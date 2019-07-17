@@ -1,0 +1,435 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Woocommerce Pay.nl Payment Methods\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
+"payment-methods\n"
+"POT-Creation-Date: 2018-04-10 18:38+0200\n"
+"PO-Revision-Date: 2018-04-10 18:38+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.0.4\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: includes/classes/Pay/Gateway/Abstract.php:20
+#, php-format
+msgid "Activate this module to accept %s transactions"
+msgstr "Activeer deze module om %s betalingen te accepteren"
+
+#: includes/classes/Pay/Gateway/Abstract.php:73
+msgid "Enable/Disable"
+msgstr "Inschakelen/uitschakelen"
+
+#: includes/classes/Pay/Gateway/Abstract.php:75
+#: includes/classes/Pay/Gateway/Abstract.php:143
+#, php-format
+msgid "Enable Pay.nl %s"
+msgstr "Pay.nl %s inschakelen"
+
+#: includes/classes/Pay/Gateway/Abstract.php:79
+msgid "Title"
+msgstr "Titel"
+
+#: includes/classes/Pay/Gateway/Abstract.php:81
+msgid "This controls the title which the user sees during checkout."
+msgstr "Hier stel je de titel in die de klant tijdens het afrekenen ziet."
+
+#: includes/classes/Pay/Gateway/Abstract.php:86
+msgid "Customer Message"
+msgstr "Klant bericht"
+
+#: includes/classes/Pay/Gateway/Abstract.php:88
+#, php-format
+msgid "Pay with %s"
+msgstr "Betaal met %s"
+
+#: includes/classes/Pay/Gateway/Abstract.php:91
+msgid "Instructions"
+msgstr "Instructies"
+
+#: includes/classes/Pay/Gateway/Abstract.php:93
+msgid "Instructions that will be added to the thank you page."
+msgstr "De instructies worden op de bedankt pagina weergegeven."
+
+#: includes/classes/Pay/Gateway/Abstract.php:98
+msgid "Minimum amount"
+msgstr "Minimum bedrag"
+
+#: includes/classes/Pay/Gateway/Abstract.php:100
+msgid "Minimum amount valid for this payment method, leave blank for no limit"
+msgstr ""
+"Minimale bedrag dat met deze betaalmethode afgerekend kan worden, laat leeg "
+"voor geen limiet"
+
+#: includes/classes/Pay/Gateway/Abstract.php:106
+msgid "Maximum amount"
+msgstr "Maximum bedrag"
+
+#: includes/classes/Pay/Gateway/Abstract.php:108
+msgid "Maximum amount valid for this payment method, leave blank for no limit"
+msgstr ""
+"Maximale bedrag dat met deze betaalmethode afgerekend kan worden, laat leeg "
+"voor geen limiet"
+
+#: includes/classes/Pay/Gateway/Abstract.php:117
+msgid "Initial order status"
+msgstr "Initiële order status"
+
+#: includes/classes/Pay/Gateway/Abstract.php:120
+msgid "default"
+msgstr "standaard"
+
+#: includes/classes/Pay/Gateway/Abstract.php:127
+#, php-format
+msgid ""
+"Some payment methods take longer than a few hours to complete. The initial "
+"order state is then set to '%s'. This ensures the order is not cancelled "
+"when the setting %s is used."
+msgstr ""
+"Bij sommige betaalmethoden duurt het langer dan een paar uur voordat de "
+"betaling bevestigd is. De initiele orderstatus wordt dan op '%s' gezet. Dit "
+"zorgt er voor dat de order niet automatisch wordt geannuleerd wanneer de "
+"instelling %s wordt gebruikt."
+
+#: includes/classes/Pay/Gateway/Abstract.php:130
+msgid "Hold Stock (minutes)"
+msgstr "Voorraad behouden (minuten)"
+
+#: includes/classes/Pay/Gateway/Abstract.php:139
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
+#: includes/classes/Pay/Gateway/Abstract.php:141
+msgid ""
+"This payment method is not available, please enable this in the pay.nl admin."
+msgstr ""
+"Deze betaalmethode is niet beschikbaar, schakel deze in op admin.pay.nl."
+
+#: includes/classes/Pay/Gateway/Abstract.php:211
+#: includes/classes/Pay/Gateway/Instore.php:105
+#, php-format
+msgid "Pay.nl: Transaction started: %s"
+msgstr "Pay.nl: Transactie gestart, TransactieId: %s"
+
+#: includes/classes/Pay/Gateway/Abstract.php:218
+#, php-format
+msgid "Initial status set to %s "
+msgstr "Initiële status op %s gezet"
+
+#: includes/classes/Pay/Gateway/Abstract.php:460
+msgid "Shipping"
+msgstr "Verzendkosten"
+
+#: includes/classes/Pay/Gateway/Abstract.php:476
+msgid "Discount"
+msgstr "Korting"
+
+#: includes/classes/Pay/Gateway/Abstract.php:526
+#, php-format
+msgid "Refunded %s - Refund ID: %s"
+msgstr "Terugbetaald %s - Refund id: %s"
+
+#: includes/classes/Pay/Gateway/Capayable.php:26
+#: includes/classes/Pay/Gateway/CapayableGespreid.php:26
+#: includes/classes/Pay/Gateway/Klarna.php:26
+#: includes/classes/Pay/Gateway/Yehhpay.php:26
+msgid "Ask birthdate"
+msgstr "Vraag geboortedatum"
+
+#: includes/classes/Pay/Gateway/Capayable.php:28
+#: includes/classes/Pay/Gateway/CapayableGespreid.php:28
+#: includes/classes/Pay/Gateway/Klarna.php:28
+#: includes/classes/Pay/Gateway/Yehhpay.php:28
+msgid ""
+"Ask the customer for his birthdate, this will fasten the checkout process"
+msgstr "Vraag de klant naar zijn geboortedatum, dit versnelt het afrekenproces"
+
+#: includes/classes/Pay/Gateway/Capayable.php:40
+#: includes/classes/Pay/Gateway/CapayableGespreid.php:40
+#: includes/classes/Pay/Gateway/Klarna.php:40
+#: includes/classes/Pay/Gateway/Yehhpay.php:40
+msgid "Birthdate: "
+msgstr "Geboortedatum: "
+
+#: includes/classes/Pay/Gateway/Ideal.php:35
+msgid "Choose your bank"
+msgstr "Kies uw bank"
+
+#: includes/classes/Pay/Gateway/Ideal.php:70
+msgid "Bankselection"
+msgstr "Bankselectie"
+
+#: includes/classes/Pay/Gateway/Ideal.php:73
+msgid "No bankselection"
+msgstr "Geen bankselectie"
+
+#: includes/classes/Pay/Gateway/Ideal.php:74
+msgid "Selectbox"
+msgstr "Selectbox"
+
+#: includes/classes/Pay/Gateway/Ideal.php:75
+msgid "Radiobuttons"
+msgstr "RadioButtons"
+
+#: includes/classes/Pay/Gateway/Ideal.php:77
+msgid "Pick the type of bankselection"
+msgstr "Kies het type van bankselectie"
+
+#: includes/classes/Pay/Gateway/Instore.php:26
+msgid "Choose in checkout"
+msgstr "Kiezen tijdens afrekenen"
+
+#: includes/classes/Pay/Gateway/Instore.php:27
+msgid "Choose in checkout and save in cookie"
+msgstr "Kiezen tijdens afrekenen en opslaan in cookie"
+
+#: includes/classes/Pay/Gateway/Instore.php:36
+msgid "Selected terminal"
+msgstr "Geselecteerde terminal"
+
+#: includes/classes/Pay/Gateway/Instore.php:39
+msgid "Select the terminal the payment should be sent to"
+msgstr "Selecteer de terminal waar de betaling naartoe gestuurd moet worden"
+
+#: includes/classes/Pay/Gateway/Instore.php:85
+msgid "Choose the pin terminal"
+msgstr "Kies de pin terminal"
+
+#: includes/classes/Pay/Gateways.php:79
+msgid "The following payment methods can be enabled"
+msgstr "De volgende betaalmethoden kunnen worden ingeschakeld"
+
+#: includes/classes/Pay/Gateways.php:96
+msgid "Pay.nl settings"
+msgstr "Pay.nl instellingen"
+
+#: includes/classes/Pay/Gateways.php:98
+msgid ""
+"The following options are required to use the Pay.nl Payment Gateway and are "
+"used by all Pay.nl Payment Methods"
+msgstr ""
+"De volgende instellingen zijn benodigd om de Pay.nl betaalmethoden te kunnen "
+"gebruiken, en worden door alle betaalmethoden van Pay.nl gebruikt."
+
+#: includes/classes/Pay/Gateways.php:102
+msgid "Token Code"
+msgstr "Token Code"
+
+#: includes/classes/Pay/Gateways.php:104
+msgid ""
+"The AT-code belonging to your token, you can find this <a href=\"https://"
+"admin.pay.nl/company/tokens\" target=\"api_token\">here</a>"
+msgstr ""
+"De AT-code die bij het token hoort, je kunt deze <a href=\"https://admin.pay."
+"nl/company/tokens\" target=\"api_token\">hier</a> vinden"
+
+#: includes/classes/Pay/Gateways.php:108
+msgid "Api token"
+msgstr "API token"
+
+#: includes/classes/Pay/Gateways.php:110
+msgid ""
+"The api token used to communicate with the Pay.nl API, you can find your "
+"token <a href=\"https://admin.pay.nl/company/tokens\" target=\"api_token"
+"\">here</a>"
+msgstr ""
+"Het API token wordt gebruikt om met de API van Pay.nl de communiceren, je "
+"kunt je API token <a href=\"https://admin.pay.nl/company/tokens\" target="
+"\"api_token\">hier</a> vinden"
+
+#: includes/classes/Pay/Gateways.php:114
+msgid "Service id"
+msgstr "Service id"
+
+#: includes/classes/Pay/Gateways.php:116
+msgid ""
+"The serviceid to identify your website, you can find your serviceid <a href="
+"\"https://admin.pay.nl/programs/programs\" target=\"serviceid\">here</a>"
+msgstr ""
+"Het serviceId is de SL-code van je dienst, en wordt gebruikt om de "
+"betalingen aan de juiste dienst te koppelen. Je kunt je serviceId <a href="
+"\"https://admin.pay.nl/programs/programs\" target=\"serviceid\">hier</a> "
+"vinden."
+
+#: includes/classes/Pay/Gateways.php:118
+msgid "The serviceid should be in the following format: SL-xxxx-xxxx"
+msgstr "Het serviceId moet in het volgende formaat zijn: SL-xxxx-xxxx"
+
+#: includes/classes/Pay/Gateways.php:121
+msgid "Test mode"
+msgstr "Test modus"
+
+#: includes/classes/Pay/Gateways.php:123
+msgid "Check this box if you want to enable test mode"
+msgstr "Vink aan om betalingen via testmodus te laten verlopen"
+
+#: includes/classes/Pay/Gateways.php:128
+msgid "SSL Verify Peer"
+msgstr "SSL Verify Peer"
+
+#: includes/classes/Pay/Gateways.php:130
+msgid ""
+"Uncheck this box if you have SSL certificate errors that you don't know how "
+"to fix"
+msgstr ""
+"Vink dit uit als je SSL certificaat problemen hebt en je weet niet hoe je "
+"deze moet oplossen"
+
+#: includes/classes/Pay/Gateways.php:135
+msgid "Send order data"
+msgstr "Bestellingsgegevens versturen"
+
+#: includes/classes/Pay/Gateways.php:137
+msgid ""
+"Check this box if you want to send the order data to pay.nl, this is "
+"required if you want use 'Pay after delivery' paymentmethods "
+msgstr ""
+"Vink aan om order data naar pay.nl te versturen, dit is verplicht indien u "
+"van Achteraf betalen gebruik wilt maken"
+
+#: includes/classes/Pay/Gateways.php:142
+msgid "Use high risk methods"
+msgstr "Gebruik 'high risk' betaalmethoden"
+
+#: includes/classes/Pay/Gateways.php:144
+msgid "Check this box if you are using high risk payment methods"
+msgstr "Vink aan om 'high risk' betaalmethoden te gebruiken"
+
+#: includes/classes/Pay/Gateways.php:149
+msgid "Payment screen language"
+msgstr "Betaalscherm taal"
+
+#: includes/classes/Pay/Gateways.php:152 includes/classes/Pay/Gateways.php:160
+msgid "This is the language in which the payment screen will be shown"
+msgstr "Dit is de taal waarin het betaalscherm wordt weergegeven"
+
+#: includes/classes/Pay/Gateways.php:157
+msgid "Show payment method logos"
+msgstr "Toon logo's betaalmethoden"
+
+#: includes/classes/Pay/Gateways.php:278
+msgid "The payment has been canceled, please try again"
+msgstr "De betaling is geannuleerd, probeer het a.u.b. opnieuw"
+
+#: includes/classes/Pay/Helper/Data.php:128
+msgid "Don't show logos"
+msgstr "Geen logo's weergeven"
+
+#: includes/classes/Pay/Helper/Data.php:186
+msgid "Dutch"
+msgstr "Nederlands"
+
+#: includes/classes/Pay/Helper/Data.php:187
+msgid "English"
+msgstr "Engels"
+
+#: includes/classes/Pay/Helper/Data.php:188
+msgid "German"
+msgstr "Duits"
+
+#: includes/classes/Pay/Helper/Data.php:189
+msgid "Spanish"
+msgstr "Spaans"
+
+#: includes/classes/Pay/Helper/Data.php:190
+msgid "Italian"
+msgstr "Italiaans"
+
+#: includes/classes/Pay/Helper/Data.php:191
+msgid "French"
+msgstr "Frans"
+
+#: includes/classes/Pay/Helper/Data.php:192
+msgid "Use browser language"
+msgstr "Gebruik de browsertaal"
+
+#: includes/classes/Pay/Helper/Transaction.php:68
+msgid "Transaction not found"
+msgstr "Transactie niet gevonden"
+
+#: includes/classes/Pay/Helper/Transaction.php:114
+#, php-format
+msgid ""
+"Validation error: Paid amount does not match order amount. \n"
+"paidAmount: %s, \n"
+"orderAmount: %s\n"
+msgstr ""
+"Validatiefout: Betaalde bedrag is anders dan het orderbedrag. \n"
+"Betaald bedrag: %s\n"
+"Order bedrag: %s\n"
+
+#: includes/classes/Pay/Helper/Transaction.php:122
+#, php-format
+msgid "Pay.nl: Payment complete. customerkey: %s"
+msgstr "Pay.nl: Betaling voltooid. customerkey: %s"
+
+#: includes/classes/Pay/Helper/Transaction.php:127
+msgid "Pay.nl: Payment canceled"
+msgstr "Pay.nl: Betaling geannuleerd"
+
+#: includes/classes/Pay/Setup.php:89
+msgid ""
+"Cannot activate Woocommerce Paynl Payment Methods because woocommerce is not "
+"found.<br />Please install and activate woocommerce first"
+msgstr ""
+"Paynl betalingsmethoden kan niet worden gactiveerd omdat woocommerce niet "
+"kan worden gevonden.<br/>Installeer en activeer woocommerce eerst"
+
+#: includes/classes/Pay/Setup.php:90
+msgid "Woocommerce not found"
+msgstr "Woocommerce niet gevonden"
+
+#: woocommerce-payment-paynl.php:32
+msgid "The Pay.nl payment methods plugin requires Woocommerce to be active"
+msgstr ""
+"Om de Pay.nl betaalmethoden te kunnen gebruiken, moet woocommerce "
+"geactiveerd zijn"
+
+#: woocommerce-payment-paynl.php:36
+msgid ""
+"Curl is not installed.<br />In order to use the Pay.nl payment methods, you "
+"must install install CURL.<br />Ask your system administrator to install "
+"php_curl"
+msgstr ""
+"Curl is niet geinstalleerd.<br />Om Pay.nl betaalmethoden te kunnen "
+"gebruiken, moet CURL geinstalleerd zijn.<br />Vraag je systeembeheerder op "
+"php_curl te installeren."
+
+#: woocommerce-payment-paynl.php:40
+msgid "Settings"
+msgstr "Instellingen"
+
+#~ msgid "Woocommerce Pay.nl Payment Methods"
+#~ msgstr "WooCommerce Pay.nl Betaalmethoden"
+
+#~ msgid "https://wordpress.org/plugins/woocommerce-paynl-payment-methods/"
+#~ msgstr "https://wordpress.org/plugins/woocommerce-paynl-payment-methods/"
+
+#~ msgid "Pay.nl payment methods for woocommerce"
+#~ msgstr "Pay.nl Betaalmethoden voor WooCommerce"
+
+#~ msgid "andypay"
+#~ msgstr "Andy Pieters"
+
+#~ msgid "http://www.pay.nl"
+#~ msgstr "http://www.pay.nl"
+
+#~ msgid ""
+#~ "Check this box if you want to send the order data to pay.nl, this is "
+#~ "required if you want to use afterpay"
+#~ msgstr ""
+#~ "Schakel deze optie in, om de bestellingsgegevens naar Pay.nl te "
+#~ "versturen. Wanneer u gebruik maakt van afterpay is dit verplicht"
+
+#~ msgid "This is the language in which the paymetn screen will be shown"
+#~ msgstr "Dit is de taal waarin het betaalscherm wordt getoond"
