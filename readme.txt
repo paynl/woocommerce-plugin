@@ -23,6 +23,7 @@ With Pay.nl you can add the following payment options to your website:
 * Alipay
 * Amazon Pay
 * American Express (AMEX)
+* Apple Pay
 * Bancontact
 * Billink
 * Capayable
@@ -104,6 +105,7 @@ At the moment the plugin supports the following payment methods:
 * Afterpay
 * Amazon Pay
 * American Express (AMEX)
+* Apple Pay
 * Bancontact
 * Billink
 * Capayable
@@ -163,6 +165,8 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 4. The iDEAL payment screen (Rabobank)
 
 == Changelog ==
+= 3.3.8 =
+Added payment method Apple Pay
 = 3.3.7 =
 Added paymentmethods: Tikkie, Przelewy 24 and Creditclick
 = 3.3.6 =

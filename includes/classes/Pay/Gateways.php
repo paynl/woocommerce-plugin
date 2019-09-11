@@ -15,6 +15,7 @@ class Pay_Gateways
             'Pay_Gateway_Alipay',
             'Pay_Gateway_Amazonpay',
             'Pay_Gateway_Amex',
+            'Pay_Gateway_Applepay',
             'Pay_Gateway_Afterpay',
             'Pay_Gateway_Billink',
             'Pay_Gateway_Cartasi',
