@@ -509,6 +509,10 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function process_refund($order_id, $amount = null, $reason = '')
     {
+        if ($amount <= 0) {
+            return new WP_Error('1', "Refund amount must be greater than €0.00");
+        }
+
         $order = wc_get_order($order_id);
 
         $transactionId = Pay_Helper_Transaction::getPaidTransactionIdForOrderId($order_id);

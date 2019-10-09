@@ -7,7 +7,7 @@ class Pay_Gateway_Billink extends Pay_Gateway_Abstract {
     }
 
     public static function getName() {
-        return 'Billink';
+        return 'Achteraf betalen via Billink';
     }
 
     public static function getOptionId() {

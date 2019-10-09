@@ -4,7 +4,7 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: http://www.pay.nl
 Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Wechatpay, ,paypal, creditcard, mybank, sofortbanking, afterpay, mistercash, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
-Stable tag: 3.3.8
+Stable tag: 3.3.10
 Tested up to: 5.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -43,6 +43,7 @@ With Pay.nl you can add the following payment options to your website:
 * IN3 Gespreid betalen
 * Incasso
 * Instore payments (PIN)
+* Klarna KP
 * Maestro
 * Manual transfer
 * Mastercard
@@ -125,6 +126,7 @@ At the moment the plugin supports the following payment methods:
 * IN3 Gespreid betalen
 * Incasso
 * Instore payments (PIN)
+* Klarna KP
 * Maestro
 * Manual transfer
 * Mastercard
@@ -165,8 +167,15 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 4. The iDEAL payment screen (Rabobank)
 
 == Changelog ==
-= 3.3.8 =
+= 3.3.10 =
+Add payment method Klarna KP
+Fix a bug where the full amount gets refunded after putting a 0 in the refund amount field
+Change the names of Billink and in3
+Change the payment profile icons to a static link
+= 3.3.9 =
 Added payment method Apple Pay
+= 3.3.8 =
+Better exception handling in exchange script
 = 3.3.7 =
 Added paymentmethods: Tikkie, Przelewy 24 and Creditclick
 = 3.3.6 =

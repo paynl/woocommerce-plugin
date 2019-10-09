@@ -37,6 +37,7 @@ class Pay_Gateways
             'Pay_Gateway_Incasso',
             'Pay_Gateway_Instore',
             'Pay_Gateway_Klarna',
+            'Pay_Gateway_Klarnakp',
             'Pay_Gateway_Maestro',
             'Pay_Gateway_Minitixsms',
             'Pay_Gateway_Mistercash',
