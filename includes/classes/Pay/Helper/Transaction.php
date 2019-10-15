@@ -74,9 +74,14 @@ class Pay_Helper_Transaction
             throw new Pay_Exception(__('Transaction not found', ''));
         }
 
-        //order ophalen
+        # Order ophalen.
         $orderId = $transaction['order_id'];
-        $order = new WC_Order($orderId);
+        try {
+          $order = new WC_Order($orderId);
+        } catch (Exception $e) {
+          // Er is iets fout gegaan bij het ophalen van de order.
+          throw new Pay_Exception_Notice('Woocommerce could not find internal order');
+        }
         if ($status == $transaction['status']) {
             if ($status == Pay_Gateways::STATUS_CANCELED) {
                 return add_query_arg('paynl_status', Pay_Gateways::STATUS_CANCELED, $woocommerce->cart->get_checkout_url());

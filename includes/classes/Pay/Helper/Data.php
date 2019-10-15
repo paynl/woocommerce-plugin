@@ -53,7 +53,7 @@ class Pay_Helper_Data
         $wpdb->query('TRUNCATE TABLE ' . $table_name_options);
 
         foreach ($paymentOptions as $paymentOption) {
-            $image = 'https://www.pay.nl/images/payment_profiles/25x25/' . $paymentOption['id'] . '.png';
+            $image = 'https://static.pay.nl/payment_profiles/25x25/' . $paymentOption['id'] . '.png';
             $wpdb->insert(
                 $table_name_options, array(
                 'id' => $paymentOption['id'],
