@@ -10,7 +10,7 @@ class Pay_Gateway_Capayable extends Pay_Gateway_Abstract
 
   public static function getName()
   {
-    return 'in3 keer betalen, 0% rente';
+    return 'Capayable Achteraf Betalen';
   }
 
   public static function getOptionId()
