@@ -10,7 +10,7 @@ class Pay_Gateway_CapayableGespreid extends Pay_Gateway_Abstract
 
   public static function getName()
   {
-    return 'In3 Gespreid betalen';
+    return 'in3 keer betalen, 0% rente';
   }
 
   public static function getOptionId()
