@@ -44,7 +44,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
         $size = get_option('paynl_logo_size');
 
         if ($size) {
-            return 'https://www.pay.nl/images/payment_profiles/' . $size . '/' . $this->getOptionId() . '.png';
+            return 'https://static.pay.nl/payment_profiles/' . $size . '/' . $this->getOptionId() . '.png';
         } else {
             return '';
         }
