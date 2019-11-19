@@ -112,6 +112,7 @@ class Pay_Gateways
         );
         $addedSettings[] = array(
             'name' => __('Token Code', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'placeholder' => 'AT-####-####',
             'type' => 'text',
             'desc' => __('The AT-code belonging to your token, you can find this <a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'id' => 'paynl_tokencode',
@@ -124,6 +125,7 @@ class Pay_Gateways
         );
         $addedSettings[] = array(
             'name' => __('Service id', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'placeholder' => 'SL-####-####',
             'type' => 'text',
             'desc' => __('The serviceid to identify your website, you can find your serviceid <a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'id' => 'paynl_serviceid',
@@ -172,6 +174,15 @@ class Pay_Gateways
             'desc' => __('This is the language in which the payment screen will be shown', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'id' => 'paynl_logo_size',
             'default' => '25x25',
+        );
+        $addedSettings[] = array(
+            'name' => __('Alternative Exchange URL', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'type' => 'text',
+            'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
+            'desc' => '<br>Use your own exchange-handler. Requests will be send as GET. <br> '.
+                      'Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#'.
+                      '<Br>For more info see: <a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
+            'id' => 'paynl_exchange_url',
         );
 
 

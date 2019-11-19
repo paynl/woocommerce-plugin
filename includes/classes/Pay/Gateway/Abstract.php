@@ -252,7 +252,18 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
         $exchangeUrl = add_query_arg('wc-api', 'Wc_Pay_Gateway_Exchange', home_url('/'));
 
-        if (WooCommerce::instance()->version < 3 && $order->customer_ip_address) {
+      # Wanneer er hekjes worden meegegeven aan de exchange, wordt dit gezien als een custom url.
+      # Zo niet, dan wordt de custom exchange die wij hier meegeven wel gebruikt, alleen nog steeds via post en de sessionvar in de header.
+      # Dus met hekjes, en exchange method op TXT, zorgt voor een GET-exchange
+      # dus bij de instellingen moeten we benadrukken dat het om een GET gaat
+      # en de hekjes geven we hier mee.
+
+      $strAlternativeExchangeUrl = self::getAlternativeExchangeUrl();
+      if (!empty(trim($strAlternativeExchangeUrl))) {
+        $exchangeUrl = $strAlternativeExchangeUrl;
+      }
+
+      if (WooCommerce::instance()->version < 3 && $order->customer_ip_address) {
             $ipAddress = $order->customer_ip_address;
         } elseif ($order->get_customer_ip_address()) {
             $ipAddress = $order->get_customer_ip_address();
@@ -402,6 +413,20 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
         return $result;
     }
+
+  /**
+   * @return mixed|string|void
+   */
+  public static function getAlternativeExchangeUrl()
+  {
+    $strAltUrl = get_option('paynl_exchange_url');
+
+    if(!empty($strAltUrl)) {
+      return $strAltUrl;
+    }
+
+    return '';
+  }
 
     public static function loginSDK()
     {
