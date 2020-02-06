@@ -16,7 +16,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
         $this->icon = $this->getIcon();
 
         $this->has_fields         = true;
-        $this->method_title       = 'Pay.nl - ' . $this->getName();
+        $this->method_title       = 'PAY. - ' . $this->getName();
         $this->method_description = sprintf(__('Activate this module to accept %s transactions',
             PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName());
 
@@ -61,6 +61,11 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
         throw new Exception('Please implement the getName method');
     }
 
+    public function getVersion()
+    {
+        return '3.4.1';
+    }
+
     /**
      * Initialise Gateway Settings Form Fields.
      */
@@ -72,7 +77,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                 'enabled'      => array(
                     'title'   => __('Enable/Disable', 'woocommerce'),
                     'type'    => 'checkbox',
-                    'label'   => sprintf(__('Enable Pay.nl %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),
+                    'label'   => sprintf(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),
                     'default' => 'no',
                 ),
                 'title'        => array(
@@ -138,9 +143,9 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                 'message' => array(
                     'title'       => __('Disabled', 'woocommerce'),
                     'type'        => 'hidden',
-                    'description' => __('This payment method is not available, please enable this in the pay.nl admin.',
+                    'description' => __('This payment method is not available, please enable this in the PAY. admin.',
                         PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-                    'label'       => sprintf(__('Enable Pay.nl %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),
+                    'label'       => sprintf(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),
 
                 )
             );
@@ -208,7 +213,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
         $result = $this->startTransaction($order);
 
-        $order->add_order_note(sprintf(__('Pay.nl: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+        $order->add_order_note(sprintf(__('PAY.: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             $result->getTransactionId()));
 
         if ($this->slowConfirmation()) {
@@ -252,7 +257,18 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
         $exchangeUrl = add_query_arg('wc-api', 'Wc_Pay_Gateway_Exchange', home_url('/'));
 
-        if (WooCommerce::instance()->version < 3 && $order->customer_ip_address) {
+      # Wanneer er hekjes worden meegegeven aan de exchange, wordt dit gezien als een custom url.
+      # Zo niet, dan wordt de custom exchange die wij hier meegeven wel gebruikt, alleen nog steeds via post en de sessionvar in de header.
+      # Dus met hekjes, en exchange method op TXT, zorgt voor een GET-exchange
+      # dus bij de instellingen moeten we benadrukken dat het om een GET gaat
+      # en de hekjes geven we hier mee.
+
+      $strAlternativeExchangeUrl = self::getAlternativeExchangeUrl();
+      if (!empty(trim($strAlternativeExchangeUrl))) {
+        $exchangeUrl = $strAlternativeExchangeUrl;
+      }
+
+      if (WooCommerce::instance()->version < 3 && $order->customer_ip_address) {
             $ipAddress = $order->customer_ip_address;
         } elseif ($order->get_customer_ip_address()) {
             $ipAddress = $order->get_customer_ip_address();
@@ -328,7 +344,8 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
             'extra1'        => apply_filters('paynl-extra1', $order->get_order_number(), $order),
             'extra2'        => apply_filters('paynl-extra2', $billing_email, $order),
             'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
-            'ipaddress'     => $ipAddress
+            'ipaddress'     => $ipAddress,
+            'object'        => 'woocommerce ' . $this->getVersion(),
         );
 
         if (get_option('paynl_send_order_data') == 'yes') {
@@ -402,6 +419,20 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
         return $result;
     }
+
+  /**
+   * @return mixed|string|void
+   */
+  public static function getAlternativeExchangeUrl()
+  {
+    $strAltUrl = get_option('paynl_exchange_url');
+
+    if(!empty($strAltUrl)) {
+      return $strAltUrl;
+    }
+
+    return '';
+  }
 
     public static function loginSDK()
     {

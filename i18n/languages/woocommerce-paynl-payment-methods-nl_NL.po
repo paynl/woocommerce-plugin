@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Woocommerce Pay.nl Payment Methods\n"
+"Project-Id-Version: Woocommerce PAY. Payment Methods\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
 "POT-Creation-Date: 2018-04-10 18:38+0200\n"
@@ -33,8 +33,8 @@ msgstr "Inschakelen/uitschakelen"
 #: includes/classes/Pay/Gateway/Abstract.php:75
 #: includes/classes/Pay/Gateway/Abstract.php:143
 #, php-format
-msgid "Enable Pay.nl %s"
-msgstr "Pay.nl %s inschakelen"
+msgid "Enable PAY. %s"
+msgstr "PAY. %s inschakelen"
 
 #: includes/classes/Pay/Gateway/Abstract.php:79
 msgid "Title"
@@ -111,15 +111,15 @@ msgstr "Uitgeschakeld"
 
 #: includes/classes/Pay/Gateway/Abstract.php:141
 msgid ""
-"This payment method is not available, please enable this in the pay.nl admin."
+"This payment method is not available, please enable this in the PAY. admin."
 msgstr ""
 "Deze betaalmethode is niet beschikbaar, schakel deze in op admin.pay.nl."
 
 #: includes/classes/Pay/Gateway/Abstract.php:211
 #: includes/classes/Pay/Gateway/Instore.php:105
 #, php-format
-msgid "Pay.nl: Transaction started: %s"
-msgstr "Pay.nl: Transactie gestart, TransactieId: %s"
+msgid "PAY.: Transaction started: %s"
+msgstr "PAY.: Transactie gestart, TransactieId: %s"
 
 #: includes/classes/Pay/Gateway/Abstract.php:218
 #, php-format
@@ -210,16 +210,16 @@ msgid "The following payment methods can be enabled"
 msgstr "De volgende betaalmethoden kunnen worden ingeschakeld"
 
 #: includes/classes/Pay/Gateways.php:96
-msgid "Pay.nl settings"
-msgstr "Pay.nl instellingen"
+msgid "PAY. settings"
+msgstr "PAY. instellingen"
 
 #: includes/classes/Pay/Gateways.php:98
 msgid ""
-"The following options are required to use the Pay.nl Payment Gateway and are "
-"used by all Pay.nl Payment Methods"
+"The following options are required to use the PAY. Payment Gateway and are "
+"used by all PAY. Payment Methods"
 msgstr ""
-"De volgende instellingen zijn benodigd om de Pay.nl betaalmethoden te kunnen "
-"gebruiken, en worden door alle betaalmethoden van Pay.nl gebruikt."
+"De volgende instellingen zijn benodigd om de PAY. betaalmethoden te kunnen "
+"gebruiken, en worden door alle betaalmethoden van PAY. gebruikt."
 
 #: includes/classes/Pay/Gateways.php:102
 msgid "Token Code"
@@ -239,11 +239,11 @@ msgstr "API token"
 
 #: includes/classes/Pay/Gateways.php:110
 msgid ""
-"The api token used to communicate with the Pay.nl API, you can find your "
+"The api token used to communicate with the PAY. API, you can find your "
 "token <a href=\"https://admin.pay.nl/company/tokens\" target=\"api_token"
 "\">here</a>"
 msgstr ""
-"Het API token wordt gebruikt om met de API van Pay.nl de communiceren, je "
+"Het API token wordt gebruikt om met de API van PAY. de communiceren, je "
 "kunt je API token <a href=\"https://admin.pay.nl/company/tokens\" target="
 "\"api_token\">hier</a> vinden"
 
@@ -291,10 +291,10 @@ msgstr "Bestellingsgegevens versturen"
 
 #: includes/classes/Pay/Gateways.php:137
 msgid ""
-"Check this box if you want to send the order data to pay.nl, this is "
+"Check this box if you want to send the order data to PAY., this is "
 "required if you want use 'Pay after delivery' paymentmethods "
 msgstr ""
-"Vink aan om order data naar pay.nl te versturen, dit is verplicht indien u "
+"Vink aan om order data naar PAY. te versturen, dit is verplicht indien u "
 "van Achteraf betalen gebruik wilt maken"
 
 #: includes/classes/Pay/Gateways.php:142
@@ -370,12 +370,12 @@ msgstr ""
 
 #: includes/classes/Pay/Helper/Transaction.php:122
 #, php-format
-msgid "Pay.nl: Payment complete. customerkey: %s"
-msgstr "Pay.nl: Betaling voltooid. customerkey: %s"
+msgid "PAY.: Payment complete. customerkey: %s"
+msgstr "PAY.: Betaling voltooid. customerkey: %s"
 
 #: includes/classes/Pay/Helper/Transaction.php:127
-msgid "Pay.nl: Payment canceled"
-msgstr "Pay.nl: Betaling geannuleerd"
+msgid "PAY.: Payment canceled"
+msgstr "PAY.: Betaling geannuleerd"
 
 #: includes/classes/Pay/Setup.php:89
 msgid ""
@@ -390,18 +390,18 @@ msgid "Woocommerce not found"
 msgstr "Woocommerce niet gevonden"
 
 #: woocommerce-payment-paynl.php:32
-msgid "The Pay.nl payment methods plugin requires Woocommerce to be active"
+msgid "The PAY. payment methods plugin requires Woocommerce to be active"
 msgstr ""
-"Om de Pay.nl betaalmethoden te kunnen gebruiken, moet woocommerce "
+"Om de PAY. betaalmethoden te kunnen gebruiken, moet woocommerce "
 "geactiveerd zijn"
 
 #: woocommerce-payment-paynl.php:36
 msgid ""
-"Curl is not installed.<br />In order to use the Pay.nl payment methods, you "
+"Curl is not installed.<br />In order to use the PAY. payment methods, you "
 "must install install CURL.<br />Ask your system administrator to install "
 "php_curl"
 msgstr ""
-"Curl is niet geinstalleerd.<br />Om Pay.nl betaalmethoden te kunnen "
+"Curl is niet geinstalleerd.<br />Om PAY. betaalmethoden te kunnen "
 "gebruiken, moet CURL geinstalleerd zijn.<br />Vraag je systeembeheerder op "
 "php_curl te installeren."
 
@@ -409,14 +409,14 @@ msgstr ""
 msgid "Settings"
 msgstr "Instellingen"
 
-#~ msgid "Woocommerce Pay.nl Payment Methods"
-#~ msgstr "WooCommerce Pay.nl Betaalmethoden"
+#~ msgid "Woocommerce PAY. Payment Methods"
+#~ msgstr "WooCommerce PAY. Betaalmethoden"
 
 #~ msgid "https://wordpress.org/plugins/woocommerce-paynl-payment-methods/"
 #~ msgstr "https://wordpress.org/plugins/woocommerce-paynl-payment-methods/"
 
-#~ msgid "Pay.nl payment methods for woocommerce"
-#~ msgstr "Pay.nl Betaalmethoden voor WooCommerce"
+#~ msgid "PAY. payment methods for woocommerce"
+#~ msgstr "PAY. Betaalmethoden voor WooCommerce"
 
 #~ msgid "andypay"
 #~ msgstr "Andy Pieters"
@@ -425,10 +425,10 @@ msgstr "Instellingen"
 #~ msgstr "http://www.pay.nl"
 
 #~ msgid ""
-#~ "Check this box if you want to send the order data to pay.nl, this is "
+#~ "Check this box if you want to send the order data to PAY., this is "
 #~ "required if you want to use afterpay"
 #~ msgstr ""
-#~ "Schakel deze optie in, om de bestellingsgegevens naar Pay.nl te "
+#~ "Schakel deze optie in, om de bestellingsgegevens naar PAY. te "
 #~ "versturen. Wanneer u gebruik maakt van afterpay is dit verplicht"
 
 #~ msgid "This is the language in which the paymetn screen will be shown"

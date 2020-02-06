@@ -1,23 +1,23 @@
-=== Woocommerce Pay.nl Payment Methods ===
+=== Woocommerce PAY. Payment Methods ===
 Contributors: andypay
 Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: http://www.pay.nl
 Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Wechatpay, ,paypal, creditcard, mybank, sofortbanking, afterpay, mistercash, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
-Stable tag: 3.3.10
+Stable tag: 3.4.1
 Tested up to: 5.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin adds the pay.nl payment methods to your Woocommerce installation.
+This plugin adds the PAY. payment methods to your Woocommerce installation.
 
 == Description ==
 
-*By installing this plugin you'll be able to integrate the payment methods of Pay.nl to your WooCommerce Webshop. This will only take a few minutes. If the plugin is successfully installed your customers will then be able to checkout their orders through the payment options such as iDeal, PayPal, Creditcard and so on.*
+*By installing this plugin you'll be able to integrate the payment methods of PAY. to your WooCommerce Webshop. This will only take a few minutes. If the plugin is successfully installed your customers will then be able to checkout their orders through the payment options such as iDeal, PayPal, Creditcard and so on.*
 
-Payment Service Provider Pay.nl offers online payment options for webshops and websites. Pay.nl has different payment option packages available. These packages range from the smallest one (XS) to the largest one (XL). Not sure which package is suitable for you? Start with the try-out package called Pioneer XS! With the Pioneer XS you will be able to use all payment options  except for the options credit card and direct debit. Just fill in the registration form and you'll receive a personal account by email. With this account you have direct access to the Pay.nl Administration Panel where you can add your website(s) and install the payment options that are essential for your website. 
+Payment Service Provider PAY. offers online payment options for webshops and websites. PAY. has different payment option packages available. These packages range from the smallest one (XS) to the largest one (XL). Not sure which package is suitable for you? Start with the try-out package called Pioneer XS! With the Pioneer XS you will be able to use all payment options  except for the options credit card and direct debit. Just fill in the registration form and you'll receive a personal account by email. With this account you have direct access to the PAY. Administration Panel where you can add your website(s) and install the payment options that are essential for your website.
 
-With Pay.nl you can add the following payment options to your website:
+With PAY. you can add the following payment options to your website:
 
 * Afterpay
 * Alipay
@@ -79,13 +79,13 @@ This section describes in short how to install the plugin and get it working.
 If you need more help, you can download the manual [here](http://www.pay.nl/plugin/woocommerce/pdf) or send an email to [support@pay.nl](mailto:support@pay.nl)
 
 1. Install the plugin via Plugins -> new plugin
-2. Activate the plugin through the 'Plugins' menu in WordPress, the name of this plugin is: Woocommerce Pay.nl Payment Methods
+2. Activate the plugin through the 'Plugins' menu in WordPress, the name of this plugin is: Woocommerce PAY. Payment Methods
 3. Under Woocommerce -> Settings -> Payment, configure the apitoken and serviceid and activate the desired payment methods.
-4. You can now accept payments using pay.nl
+4. You can now accept payments using PAY.
 
 == Frequently Asked Questions ==
 
-= How can i get an account for pay.nl? =
+= How can i get an account for PAY.? =
 
 You can register [here](http://pay.nl/registreren) (dutch and belgian companies only)
 
@@ -163,10 +163,17 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 
 1. The added settings in woocommerce -> settings -> payments
 2. The ideal configuration page
-3. The woocommerce checkout page with the pay.nl payment methods
+3. The woocommerce checkout page with the PAY. payment methods
 4. The iDEAL payment screen (Rabobank)
 
 == Changelog ==
+= 3.4.1 =
+Update plugin with object info
+Change Pay.nl name to PAY. everywhere
+= 3.4 =
+Added setting alternative exchange url
+= 3.3.11 =
+Fixed wrong paymentmethod names
 = 3.3.10 =
 Add payment method Klarna KP
 Fix a bug where the full amount gets refunded after putting a 0 in the refund amount field
@@ -198,7 +205,7 @@ Authorized transactions now use the transaction amount to check if the amount co
 Added paymentmethods Dankort and CartaSi
 = 3.2.1 =
 Added some extra checks before setting order status to failed.
-The plugin will not set the order status to failed if the order is already paid or if the last used method is not a pay.nl method.
+The plugin will not set the order status to failed if the order is already paid or if the last used method is not a PAY. method.
 = 3.2.0 =
 Changed the order_id field to bigint because the post it refers to is also bigint
 Canceled transactions now change the order status to failed
@@ -219,7 +226,7 @@ Authorize transactions handled as paid
 = 3.1.0 =
 Added code for supporting older (< v3) versions of Woocommerce
 = 3.0.2 =
-Language was not sent to pay.nl
+Language was not sent to PAY.
 Added message if woocommerce version < 3.0.0
 = 3.0.1 =
 Added payment method Yehhpay
@@ -305,7 +312,7 @@ Fixed a small typo in Pay_Helper_Transaction
 * Handling of DENIED status fixed
 = 2.3.5 =
 * Added payment method 'Pay by phone'
-* Fixed a problem where a payment method could not be disabled, when first disabled in the pay.nl admin
+* Fixed a problem where a payment method could not be disabled, when first disabled in the PAY. admin
 * Fixed a problem with ipv6 addresses
 = 2.3.4 =
 * Updated the way the ip address is fetched, in case a loadbalancer or proxy is used
@@ -319,8 +326,8 @@ Fixed a small typo in Pay_Helper_Transaction
 = 2.3 =
 * Added new paymenbtmethods (Gezondheidsbon, Fashioncheque and podiumkadokaart)
 * Added a notice, in case CURL is not installed
-* Payment methods, that are not enabled in pay.nl cannot be activated in woocommerce
-* Vat was not sent to pay.nl correctly in the product lines
+* Payment methods, that are not enabled in PAY. cannot be activated in woocommerce
+* Vat was not sent to PAY. correctly in the product lines
 = 2.2.9 =
 * Removed cancel from the plugin to fix bugs refilling the cart
 = 2.2.8 =

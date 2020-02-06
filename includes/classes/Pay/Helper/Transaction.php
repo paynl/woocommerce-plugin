@@ -130,18 +130,18 @@ class Pay_Helper_Transaction
                 update_post_meta($orderId, 'CustomerName', esc_attr($transaction->getAccountHolderName()));
                 update_post_meta($orderId, 'CustomerKey', esc_attr($transaction->getAccountNumber()));
 
-                $order->add_order_note(sprintf(__('Pay.nl: Payment complete. customerkey: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $transaction->getAccountNumber()));
+                $order->add_order_note(sprintf(__('PAY.: Payment complete. customerkey: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $transaction->getAccountNumber()));
 
                 $url = self::getOrderReturnUrl($order);
                 break;
             case Pay_Gateways::STATUS_CANCELED:
-                $order->add_order_note(__('Pay.nl: Payment canceled', PAYNL_WOOCOMMERCE_TEXTDOMAIN));
+                $order->add_order_note(__('PAY.: Payment canceled', PAYNL_WOOCOMMERCE_TEXTDOMAIN));
 
                 if (WooCommerce::instance()->version >= 3) {
                     $method = $order->get_payment_method();
 
                     if (substr($method, 0, 11) != 'pay_gateway') {
-                        throw new Pay_Exception_Notice('Not cancelling, last used method is not a pay.nl method');
+                        throw new Pay_Exception_Notice('Not cancelling, last used method is not a PAY. method');
                     }
 
                     if ($order->is_paid()) {
