@@ -105,9 +105,9 @@ class Pay_Gateways
 
         $addedSettings = array();
         $addedSettings[] = array(
-            'title' => __('Pay.nl settings', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'title' => __('PAY. settings', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'title',
-            'desc' => '<p>' . $loadedPaymentMethods . '</p><p>' . __('The following options are required to use the Pay.nl Payment Gateway and are used by all Pay.nl Payment Methods', PAYNL_WOOCOMMERCE_TEXTDOMAIN) . '</p>',
+            'desc' => '<p>' . $loadedPaymentMethods . '</p><p>' . __('The following options are required to use the PAY. Payment Gateway and are used by all PAY. Payment Methods', PAYNL_WOOCOMMERCE_TEXTDOMAIN) . '</p>',
             'id' => 'paynl_global_settings',
         );
         $addedSettings[] = array(
@@ -120,7 +120,7 @@ class Pay_Gateways
         $addedSettings[] = array(
             'name' => __('Api token', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'text',
-            'desc' => __('The api token used to communicate with the Pay.nl API, you can find your token <a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'desc' => __('The api token used to communicate with the PAY. API, you can find your token <a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'id' => 'paynl_apitoken',
         );
         $addedSettings[] = array(
@@ -148,7 +148,7 @@ class Pay_Gateways
         $addedSettings[] = array(
             'name' => __('Send order data', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'checkbox',
-            'desc' => __('Check this box if you want to send the order data to pay.nl, this is required if you want use \'Pay after delivery\' paymentmethods ', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'desc' => __('Check this box if you want to send the order data to PAY., this is required if you want use \'Pay after delivery\' paymentmethods ', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'id' => 'paynl_send_order_data',
             'default' => 'yes',
         );

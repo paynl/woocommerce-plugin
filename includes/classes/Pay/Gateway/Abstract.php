@@ -16,7 +16,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
         $this->icon = $this->getIcon();
 
         $this->has_fields         = true;
-        $this->method_title       = 'Pay.nl - ' . $this->getName();
+        $this->method_title       = 'PAY. - ' . $this->getName();
         $this->method_description = sprintf(__('Activate this module to accept %s transactions',
             PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName());
 
@@ -44,7 +44,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
         $size = get_option('paynl_logo_size');
 
         if ($size) {
-            return 'https://www.pay.nl/images/payment_profiles/' . $size . '/' . $this->getOptionId() . '.png';
+            return 'https://static.pay.nl/payment_profiles/' . $size . '/' . $this->getOptionId() . '.png';
         } else {
             return '';
         }
@@ -61,6 +61,11 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
         throw new Exception('Please implement the getName method');
     }
 
+    public function getVersion()
+    {
+        return '3.4.1';
+    }
+
     /**
      * Initialise Gateway Settings Form Fields.
      */
@@ -72,7 +77,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                 'enabled'      => array(
                     'title'   => __('Enable/Disable', 'woocommerce'),
                     'type'    => 'checkbox',
-                    'label'   => sprintf(__('Enable Pay.nl %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),
+                    'label'   => sprintf(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),
                     'default' => 'no',
                 ),
                 'title'        => array(
@@ -138,9 +143,9 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                 'message' => array(
                     'title'       => __('Disabled', 'woocommerce'),
                     'type'        => 'hidden',
-                    'description' => __('This payment method is not available, please enable this in the pay.nl admin.',
+                    'description' => __('This payment method is not available, please enable this in the PAY. admin.',
                         PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-                    'label'       => sprintf(__('Enable Pay.nl %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),
+                    'label'       => sprintf(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),
 
                 )
             );
@@ -208,7 +213,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
         $result = $this->startTransaction($order);
 
-        $order->add_order_note(sprintf(__('Pay.nl: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+        $order->add_order_note(sprintf(__('PAY.: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             $result->getTransactionId()));
 
         if ($this->slowConfirmation()) {
@@ -339,7 +344,8 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
             'extra1'        => apply_filters('paynl-extra1', $order->get_order_number(), $order),
             'extra2'        => apply_filters('paynl-extra2', $billing_email, $order),
             'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
-            'ipaddress'     => $ipAddress
+            'ipaddress'     => $ipAddress,
+            'object'        => 'woocommerce ' . $this->getVersion(),
         );
 
         if (get_option('paynl_send_order_data') == 'yes') {

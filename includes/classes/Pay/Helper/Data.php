@@ -64,7 +64,7 @@ class Pay_Helper_Data
             );
             if ($paymentOption['id'] == 10 && isset($paymentOption['banks'])) {
                 foreach ($paymentOption['banks'] as $paymentOptionSub) {
-                    $image = 'https://admin.pay.nl/images/payment_banks/' . $paymentOptionSub['id'] . '.png';
+                    $image = 'https://static.pay.nl/ideal/banks/' . $paymentOptionSub['id'] . '.png';
                     $wpdb->insert(
                         $table_name_option_subs, array(
                         'option_id' => $paymentOption['id'],

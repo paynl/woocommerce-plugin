@@ -34,7 +34,7 @@ class Config
     private static $tokenCode = 'token';
 
     /**
-     * @var string The Pay.nl  API token to be used for requests.
+     * @var string The PAY.  API token to be used for requests.
      */
     private static $apiToken;
 
@@ -44,12 +44,12 @@ class Config
     private static $serviceId;
 
     /**
-     * @var string The base URL for the Pay.nl API.
+     * @var string The base URL for the PAY. API.
      */
     private static $apiBase = 'https://rest-api.pay.nl';
 
     /**
-     * @var int The version of the Pay.nl API to use for requests.
+     * @var int The version of the PAY. API to use for requests.
      */
     private static $apiVersion = 5;
 

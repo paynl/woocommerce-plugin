@@ -102,7 +102,7 @@ class Pay_Gateway_Instore extends Pay_Gateway_Abstract
 
         $result = $this->startTransaction($order);
 
-        $order->add_order_note(sprintf(__('Pay.nl: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+        $order->add_order_note(sprintf(__('PAY.: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             $result->getTransactionId()));
 
         Pay_Helper_Transaction::newTransaction($result->getTransactionId(), $this->getOptionId(), $order->get_total(),

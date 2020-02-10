@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Plugin Name: Woocommerce Pay.nl Payment Methods
+ * Plugin Name: WooCommerce PAY. Payment Methods
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
- * Description: Pay.nl payment methods for woocommerce
- * Version: 3.4
- * Author: Pay.nl
- * Author URI: http://www.pay.nl
+ * Description: PAY. payment methods for WooCommerce
+ * Version: 3.4.1
+ * Author: PAY.
+ * Author URI: https://www.pay.nl
  * Requires at least: 3.5.1
  * Tested up to: 5.0
  *
@@ -29,11 +29,11 @@ define( 'PAYNL_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 load_plugin_textdomain( PAYNL_WOOCOMMERCE_TEXTDOMAIN, false, 'woocommerce-paynl-payment-methods/i18n/languages' );
 
 function pay_error_woocommerce_not_active() {
-	echo '<div class="error"><p>' . __( 'The Pay.nl payment methods plugin requires Woocommerce to be active', PAYNL_WOOCOMMERCE_TEXTDOMAIN ) . '</p></div>';
+	echo '<div class="error"><p>' . __( 'The PAY. payment methods plugin requires Woocommerce to be active', PAYNL_WOOCOMMERCE_TEXTDOMAIN ) . '</p></div>';
 }
 
 function pay_error_curl_not_installed() {
-	echo '<div class="error"><p>' . __( 'Curl is not installed.<br />In order to use the Pay.nl payment methods, you must install install CURL.<br />Ask your system administrator to install php_curl', PAYNL_WOOCOMMERCE_TEXTDOMAIN ) . '</p></div>';
+	echo '<div class="error"><p>' . __( 'Curl is not installed.<br />In order to use the PAY. payment methods, you must install install CURL.<br />Ask your system administrator to install php_curl', PAYNL_WOOCOMMERCE_TEXTDOMAIN ) . '</p></div>';
 }
 
 function paynl_plugin_add_settings_link( $links ) {
@@ -79,4 +79,3 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) || is_plugin_active_for_n
 	// Woocommerce is niet actief. foutmelding weergeven
 	add_action( 'admin_notices', 'pay_error_woocommerce_not_active' );
 }
-
