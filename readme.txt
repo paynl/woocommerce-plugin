@@ -353,6 +353,3 @@ Fixed a small typo in Pay_Helper_Transaction
 * Fixed a bug where the plugin would not detect woocommerce when using sitewide plugins
 = 2.2.1 =
 * Compatible with wordpress 2.2
-
-
-

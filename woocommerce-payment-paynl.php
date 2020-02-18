@@ -79,4 +79,3 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) || is_plugin_active_for_n
 	// Woocommerce is niet actief. foutmelding weergeven
 	add_action( 'admin_notices', 'pay_error_woocommerce_not_active' );
 }
-
