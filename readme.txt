@@ -47,7 +47,9 @@ With PAY. you can add the following payment options to your website:
 * Maestro
 * Manual transfer
 * Mastercard
+* Multibanco
 * Mybank
+* Payconiq
 * Paypal
 * Paysafecard
 * Phone payments
@@ -130,7 +132,9 @@ At the moment the plugin supports the following payment methods:
 * Maestro
 * Manual transfer
 * Mastercard
+* Multibanco
 * Mybank
+* Payconiq
 * Paypal
 * Paysafecard
 * Phone payments
@@ -167,6 +171,8 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 4. The iDEAL payment screen (Rabobank)
 
 == Changelog ==
+= 3.4.2 =
+Add payment methods Payconiq and Multibanco
 = 3.4.1 =
 Update plugin with object info
 Change Pay.nl name to PAY. everywhere
