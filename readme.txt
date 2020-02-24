@@ -4,7 +4,7 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: http://www.pay.nl
 Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Wechatpay, ,paypal, creditcard, mybank, sofortbanking, afterpay, mistercash, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 Tested up to: 5.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -47,7 +47,9 @@ With PAY. you can add the following payment options to your website:
 * Maestro
 * Manual transfer
 * Mastercard
+* Multibanco
 * Mybank
+* Payconiq
 * Paypal
 * Paysafecard
 * Phone payments
@@ -130,7 +132,9 @@ At the moment the plugin supports the following payment methods:
 * Maestro
 * Manual transfer
 * Mastercard
+* Multibanco
 * Mybank
+* Payconiq
 * Paypal
 * Paysafecard
 * Phone payments
@@ -167,6 +171,8 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 4. The iDEAL payment screen (Rabobank)
 
 == Changelog ==
+= 3.4.2 =
+Add payment methods Payconiq and Multibanco
 = 3.4.1 =
 Update plugin with object info
 Change Pay.nl name to PAY. everywhere

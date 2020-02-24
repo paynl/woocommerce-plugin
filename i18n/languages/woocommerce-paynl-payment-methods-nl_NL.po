@@ -313,6 +313,10 @@ msgstr "Betaalscherm taal"
 msgid "This is the language in which the payment screen will be shown"
 msgstr "Dit is de taal waarin het betaalscherm wordt weergegeven"
 
+#: includes/classes/Pay/Gateways.php:176
+msgid "This is the size in which the payment method logos will be shown"
+msgstr "Dit is de grootte waarin de logo's van de betaalmethoden worden weergegeven"
+
 #: includes/classes/Pay/Gateways.php:157
 msgid "Show payment method logos"
 msgstr "Toon logo's betaalmethoden"
