@@ -4,11 +4,11 @@
  * Plugin Name: WooCommerce PAY. Payment Methods
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
  * Description: PAY. payment methods for WooCommerce
- * Version: 3.4.2
+ * Version: 3.4.3
  * Author: PAY.
  * Author URI: https://www.pay.nl
  * Requires at least: 3.5.1
- * Tested up to: 5.0
+ * Tested up to: 5.3.2
  *
  * Text Domain: woocommerce-paynl-payment-methods
  * Domain Path: /i18n/languages
@@ -79,3 +79,4 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) || is_plugin_active_for_n
 	// Woocommerce is niet actief. foutmelding weergeven
 	add_action( 'admin_notices', 'pay_error_woocommerce_not_active' );
 }
+
