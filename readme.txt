@@ -172,7 +172,7 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 
 == Changelog ==
 = 3.4.3 =
-Updated layout
+Updated layout and Added settings to add VAT-number and COC-number to checkout.
 = 3.4.2 =
 Add payment methods Payconiq and Multibanco
 = 3.4.1 =

@@ -88,15 +88,12 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) || is_plugin_active_for_n
     add_action('woocommerce_admin_order_data_after_billing_address', 'wpdesk_coc_number_display_admin_order_meta', 10, 1);
   }
 
-
-
 } else {
 	// Woocommerce is niet actief. foutmelding weergeven
 	add_action( 'admin_notices', 'pay_error_woocommerce_not_active' );
 }
 
 
-#To add a new field, you need to paste the code in functions.php of your theme.
 function wpdesk_vat_field($checkout)
 {
   woocommerce_form_field('vat_number', array(
