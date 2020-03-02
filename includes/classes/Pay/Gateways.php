@@ -155,6 +155,20 @@ class Pay_Gateways
             'default' => 'yes',
         );
         $addedSettings[] = array(
+            'name' => __('Show VAT number', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'type' => 'checkbox',
+            'desc' => __('Check this box if you want to show VAT number in checkout', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'id' => 'paynl_show_vat_number',
+            'default' => 'no',
+        );
+        $addedSettings[] = array(
+            'name' => __('Show COC number', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'type' => 'checkbox',
+            'desc' => __('Check this box if you want to show COC number in checkout', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'id' => 'paynl_show_coc_number',
+            'default' => 'no',
+        );
+        $addedSettings[] = array(
             'name' => __('Use high risk methods', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'checkbox',
             'desc' => __("Check this box if you are using high risk payment methods", PAYNL_WOOCOMMERCE_TEXTDOMAIN),

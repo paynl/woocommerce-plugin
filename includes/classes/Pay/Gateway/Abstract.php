@@ -338,6 +338,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
             'amount'        => $order->get_total(),
             'returnUrl'     => $returnUrl,
             'exchangeUrl'   => $exchangeUrl,
+            'orderNumber'   => $order->get_order_number(),
             'paymentMethod' => $this->getOptionId(),
             'currency'      => $currency,
             'description'   => $order->get_order_number(),
@@ -358,8 +359,21 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
             if (isset($_POST['birthdate']) && !empty($_POST['birthdate'])) {
                 $enduser['birthDate'] = $_POST['birthdate'];
             }
-            $startData['enduser'] = $enduser;
 
+          $enduser['company'] = array(
+              'name' => $order->get_billing_company(),
+              'countryCode' => $billing_country
+            );
+
+            if (!empty($_POST['vat_number'])) {
+              $enduser['company']['vatNumber'] = sanitize_text_field($_POST['vat_number']);
+            }
+
+            if (!empty($_POST['coc_number'])) {
+              $enduser['company']['cocNumber'] = sanitize_text_field($_POST['coc_number']);
+            }
+
+            $startData['enduser'] = $enduser;
 
             // order gegevens ophalen
             $shippingAddress  = $shipping_address_1 . ' ' . $shipping_address_2;
