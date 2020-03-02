@@ -117,27 +117,26 @@ function wpdesk_coc_field($checkout)
   ), $checkout->get_value('coc_number'));
 }
 
-#To save this freshly added field in the order, you need to use the following code:
+# Save VAT-field in the order
 function wpdesk_checkout_vat_number_update_order_meta( $order_id ) {
   if ( ! empty( $_POST['vat_number'] ) ) {
     update_post_meta( $order_id, '_vat_number', sanitize_text_field( $_POST['vat_number'] ) );
   }
 }
 
-# It's also wise to show its content in the admin panel. To do so, use the following code:
+# Show content in the WooCommerce admin
 function wpdesk_vat_number_display_admin_order_meta( $order ) {
   echo '<p><strong>' . __( 'VAT Number', 'woocommerce' ) . ':</strong> ' . get_post_meta( $order->id, '_vat_number', true ) . '</p>';
 }
 
-
-#To save this freshly added field in the order, you need to use the following code:
+# Save COC-field in the order
 function wpdesk_checkout_coc_number_update_order_meta( $order_id ) {
   if ( ! empty( $_POST['coc_number'] ) ) {
     update_post_meta( $order_id, '_coc_number', sanitize_text_field( $_POST['coc_number'] ) );
   }
 }
 
-# It's also wise to show its content in the admin panel. To do so, use the following code:
+# Show content in the WooCommerce admin
 function wpdesk_coc_number_display_admin_order_meta( $order ) {
   echo '<p><strong>' . __( 'COC Number', 'woocommerce' ) . ':</strong> ' . get_post_meta( $order->id, '_coc_number', true ) . '</p>';
 }
