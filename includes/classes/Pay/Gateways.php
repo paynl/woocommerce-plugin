@@ -2,7 +2,6 @@
 
 class Pay_Gateways
 {
-
     const STATUS_PENDING = 'PENDING';
     const STATUS_CANCELED = 'CANCELED';
     const STATUS_SUCCESS = 'SUCCESS';
@@ -10,7 +9,6 @@ class Pay_Gateways
 
     public static function _getGateways($arrDefault)
     {
-
         $paymentOptions = array(
             'Pay_Gateway_Alipay',
             'Pay_Gateway_Amazonpay',
@@ -76,15 +74,13 @@ class Pay_Gateways
             $paymentOptionsAvailable = $paymentOptions;
         }
 
-
         $arrDefault = array_merge($arrDefault, $paymentOptionsAvailable);
 
         return $arrDefault;
     }
 
     public static function _addGlobalSettings($settings)
-    {
-
+    {       
         $loadedPaymentMethods = "";
         try {
             Pay_Helper_Data::loadPaymentMethods();
@@ -99,12 +95,38 @@ class Pay_Gateways
             $loadedPaymentMethods .= '</ul>';
             $loadedPaymentMethods .= '<div class="clear"></div>';
         } catch (Exception $e) {
-            $loadedPaymentMethods = '<span style="color:#ff0000; font-weight:bold;">Error: ' . $e->getMessage() . '</span>';
+            $current_apitoken = get_option('paynl_apitoken');
+            $current_serviceid = get_option('paynl_serviceid');
+            $current_tokencode = get_option('paynl_tokencode');
+            
+            $error = $e->getMessage();
+            if(strlen($current_apitoken . $current_serviceid . $current_tokencode) == 0){
+                if(count($_POST)>0){
+                    $error = __('API token and Service id are required.', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
+                } else{
+                    $error = '';
+                }                
+            } else if(strlen($current_apitoken . $current_serviceid) == 0){
+                $error = __('API token and Service id are required.', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
+            } else if(strlen($current_apitoken) == 0){               
+                $error = __('API token is required.', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
+            } else if(strlen($current_serviceid) == 0){
+                $error = __('Service id is required.', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
+            }
+            
+            if($error == 'HTTP/1.0 401 Unauthorized'){
+                $error = __('API token is invalid.', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
+            }
+            if($error  == 'PAY-404 - Service not found'){
+                $error = __('Service id is invalid.', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
+            }
+
+            if(strlen($error)>0){
+                $loadedPaymentMethods = '<span style="color:#ff0000; font-weight:bold;">'.__('Error:', PAYNL_WOOCOMMERCE_TEXTDOMAIN).' ' . $error . '</span>';
+            }
         }
 
-
         $updatedSettings = array();
-
         $addedSettings = array();
         $addedSettings[] = array(
             'title' => __('PAY. settings', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
@@ -186,8 +208,6 @@ class Pay_Gateways
                       '<Br>For more info see: <a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
             'id' => 'paynl_exchange_url',
         );
-
-
         $addedSettings[] = array(
             'type' => 'sectionend',
             'id' => 'paynl_global_settings',
@@ -197,8 +217,7 @@ class Pay_Gateways
                 $updatedSettings = array_merge($updatedSettings, $addedSettings);
             }
             $updatedSettings[] = $setting;
-        }
-
+        }       
 
         return $updatedSettings;
     }
@@ -236,7 +255,6 @@ class Pay_Gateways
         } catch (Pay_Exception_Notice $e) {
             // just ignore the notices
         }
-
         wp_redirect($url);
     }
 
@@ -279,7 +297,6 @@ class Pay_Gateways
             }
             if (!$pending) {
                 Pay_Helper_Transaction::processTransaction($_REQUEST['order_id'], $status);
-
                 $message = 'TRUE|Status updated to ' . $status;
             }
         } catch (Pay_Exception_Notice $e) {
