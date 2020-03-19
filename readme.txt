@@ -1,15 +1,15 @@
-=== Woocommerce PAY. Payment Methods ===
+=== WooCommerce PAY. Payment Methods ===
 Contributors: andypay
 Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: http://www.pay.nl
 Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Wechatpay, ,paypal, creditcard, mybank, sofortbanking, afterpay, mistercash, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
-Stable tag: 3.4.2
-Tested up to: 5.0
+Stable tag: 3.4.3
+Tested up to: 5.3.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin adds the PAY. payment methods to your Woocommerce installation.
+This plugin adds the PAY. payment methods to your WooCommerce installation.
 
 == Description ==
 
@@ -81,8 +81,8 @@ This section describes in short how to install the plugin and get it working.
 If you need more help, you can download the manual [here](http://www.pay.nl/plugin/woocommerce/pdf) or send an email to [support@pay.nl](mailto:support@pay.nl)
 
 1. Install the plugin via Plugins -> new plugin
-2. Activate the plugin through the 'Plugins' menu in WordPress, the name of this plugin is: Woocommerce PAY. Payment Methods
-3. Under Woocommerce -> Settings -> Payment, configure the apitoken and serviceid and activate the desired payment methods.
+2. Activate the plugin through the 'Plugins' menu in WordPress, the name of this plugin is: WooCommerce PAY. Payment Methods
+3. Under WooCommerce -> Settings -> Payment, configure the apitoken and serviceid and activate the desired payment methods.
 4. You can now accept payments using PAY.
 
 == Frequently Asked Questions ==
@@ -171,6 +171,8 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 4. The iDEAL payment screen (Rabobank)
 
 == Changelog ==
+= 3.4.3 =
+Updated layout and Added settings to add VAT-number and COC-number to checkout.
 = 3.4.2 =
 Add payment methods Payconiq and Multibanco
 = 3.4.1 =
@@ -353,3 +355,6 @@ Fixed a small typo in Pay_Helper_Transaction
 * Fixed a bug where the plugin would not detect woocommerce when using sitewide plugins
 = 2.2.1 =
 * Compatible with wordpress 2.2
+
+
+

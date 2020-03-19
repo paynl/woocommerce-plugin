@@ -92,7 +92,7 @@ class Pay_Gateways
             $arrOptions = Pay_Helper_Data::getOptions();
             $loadedPaymentMethods .= '<br /><br />' . __('The following payment methods can be enabled', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
 
-            $loadedPaymentMethods .= '<ul style="width:900px;">';
+            $loadedPaymentMethods .= '<ul>';
             foreach ($arrOptions as $option) {
                 $loadedPaymentMethods .= '<li style="float: left; width:300px;"><img src="' . $option['image'] . '" alt="' . $option['name'] . '" title="' . $option['name'] . '" /> ' . $option['name'] . '</li>';
             }
@@ -155,6 +155,20 @@ class Pay_Gateways
             'default' => 'yes',
         );
         $addedSettings[] = array(
+            'name' => __('Show VAT number', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'type' => 'checkbox',
+            'desc' => __('Check this box if you want to show VAT number in checkout', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'id' => 'paynl_show_vat_number',
+            'default' => 'no',
+        );
+        $addedSettings[] = array(
+            'name' => __('Show COC number', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'type' => 'checkbox',
+            'desc' => __('Check this box if you want to show COC number in checkout', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'id' => 'paynl_show_coc_number',
+            'default' => 'no',
+        );
+        $addedSettings[] = array(
             'name' => __('Use high risk methods', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'checkbox',
             'desc' => __("Check this box if you are using high risk payment methods", PAYNL_WOOCOMMERCE_TEXTDOMAIN),
@@ -211,12 +225,22 @@ class Pay_Gateways
         add_filter('woocommerce_payment_gateways', array(__CLASS__, '_getGateways'));
     }
 
-    /**
-     * This function adds the Pay Global Settings to the woocommerce payment method settings
+
+    public static function _addPayStyleSheet()
+    {
+      wp_register_style( 'custom_wp_admin_css', plugin_dir_url( __FILE__ ) . '/css/pay.css', false, '1.0.0' );
+      wp_enqueue_style( 'custom_wp_admin_css' );
+    }
+
+  /**
+     *
+     *
+     * This function adds the Pay Global Settings to the WooCommerce payment method settings
      */
     public static function addSettings()
     {
-        add_filter('woocommerce_payment_gateways_settings', array(__CLASS__, '_addGlobalSettings'));
+      add_action('admin_enqueue_scripts', array(__CLASS__, '_addPayStyleSheet'));
+      add_filter('woocommerce_payment_gateways_settings', array(__CLASS__, '_addGlobalSettings'));
     }
 
     /**
