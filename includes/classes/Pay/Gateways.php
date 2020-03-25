@@ -80,7 +80,7 @@ class Pay_Gateways
     }
 
     public static function _addGlobalSettings($settings)
-    {       
+    {
         $loadedPaymentMethods = "";
         try {
             Pay_Helper_Data::loadPaymentMethods();
@@ -88,7 +88,7 @@ class Pay_Gateways
             $arrOptions = Pay_Helper_Data::getOptions();
             $loadedPaymentMethods .= '<br /><br />' . __('The following payment methods can be enabled', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
 
-            $loadedPaymentMethods .= '<ul style="width:900px;">';
+            $loadedPaymentMethods .= '<ul>';
             foreach ($arrOptions as $option) {
                 $loadedPaymentMethods .= '<li style="float: left; width:300px;"><img src="' . $option['image'] . '" alt="' . $option['name'] . '" title="' . $option['name'] . '" /> ' . $option['name'] . '</li>';
             }
@@ -98,22 +98,22 @@ class Pay_Gateways
             $current_apitoken = get_option('paynl_apitoken');
             $current_serviceid = get_option('paynl_serviceid');
             $current_tokencode = get_option('paynl_tokencode');
-            
+
             $error = $e->getMessage();
             if(strlen($current_apitoken . $current_serviceid . $current_tokencode) == 0){
                 if(count($_POST)>0){
                     $error = __('API token and Service id are required.', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
                 } else{
                     $error = '';
-                }                
+                }
             } else if(strlen($current_apitoken . $current_serviceid) == 0){
                 $error = __('API token and Service id are required.', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
-            } else if(strlen($current_apitoken) == 0){               
+            } else if(strlen($current_apitoken) == 0){
                 $error = __('API token is required.', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
             } else if(strlen($current_serviceid) == 0){
                 $error = __('Service id is required.', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
             }
-            
+
             if($error == 'HTTP/1.0 401 Unauthorized'){
                 $error = __('API token is invalid.', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
             }
@@ -177,6 +177,20 @@ class Pay_Gateways
             'default' => 'yes',
         );
         $addedSettings[] = array(
+            'name' => __('Show VAT number', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'type' => 'checkbox',
+            'desc' => __('Check this box if you want to show VAT number in checkout', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'id' => 'paynl_show_vat_number',
+            'default' => 'no',
+        );
+        $addedSettings[] = array(
+            'name' => __('Show COC number', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'type' => 'checkbox',
+            'desc' => __('Check this box if you want to show COC number in checkout', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'id' => 'paynl_show_coc_number',
+            'default' => 'no',
+        );
+        $addedSettings[] = array(
             'name' => __('Use high risk methods', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'checkbox',
             'desc' => __("Check this box if you are using high risk payment methods", PAYNL_WOOCOMMERCE_TEXTDOMAIN),
@@ -217,7 +231,7 @@ class Pay_Gateways
                 $updatedSettings = array_merge($updatedSettings, $addedSettings);
             }
             $updatedSettings[] = $setting;
-        }       
+        }
 
         return $updatedSettings;
     }
@@ -230,12 +244,22 @@ class Pay_Gateways
         add_filter('woocommerce_payment_gateways', array(__CLASS__, '_getGateways'));
     }
 
-    /**
-     * This function adds the Pay Global Settings to the woocommerce payment method settings
+
+    public static function _addPayStyleSheet()
+    {
+      wp_register_style( 'custom_wp_admin_css', plugin_dir_url( __FILE__ ) . '/css/pay.css', false, '1.0.0' );
+      wp_enqueue_style( 'custom_wp_admin_css' );
+    }
+
+  /**
+     *
+     *
+     * This function adds the Pay Global Settings to the Woocommerce payment method settings
      */
     public static function addSettings()
     {
-        add_filter('woocommerce_payment_gateways_settings', array(__CLASS__, '_addGlobalSettings'));
+      add_action('admin_enqueue_scripts', array(__CLASS__, '_addPayStyleSheet'));
+      add_filter('woocommerce_payment_gateways_settings', array(__CLASS__, '_addGlobalSettings'));
     }
 
     /**
@@ -255,6 +279,7 @@ class Pay_Gateways
         } catch (Pay_Exception_Notice $e) {
             // just ignore the notices
         }
+
         wp_redirect($url);
     }
 
@@ -297,6 +322,7 @@ class Pay_Gateways
             }
             if (!$pending) {
                 Pay_Helper_Transaction::processTransaction($_REQUEST['order_id'], $status);
+
                 $message = 'TRUE|Status updated to ' . $status;
             }
         } catch (Pay_Exception_Notice $e) {
