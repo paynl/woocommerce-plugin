@@ -2,7 +2,7 @@
 Contributors: andypay
 Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: http://www.pay.nl
-Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Wechatpay, ,paypal, creditcard, mybank, sofortbanking, afterpay, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
+Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Wechatpay, paypal, creditcard, mybank, sofortbanking, afterpay, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
 Stable tag: 3.4.4
 Tested up to: 5.3.2

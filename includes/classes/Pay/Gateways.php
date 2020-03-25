@@ -254,7 +254,7 @@ class Pay_Gateways
   /**
      *
      *
-     * This function adds the Pay Global Settings to the Woocommerce payment method settings
+     * This function adds the Pay Global Settings to the WooCommerce payment method settings
      */
     public static function addSettings()
     {
