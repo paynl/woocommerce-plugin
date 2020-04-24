@@ -37,9 +37,9 @@ class Pay_Gateway_Yehhpay extends Pay_Gateway_Abstract
     $ask_birthdate = $this->get_option('ask_birthdate');
     if ($ask_birthdate == 'yes')
     {
-      echo __('Birthdate: ', PAYNL_WOOCOMMERCE_TEXTDOMAIN) . " <input name='birthdate_yehhpay' id='birthdate_yehhpay' ></input>";
+      echo __('Birthdate: ', PAYNL_WOOCOMMERCE_TEXTDOMAIN) . " <input name='birthdate_yeahpay' id='birthdate_yeahpay' ></input>";
 
-      $js = 'jQuery( "#birthdate_yehhpay" ).css("width","125px").datepicker({ changeMonth: true, changeYear: true, yearRange:"-100:+0", dateFormat: "dd-mm-yy" });';
+      $js = 'jQuery( "#birthdate_yeahpay" ).css("width","125px").datepicker({ changeMonth: true, changeYear: true, yearRange:"-100:+0", dateFormat: "dd-mm-yy" });';
       wp_enqueue_style('jquery-ui', PAYNL_PLUGIN_URL . 'assets/jquery-ui/jquery-ui.min.css');
       wp_enqueue_script('jquery-ui', PAYNL_PLUGIN_URL . 'assets/jquery-ui/jquery-ui.min.js');
 
