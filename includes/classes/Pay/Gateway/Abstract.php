@@ -359,8 +359,26 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
             if (isset($_POST['birthdate']) && !empty($_POST['birthdate'])) {
                 $enduser['birthDate'] = $_POST['birthdate'];
             }
+            if (isset($_POST['birthdate_billink']) && !empty($_POST['birthdate_billink']) && $this->getOptionId() == 1672) {
+                $enduser['birthDate'] = $_POST['birthdate_billink'];
+            }
+            if (isset($_POST['birthdate_capayble']) && !empty($_POST['birthdate_capayble']) && $this->getOptionId() == 1744) {
+                $enduser['birthDate'] = $_POST['birthdate_capayble'];
+            }
+            if (isset($_POST['birthdate_capayble_gespreid']) && !empty($_POST['birthdate_capayble_gespreid']) && $this->getOptionId() == 1813) {
+                $enduser['birthDate'] = $_POST['birthdate_capayble'];
+            }
+            if (isset($_POST['birthdate_klarna']) && !empty($_POST['birthdate_klarna']) && $this->getOptionId() == 1717) {
+                $enduser['birthDate'] = $_POST['birthdate_klarna'];
+            }
+            if (isset($_POST['birthdate_yehhpay']) && !empty($_POST['birthdate_yehhpay']) && $this->getOptionId() == 1877) {
+                $enduser['birthDate'] = $_POST['birthdate_yehhpay'];
+            }
+            if (isset($_POST['birthdate_yehhpay']) && !empty($_POST['birthdate_yehhpay']) && $this->getOptionId() == 1877) {
+                $enduser['birthDate'] = $_POST['birthdate_yehhpay'];
+            }
 
-          $enduser['company'] = array(
+            $enduser['company'] = array(
               'name' => $order->get_billing_company(),
               'countryCode' => $billing_country
             );
