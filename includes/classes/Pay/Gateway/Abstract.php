@@ -366,7 +366,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                 $enduser['birthDate'] = $_POST['birthdate_capayble'];
             }
             if (isset($_POST['birthdate_capayble_gespreid']) && !empty($_POST['birthdate_capayble_gespreid']) && $this->getOptionId() == 1813) {
-                $enduser['birthDate'] = $_POST['birthdate_capayble'];
+                $enduser['birthDate'] = $_POST['birthdate_capayble_gespreid'];
             }
             if (isset($_POST['birthdate_klarna']) && !empty($_POST['birthdate_klarna']) && $this->getOptionId() == 1717) {
                 $enduser['birthDate'] = $_POST['birthdate_klarna'];
