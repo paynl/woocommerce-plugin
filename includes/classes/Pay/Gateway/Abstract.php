@@ -371,8 +371,8 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
             if (isset($_POST['birthdate_klarna']) && !empty($_POST['birthdate_klarna']) && $this->getOptionId() == 1717) {
                 $enduser['birthDate'] = $_POST['birthdate_klarna'];
             }
-            if (isset($_POST['birthdate_yeahpay']) && !empty($_POST['birthdate_yeahpay']) && $this->getOptionId() == 1877) {
-                $enduser['birthDate'] = $_POST['birthdate_yeahpay'];
+            if (isset($_POST['birthdate_yehhpay']) && !empty($_POST['birthdate_yehhpay']) && $this->getOptionId() == 1877) {
+                $enduser['birthDate'] = $_POST['birthdate_yehhpay'];
             }            
 
             $enduser['company'] = array(
