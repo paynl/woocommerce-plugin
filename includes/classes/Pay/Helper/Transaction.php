@@ -148,6 +148,10 @@ class Pay_Helper_Transaction
                         throw new Pay_Exception_Notice('Not cancelling, order is already paid');
                     }
 
+                    if (!$order->has_status('pending')) {
+                        throw new Pay_Exception_Notice('Cancel ignored, order is '.$order->get_status());
+                    }
+
                     $order->set_status('failed');
                     $order->save();
                 }
