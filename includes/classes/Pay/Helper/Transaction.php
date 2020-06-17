@@ -135,7 +135,7 @@ class Pay_Helper_Transaction
                 $url = self::getOrderReturnUrl($order);
                 break;
             case Pay_Gateways::STATUS_CANCELED:
-                $order->add_order_note(__('PAY.: Payment canceled', PAYNL_WOOCOMMERCE_TEXTDOMAIN));
+               
 
                 if (WooCommerce::instance()->version >= 3) {
                     $method = $order->get_payment_method();
@@ -148,8 +148,14 @@ class Pay_Helper_Transaction
                         throw new Pay_Exception_Notice('Not cancelling, order is already paid');
                     }
 
+                    if (!$order->has_status('pending')) {
+                        throw new Pay_Exception_Notice('Cancel ignored, order is ' . $order->get_status());
+                    }
+
                     $order->set_status('failed');
                     $order->save();
+                    
+                    $order->add_order_note(__('PAY.: Payment canceled', PAYNL_WOOCOMMERCE_TEXTDOMAIN));
                 }
 
                 $url = $woocommerce->cart->get_checkout_url();
