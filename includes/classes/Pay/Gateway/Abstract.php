@@ -63,7 +63,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
     public function getVersion()
     {
-        return '3.4.4';
+        return '3.4.6';
     }
 
     /**
