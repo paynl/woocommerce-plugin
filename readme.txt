@@ -6,7 +6,7 @@ Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Wechatpay, paypal, cred
 Requires at least: 3.5.1
 Stable tag: 3.4.6
 Tested up to: 5.4.2
-WC tested up to: 4.2.1
+WC tested up to: 4.3.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
