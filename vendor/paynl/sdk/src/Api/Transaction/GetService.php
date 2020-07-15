@@ -30,6 +30,7 @@ class GetService extends Transaction
 {
     protected $apiTokenRequired = true;
     protected $serviceIdRequired = true;
+    protected $version = 16;
 
     /**
      * @var array cached result

@@ -13,7 +13,8 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
     public function __construct()
     {
         $this->id   = $this->getId();
-        $this->icon = $this->getIcon();
+        $this->icon = $this->getIcon();     
+        $this->optionId = $this->getOptionId();          
 
         $this->has_fields         = true;
         $this->method_title       = 'PAY. - ' . $this->getName();
@@ -44,7 +45,13 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
         $size = get_option('paynl_logo_size');
 
         if ($size) {
-            return 'https://static.pay.nl/payment_profiles/' . $size . '/' . $this->getOptionId() . '.png';
+
+            $paymentOptions = Pay_Helper_Data::getPaymentOptionsList();
+            $paymentOption = (isset($paymentOptions[$this->getOptionId()])) ? $paymentOptions[$this->getOptionId()] : array();
+            $sizes = explode('x', $size);        
+            $style = 'width: ' . $sizes[0] . 'px;height:  ' . $sizes[1] . 'px;min-height: 0px;max-height: 100px;position: absolute;float: none;top: 35px;transform: translateY(-50%);right: 20px;';
+            return plugins_url('/woocommerce-paynl-payment-methods/assets/logos/' . $paymentOption['brand']['id'] . '.png').'" style="' . $style;
+        
         } else {
             return '';
         }
@@ -71,8 +78,13 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function init_form_fields()
     {
-        $optionId = $this->getOptionId();
+        $optionId = $this->getOptionId();   
+
         if (Pay_Helper_Data::isOptionAvailable($optionId)) {
+
+            $paymentOptions = Pay_Helper_Data::getPaymentOptionsList();
+            $paymentOptionDefaults = (isset($paymentOptions[$optionId])) ? $paymentOptions[$optionId] : array();
+            
             $this->form_fields = array(
                 'enabled'      => array(
                     'title'   => __('Enable/Disable', 'woocommerce'),
@@ -90,7 +102,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                 'description'  => array(
                     'title'   => __('Customer Message', 'woocommerce'),
                     'type'    => 'textarea',
-                    'default' => sprintf(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),
+                    'default' => (isset($paymentOptionDefaults['brand']['public_description'])) ? $paymentOptionDefaults['brand']['public_description'] : sprintf(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),                    
                 ),
                 'instructions' => array(
                     'title'       => __('Instructions', 'woocommerce'),
@@ -104,7 +116,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                     'type'        => 'price',
                     'description' => __('Minimum amount valid for this payment method, leave blank for no limit',
                         PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-                    'default'     => '',
+                    'default' => (isset($paymentOptionDefaults['min_amount'])) ? $paymentOptionDefaults['min_amount'] : '',                    
                     'desc_tip'    => true,
                 ),
                 'max_amount'   => array(
@@ -112,7 +124,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                     'type'        => 'price',
                     'description' => __('Maximum amount valid for this payment method, leave blank for no limit',
                         PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-                    'default'     => '',
+                    'default' => (isset($paymentOptionDefaults['max_amount'])) ? $paymentOptionDefaults['max_amount'] : '',                    
                     'desc_tip'    => true,
                 ),
             );
@@ -206,6 +218,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
         }
     }
 
+    
     public function process_payment($order_id)
     {
         /** @var $wpdb wpdb The database */
@@ -373,7 +386,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
             }
             if (isset($_POST['birthdate_yehhpay']) && !empty($_POST['birthdate_yehhpay']) && $this->getOptionId() == 1877) {
                 $enduser['birthDate'] = $_POST['birthdate_yehhpay'];
-            }            
+            }
 
             $enduser['company'] = array(
               'name' => $order->get_billing_company(),

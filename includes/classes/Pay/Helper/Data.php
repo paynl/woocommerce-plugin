@@ -37,23 +37,19 @@ class Pay_Helper_Data
 
     public static function loadPaymentMethods()
     {
-        global $wpdb;
+        global $wpdb;        
 
-        Pay_Gateway_Abstract::loginSDK();
-
-
-        $paymentOptions = \Paynl\Paymentmethods::getList();
-
-
+        $paymentOptions = self::getPaymentOptionsList();
+        
         $table_name_options = $wpdb->prefix . "pay_options";
         $table_name_option_subs = $wpdb->prefix . "pay_option_subs";
 
         //eerst flushen
         $wpdb->query('TRUNCATE TABLE ' . $table_name_option_subs);
         $wpdb->query('TRUNCATE TABLE ' . $table_name_options);
-
+          
         foreach ($paymentOptions as $paymentOption) {
-            $image = 'https://static.pay.nl/payment_profiles/25x25/' . $paymentOption['id'] . '.png';
+            $image = plugins_url('/woocommerce-paynl-payment-methods/assets/logos/' . $paymentOption['brand']['id'] . '.png');
             $wpdb->insert(
                 $table_name_options, array(
                 'id' => $paymentOption['id'],
@@ -78,7 +74,8 @@ class Pay_Helper_Data
             }
         }
     }
-
+    
+    
     public static function getOptions()
     {
         global $wpdb;
@@ -121,6 +118,14 @@ class Pay_Helper_Data
             return true;
     }
 
+    public static function getPaymentOptionsList()
+    {       
+        Pay_Gateway_Abstract::loginSDK();
+
+        $paymentOptions = \Paynl\Paymentmethods::getList();
+
+        return $paymentOptions;
+    }
 
     public static function getLogoSizes()
     {
