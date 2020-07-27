@@ -116,7 +116,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                     'type'        => 'price',
                     'description' => __('Minimum amount valid for this payment method, leave blank for no limit',
                         PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-                    'default' => (isset($paymentOptionDefaults['min_amount'])) ? $paymentOptionDefaults['min_amount'] : '',                    
+                    'default' => (isset($paymentOptionDefaults['min_amount'])) ? floatval($paymentOptionDefaults['min_amount'] / 100)  : '',                    
                     'desc_tip'    => true,
                 ),
                 'max_amount'   => array(
@@ -124,7 +124,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                     'type'        => 'price',
                     'description' => __('Maximum amount valid for this payment method, leave blank for no limit',
                         PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-                    'default' => (isset($paymentOptionDefaults['max_amount'])) ? $paymentOptionDefaults['max_amount'] : '',                    
+                    'default' => (isset($paymentOptionDefaults['max_amount'])) ? floatval($paymentOptionDefaults['max_amount'] / 100) : '',                    
                     'desc_tip'    => true,
                 ),
             );
