@@ -25,7 +25,6 @@ class Paymentmethods
         foreach ((array)$input['countryOptionList'] as $country) {       
             
             foreach ((array)$country['paymentOptionList'] as $paymentOption) {
-                
                 if (isset($paymentMethods[$paymentOption['id']])) {
                     $paymentMethods[$paymentOption['id']]['countries'][] = $country['id'];
                     continue;
@@ -94,9 +93,10 @@ class Paymentmethods
     public static function getList(array $options = array())
     {
         $api = new Api\GetService();
-        $result = $api->doRequest();                    
+        $result = $api->doRequest();       
        
-        $paymentMethods = self::reorderOutput($result); 
+        $paymentMethods = self::reorderOutput($result);
+ 
 
         if (isset($options['country'])) {
             $paymentMethods = self::filterCountry($paymentMethods, $options['country']);

@@ -1,20 +1,4 @@
 <?php
-/*
- * Copyright (C) 2015 Andy Pieters <andy@andypieters.nl>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 
 namespace Paynl\Api\Transaction;
 
@@ -33,9 +17,22 @@ class GetService extends Transaction
     protected $version = 16;
 
     /**
+     * @var int The ID of the payment method. Only the payment options linked to the provided payment method ID will be returned if an ID is provided. If omitted, all available payment options are returned. Use the following IDs to filter the options:.
+     */
+    private $paymentMethodId;
+
+    /**
      * @var array cached result
      */
     private static $cache = array();
+
+    /**
+     * @param int $paymentMethodId
+     */
+    public function setPaymentMethodId($paymentMethodId)
+    {
+        $this->paymentMethodId = $paymentMethodId;
+    }
 
     /**
      * @inheritdoc
@@ -43,9 +40,13 @@ class GetService extends Transaction
      */
     protected function getData()
     {
-        Helper::requireServiceId();
+        Helper::requireServiceId();  
 
         $this->data['serviceId'] = Config::getServiceId();
+
+        if (!empty($this->paymentMethodId)) {
+            $this->data['paymentMethodId'] = $this->paymentMethodId;
+        }
 
         return parent::getData();
     }
@@ -57,7 +58,7 @@ class GetService extends Transaction
     {
         Helper::requireApiToken();
         Helper::requireServiceId();
-
+        
         $cacheKey = Config::getTokenCode().'|'.Config::getApiToken() . '|' . Config::getServiceId();
         if (isset(self::$cache[$cacheKey])) {
             if (self::$cache[$cacheKey] instanceof \Exception) {
@@ -67,11 +68,17 @@ class GetService extends Transaction
         }
         try {
             $result = parent::doRequest('transaction/getService');
+
+            if(isset($result['service']) && empty($result['service']['basePath'])) {
+              $result['service']['basePath'] = 'https://admin.pay.nl/images';
+            }
+
             self::$cache[$cacheKey] = $result;
         } catch (\Exception $e) {
             self::$cache[$cacheKey] = $e;
             throw $e;
         }
-        return $result;
+
+      return $result;
     }
 }
