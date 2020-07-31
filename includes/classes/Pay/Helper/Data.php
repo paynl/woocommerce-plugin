@@ -50,9 +50,8 @@ class Pay_Helper_Data
 
         foreach ($paymentOptions as $paymentOption) {
             $image = '';
-            $plugin_url = str_replace('/includes/classes/Pay/Helper','', plugins_url( '',  __FILE__));
             if (isset($paymentOption['brand']['id'])) {
-                $image = $plugin_url . '/assets/logos/' . $paymentOption['brand']['id'] . '.png';
+                $image = PAYNL_PLUGIN_URL . '/assets/logos/' . $paymentOption['brand']['id'] . '.png';
             } else if (isset($paymentOption['id'])) {
                 $image = 'https://static.pay.nl/payment_profiles/25x25/' . $paymentOption['id'] . '.png';
             }
