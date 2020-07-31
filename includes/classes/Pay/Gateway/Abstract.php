@@ -67,7 +67,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
         return '3.4.6';
     }
 
-    public function set_option_default($key, $value, $upate = false){
+    public function set_option_default($key, $value, $update = false){
         if((!$this->get_option($key)) || (strlen($this->get_option($key)) == 0) || ($update && $this->get_option($key) != $value)){
             $this->update_option($key, $value);
         }
