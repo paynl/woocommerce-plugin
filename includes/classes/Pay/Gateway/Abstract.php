@@ -50,8 +50,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
             $paymentOption = (isset($paymentOptions[$this->getOptionId()])) ? $paymentOptions[$this->getOptionId()] : array();
             $sizes = explode('x', $size);        
             $style = 'width: ' . $sizes[0] . 'px;height:  ' . $sizes[1] . 'px;min-height: 0px;max-height: 100px;position: absolute;float: none;top: 35px;transform: translateY(-50%);right: 20px;';
-            return plugins_url('/woocommerce-paynl-payment-methods/assets/logos/' . $paymentOption['brand']['id'] . '.png').'" style="' . $style;
-        
+            return str_replace('/includes/classes/Pay/Gateway','', plugins_url( '',  __FILE__)) . '/assets/logos/' . $paymentOption['brand']['id'] . '.png" style="' . $style;        
         } else {
             return '';
         }
