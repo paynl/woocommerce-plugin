@@ -54,8 +54,9 @@ Pay_Autoload::register();
 //Installer registreren
 register_activation_hook( __FILE__, array( 'Pay_Setup', 'install' ) );
 
-if ( is_plugin_active_for_network( 'woocommerce-paynl-payment-methods/woocommerce-payment-paynl.php' ) ) {
-	add_action( 'wpmu_new_blog', array( 'Pay_Setup', 'newBlog' ), 10, 6 );
+if (is_plugin_active_for_network('woocommerce-paynl-payment-methods/woocommerce-payment-paynl.php')) {
+  add_action('wp_initialize_site', array('Pay_Setup', 'newBlog'), 11);
+  add_filter('wpmu_drop_tables', array('Pay_Setup', 'delBlog'));
 }
 
 if ( is_plugin_active( 'woocommerce/woocommerce.php' ) || is_plugin_active_for_network( 'woocommerce/woocommerce.php' ) ) {
