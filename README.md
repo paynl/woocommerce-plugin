@@ -45,7 +45,7 @@
   
   #### Update instructions
 
-  If you go to the plugins page of WooCommerce you will see a notification if the PAY. plugin needs to be updated. With a simple click in the same menu it can be done.
+  If you go to the plugins page in wordpress you will see a notification if the PAY. plugin needs to be updated. With a simple click in the same menu it can be done.
   
   # Usage
   
