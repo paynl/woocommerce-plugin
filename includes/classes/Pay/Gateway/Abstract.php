@@ -44,9 +44,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
     {
         $size = get_option('paynl_logo_size');
         if ($size) {
-            $sizes = explode('x', $size);        
-            $style = 'width: ' . $sizes[0] . 'px;height:  ' . $sizes[1] . 'px;min-height: 0px;max-height: 100px;position: absolute;float: none;top: 35px;transform: translateY(-50%);right: 20px;';
-            return PAYNL_PLUGIN_URL . '/assets/logos/' . $this->get_option('brand_id') . '.png" style="' . $style;
+          return PAYNL_PLUGIN_URL . '/assets/logos/' . $this->get_option('brand_id') . '.png';
         } else {
             return '';
         }
@@ -82,14 +80,22 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
         if (Pay_Helper_Data::isOptionAvailable($optionId)) {
 
-            $paymentOptions = Pay_Helper_Data::getPaymentOptionsList();
-            $paymentOptionDefaults = (isset($paymentOptions[$optionId])) ? $paymentOptions[$optionId] : array();
-            
-            $this->set_option_default('brand_id', (isset($paymentOptionDefaults['brand']['id'])) ? $paymentOptionDefaults['brand']['id']  : '', true);
-            $this->set_option_default('min_amount', (isset($paymentOptionDefaults['min_amount'])) ? floatval($paymentOptionDefaults['min_amount'] / 100)  : '', false);
-            $this->set_option_default('max_amount', (isset($paymentOptionDefaults['max_amount'])) ? floatval($paymentOptionDefaults['min_amount'] / 100)  : '', false);
-            $this->set_option_default('description', (isset($paymentOptionDefaults['brand']['public_description']) && strlen($paymentOptionDefaults['brand']['public_description'])>0) ? $paymentOptionDefaults['brand']['public_description'] : sprintf(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()), false);
+             //check if value exists or not and set defaults if nessesary.
+            if (                
+                (!$this->get_option('brand_id')) || (strlen($this->get_option('brand_id')) == 0) ||
+                (!$this->get_option('min_amount')) || (strlen($this->get_option('min_amount')) == 0) ||
+                (!$this->get_option('max_amount')) || (strlen($this->get_option('max_amount')) == 0) ||
+                (!$this->get_option('description')) || (strlen($this->get_option('description')) == 0)            
+            ) {                            
+                $paymentOptions = Pay_Helper_Data::getPaymentOptionsList();
+                $paymentOptionDefaults = (isset($paymentOptions[$optionId])) ? $paymentOptions[$optionId] : array();
 
+                $this->set_option_default('brand_id', (isset($paymentOptionDefaults['brand']['id'])) ? $paymentOptionDefaults['brand']['id']  : '', true);
+                $this->set_option_default('min_amount', (isset($paymentOptionDefaults['min_amount'])) ? floatval($paymentOptionDefaults['min_amount'] / 100)  : '', false);
+                $this->set_option_default('max_amount', (isset($paymentOptionDefaults['max_amount'])) ? floatval($paymentOptionDefaults['max_amount'] / 100)  : '', false);
+                $this->set_option_default('description', (isset($paymentOptionDefaults['brand']['public_description']) && strlen($paymentOptionDefaults['brand']['public_description'])>0) ? $paymentOptionDefaults['brand']['public_description'] : sprintf(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()), false);
+            }
+            
             $this->form_fields = array(
                 'enabled'      => array(
                     'title'   => __('Enable/Disable', 'woocommerce'),
@@ -107,7 +113,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                 'description'  => array(
                     'title'   => __('Customer Message', 'woocommerce'),
                     'type'    => 'textarea',
-                    'default' => (isset($paymentOptionDefaults['brand']['public_description'])) ? $paymentOptionDefaults['brand']['public_description'] : sprintf(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),                    
+                    'default' => sprintf(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),                    
                 ),
                 'instructions' => array(
                     'title'       => __('Instructions', 'woocommerce'),
@@ -121,7 +127,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                     'type'        => 'price',
                     'description' => __('Minimum amount valid for this payment method, leave blank for no limit',
                         PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-                    'default' => (isset($paymentOptionDefaults['min_amount'])) ? floatval($paymentOptionDefaults['min_amount'] / 100)  : '',                    
+                    'default' => '',                    
                     'desc_tip'    => true,
                 ),
                 'max_amount'   => array(
@@ -129,7 +135,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                     'type'        => 'price',
                     'description' => __('Maximum amount valid for this payment method, leave blank for no limit',
                         PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-                    'default' => (isset($paymentOptionDefaults['max_amount'])) ? floatval($paymentOptionDefaults['max_amount'] / 100) : '',                    
+                    'default' => '',                    
                     'desc_tip'    => true,
                 ),
             );
