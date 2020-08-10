@@ -4,5 +4,6 @@
 
 #paynl_global_settings-description  img {
     position: relative;
-    top: 7px;
+    vertical-align: middle;
+    margin-right:5px;
 }

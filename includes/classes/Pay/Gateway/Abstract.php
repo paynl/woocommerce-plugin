@@ -43,8 +43,12 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
     public function getIcon()
     {
         $size = get_option('paynl_logo_size');
-        if ($size) {
-          return PAYNL_PLUGIN_URL . '/assets/logos/' . $this->get_option('brand_id') . '.png';
+
+        if ($size) {      
+            $sizes = explode('x', $size);        
+            $style = 'width: ' . $sizes[0] . 'px;height:  ' . $sizes[1] . 'px;min-height: 0px;max-height: 100px;';
+            $style2 = 'width: ' . $sizes[0] . 'px; display: inline-block; height: ' . $sizes[1] . 'px; vertical-align: middle;';
+            return PAYNL_PLUGIN_URL . '/assets/logos/' . $this->get_option('brand_id') . '.png" style="' . $style . '"/><span style="' . $style2 . '"></span><img style="display:none;"';
         } else {
             return '';
         }
