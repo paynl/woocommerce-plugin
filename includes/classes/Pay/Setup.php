@@ -75,13 +75,28 @@ class Pay_Setup {
         }
     }
 
-    public function newBlog($blog_id, $user_id, $domain, $path, $site_id, $meta) {
+    public static function newBlog($blog_id, $user_id = null, $domain = null, $path = null, $site_id = null, $meta = null) {
         global $wpdb;
 
         $old_blog = $wpdb->blogid;
-        switch_to_blog($blog_id);
+        switch_to_blog($blog_id->blog_id);
         self::_install();
         switch_to_blog($old_blog);
+    }
+
+  /**
+   * Delete PAY. tables when a (multi)site gets deleted
+   * @param $tables
+   * @return mixed
+   */
+    public static function delBlog($tables)
+    {
+      global $wpdb;
+      $tables[] = $wpdb->prefix . 'pay_transactions';
+      $tables[] = $wpdb->prefix . 'pay_options';
+      $tables[] = $wpdb->prefix . 'pay_option_subs';
+
+      return $tables;
     }
 
     private static function checkRequirements() {
