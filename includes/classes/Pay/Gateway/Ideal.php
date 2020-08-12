@@ -44,7 +44,7 @@ class Pay_Gateway_Ideal extends Pay_Gateway_Abstract
       <?php } elseif ($selectionType == 'radio')
       {
         ?>
-        <ul style="border:none;width:400px;list-style: none;">
+        <ul style="border:none;width:200px;list-style: none; margin:0; margin-top:20px;">
           <?php
           foreach ($optionSubs as $optionSub)
           {

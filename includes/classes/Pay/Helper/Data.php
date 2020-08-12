@@ -39,11 +39,7 @@ class Pay_Helper_Data
     {
         global $wpdb;
 
-        Pay_Gateway_Abstract::loginSDK();
-
-
-        $paymentOptions = \Paynl\Paymentmethods::getList();
-
+        $paymentOptions = self::getPaymentOptionsList();
 
         $table_name_options = $wpdb->prefix . "pay_options";
         $table_name_option_subs = $wpdb->prefix . "pay_option_subs";
@@ -53,14 +49,19 @@ class Pay_Helper_Data
         $wpdb->query('TRUNCATE TABLE ' . $table_name_options);
 
         foreach ($paymentOptions as $paymentOption) {
-            $image = 'https://static.pay.nl/payment_profiles/25x25/' . $paymentOption['id'] . '.png';
+            $image = '';
+            if (isset($paymentOption['brand']['id'])) {
+                $image = PAYNL_PLUGIN_URL . '/assets/logos/' . $paymentOption['brand']['id'] . '.png';
+            } else if (isset($paymentOption['id'])) {
+                $image = 'https://static.pay.nl/payment_profiles/25x25/' . $paymentOption['id'] . '.png';
+            }
             $wpdb->insert(
                 $table_name_options, array(
-                'id' => $paymentOption['id'],
-                'name' => $paymentOption['visibleName'],
-                'image' => $image,
-                'update_date' => current_time('mysql'),
-            ), array('%d', '%s', '%s', '%s')
+                    'id' => $paymentOption['id'],
+                    'name' => $paymentOption['visibleName'],
+                    'image' => $image,
+                    'update_date' => current_time('mysql'),
+                ), array('%d', '%s', '%s', '%s')
             );
             if ($paymentOption['id'] == 10 && isset($paymentOption['banks'])) {
                 foreach ($paymentOption['banks'] as $paymentOptionSub) {
@@ -78,6 +79,7 @@ class Pay_Helper_Data
             }
         }
     }
+
 
     public static function getOptions()
     {
@@ -121,6 +123,14 @@ class Pay_Helper_Data
             return true;
     }
 
+    public static function getPaymentOptionsList()
+    {
+        Pay_Gateway_Abstract::loginSDK();
+
+        $paymentOptions = \Paynl\Paymentmethods::getList();
+
+        return $paymentOptions;
+    }
 
     public static function getLogoSizes()
     {

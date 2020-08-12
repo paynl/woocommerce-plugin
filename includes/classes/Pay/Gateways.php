@@ -90,7 +90,7 @@ class Pay_Gateways
 
             $loadedPaymentMethods .= '<ul>';
             foreach ($arrOptions as $option) {
-                $loadedPaymentMethods .= '<li style="float: left; width:300px;"><img src="' . $option['image'] . '" alt="' . $option['name'] . '" title="' . $option['name'] . '" /> ' . $option['name'] . '</li>';
+                $loadedPaymentMethods .= '<li style="float: left; width:300px; display:block;"><img height="50px" src="' . $option['image'] . '" alt="' . $option['name'] . '" title="' . $option['name'] . '" /> ' . $option['name'] . '</li>';
             }
             $loadedPaymentMethods .= '</ul>';
             $loadedPaymentMethods .= '<div class="clear"></div>';
@@ -131,7 +131,7 @@ class Pay_Gateways
         $addedSettings[] = array(
             'title' => __('PAY. settings', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'title',
-            'desc' => '<p>' . $loadedPaymentMethods . '</p><p>' . __('The following options are required to use the PAY. Payment Gateway and are used by all PAY. Payment Methods', PAYNL_WOOCOMMERCE_TEXTDOMAIN) . '</p>',
+            'desc' => '<p>' . $loadedPaymentMethods . '</p><p style="margin-top: 25px;">' . __('The following options are required to use the PAY. Payment Gateway and are used by all PAY. Payment Methods', PAYNL_WOOCOMMERCE_TEXTDOMAIN) . '</p>',
             'id' => 'paynl_global_settings',
         );
         $addedSettings[] = array(
