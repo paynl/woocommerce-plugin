@@ -5,7 +5,7 @@
   
   # Description
   
-  With the PAY. plugin you can easily add different payment methods to your WooCommerce webshop. You can go to https://www.pay.nl (Dutch) for an overview of all our features and services, you can also visit https://docs.pay.nl/plugins#woocommerce for more documentation of our plugin.
+  The PAY. plugin lets you easily add different payment methods to your WooCommerce webshop. Go to https://www.pay.nl (Dutch) for an overview of all our features and services, you can also visit https://docs.pay.nl/plugins#woocommerce for more documentation of our plugin.
   
   - [Description](#description)
   - [Available payment methods](#available-payment-methods)
