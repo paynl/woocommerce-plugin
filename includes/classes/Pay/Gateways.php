@@ -211,7 +211,7 @@ class Pay_Gateways
             'options' => Pay_Helper_Data::getLogoSizes(),
             'desc' => __('This is the size in which the payment method logos will be shown', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'id' => 'paynl_logo_size',
-            'default' => '25x25',
+            'default' => 'Auto',
         );
         $addedSettings[] = array(
             'name' => __('Alternative Exchange URL', PAYNL_WOOCOMMERCE_TEXTDOMAIN),

@@ -51,7 +51,7 @@ class Pay_Helper_Data
         foreach ($paymentOptions as $paymentOption) {
             $image = '';
             if (isset($paymentOption['brand']['id'])) {
-                $image = PAYNL_PLUGIN_URL . '/assets/logos/' . $paymentOption['brand']['id'] . '.png';
+                $image = PAYNL_PLUGIN_URL . 'assets/logos/' . $paymentOption['brand']['id'] . '.png';
             } else if (isset($paymentOption['id'])) {
                 $image = 'https://static.pay.nl/payment_profiles/25x25/' . $paymentOption['id'] . '.png';
             }
@@ -123,19 +123,41 @@ class Pay_Helper_Data
             return true;
     }
 
+  public static function getAllOptions()
+  {
+    global $wpdb;
+
+      $table_name_options = $wpdb->prefix . "pay_options";
+
+      $query = $wpdb->prepare("SELECT id, name, image, update_date FROM $table_name_options");
+
+      $result = $wpdb->get_results($query, ARRAY_A);
+
+      $methods = array();
+      foreach ($result as $paymentmethod) {
+        $methods[$paymentmethod['id']] = $paymentmethod;
+      }
+
+      return $methods;
+  }
+
+    private static $_payment_methods = null;
     public static function getPaymentOptionsList()
     {
-        Pay_Gateway_Abstract::loginSDK();
+        if(empty(self::$_payment_methods)) {
+          Pay_Gateway_Abstract::loginSDK();
+          $paymentOptions = \Paynl\Paymentmethods::getList();
+          self::$_payment_methods = $paymentOptions;
+        }
 
-        $paymentOptions = \Paynl\Paymentmethods::getList();
-
-        return $paymentOptions;
+      return self::$_payment_methods;
     }
 
     public static function getLogoSizes()
     {
         return array(
-            0 => __('Don\'t show logos', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'Auto' => 'Auto',
+            0       => __('Don\'t show logos', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             '50x32' => '50x32',
             '40x26' => '40x26',
             '20x20' => '20x20',

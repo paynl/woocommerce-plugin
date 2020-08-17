@@ -42,16 +42,26 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
     public function getIcon()
     {
-        $size = get_option('paynl_logo_size');
+      $size = $this->getIconSize();
+      $brandid = $this->get_option('brand_id');
 
-        if ($size) {      
-            $sizes = explode('x', $size);        
-            $style = 'width: ' . $sizes[0] . 'px;height:  ' . $sizes[1] . 'px;min-height: 0px;max-height: 100px;';
-            $style2 = 'width: ' . $sizes[0] . 'px; display: inline-block; height: ' . $sizes[1] . 'px; vertical-align: middle;';
-            return PAYNL_PLUGIN_URL . '/assets/logos/' . $this->get_option('brand_id') . '.png" style="' . $style . '"/><span style="' . $style2 . '"></span><img style="display:none;"';
-        } else {
-            return '';
-        }
+      if (!empty($brandid) && $size == 'Auto') {
+        return PAYNL_PLUGIN_URL . 'assets/logos/' . $this->get_option('brand_id') . '.png';
+      } elseif (!empty($size) && $size != 'Auto') {
+        return 'https://static.pay.nl/payment_profiles/' . $size . '/' . $this->getOptionId() . '.png';
+      }
+
+      return '';
+    }
+
+    private function getIconSize()
+    {
+      $size = get_option('paynl_logo_size');
+      if (is_null($size)) {
+        $size = 'Auto';
+      }
+
+      return $size;
     }
 
     public static function getOptionId()
@@ -66,7 +76,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
     public function getVersion()
     {
-        return '3.4.6';
+        return '3.5.0';
     }
 
     public function set_option_default($key, $value, $update = false){
