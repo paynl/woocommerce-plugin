@@ -79,11 +79,12 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
         return '3.5.0';
     }
 
-    public function set_option_default($key, $value, $update = false){
-        if((!$this->get_option($key)) || (strlen($this->get_option($key)) == 0) || ($update && $this->get_option($key) != $value)){
-            $this->update_option($key, $value);
-        }
+  public function set_option_default($key, $value, $update = false)
+  {
+    if ((!$this->get_option($key)) || (strlen($this->get_option($key)) == 0) || ($update && $this->get_option($key) != $value)) {
+      $this->update_option($key, $value);
     }
+  }
 
     /**
      * Initialise Gateway Settings Form Fields.
@@ -94,22 +95,6 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
         if (Pay_Helper_Data::isOptionAvailable($optionId)) {
 
-             //check if value exists or not and set defaults if nessesary.
-            if (                
-                (!$this->get_option('brand_id')) || (strlen($this->get_option('brand_id')) == 0) ||
-                (!$this->get_option('min_amount')) || (strlen($this->get_option('min_amount')) == 0) ||
-                (!$this->get_option('max_amount')) || (strlen($this->get_option('max_amount')) == 0) ||
-                (!$this->get_option('description')) || (strlen($this->get_option('description')) == 0)            
-            ) {                            
-                $paymentOptions = Pay_Helper_Data::getPaymentOptionsList();
-                $paymentOptionDefaults = (isset($paymentOptions[$optionId])) ? $paymentOptions[$optionId] : array();
-
-                $this->set_option_default('brand_id', (isset($paymentOptionDefaults['brand']['id'])) ? $paymentOptionDefaults['brand']['id']  : '', true);
-                $this->set_option_default('min_amount', (isset($paymentOptionDefaults['min_amount'])) ? floatval($paymentOptionDefaults['min_amount'] / 100)  : '', false);
-                $this->set_option_default('max_amount', (isset($paymentOptionDefaults['max_amount'])) ? floatval($paymentOptionDefaults['max_amount'] / 100)  : '', false);
-                $this->set_option_default('description', (isset($paymentOptionDefaults['brand']['public_description']) && strlen($paymentOptionDefaults['brand']['public_description'])>0) ? $paymentOptionDefaults['brand']['public_description'] : sprintf(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()), false);
-            }
-            
             $this->form_fields = array(
                 'enabled'      => array(
                     'title'   => __('Enable/Disable', 'woocommerce'),
@@ -173,6 +158,24 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                             'woocommerce') . '</a>'
                     ),
                 );
+            }
+
+            if (
+              (!$this->get_option('brand_id')) || (strlen($this->get_option('brand_id')) == 0) ||
+              (!$this->get_option('min_amount')) || (strlen($this->get_option('min_amount')) == 0) ||
+              (!$this->get_option('max_amount')) || (strlen($this->get_option('max_amount')) == 0) ||
+                $this->get_option('description') == 'pay_init'
+            ) {
+
+              $paymentOptions = Pay_Helper_Data::getPaymentOptionsList();
+              $payDefaults = (isset($paymentOptions[$optionId])) ? $paymentOptions[$optionId] : array();
+
+              $this->set_option_default('brand_id', (isset($payDefaults['brand']['id'])) ? $payDefaults['brand']['id']  : '', true);
+              $this->set_option_default('min_amount', (isset($payDefaults['min_amount'])) ? floatval($payDefaults['min_amount'] / 100)  : '', false);
+              $this->set_option_default('max_amount', (isset($payDefaults['max_amount'])) ? floatval($payDefaults['max_amount'] / 100)  : '', false);
+
+              $pubDesc = isset($payDefaults['brand']['public_description']) ? $payDefaults['brand']['public_description'] : sprintf(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName());
+              $this->set_option_default('description', $pubDesc, true);
             }
 
         } else {
