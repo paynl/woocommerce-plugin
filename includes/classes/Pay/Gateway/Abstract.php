@@ -112,7 +112,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                 'description'  => array(
                     'title'   => __('Customer Message', 'woocommerce'),
                     'type'    => 'textarea',
-                    'default' => sprintf(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),                    
+                    'default' => 'pay_init',
                 ),
                 'instructions' => array(
                     'title'       => __('Instructions', 'woocommerce'),
