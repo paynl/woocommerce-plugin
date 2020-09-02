@@ -120,9 +120,9 @@ class Pay_Helper_Transaction
             case Pay_Gateways::STATUS_SUCCESS:
                 $woocommerce->cart->empty_cart();
 
-                //checken of het bedrag klopt
-                if ($order->get_total() != $paidCurrencyAmount) {
-                    $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PAYNL_WOOCOMMERCE_TEXTDOMAIN), $paidCurrencyAmount, $order->get_total()));
+                # Check the amount
+                if ($order->get_total() != $paidCurrencyAmount && $order->get_total() != $transaction->getPaidAmount()) {
+                  $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PAYNL_WOOCOMMERCE_TEXTDOMAIN), $paidCurrencyAmount . ' / ' . $transaction->getPaidAmount(), $order->get_total()));
                 } else {
                     $order->payment_complete($transactionId);
                 }
