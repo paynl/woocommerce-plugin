@@ -71,7 +71,7 @@ class Pay_Helper_Transaction
         $transaction = self::getTransaction($transactionId);
 
         if (empty($transaction)) {
-            throw new Pay_Exception(__('Transaction not found', ''));
+            throw new Pay_Exception(__('Transaction not found: ' . $transactionId, ''));
         }
 
         # Order ophalen.

@@ -174,7 +174,7 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 == Changelog ==
 = 3.5.1 =
 Fixed currency issue
-Fix for using an empty payment description
+Added fix for using an empty payment description
 = 3.5.0 =
 Updated SDK
 Using local images for payment methods

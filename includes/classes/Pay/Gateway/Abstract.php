@@ -76,7 +76,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
     public function getVersion()
     {
-        return '3.5.0';
+        return '3.5.1';
     }
 
   public function set_option_default($key, $value, $update = false)
