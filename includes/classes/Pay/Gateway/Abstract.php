@@ -167,8 +167,12 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
                 $this->get_option('description') == 'pay_init'
             ) {
 
-              $paymentOptions = Pay_Helper_Data::getPaymentOptionsList();
-              $payDefaults = (isset($paymentOptions[$optionId])) ? $paymentOptions[$optionId] : array();
+                try {
+                    $paymentOptions = Pay_Helper_Data::getPaymentOptionsList();
+                    $payDefaults = (isset($paymentOptions[$optionId])) ? $paymentOptions[$optionId] : array();
+                } catch (Exception $e) {
+                    $payDefaults = array();
+                }
 
               $this->set_option_default('brand_id', (isset($payDefaults['brand']['id'])) ? $payDefaults['brand']['id']  : '', true);
               $this->set_option_default('min_amount', (isset($payDefaults['min_amount'])) ? floatval($payDefaults['min_amount'] / 100)  : '', false);
