@@ -111,7 +111,7 @@ class Pay_Helper_Transaction
             $orderStatus = $order->get_status();
         }
 
-        if ($orderStatus == 'complete' || $orderStatus == 'processing') {
+        if ( in_array($orderStatus, array('completed','processing','shipped')) ) {
             throw new Pay_Exception_Notice('Order is already completed');
         }
 
