@@ -33,6 +33,7 @@ With PAY. you can add the following payment options to your website:
 * Cashly
 * Creditclick
 * Dankort
+* De Cadeaukaart
 * EPS-Überweising
 * Fashioncheque
 * Fashion Giftcard
