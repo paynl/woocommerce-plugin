@@ -24,6 +24,7 @@ class Pay_Gateways
             'Pay_Gateway_CreditClick',
             'Pay_Gateway_Cashly',
             'Pay_Gateway_Dankort',
+            'Pay_Gateway_DeCadeaukaart',
             'Pay_Gateway_Eps',
             'Pay_Gateway_Fashioncheque',
             'Pay_Gateway_Fashiongiftcard',
