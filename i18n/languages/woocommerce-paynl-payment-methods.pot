@@ -1,224 +1,361 @@
-# Copyright (C) 2020 Woocommerce PAY. Payment Methods
-# This file is distributed under the same license as the Woocommerce PAY. Payment Methods package.
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Woocommerce PAY. Payment Methods 2.4.9\n"
+"Project-Id-Version: Woocommerce PAY. Payment Methods\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
-"POT-Creation-Date: 2016-09-01 13:33:23+00:00\n"
+"POT-Creation-Date: 2020-11-11 11:33+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: Dutch; Flemish\n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"X-Loco-Source-Locale: nl_NL\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Poedit-Basepath: ../..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Loco-Parser: loco_parse_po"
 
-#: includes/classes/Pay/Gateway/Abstract.php:62
+#: includes/classes/Pay/Gateway/Abstract.php:20
+#, php-format
+msgid "Activate this module to accept %s transactions"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Abstract.php:73
 msgid "Enable/Disable"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:64
-#: includes/classes/Pay/Gateway/Abstract.php:118
+#: includes/classes/Pay/Gateway/Abstract.php:75 
+#: includes/classes/Pay/Gateway/Abstract.php:143
+#, php-format
 msgid "Enable PAY. %s"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:68
+#: includes/classes/Pay/Gateway/Abstract.php:79
 msgid "Title"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:70
+#: includes/classes/Pay/Gateway/Abstract.php:81
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:75
+#: includes/classes/Pay/Gateway/Abstract.php:86
 msgid "Customer Message"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:77
+#: includes/classes/Pay/Gateway/Abstract.php:88
+#, php-format
 msgid "Pay with %s"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:80
+#: includes/classes/Pay/Gateway/Abstract.php:91
 msgid "Instructions"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:82
+#: includes/classes/Pay/Gateway/Abstract.php:93
 msgid "Instructions that will be added to the thank you page."
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:91
+#: includes/classes/Pay/Gateway/Abstract.php:98
+msgid "Minimum amount"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Abstract.php:100
+msgid "Minimum amount valid for this payment method, leave blank for no limit"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Abstract.php:106
+msgid "Maximum amount"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Abstract.php:108
+msgid "Maximum amount valid for this payment method, leave blank for no limit"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Abstract.php:117
 msgid "Initial order status"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:94
+#: includes/classes/Pay/Gateway/Abstract.php:120
 msgid "default"
 msgstr ""
 
-#. translators: Placeholder 1: Default order status, placeholder 2: Link to
-#. 'Hold Stock' setting
-#: includes/classes/Pay/Gateway/Abstract.php:101
+#: includes/classes/Pay/Gateway/Abstract.php:127
+#, php-format
 msgid ""
 "Some payment methods take longer than a few hours to complete. The initial "
 "order state is then set to '%s'. This ensures the order is not cancelled "
 "when the setting %s is used."
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:104
+#: includes/classes/Pay/Gateway/Abstract.php:130
 msgid "Hold Stock (minutes)"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:114
+#: includes/classes/Pay/Gateway/Abstract.php:139
 msgid "Disabled"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:116
+#: includes/classes/Pay/Gateway/Abstract.php:141
 msgid ""
 "This payment method is not available, please enable this in the PAY. admin."
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:131
-msgid "Activate this module to accept %s transactions"
-msgstr ""
-
-#: includes/classes/Pay/Gateway/Abstract.php:299
+#: includes/classes/Pay/Gateway/Abstract.php:211 
+#: includes/classes/Pay/Gateway/Instore.php:105
+#, php-format
 msgid "PAY.: Transaction started: %s"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:306
+#: includes/classes/Pay/Gateway/Abstract.php:218
+#, php-format
 msgid "Initial status set to %s "
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Abstract.php:357
+#: includes/classes/Pay/Gateway/Abstract.php:460
+msgid "Shipping"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Abstract.php:476
+msgid "Discount"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Abstract.php:526
+#, php-format
 msgid "Refunded %s - Refund ID: %s"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Capayable.php:26
+#: includes/classes/Pay/Gateway/Capayable.php:26 
+#: includes/classes/Pay/Gateway/CapayableGespreid.php:26 
+#: includes/classes/Pay/Gateway/Klarna.php:26 
+#: includes/classes/Pay/Gateway/Yehhpay.php:26
 msgid "Ask birthdate"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Capayable.php:28
+#: includes/classes/Pay/Gateway/Capayable.php:28 
+#: includes/classes/Pay/Gateway/CapayableGespreid.php:28 
+#: includes/classes/Pay/Gateway/Klarna.php:28 
+#: includes/classes/Pay/Gateway/Yehhpay.php:28
 msgid ""
 "Ask the customer for his birthdate, this will fasten the checkout process"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Capayable.php:40
+#: includes/classes/Pay/Gateway/Capayable.php:40 
+#: includes/classes/Pay/Gateway/CapayableGespreid.php:40 
+#: includes/classes/Pay/Gateway/Klarna.php:40 
+#: includes/classes/Pay/Gateway/Yehhpay.php:40
 msgid "Birthdate: "
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Ideal.php:69
+#: includes/classes/Pay/Gateway/Ideal.php:35
+msgid "Choose your bank"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Ideal.php:70
 msgid "Bankselection"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Ideal.php:72
+#: includes/classes/Pay/Gateway/Ideal.php:73
 msgid "No bankselection"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Ideal.php:73
+#: includes/classes/Pay/Gateway/Ideal.php:74
 msgid "Selectbox"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Ideal.php:74
+#: includes/classes/Pay/Gateway/Ideal.php:75
 msgid "Radiobuttons"
 msgstr ""
 
-#: includes/classes/Pay/Gateway/Ideal.php:76
+#: includes/classes/Pay/Gateway/Ideal.php:77
 msgid "Pick the type of bankselection"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:71
+#: includes/classes/Pay/Gateway/Instore.php:26
+msgid "Choose in checkout"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Instore.php:27
+msgid "Choose in checkout and save in cookie"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Instore.php:36
+msgid "Selected terminal"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Instore.php:39
+msgid "Select the terminal the payment should be sent to"
+msgstr ""
+
+#: includes/classes/Pay/Gateway/Instore.php:85
+msgid "Choose the pin terminal"
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:89
 msgid "The following payment methods can be enabled"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:88
+#: includes/classes/Pay/Gateways.php:105
+msgid "API token and Service id are required."
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:112
+msgid "API token is required."
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:114
+msgid "Service id is required."
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:118
+msgid "API token is invalid."
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:121
+msgid "Service id is invalid."
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:125
+msgid "Error:"
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:132
 msgid "PAY. settings"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:90
+#: includes/classes/Pay/Gateways.php:134
 msgid ""
 "The following options are required to use the PAY. Payment Gateway and are "
 "used by all PAY. Payment Methods"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:94
+#: includes/classes/Pay/Gateways.php:138
+msgid "Token Code"
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:141
+msgid ""
+"The AT-code belonging to your token, you can find this <a href=\"https:"
+"//admin.pay.nl/company/tokens\" target=\"api_token\">here</a>"
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:145
 msgid "Api token"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:96
+#: includes/classes/Pay/Gateways.php:147
 msgid ""
-"The api token used to communicate with the PAY. API, you can find your "
-"token <a href=\"https://admin.pay.nl/my_merchant\" target=\"api_token"
-"\">here</a>"
+"The api token used to communicate with the PAY. API, you can find your token "
+"<a href=\"https://admin.pay.nl/company/tokens\" target=\"api_token\">here</a>"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:100
+#: includes/classes/Pay/Gateways.php:151
 msgid "Service id"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:102
+#: includes/classes/Pay/Gateways.php:154
 msgid ""
-"The serviceid to identify your website, you can find your serviceid <a href="
-"\"https://admin.pay.nl/programs/programs\" target=\"serviceid\">here</a>"
+"The serviceid to identify your website, you can find your serviceid <a "
+"href=\"https://admin.pay.nl/programs/programs\" target=\"serviceid\">here</a>"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:104
+#: includes/classes/Pay/Gateways.php:156
 msgid "The serviceid should be in the following format: SL-xxxx-xxxx"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:107
+#: includes/classes/Pay/Gateways.php:159
 msgid "Test mode"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:109
+#: includes/classes/Pay/Gateways.php:161
 msgid "Check this box if you want to enable test mode"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:114
+#: includes/classes/Pay/Gateways.php:166
+msgid "SSL Verify Peer"
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:168
+msgid ""
+"Uncheck this box if you have SSL certificate errors that you don't know how "
+"to fix"
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:173
 msgid "Send order data"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:116
+#: includes/classes/Pay/Gateways.php:175
 msgid ""
-"Check this box if you want to send the order data to PAY., this is "
-"required if you want use 'Pay after delivery' paymentmethods "
+"Check this box if you want to send the order data to PAY., this is required "
+"if you want use 'Pay after delivery' paymentmethods "
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:121
+#: includes/classes/Pay/Gateways.php:180
+msgid "Use high risk methods"
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:182
+msgid "Check this box if you are using high risk payment methods"
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:187
 msgid "Payment screen language"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:124
+#: includes/classes/Pay/Gateways.php:190 includes/classes/Pay/Gateways.php:160
 msgid "This is the language in which the payment screen will be shown"
 msgstr ""
 
-#: includes/classes/Pay/Gateways.php:227
+#: includes/classes/Pay/Gateways.php:176
+msgid "This is the size in which the payment method logos will be shown"
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:195
+msgid "Show payment method logos"
+msgstr ""
+
+#: includes/classes/Pay/Gateways.php:324
 msgid "The payment has been canceled, please try again"
 msgstr ""
 
-#: includes/classes/Pay/Helper/Data.php:138
+#: includes/classes/Pay/Helper/Data.php:128
+msgid "Don't show logos"
+msgstr ""
+
+#: includes/classes/Pay/Helper/Data.php:186
 msgid "Dutch"
 msgstr ""
 
-#: includes/classes/Pay/Helper/Data.php:139
+#: includes/classes/Pay/Helper/Data.php:187
 msgid "English"
 msgstr ""
 
-#: includes/classes/Pay/Helper/Data.php:140
+#: includes/classes/Pay/Helper/Data.php:188
 msgid "German"
 msgstr ""
 
-#: includes/classes/Pay/Helper/Data.php:141
+#: includes/classes/Pay/Helper/Data.php:189
 msgid "Spanish"
 msgstr ""
 
-#: includes/classes/Pay/Helper/Data.php:142
+#: includes/classes/Pay/Helper/Data.php:190
 msgid "Italian"
 msgstr ""
 
-#: includes/classes/Pay/Helper/Data.php:143
+#: includes/classes/Pay/Helper/Data.php:191
 msgid "French"
 msgstr ""
 
-#: includes/classes/Pay/Helper/Data.php:144
+#: includes/classes/Pay/Helper/Data.php:192
 msgid "Use browser language"
 msgstr ""
 
@@ -226,58 +363,52 @@ msgstr ""
 msgid "Transaction not found"
 msgstr ""
 
-#: includes/classes/Pay/Helper/Transaction.php:106
+#: includes/classes/Pay/Helper/Transaction.php:114
+#, php-format
 msgid ""
 "Validation error: Paid amount does not match order amount. \n"
 "paidAmount: %s, \n"
 "orderAmount: %s\n"
 msgstr ""
 
-#: includes/classes/Pay/Helper/Transaction.php:111
+#: includes/classes/Pay/Helper/Transaction.php:122
+#, php-format
 msgid "PAY.: Payment complete. customerkey: %s"
 msgstr ""
 
-#: includes/classes/Pay/Helper/Transaction.php:116
+#: includes/classes/Pay/Helper/Transaction.php:127
 msgid "PAY.: Payment canceled"
 msgstr ""
 
-#: includes/classes/Pay/Setup.php:83
+#: includes/classes/Pay/Setup.php:89
 msgid ""
 "Cannot activate Woocommerce Paynl Payment Methods because woocommerce is not "
 "found.<br />Please install and activate woocommerce first"
 msgstr ""
 
-#: includes/classes/Pay/Setup.php:84
+#: includes/classes/Pay/Setup.php:90
 msgid "Woocommerce not found"
 msgstr ""
 
-#: woocommerce-payment-paynl.php:31
-msgid "The PAY. payment methods plugin requires woocommerce to be active"
+#: woocommerce-payment-paynl.php:32
+msgid "The PAY. payment methods plugin requires Woocommerce to be active"
 msgstr ""
 
-#: woocommerce-payment-paynl.php:35
+#: woocommerce-payment-paynl.php:36
 msgid ""
 "Curl is not installed.<br />In order to use the PAY. payment methods, you "
 "must install install CURL.<br />Ask your system administrator to install "
 "php_curl"
 msgstr ""
 
-#. Plugin Name of the plugin/theme
-msgid "Woocommerce PAY. Payment Methods"
+#: woocommerce-payment-paynl.php:40
+msgid "Settings"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-msgid "https://wordpress.org/plugins/woocommerce-paynl-payment-methods/"
+msgid ""
+"Your account is not authorized to refund transactions. For more information "
+"refer to: https://docs.pay.nl/merchants#refund-transaction"
 msgstr ""
 
-#. Description of the plugin/theme
-msgid "PAY. payment methods for woocommerce"
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "PAY."
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "https://www.pay.nl"
+msgid "This transaction has already been refunded trough the PAY. admin panel."
 msgstr ""
