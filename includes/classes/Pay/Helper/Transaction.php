@@ -101,9 +101,7 @@ class Pay_Helper_Transaction
           throw new Pay_Exception_Notice('Woocommerce could not find internal order ' . $orderId);
         }
 
-        if ($status == $transaction['status'])
-        {
-            # update-state equals local state
+        if ($status == $transaction['status']) {
             if ($status == Pay_Gateways::STATUS_CANCELED) {
                 return add_query_arg('paynl_status', Pay_Gateways::STATUS_CANCELED, wc_get_checkout_url());
             }
