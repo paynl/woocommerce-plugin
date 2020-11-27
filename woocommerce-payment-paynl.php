@@ -9,7 +9,8 @@
  * Author URI: https://www.pay.nl
  * Requires at least: 3.5.1
  * Tested up to: 5.5.3
- * WC tested up to: 4.6.1
+ * WC tested up to: 4.7.0
+ * WC requires at least: 2.5
  *
  * Text Domain: woocommerce-paynl-payment-methods
  * Domain Path: /i18n/languages
@@ -111,8 +112,8 @@ function wpdesk_coc_field($checkout)
   woocommerce_form_field('coc_number', array(
     'type' => 'text',
     'class' => array('coc-number-field form-row-wide'),
-    'label' => __('COC Number'),
-    'placeholder' => __('Enter your COC number'),
+    'label' => __('COC Number', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+    'placeholder' => __('Enter your COC number', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
   ), $checkout->get_value('coc_number'));
 }
 

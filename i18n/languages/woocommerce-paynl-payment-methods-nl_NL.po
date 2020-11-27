@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
 "POT-Creation-Date: 2018-04-10 18:38+0200\n"
-"PO-Revision-Date: 2020-03-06 11:21+0000\n"
+"PO-Revision-Date: 2020-11-27 12:38+0000\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -438,3 +438,9 @@ msgstr ""
 #: woocommerce-payment-paynl.php:40
 msgid "Settings"
 msgstr "Instellingen"
+
+msgid "COC Number"
+msgstr "COC Nummer"
+
+msgid "Enter your COC number"
+msgstr "Voer je COC nummer in "
