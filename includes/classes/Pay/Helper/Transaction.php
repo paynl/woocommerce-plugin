@@ -51,6 +51,10 @@ class Pay_Helper_Transaction
         );
     }
 
+    /**
+     * @param $transactionId
+     * @return false|mixed
+     */
     private static function getTransaction($transactionId)
     {
         global $wpdb;
@@ -60,37 +64,52 @@ class Pay_Helper_Transaction
             $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE transaction_id = %s", $transactionId), ARRAY_A
         );
 
-        return $result[0];
+        return isset($result[0]) ? $result[0] : false;
     }
 
+    /**
+     * @param $transactionId
+     * @param null $status
+     * @return mixed|string|void
+     * @throws Pay_Exception
+     * @throws Pay_Exception_Notice
+     * @throws \Paynl\Error\Api
+     * @throws \Paynl\Error\Error
+     * @throws \Paynl\Error\Required\ApiToken
+     * @throws \Paynl\Error\Required\ServiceId
+     */
     public static function processTransaction($transactionId, $status = null)
     {
         global $woocommerce;
 
-        // we gaan eerst kijken naar de status
+        # Retrieve local paymentstate
         $transaction = self::getTransaction($transactionId);
 
         if (empty($transaction)) {
-            throw new Pay_Exception(__('Transaction not found: ' . $transactionId, ''));
+            throw new Pay_Exception(__('Local transaction not found: ' . $transactionId, ''));
+        }
+        if (!isset($transaction['order_id'])) {
+            throw new Pay_Exception(__('OrderId not set in local transaction: ' . $transactionId, ''));
         }
 
-        # Order ophalen.
         $orderId = $transaction['order_id'];
+
         try {
           $order = new WC_Order($orderId);
         } catch (Exception $e) {
-          // Er is iets fout gegaan bij het ophalen van de order.
-          throw new Pay_Exception_Notice('Woocommerce could not find internal order');
+          # Could not retrieve order from WooCommerce
+          throw new Pay_Exception_Notice('Woocommerce could not find internal order ' . $orderId);
         }
+
         if ($status == $transaction['status']) {
             if ($status == Pay_Gateways::STATUS_CANCELED) {
-                return add_query_arg('paynl_status', Pay_Gateways::STATUS_CANCELED, $woocommerce->cart->get_checkout_url());
+                return add_query_arg('paynl_status', Pay_Gateways::STATUS_CANCELED, wc_get_checkout_url());
             }
-            //update hoeft niet te worden doorgevoerd
+            # We dont have to update
             return self::getOrderReturnUrl($order);
         }
 
-        // huidige status ophalen bij pay
+        # Retieve PAY. transaction paymentstate
         Pay_Gateway_Abstract::loginSDK();
         $transaction = \Paynl\Transaction::get($transactionId);
 
@@ -106,12 +125,12 @@ class Pay_Helper_Transaction
         self::updateStatus($transactionId, $apiStatus);
 
         if (WooCommerce::instance()->version < 3) {
-            $orderStatus = $order->status;
+            $wcOrderStatus = $order->status;
         } else {
-            $orderStatus = $order->get_status();
+            $wcOrderStatus = $order->get_status();
         }
 
-        if ($orderStatus == 'complete' || $orderStatus == 'processing') {
+        if ($wcOrderStatus == 'complete' || $wcOrderStatus == 'processing') {
             throw new Pay_Exception_Notice('Order is already completed');
         }
 
@@ -158,9 +177,7 @@ class Pay_Helper_Transaction
                     $order->add_order_note(__('PAY.: Payment canceled', PAYNL_WOOCOMMERCE_TEXTDOMAIN));
                 }
 
-                $url = $woocommerce->cart->get_checkout_url();
-
-                $url = add_query_arg('paynl_status', Pay_Gateways::STATUS_CANCELED, $url);
+                $url = add_query_arg('paynl_status', Pay_Gateways::STATUS_CANCELED, wc_get_checkout_url());
 
                 break;
             case Pay_Gateways::STATUS_VERIFY:
