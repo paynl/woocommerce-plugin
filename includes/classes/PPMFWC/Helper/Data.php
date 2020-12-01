@@ -7,7 +7,7 @@ class PPMFWC_Helper_Data
      * @param $message
      * @param string $type
      */
-    public static function payLogger($message, $type = 'info')
+    public static function ppmfwc_payLogger($message, $type = 'info')
     {
         if(!in_array($type, array('emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'))) {
             $type = 'info';
@@ -177,7 +177,7 @@ class PPMFWC_Helper_Data
       return self::$_payment_methods;
     }
 
-    public static function getLogoSizes()
+    public static function ppmfwc_getLogoSizes()
     {
         return array(
             'Auto' => 'Auto',
@@ -216,7 +216,7 @@ class PPMFWC_Helper_Data
                 }
             }
 
-            $arrAvailableLanguages = self::getAvailableLanguages();
+            $arrAvailableLanguages = self::ppmfwc_getAvailableLanguages();
             $arrAvailableLanguages = array_keys($arrAvailableLanguages);
 
             //laatste er af halen (browsertaal)
@@ -240,7 +240,7 @@ class PPMFWC_Helper_Data
         return strtolower(substr($deflang, 0, 2));
     }
 
-    public static function getAvailableLanguages()
+    public static function ppmfwc_getAvailableLanguages()
     {
         return array(
             'nl' => esc_html(__('Dutch', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),

@@ -213,7 +213,7 @@ class PPMFWC_Gateways
         $addedSettings[] = array(
             'name' => __('Payment screen language', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'select',
-            'options' => PPMFWC_Helper_Data::getAvailableLanguages(),
+            'options' => PPMFWC_Helper_Data::ppmfwc_getAvailableLanguages(),
             'desc' => esc_html(__('This is the language in which the payment screen will be shown', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_language',
             'default' => 'nl',
@@ -221,7 +221,7 @@ class PPMFWC_Gateways
         $addedSettings[] = array(
             'name' => __('Show payment method logos', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'select',
-            'options' => PPMFWC_Helper_Data::getLogoSizes(),
+            'options' => PPMFWC_Helper_Data::ppmfwc_getLogoSizes(),
             'desc' => esc_html(__('This is the size in which the payment method logos will be shown', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_logo_size',
             'default' => 'Auto',
@@ -252,7 +252,7 @@ class PPMFWC_Gateways
     /**
      * This function registers the Pay Payment Gateways
      */
-    public static function register()
+    public static function ppmfwc_register()
     {
         add_filter('woocommerce_payment_gateways', array(__CLASS__, 'ppmfwc_getGateways'));
     }
@@ -267,7 +267,7 @@ class PPMFWC_Gateways
     /**
      * This function adds the Pay Global Settings to the WooCommerce payment method settings
      */
-    public static function addSettings()
+    public static function ppmfwc_addSettings()
     {
         add_action('admin_enqueue_scripts', array(__CLASS__, 'ppmfwc_addPayStyleSheet'));
         add_filter('woocommerce_payment_gateways_settings', array(__CLASS__, 'ppmfwc_addGlobalSettings'));
@@ -276,7 +276,7 @@ class PPMFWC_Gateways
     /**
      * Register the API's to catch the return and exchange
      */
-    public static function registerApi()
+    public static function ppmfwc_registerApi()
     {
         add_action('woocommerce_api_wc_pay_gateway_return', array(__CLASS__, 'ppmfwc_onReturn'));
         add_action('woocommerce_api_wc_pay_gateway_exchange', array(__CLASS__, 'ppmfwc_onExchange'));
@@ -291,7 +291,7 @@ class PPMFWC_Gateways
         $orderId = isset($_GET['orderId']) ? sanitize_text_field($_GET['orderId']) : false;
         $url = wc_get_checkout_url();
 
-        $status = self::getStatusFromStatusId($orderStatusId);
+        $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);
         try {
             # Retrieve URL to continue (and update status if necessary)
             if (!empty($orderId)) {
@@ -299,9 +299,9 @@ class PPMFWC_Gateways
             }
 
         } catch (PPMFWC_Exception_Notice $e) {
-            PPMFWC_Helper_Data::payLogger('Could not retrieve url to continue. Error: ' . $e->getMessage());
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue. Error: ' . $e->getMessage());
         } catch (Exception $e) {
-            PPMFWC_Helper_Data::payLogger('Could not retrieve url to continue. Error: ' . $e->getMessage(), 'error');
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue. Error: ' . $e->getMessage(), 'error');
         }
 
         wp_redirect($url);
@@ -313,7 +313,7 @@ class PPMFWC_Gateways
      * @param $statusId
      * @return string
      */
-    public static function getStatusFromStatusId($statusId)
+    public static function ppmfwc_getStatusFromStatusId($statusId)
     {
         if (
             $statusId == 100 ||
@@ -335,7 +335,7 @@ class PPMFWC_Gateways
      *
      * @return mixed
      */
-    public static function getPayActions()
+    public static function ppmfwc_getPayActions()
     {
         $arrPayActions[self::ACTION_NEWPPT] = self::STATUS_SUCCESS;
         $arrPayActions[self::ACTION_PENDING] = self::STATUS_PENDING;
@@ -353,7 +353,7 @@ class PPMFWC_Gateways
     {
         $action = isset($_GET['action']) ? strtolower(sanitize_text_field($_GET['action'])) : null;
         $order_id = isset($_REQUEST['order_id']) ? sanitize_text_field($_REQUEST['order_id']) : null;
-        $arrActions = self::getPayActions();
+        $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
 
         ob_start();

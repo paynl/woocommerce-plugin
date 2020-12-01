@@ -5,7 +5,7 @@ class PPMFWC_Setup
 
     const db_version = 1.1;
 
-    public static function _install()
+    public static function ppmfwc_installBlog()
     {
         self::checkRequirements();
         global $wpdb;
@@ -62,7 +62,7 @@ class PPMFWC_Setup
         }
     }
 
-    public static function install()
+    public static function ppmfwc_install()
     {
         if (is_multisite() && is_plugin_active_for_network('woocommerce-paynl-payment-methods/woocommerce-payment-paynl.php')) {
             global $wpdb, $blog_id;
@@ -70,21 +70,29 @@ class PPMFWC_Setup
             $ids = $wpdb->get_col($dbquery);
             foreach ($ids as $id) {
                 switch_to_blog($id);
-                self::_install();
+                self::ppmfwc_installBlog();
             }
             switch_to_blog($blog_id);
         } else {
-            self::_install();
+            self::ppmfwc_installBlog();
         }
     }
 
-    public static function newBlog($blog_id, $user_id = null, $domain = null, $path = null, $site_id = null, $meta = null)
+    /**
+     * @param $blog_id
+     * @param null $user_id
+     * @param null $domain
+     * @param null $path
+     * @param null $site_id
+     * @param null $meta
+     */
+    public static function ppmfwc_newBlog($blog_id, $user_id = null, $domain = null, $path = null, $site_id = null, $meta = null)
     {
         global $wpdb;
 
         $old_blog = $wpdb->blogid;
         switch_to_blog($blog_id->blog_id);
-        self::_install();
+        self::ppmfwc_installBlog();
         switch_to_blog($old_blog);
     }
 
@@ -93,7 +101,7 @@ class PPMFWC_Setup
      * @param $tables
      * @return mixed
      */
-    public static function delBlog($tables)
+    public static function ppmfwc_delBlog($tables)
     {
         global $wpdb;
         $tables[] = $wpdb->prefix . 'pay_transactions';
@@ -106,14 +114,14 @@ class PPMFWC_Setup
     private static function checkRequirements()
     {
         if (!is_plugin_active('woocommerce/woocommerce.php') && !is_plugin_active_for_network('woocommerce/woocommerce.php')) {
-            $error = __('Cannot activate PAY. Payment Methods for WooCommerce because WooCommerce could not be found.<br />Please install and activate woocommerce first', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
+            $error = __('Cannot activate PAY. Payment Methods for WooCommerce because WooCommerce could not be found. Please install and activate woocommerce first', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
             $title = __('Woocommerce not found', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
 
-            wp_die($error, $title, array('back_link' => true));
+            wp_die(esc_html($error), esc_html($title), array('back_link' => true));
         }
     }
 
-    public static function testConnection()
+    public static function ppmfwc_testConnection()
     {
         # Only run this if the setting is not saved
         if (get_option('paynl_verify_peer') === false) {
