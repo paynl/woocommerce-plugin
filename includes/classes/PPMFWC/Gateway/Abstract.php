@@ -18,8 +18,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         $this->has_fields         = true;
         $this->method_title       = 'PAY. - ' . $this->getName();
-        $this->method_description = sprintf(__('Activate this module to accept %s transactions',
-            PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName());
+        $this->method_description = sprintf(__('Activate this module to accept %s transactions', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName());
 
         $this->supports = array('products', 'refunds');
 
@@ -29,10 +28,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $this->title       = $this->get_option('title');
         $this->description = $this->get_option('description');
 
-        add_action('woocommerce_update_options_payment_gateways_' . $this->id, array(
-            $this,
-            'process_admin_options'
-        ));
+        add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this,'process_admin_options'));
     }
 
     public static function getId()
@@ -319,62 +315,17 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $exchangeUrl = $strAlternativeExchangeUrl;
         }
 
-        if (WooCommerce::instance()->version < 3 && $order->customer_ip_address) {
-            $ipAddress = $order->customer_ip_address;
-        } elseif ($order->get_customer_ip_address()) {
-            $ipAddress = $order->get_customer_ip_address();
-        } else {
+        $ipAddress = $order->get_customer_ip_address();
+        if (empty($ipAddress)) {
             $ipAddress = Paynl\Helper::getIp();
         }
 
-        if (WooCommerce::instance()->version < 3) {
-            $currency = $order->order_currency;
-
-            # This is not an error, this is for supporting older woocommerce versions.
-            $order_id = $order->id;
-
-            $shipping_first_name = $order->shipping_first_name;
-            $shipping_last_name  = $order->shipping_last_name;
-            $shipping_address_1  = $order->shipping_address_1;
-            $shipping_address_2  = $order->shipping_address_2;
-            $shipping_postcode   = $order->shipping_postcode;
-            $shipping_city       = $order->shipping_city;
-            $shipping_country    = $order->shipping_country;
-
-            $billing_email      = $order->billing_email;
-            $billing_phone      = $order->billing_phone;
-            $billing_first_name = $order->billing_first_name;
-            $billing_last_name  = $order->billing_last_name;
-            $billing_address_1  = $order->billing_address_1;
-            $billing_address_2  = $order->billing_address_2;
-            $billing_postcode   = $order->billing_postcode;
-            $billing_city       = $order->billing_city;
-            $billing_country    = $order->billing_country;
-        } else {
-            $currency = $order->get_currency();
-            $order_id = $order->get_id();
-
-            $shipping_first_name = $order->get_shipping_first_name();
-            $shipping_last_name  = $order->get_shipping_last_name();
-            $shipping_address_1  = $order->get_shipping_address_1();
-            $shipping_address_2  = $order->get_shipping_address_2();
-            $shipping_postcode   = $order->get_shipping_postcode();
-            $shipping_city       = $order->get_shipping_city();
-            $shipping_country    = $order->get_shipping_country();
-
-            $billing_email      = $order->get_billing_email();
-            $billing_phone      = $order->get_billing_phone();
-            $billing_first_name = $order->get_billing_first_name();
-            $billing_last_name  = $order->get_billing_last_name();
-            $billing_address_1  = $order->get_billing_address_1();
-            $billing_address_2  = $order->get_billing_address_2();
-            $billing_postcode   = $order->get_billing_postcode();
-            $billing_city       = $order->get_billing_city();
-            $billing_country    = $order->get_billing_country();
-        }
+        $currency = $order->get_currency();
+        $order_id = $order->get_id();
+        $billing_country = $order->get_billing_country();
 
         try {
-            $paymentOptionId = $this->getOptionId();
+            $pay_paymentOptionId = $this->getOptionId();
         } catch (Exception $e) {
             return false;
         }
@@ -384,11 +335,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             'returnUrl'     => $returnUrl,
             'exchangeUrl'   => $exchangeUrl,
             'orderNumber'   => $order->get_order_number(),
-            'paymentMethod' => $this->getOptionId(),
+            'paymentMethod' => $pay_paymentOptionId,
             'currency'      => $currency,
             'description'   => $order->get_order_number(),
             'extra1'        => apply_filters('paynl-extra1', $order->get_order_number(), $order),
-            'extra2'        => apply_filters('paynl-extra2', $billing_email, $order),
+            'extra2'        => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
             'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
             'ipaddress'     => $ipAddress,
             'object'        => 'woocommerce ' . $this->getVersion(),
@@ -396,13 +347,13 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         if (get_option('paynl_send_order_data') == 'yes') {
             $enduser = array(
-                'initials'     => $shipping_first_name,
-                'lastName'     => substr($shipping_last_name,0,32),
-                'phoneNumber'  => $billing_phone,
-                'emailAddress' => $billing_email,
+                'initials'     => $order->get_shipping_first_name(),
+                'lastName'     => substr($order->get_shipping_last_name(),0,32),
+                'phoneNumber'  => $order->get_billing_phone(),
+                'emailAddress' => $order->get_billing_email()
             );
 
-            $enduser['birthDate'] = $this->getBirthDate($paymentOptionId);
+            $enduser['birthDate'] = $this->getBirthDate($pay_paymentOptionId);
             $enduser['company'] = array(
               'name' => $order->get_billing_company(),
               'countryCode' => $billing_country
@@ -418,28 +369,28 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $startData['enduser'] = $enduser;
 
             # Retrieve order data
-            $shippingAddress  = $shipping_address_1 . ' ' . $shipping_address_2;
+            $shippingAddress  =  $order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2();
             $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
 
             $address              = array(
                 'streetName'  => $aShippingAddress[0],
                 'houseNumber' => $aShippingAddress[1],
-                'zipCode'     => $shipping_postcode,
-                'city'        => $shipping_city,
-                'country'     => $shipping_country,
+                'zipCode'     => $order->get_shipping_postcode(),
+                'city'        => $order->get_shipping_city(),
+                'country'     => $order->get_shipping_country()
             );
             $startData['address'] = $address;
 
-            $billingAddress  = $billing_address_1 . ' ' . $billing_address_2;
+            $billingAddress  = $order->get_billing_address_1() . ' ' . $order->get_billing_address_2();
             $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
 
             $invoiceAddress              = array(
-                'initials'    => $billing_first_name,
-                'lastName'    => substr($billing_last_name,0,32),
+                'initials'    => $order->get_billing_first_name(),
+                'lastName'    => substr($order->get_billing_last_name(), 0, 32),
                 'streetName'  => $aBillingAddress[0],
                 'houseNumber' => $aBillingAddress[1],
-                'zipCode'     => $billing_postcode,
-                'city'        => $billing_city,
+                'zipCode'     => $order->get_billing_postcode(),
+                'city'        => $order->get_billing_city(),
                 'country'     => $billing_country,
             );
             $startData['invoiceAddress'] = $invoiceAddress;
@@ -462,13 +413,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         $payTransaction = \Paynl\Transaction::start($startData);
 
-        if (WooCommerce::instance()->version > 3) {
-            # This method was introduced in woocommerce 3.0
-            $order->update_meta_data('transactionId', $payTransaction->getTransactionId());
-            $order->save();
-        } else {
-            update_post_meta($order->id, 'transactionId', $payTransaction->getTransactionId());
-        }
+        $order->update_meta_data('transactionId', $payTransaction->getTransactionId());
+        $order->save();
 
         return $payTransaction;
     }

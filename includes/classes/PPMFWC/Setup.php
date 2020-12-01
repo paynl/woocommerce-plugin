@@ -1,14 +1,16 @@
 <?php
 
-class PPMFWC_Pay_Setup {
+class PPMFWC_Setup
+{
 
     const db_version = 1.1;
 
-    public static function _install() {
+    public static function _install()
+    {
         self::checkRequirements();
         global $wpdb;
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
         $pay_db_version = get_option("pay_db_version");
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
@@ -51,7 +53,7 @@ class PPMFWC_Pay_Setup {
             dbDelta($sql);
 
             add_option("pay_db_version", self::db_version);
-        } elseif($pay_db_version < 1.1){
+        } elseif ($pay_db_version < 1.1) {
             $sql = "ALTER TABLE `$table_name_transactions` MODIFY order_id BIGINT(20);";
 
             $wpdb->query($sql);
@@ -60,7 +62,8 @@ class PPMFWC_Pay_Setup {
         }
     }
 
-    public static function install() {
+    public static function install()
+    {
         if (is_multisite() && is_plugin_active_for_network('woocommerce-paynl-payment-methods/woocommerce-payment-paynl.php')) {
             global $wpdb, $blog_id;
             $dbquery = 'SELECT blog_id FROM ' . $wpdb->blogs;
@@ -75,7 +78,8 @@ class PPMFWC_Pay_Setup {
         }
     }
 
-    public static function newBlog($blog_id, $user_id = null, $domain = null, $path = null, $site_id = null, $meta = null) {
+    public static function newBlog($blog_id, $user_id = null, $domain = null, $path = null, $site_id = null, $meta = null)
+    {
         global $wpdb;
 
         $old_blog = $wpdb->blogid;
@@ -84,22 +88,23 @@ class PPMFWC_Pay_Setup {
         switch_to_blog($old_blog);
     }
 
-  /**
-   * Delete PAY. tables when a (multi)site gets deleted
-   * @param $tables
-   * @return mixed
-   */
+    /**
+     * Delete PAY. tables when a (multi)site gets deleted
+     * @param $tables
+     * @return mixed
+     */
     public static function delBlog($tables)
     {
-      global $wpdb;
-      $tables[] = $wpdb->prefix . 'pay_transactions';
-      $tables[] = $wpdb->prefix . 'pay_options';
-      $tables[] = $wpdb->prefix . 'pay_option_subs';
+        global $wpdb;
+        $tables[] = $wpdb->prefix . 'pay_transactions';
+        $tables[] = $wpdb->prefix . 'pay_options';
+        $tables[] = $wpdb->prefix . 'pay_option_subs';
 
-      return $tables;
+        return $tables;
     }
 
-    private static function checkRequirements() {
+    private static function checkRequirements()
+    {
         if (!is_plugin_active('woocommerce/woocommerce.php') && !is_plugin_active_for_network('woocommerce/woocommerce.php')) {
             $error = __('Cannot activate PAY. Payment Methods for WooCommerce because WooCommerce could not be found.<br />Please install and activate woocommerce first', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
             $title = __('Woocommerce not found', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
@@ -107,11 +112,13 @@ class PPMFWC_Pay_Setup {
             wp_die($error, $title, array('back_link' => true));
         }
     }
-    public static function testConnection(){
-        // Only run this if the setting is not saved
-        if(get_option('paynl_verify_peer') === false) {
+
+    public static function testConnection()
+    {
+        # Only run this if the setting is not saved
+        if (get_option('paynl_verify_peer') === false) {
             try {
-                // i don't really care about the ip, i want to test the connection
+                # Test the connection using a dummy IP
                 \Paynl\Validate::isPayServerIp('10.20.30.40');
                 add_option('paynl_verify_peer', 'yes');
             } catch (Exception $e) {

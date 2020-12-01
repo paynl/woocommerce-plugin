@@ -71,7 +71,7 @@ class PPMFWC_Helper_Transaction
      * @param $transactionId
      * @param null $status
      * @return mixed|string|void
-     * @throws Pay_Exception
+     * @throws PPMFWC_Exception
      * @throws PPMFWC_Exception_Notice
      * @throws \Paynl\Error\Api
      * @throws \Paynl\Error\Error
@@ -86,10 +86,10 @@ class PPMFWC_Helper_Transaction
         $transaction = self::getTransaction($transactionId);
 
         if (empty($transaction)) {
-            throw new Pay_Exception(__('Local transaction not found: ' . $transactionId, ''));
+            throw new PPMFWC_Exception(__('Local transaction not found: ' . $transactionId, ''));
         }
         if (!isset($transaction['order_id'])) {
-            throw new Pay_Exception(__('OrderId not set in local transaction: ' . $transactionId, ''));
+            throw new PPMFWC_Exception(__('OrderId not set in local transaction: ' . $transactionId, ''));
         }
 
         $orderId = $transaction['order_id'];

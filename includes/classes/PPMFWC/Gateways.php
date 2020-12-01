@@ -6,13 +6,15 @@ class PPMFWC_Gateways
     const STATUS_CANCELED = 'CANCELED';
     const STATUS_SUCCESS = 'SUCCESS';
     const STATUS_VERIFY = 'VERIFY';
+    const STATUS_REFUND = 'REFUND';
 
     const ACTION_NEWPPT = 'new_ppt';
     const ACTION_PENDING = 'pending';
     const ACTION_CANCEL = 'cancel';
     const ACTION_VERIFY = 'verify';
+    const ACTION_REFUND = 'refund:received';
 
-    public static function paynl_getGateways($arrDefault)
+    public static function ppmfwc_getGateways($arrDefault)
     {
         $paymentOptions = array(
             'PPMFWC_Gateway_Alipay',
@@ -251,11 +253,11 @@ class PPMFWC_Gateways
      */
     public static function register()
     {
-        add_filter('woocommerce_payment_gateways', array(__CLASS__, 'paynl_getGateways'));
+        add_filter('woocommerce_payment_gateways', array(__CLASS__, 'ppmfwc_getGateways'));
     }
 
 
-    public static function paynl_addPayStyleSheet()
+    public static function ppmfwc_addPayStyleSheet()
     {
       wp_register_style( 'paynl_wp_admin_css', PAYNL_PLUGIN_URL . 'assets/css/pay.css', false, '1.0.0' );
       wp_enqueue_style( 'paynl_wp_admin_css' );
@@ -266,7 +268,7 @@ class PPMFWC_Gateways
      */
     public static function addSettings()
     {
-      add_action('admin_enqueue_scripts', array(__CLASS__, 'paynl_addPayStyleSheet'));
+      add_action('admin_enqueue_scripts', array(__CLASS__, 'ppmfwc_addPayStyleSheet'));
       add_filter('woocommerce_payment_gateways_settings', array(__CLASS__, 'ppmfwc_addGlobalSettings'));
     }
 
@@ -275,14 +277,14 @@ class PPMFWC_Gateways
      */
     public static function registerApi()
     {
-        add_action('woocommerce_api_wc_pay_gateway_return', array(__CLASS__, 'paynl_onReturn'));
-        add_action('woocommerce_api_wc_pay_gateway_exchange', array(__CLASS__, 'paynl_onExchange'));
+        add_action('woocommerce_api_wc_pay_gateway_return', array(__CLASS__, 'ppmfwc_onReturn'));
+        add_action('woocommerce_api_wc_pay_gateway_exchange', array(__CLASS__, 'ppmfwc_onExchange'));
     }
 
     /**
      * After a (successfull, failed, cancelled etc.) PAY payment the user wil end up here
      */
-    public static function paynl_onReturn()
+    public static function ppmfwc_onReturn()
     {
         $orderStatusId = isset($_GET['orderStatusId']) ? sanitize_text_field($_GET['orderStatusId']) : false;
         $orderId = isset($_GET['orderId']) ? sanitize_text_field($_GET['orderId']) : false;
@@ -338,18 +340,20 @@ class PPMFWC_Gateways
         $arrPayActions[self::ACTION_PENDING] = self::STATUS_PENDING;
         $arrPayActions[self::ACTION_CANCEL] = self::STATUS_CANCELED;
         $arrPayActions[self::ACTION_VERIFY] = self::STATUS_VERIFY;
+        $arrPayActions[self::ACTION_REFUND] = self::STATUS_REFUND;
         return $arrPayActions;
     }
     /**
      * Handles the PAY. Exchange requests
      *
      */
-    public static function paynl_onExchange()
+    public static function ppmfwc_onExchange()
     {
-        $message = 'TRUE|Ignoring pending';
+
         $action = isset($_GET['action']) ? strtolower(sanitize_text_field($_GET['action'])) : null;
         $order_id = isset($_REQUEST['order_id']) ? sanitize_text_field($_REQUEST['order_id']) : null;
         $arrActions = self::getPayActions();
+        $message = 'TRUE|Ignoring ' . $action;
 
         ob_start();
         try {
@@ -359,7 +363,7 @@ class PPMFWC_Gateways
                 throw new PPMFWC_Exception_Notice('Unknown action: ' . $action);
             }
 
-            if ($action != SELF::ACTION_PENDING) {
+            if (!in_array($action, array(SELF::ACTION_PENDING, SELF::ACTION_REFUND))) {
                 # Try to update the orderstatus.
                 PPMFWC_Helper_Transaction::processTransaction($order_id, $status);
                 $message = 'TRUE|Status updated to ' . $status;
@@ -367,7 +371,7 @@ class PPMFWC_Gateways
 
         } catch (PPMFWC_Exception_Notice $e) {
             $message = 'TRUE|Notice: ' . $e->getMessage();
-        } catch (Pay_Exception $e) {
+        } catch (PPMFWC_Exception $e) {
             $message = 'False|Error 1: ' . $e->getMessage();
         } catch (Exception $e) {
             $message = 'False|Error 2: ' . $e->getMessage();
@@ -380,15 +384,15 @@ class PPMFWC_Gateways
         die($message);
     }
 
-    public static function paynl_registerCheckoutFlash()
+    public static function ppmfwc_registerCheckoutFlash()
     {
         $paynlstatus = isset($_REQUEST['paynl_status']) ? sanitize_text_field($_REQUEST['paynl_status']) : null;
         if ($paynlstatus == self::STATUS_CANCELED) {
-            add_action('woocommerce_before_checkout_form', array(__CLASS__, 'displayFlashCanceled'), 20);
+            add_action('woocommerce_before_checkout_form', array(__CLASS__, 'ppmfwc_displayFlashCanceled'), 20);
         }
     }
 
-    public static function displayFlashCanceled()
+    public static function ppmfwc_displayFlashCanceled()
     {
         wc_print_notice(__('The payment has been canceled, please try again', PAYNL_WOOCOMMERCE_TEXTDOMAIN), 'error');
     }

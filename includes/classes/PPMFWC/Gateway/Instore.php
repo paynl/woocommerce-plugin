@@ -100,13 +100,18 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
         /** @var $wpdb wpdb The database */
         $order = new WC_Order($order_id);
 
-        $result = $this->startTransaction($order);
+        try {
+            $result = $this->startTransaction($order);
 
-        $order->add_order_note(sprintf(__('PAY.: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-            $result->getTransactionId()));
+            $paymentOptionId = $this->getOptionId();
+        } catch (Exception $e) {
+            wc_add_notice(__('Payment error:', PAYNL_WOOCOMMERCE_TEXTDOMAIN), 'error');
+            return;
+        }
 
-        PPMFWC_Helper_Transaction::newTransaction($result->getTransactionId(), $this->getOptionId(), $order->get_total(),
-            $order->get_id(), '');
+        $order->add_order_note(sprintf(__('PAY.: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $result->getTransactionId()));
+
+        PPMFWC_Helper_Transaction::newTransaction($result->getTransactionId(), $paymentOptionId, $order->get_total(), $order->get_id(), '');
 
         $terminal_setting = $this->get_option('paynl_instore_terminal');
 
