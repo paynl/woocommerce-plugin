@@ -1,12 +1,12 @@
-=== WooCommerce PAY. Payment Methods ===
+=== PAY. Payment Methods for WooCommerce ===
 Contributors: andypay
 Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Wechatpay, paypal, creditcard, mybank, sofortbanking, afterpay, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
 Stable tag: 3.5.3
-Tested up to: 5.5.3
-WC tested up to: 4.7.0
+Tested up to: 5.6
+WC tested up to: 4.7.1
 WC requires at least: 2.5
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,7 +15,7 @@ This plugin adds the PAY. payment methods to your WooCommerce installation.
 
 == Description ==
 
-*By installing this plugin you'll be able to integrate the payment methods of PAY. to your WooCommerce Webshop. This will only take a few minutes. If the plugin is successfully installed your customers will then be able to checkout their orders through the payment options such as iDeal, PayPal, Creditcard and so on.*
+*By installing this plugin you'll be able to integrate the PAY. Payment Methods for WooCommerce into your WooCommerce Webshop. This will only take a few minutes. If the plugin is successfully installed your customers will then be able to checkout their orders through the payment options such as iDeal, PayPal, Creditcard and so on.*
 
 Payment Service Provider PAY. offers online payment options for webshops and websites. PAY. has different payment option packages available. These packages range from the smallest one (XS) to the largest one (XL). Not sure which package is suitable for you? Start with the try-out package called Pioneer XS! With the Pioneer XS you will be able to use all payment options  except for the options credit card and direct debit. Just fill in the registration form and you'll receive a personal account by email. With this account you have direct access to the PAY. Administration Panel where you can add your website(s) and install the payment options that are essential for your website.
 
@@ -84,7 +84,7 @@ This section describes in short how to install the plugin and get it working.
 If you need more help, you can download the manual [here](http://www.pay.nl/plugin/woocommerce/pdf) or send an email to [support@pay.nl](mailto:support@pay.nl)
 
 1. Install the plugin via Plugins -> new plugin
-2. Activate the plugin through the 'Plugins' menu in WordPress, the name of this plugin is: WooCommerce PAY. Payment Methods
+2. Activate the plugin through the 'Plugins' menu in WordPress, the name of this plugin is: PAY. Payment Methods for WooCommerce
 3. Under WooCommerce -> Settings -> Payment, configure the apitoken and serviceid and activate the desired payment methods.
 4. You can now accept payments using PAY.
 
