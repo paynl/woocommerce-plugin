@@ -1,4 +1,4 @@
 <?php
-class Pay_Exception extends Exception{
+class PPMFWC_Exception extends Exception{
     
 }
