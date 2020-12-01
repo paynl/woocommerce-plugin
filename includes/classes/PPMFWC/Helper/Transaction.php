@@ -101,8 +101,7 @@ class PPMFWC_Helper_Transaction
           throw new PPMFWC_Exception_Notice('Woocommerce could not find internal order ' . $orderId);
         }
 
-        if ($status == $transaction['status'])
-        {
+        if ($status == $transaction['status']) {
             if ($status == PPMFWC_Gateways::STATUS_CANCELED) {
                 return add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
             }
@@ -125,17 +124,13 @@ class PPMFWC_Helper_Transaction
 
         self::updateStatus($transactionId, $apiStatus);
 
-        if (WooCommerce::instance()->version < 3) {
-            $wcOrderStatus = $order->status;
-        } else {
-            $wcOrderStatus = $order->get_status();
-        }
+        $wcOrderStatus = $order->get_status();
 
         if ($wcOrderStatus == 'complete' || $wcOrderStatus == 'processing') {
             throw new PPMFWC_Exception_Notice('Order is already completed');
         }
 
-        // aan de hand van apistatus gaan we hem updaten
+        # Update status
         switch ($apiStatus) {
             case PPMFWC_Gateways::STATUS_SUCCESS:
                 $woocommerce->cart->empty_cart();
@@ -155,38 +150,32 @@ class PPMFWC_Helper_Transaction
                 $url = self::getOrderReturnUrl($order);
                 break;
             case PPMFWC_Gateways::STATUS_CANCELED:
-               
 
-                if (WooCommerce::instance()->version >= 3) {
-                    $method = $order->get_payment_method();
+                $method = $order->get_payment_method();
 
-                    if (substr($method, 0, 11) != 'pay_gateway') {
-                        throw new PPMFWC_Exception_Notice('Not cancelling, last used method is not a PAY. method');
-                    }
-
-                    if ($order->is_paid()) {
-                        throw new PPMFWC_Exception_Notice('Not cancelling, order is already paid');
-                    }
-
-                    if (!$order->has_status('pending')) {
-                        throw new PPMFWC_Exception_Notice('Cancel ignored, order is ' . $order->get_status());
-                    }
-
-                    $order->set_status('failed');
-                    $order->save();
-                    
-                    $order->add_order_note(__('PAY.: Payment canceled', PAYNL_WOOCOMMERCE_TEXTDOMAIN));
+                if (substr($method, 0, 11) != 'pay_gateway') {
+                    throw new PPMFWC_Exception_Notice('Not cancelling, last used method is not a PAY. method');
                 }
+                if ($order->is_paid()) {
+                    throw new PPMFWC_Exception_Notice('Not cancelling, order is already paid');
+                }
+                if (!$order->has_status('pending')) {
+                    throw new PPMFWC_Exception_Notice('Cancel ignored, order is ' . $order->get_status());
+                }
+
+                $order->set_status('failed');
+                $order->save();
+
+                $order->add_order_note(esc_html(__('PAY.: Payment canceled', PAYNL_WOOCOMMERCE_TEXTDOMAIN)));
 
                 $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
 
                 break;
             case PPMFWC_Gateways::STATUS_VERIFY:
-                $order->update_status('on-hold', __("Transaction needs to be verified", PAYNL_WOOCOMMERCE_TEXTDOMAIN));
+                $order->update_status('on-hold', esc_html(__("Transaction needs to be verified", PAYNL_WOOCOMMERCE_TEXTDOMAIN)));
                 $url = self::getOrderReturnUrl($order);
                 break;
             default:
-                // Pending doen we niks mee
                 $url = self::getOrderReturnUrl($order);
                 break;
         }
@@ -196,7 +185,6 @@ class PPMFWC_Helper_Transaction
 
     public static function getOrderReturnUrl(WC_Order $order)
     {
-        // return url returnen
         $return_url = $order->get_checkout_order_received_url();
         if (is_ssl() || get_option('woocommerce_force_ssl_checkout') == 'yes') {
             $return_url = str_replace('http:', 'https:', $return_url);

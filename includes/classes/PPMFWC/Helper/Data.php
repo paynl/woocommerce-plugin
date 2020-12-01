@@ -194,9 +194,11 @@ class PPMFWC_Helper_Data
 
     public static function getBrowserLanguage()
     {
-        if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"]))
+        if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
             return self::parseDefaultLanguage($_SERVER["HTTP_ACCEPT_LANGUAGE"]);
-        else return self::parseDefaultLanguage(NULL);
+        } else {
+            return self::parseDefaultLanguage(NULL);
+        }
     }
 
     private static function parseDefaultLanguage($http_accept, $deflang = "en")
@@ -222,13 +224,15 @@ class PPMFWC_Helper_Data
 
             #return default language (highest q-value)
             $qval = 0.0;
-            foreach ($lang as $key => $value) {
-                $languagecode = strtolower(substr($key, 0, 2));
+            if(isset($lang) && is_array($lang)) {
+                foreach ($lang as $key => $value) {
+                    $languagecode = strtolower(substr($key, 0, 2));
 
-                if (in_array($languagecode, $arrAvailableLanguages)) {
-                    if ($value > $qval) {
-                        $qval = (float)$value;
-                        $deflang = $key;
+                    if (in_array($languagecode, $arrAvailableLanguages)) {
+                        if ($value > $qval) {
+                            $qval = (float)$value;
+                            $deflang = $key;
+                        }
                     }
                 }
             }
@@ -239,13 +243,13 @@ class PPMFWC_Helper_Data
     public static function getAvailableLanguages()
     {
         return array(
-            'nl' => __('Dutch', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-            'en' => __('English', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-            'de' => __('German', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-            'es' => __('Spanish', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-            'it' => __('Italian', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-            'fr' => __('French', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-            'browser' => __('Use browser language', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            'nl' => esc_html(__('Dutch', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+            'en' => esc_html(__('English', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+            'de' => esc_html(__('German', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+            'es' => esc_html(__('Spanish', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+            'it' => esc_html(__('Italian', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+            'fr' => esc_html(__('French', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+            'browser' => esc_html(__('Use browser language', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
         );
     }
 

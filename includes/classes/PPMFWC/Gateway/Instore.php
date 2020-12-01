@@ -23,8 +23,8 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             $terminals = $this->get_terminals();
 
             $options = array();
-            $options['checkout'] = __('Choose in checkout', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
-            $options['checkout_save'] = __('Choose in checkout and save in cookie', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
+            $options['checkout'] = esc_html(__('Choose in checkout', PAYNL_WOOCOMMERCE_TEXTDOMAIN));
+            $options['checkout_save'] = esc_html(__('Choose in checkout and save in cookie', PAYNL_WOOCOMMERCE_TEXTDOMAIN));
 
             if (isset($terminals) && !empty($terminals)) {
                 foreach ($terminals as $terminal) {
@@ -32,20 +32,21 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
                 }
             }
 
-            $this->form_fields['paynl_instore_terminal'] = array(
-                'title' => __('Selected terminal', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            $this->form_fields['paynl_instore_terminal'] =array(
+                'title' => esc_html(__('Selected terminal', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'select',
                 'options' => $options,
-                'description' => __('Select the terminal the payment should be sent to', PAYNL_WOOCOMMERCE_TEXTDOMAIN)
-            );
+                'description' => esc_html(__('Select the terminal the payment should be sent to', PAYNL_WOOCOMMERCE_TEXTDOMAIN)));
         }
     }
-    private function get_terminals(){
+
+    private function get_terminals()
+    {
         try {
-            $cache_key = 'paynl_instore_terminals_'.$this->getServiceId();
+            $cache_key = 'paynl_instore_terminals_' . $this->getServiceId();
 
             $terminals = get_transient($cache_key);
-            if($terminals === false){
+            if ($terminals === false) {
                 $terminals = \Paynl\Instore::getAllTerminals()->getList();
                 set_transient($cache_key, $terminals, HOUR_IN_SECONDS);
             }
@@ -72,7 +73,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
         }
         if ($terminal == 'checkout_save') {
             if (isset($_COOKIE['paynl_instore_terminal_id']) && !empty($_COOKIE['paynl_instore_terminal_id'])) {
-                echo "<input type='hidden' name='terminal_id' value='" . $_COOKIE['paynl_instore_terminal_id'] . "' />";
+                echo "<input type='hidden' name='terminal_id' value='" . esc_attr($_COOKIE['paynl_instore_terminal_id']) . "' />";
                 return;
             }
         }
@@ -82,10 +83,10 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             ?>
             <p>
                 <select name="terminal_id">
-                    <option value=""><?php echo __('Choose the pin terminal', PAYNL_WOOCOMMERCE_TEXTDOMAIN) ?></option>
+                    <option value=""><?php echo esc_html(__('Choose the pin terminal', PAYNL_WOOCOMMERCE_TEXTDOMAIN)) ?></option>
                     <?php
                     foreach ($terminals as $terminal) {
-                        echo '<option value="' . $terminal['id'] . '">' . $terminal['name'] . '</option>';
+                        echo '<option value="' . esc_attr($terminal['id']) . '">' . esc_html($terminal['name']) . '</option>';
                     }
                     ?>
                 </select>
@@ -105,11 +106,11 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
 
             $paymentOptionId = $this->getOptionId();
         } catch (Exception $e) {
-            wc_add_notice(__('Payment error:', PAYNL_WOOCOMMERCE_TEXTDOMAIN), 'error');
+            wc_add_notice(esc_html(__('Payment error:', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), 'error');
             return;
         }
 
-        $order->add_order_note(sprintf(__('PAY.: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $result->getTransactionId()));
+        $order->add_order_note(sprintf( esc_html(__('PAY.: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), $result->getTransactionId()));
 
         PPMFWC_Helper_Transaction::newTransaction($result->getTransactionId(), $paymentOptionId, $order->get_total(), $order->get_id(), '');
 
@@ -126,15 +127,12 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
         } else {
             $terminal = $terminal_setting;
         }
-        if($terminal_setting == 'checkout_save'){
-            setcookie('paynl_instore_terminal_id', $terminal, time()+(60*60*24*365));
+        if ($terminal_setting == 'checkout_save') {
+            setcookie('paynl_instore_terminal_id', $terminal, time() + (60 * 60 * 24 * 365));
         }
 
         # Send to pinterminal
-        $result = \Paynl\Instore::payment(array(
-            'transactionId' => $result->getTransactionId(),
-            'terminalId' => $terminal
-        ));
+        $result = \Paynl\Instore::payment(array('transactionId' => $result->getTransactionId(), 'terminalId' => $terminal));
 
         $hash = $result->getHash();
         ini_set('max_execution_time', 65);
@@ -144,9 +142,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
                 switch ($status->getTransactionState()) {
                     case 'approved':
                         $order->payment_complete();
-                        return array('result' => 'success',
-                            'redirect' => $order->get_checkout_order_received_url()
-                        );
+                        return array('result' => 'success', 'redirect' => $order->get_checkout_order_received_url());
                         break;
                     case 'cancelled':
                     case 'expired':
@@ -159,9 +155,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             sleep(1);
         }
 
-        return array(
-            'result' => 'expired'
-        );
+        return array('result' => 'expired');
     }
 
 }

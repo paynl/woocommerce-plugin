@@ -17,8 +17,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $this->optionId = $this->getOptionId();          
 
         $this->has_fields         = true;
-        $this->method_title       = 'PAY. - ' . $this->getName();
-        $this->method_description = sprintf(__('Activate this module to accept %s transactions', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName());
+        $this->method_title       = esc_html('PAY. - ' . $this->getName());
+        $this->method_description = esc_html(sprintf(__('Activate this module to accept %s transactions', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()));
 
         $this->supports = array('products', 'refunds');
 
@@ -31,6 +31,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this,'process_admin_options'));
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getId()
     {
         throw new Exception('Please implement the getId method');
@@ -38,16 +41,16 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
     public function getIcon()
     {
-      $size = $this->getIconSize();
-      $brandid = $this->get_option('brand_id');
+        $size = $this->getIconSize();
+        $brandid = $this->get_option('brand_id');
 
-      if (!empty($brandid) && $size == 'Auto') {
-        return PAYNL_PLUGIN_URL . 'assets/logos/' . $this->get_option('brand_id') . '.png';
-      } elseif (!empty($size) && $size != 'Auto') {
-        return 'https://static.pay.nl/payment_profiles/' . $size . '/' . $this->getOptionId() . '.png';
-      }
+        if (!empty($brandid) && $size == 'Auto') {
+            return PAYNL_PLUGIN_URL . 'assets/logos/' . $this->get_option('brand_id') . '.png';
+        } elseif (!empty($size) && $size != 'Auto') {
+            return 'https://static.pay.nl/payment_profiles/' . $size . '/' . $this->getOptionId() . '.png';
+        }
 
-      return '';
+        return '';
     }
 
     private function getIconSize()
@@ -68,6 +71,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         throw new Exception('Please implement the getOptionId method');
     }
 
+    /**
+     * @throws Exception
+     */
     public static function getName()
     {
         throw new Exception('Please implement the getName method');
@@ -78,12 +84,17 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         return '3.5.3';
     }
 
-  public function set_option_default($key, $value, $update = false)
-  {
-    if ((!$this->get_option($key)) || (strlen($this->get_option($key)) == 0) || ($update && $this->get_option($key) != $value)) {
-      $this->update_option($key, $value);
+    /**
+     * @param $key
+     * @param $value
+     * @param false $update
+     */
+    public function set_option_default($key, $value, $update = false)
+    {
+        if ((!$this->get_option($key)) || (strlen($this->get_option($key)) == 0) || ($update && $this->get_option($key) != $value)) {
+            $this->update_option($key, $value);
+        }
     }
-  }
 
     /**
      * Initialise Gateway Settings Form Fields.
@@ -95,66 +106,59 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         if (PPMFWC_Helper_Data::isOptionAvailable($optionId)) {
 
             $this->form_fields = array(
-                'enabled'      => array(
-                    'title'   => __('Enable/Disable', 'woocommerce'),
+                    'enabled' => array('title' => esc_html(__('Enable/Disable', 'woocommerce')),
                     'type'    => 'checkbox',
-                    'label'   => sprintf(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),
+                    'label'   => esc_html(sprintf(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName())),
                     'default' => 'no',
                 ),
                 'title'        => array(
-                    'title'       => __('Title', 'woocommerce'),
+                    'title'       => esc_html(__('Title', 'woocommerce')),
                     'type'        => 'text',
-                    'description' => __('This controls the title which the user sees during checkout.', 'woocommerce'),
-                    'default'     => $this->getName(),
+                    'description' => esc_html(__('This controls the title which the user sees during checkout.', 'woocommerce')),
+                    'default'     => esc_html($this->getName()),
                     'desc_tip'    => true,
                 ),
                 'description'  => array(
-                    'title'   => __('Customer Message', 'woocommerce'),
+                    'title'   => esc_html(__('Customer Message', 'woocommerce')),
                     'type'    => 'textarea',
                     'default' => 'pay_init',
                 ),
                 'instructions' => array(
-                    'title'       => __('Instructions', 'woocommerce'),
+                    'title'       => esc_html(__('Instructions', 'woocommerce')),
                     'type'        => 'textarea',
-                    'description' => __('Instructions that will be added to the thank you page.', 'woocommerce'),
+                    'description' => esc_html(__('Instructions that will be added to the thank you page.', 'woocommerce')),
                     'default'     => '',
                     'desc_tip'    => true,
                 ),
                 'min_amount'   => array(
-                    'title'       => __('Minimum amount', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+                    'title'       => esc_html(__('Minimum amount', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'price',
-                    'description' => __('Minimum amount valid for this payment method, leave blank for no limit',
-                        PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+                    'description' => esc_html(__('Minimum amount valid for this payment method, leave blank for no limit', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
                     'default' => '',                    
                     'desc_tip'    => true,
                 ),
                 'max_amount'   => array(
-                    'title'       => __('Maximum amount', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+                    'title'       => esc_html(__('Maximum amount', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'price',
-                    'description' => __('Maximum amount valid for this payment method, leave blank for no limit',
-                        PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-                    'default' => '',                    
+                    'description' => esc_html(__('Maximum amount valid for this payment method, leave blank for no limit', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+                    'default'     => '',
                     'desc_tip'    => true,
                 ),
             );
 
             if ($this->slowConfirmation()) {
                 $this->form_fields['initial_order_status'] = array(
-                    'title'       => __('Initial order status', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+                    'title'       => esc_html( __('Initial order status', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'select',
                     'options'     => array(
-                        self::STATUS_ON_HOLD => wc_get_order_status_name(self::STATUS_ON_HOLD) . ' (' . __('default',
-                                'woocommerce') . ')',
+                        self::STATUS_ON_HOLD => wc_get_order_status_name(self::STATUS_ON_HOLD) . esc_html( ' (' . __('default', 'woocommerce') . ')'),
                         self::STATUS_PENDING => wc_get_order_status_name(self::STATUS_PENDING),
                     ),
                     'default'     => self::STATUS_ON_HOLD,
                     /* translators: Placeholder 1: Default order status, placeholder 2: Link to 'Hold Stock' setting */
-                    'description' => sprintf(
-                        __('Some payment methods take longer than a few hours to complete. The initial order state is then set to \'%s\'. This ensures the order is not cancelled when the setting %s is used.',
-                            PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-                        wc_get_order_status_name(self::STATUS_ON_HOLD),
-                        '<a href="' . admin_url('admin.php?page=wc-settings&tab=products&section=inventory') . '" target="_blank">' . __('Hold Stock (minutes)',
-                            'woocommerce') . '</a>'
+                    'description' => sprintf( esc_html(__('Some payment methods take longer than a few hours to complete. The initial order state is then set to \'%s\'. This ensures the order is not cancelled when the setting %s is used.', PAYNL_WOOCOMMERCE_TEXTDOMAIN))
+                         , wc_get_order_status_name(self::STATUS_ON_HOLD)
+                         , '<a href="' . admin_url('admin.php?page=wc-settings&tab=products&section=inventory') . '" target="_blank">' . esc_html( __('Hold Stock (minutes)', 'woocommerce')) . '</a>'
                     ),
                 );
             }
@@ -177,18 +181,17 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
               $this->set_option_default('min_amount', (isset($payDefaults['min_amount'])) ? floatval($payDefaults['min_amount'] / 100)  : '', false);
               $this->set_option_default('max_amount', (isset($payDefaults['max_amount'])) ? floatval($payDefaults['max_amount'] / 100)  : '', false);
 
-              $pubDesc = isset($payDefaults['brand']['public_description']) ? $payDefaults['brand']['public_description'] : sprintf(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName());
+              $pubDesc = isset($payDefaults['brand']['public_description']) ? $payDefaults['brand']['public_description'] : sprintf(esc_html(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), $this->getName());
               $this->set_option_default('description', $pubDesc, true);
             }
 
         } else {
             $this->form_fields = array(
                 'message' => array(
-                    'title'       => __('Disabled', 'woocommerce'),
+                    'title'       => esc_html(__('Disabled', 'woocommerce')),
                     'type'        => 'hidden',
-                    'description' => __('This payment method is not available, please enable this in the PAY. admin.',
-                        PAYNL_WOOCOMMERCE_TEXTDOMAIN),
-                    'label'       => sprintf(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()),
+                    'description' => esc(__('This payment method is not available, please enable this in the PAY. admin.', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+                    'label'       => sprintf( esc_html(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
 
                 )
             );
@@ -266,23 +269,19 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         }
 
         if(!$payTransaction || $transactionFailed) {
-            wc_add_notice(__('Payment error:', PAYNL_WOOCOMMERCE_TEXTDOMAIN), 'error');
+            wc_add_notice(esc_html(__('Payment error:', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), 'error');
             return;
         }
 
-        $order->add_order_note(sprintf(__('PAY.: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $payTransaction->getTransactionId()));
+        $order->add_order_note(sprintf(esc_html(__('PAY.: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), $payTransaction->getTransactionId()));
 
         if ($this->slowConfirmation()) {
             $initial_status = $this->get_option('initial_order_status');
 
-            $order->update_status($initial_status, sprintf(__('Initial status set to %s ', PAYNL_WOOCOMMERCE_TEXTDOMAIN), wc_get_order_status_name($initial_status)));
+            $order->update_status($initial_status, sprintf(esc_html(__('Initial status set to %s ', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), wc_get_order_status_name($initial_status)));
             if ($initial_status == self::STATUS_ON_HOLD) {
                 # Reduce stock levels
-                if (WooCommerce::instance()->version < 3) {
-                    $order->reduce_order_stock();
-                } else {
-                    wc_reduce_stock_levels($order_id);
-                }
+                wc_reduce_stock_levels($order_id);
             }
         }
 
@@ -369,10 +368,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $startData['enduser'] = $enduser;
 
             # Retrieve order data
-            $shippingAddress  =  $order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2();
+            $shippingAddress  = $order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2();
             $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
 
-            $address              = array(
+            $address = array(
                 'streetName'  => $aShippingAddress[0],
                 'houseNumber' => $aShippingAddress[1],
                 'zipCode'     => $order->get_shipping_postcode(),
@@ -384,7 +383,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $billingAddress  = $order->get_billing_address_1() . ' ' . $order->get_billing_address_2();
             $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
 
-            $invoiceAddress              = array(
+            $invoiceAddress = array(
                 'initials'    => $order->get_billing_first_name(),
                 'lastName'    => substr($order->get_billing_last_name(), 0, 32),
                 'streetName'  => $aBillingAddress[0],
@@ -449,19 +448,19 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             return $birthdate;
     }
 
-  /**
-   * @return mixed|string|void
-   */
-  public static function getAlternativeExchangeUrl()
-  {
-    $strAltUrl = get_option('paynl_exchange_url');
+    /**
+     * @return mixed|string|void
+     */
+    public static function getAlternativeExchangeUrl()
+    {
+        $strAltUrl = get_option('paynl_exchange_url');
 
-    if(!empty($strAltUrl)) {
-      return $strAltUrl;
+        if (!empty($strAltUrl)) {
+            return $strAltUrl;
+        }
+
+        return '';
     }
-
-    return '';
-  }
 
     public static function loginSDK()
     {
@@ -469,7 +468,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         \Paynl\Config::setServiceId(self::getServiceId());
 
         $tokenCode = self::getTokenCode();
-        if(!empty($tokenCode)){
+        if (!empty($tokenCode)) {
             \Paynl\Config::setTokenCode($tokenCode);
         }
 
@@ -493,25 +492,24 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         $aProducts = array();
 
-        foreach ($items as $item) {
-            $pricePerPiece = ($item['line_subtotal'] + $item['line_subtotal_tax']) / $item['qty'];
-            $taxPerPiece   = $item['line_subtotal_tax'] / $item['qty'];
-            $product       = array(
-                'id'    => $item['product_id'],
-                'name'  => $item['name'],
-                'price' => $pricePerPiece,
-                'qty'   => $item['qty'],
-                'type'  => \Paynl\Transaction::PRODUCT_TYPE_ARTICLE,
-                'tax'   => $taxPerPiece
-            );
-            $aProducts[]   = $product;
+        if(is_array($items)) {
+            foreach ($items as $item) {
+                $pricePerPiece = ($item['line_subtotal'] + $item['line_subtotal_tax']) / $item['qty'];
+                $taxPerPiece   = $item['line_subtotal_tax'] / $item['qty'];
+                $product       = array(
+                    'id'    => $item['product_id'],
+                    'name'  => $item['name'],
+                    'price' => $pricePerPiece,
+                    'qty'   => $item['qty'],
+                    'type'  => \Paynl\Transaction::PRODUCT_TYPE_ARTICLE,
+                    'tax'   => $taxPerPiece
+                );
+                $aProducts[]   = $product;
+            }
         }
-        if (WooCommerce::instance()->version < 3) {
-            $shipping_total = $order->get_total_shipping();
-        } else {
-            $shipping_total = $order->get_shipping_total();
-        }
-        // verzendkosten meesturen
+        $shipping_total = $order->get_shipping_total();
+
+        # Add shippingcosts information
         $shipping = floatval($shipping_total) + floatval($order->get_shipping_tax());
         if ($shipping != 0) {
             $aProducts[] = array(
@@ -524,7 +522,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             );
         }
 
-        //korting meesturen
+        # Add discount information
         $discount = $order->get_total_discount(false);
         if ($discount != 0) {
             $discountExcl = $order->get_total_discount(true);
@@ -540,8 +538,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             );
         }
 
-        //fees meesturen
-        //Extra kosten meesturen
+        # Add fee information
         $fees = $order->get_fees();
         if ( ! empty($fees)) {
             foreach ($fees as $fee) {
@@ -586,8 +583,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             $result = \Paynl\Transaction::refund($transactionId, $amount, $reason);
 
-            $order->add_order_note(sprintf(__('Refunded %s - Refund ID: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $amount,
-                $result->getRefundId()));
+            $order->add_order_note(sprintf(__('Refunded %s - Refund ID: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $amount, $result->getRefundId()));
 
             return true;
         } catch (Exception $e) {
