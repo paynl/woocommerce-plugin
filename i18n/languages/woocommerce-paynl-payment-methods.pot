@@ -1,8 +1,8 @@
-# Copyright (C) 2020 Woocommerce PAY. Payment Methods
-# This file is distributed under the same license as the Woocommerce PAY. Payment Methods package.
+# Copyright (C) 2020 PAY. Payment Methods for WooCommerce
+# This file is distributed under the same license as the PAY. Payment Methods for WooCommerce package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Woocommerce PAY. Payment Methods 2.4.9\n"
+"Project-Id-Version: PAY. Payment Methods for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
 "POT-Creation-Date: 2016-09-01 13:33:23+00:00\n"
@@ -243,8 +243,8 @@ msgstr ""
 
 #: includes/classes/Pay/Setup.php:83
 msgid ""
-"Cannot activate Woocommerce Paynl Payment Methods because woocommerce is not "
-"found.<br />Please install and activate woocommerce first"
+"Cannot activate PAY. Payment Methods for WooCommerce because woocommerce is not "
+"found. Please install and activate WooCommerce first"
 msgstr ""
 
 #: includes/classes/Pay/Setup.php:84
@@ -263,7 +263,7 @@ msgid ""
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-msgid "Woocommerce PAY. Payment Methods"
+msgid "PAY. Payment Methods for WooCommerce"
 msgstr ""
 
 #. Plugin URI of the plugin/theme

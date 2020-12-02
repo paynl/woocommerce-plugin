@@ -213,15 +213,19 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             return false;
         }
 
-        $min_amount = $this->get_option('min_amount');
-        $max_amount = $this->get_option('max_amount');
-        $orderTotal = $this->get_order_total();
+        # Only check for amounts when there's a cart
+        if (WC()->cart) {
+            $min_amount = $this->get_option('min_amount');
+            $max_amount = $this->get_option('max_amount');
 
-        if ( ! empty($min_amount) && $orderTotal < (float)$min_amount) {
-            return false;
-        }
-        if ( ! empty($max_amount) && $orderTotal > (float)$max_amount) {
-            return false;
+            $orderTotal = $this->get_order_total();
+
+            if (!empty($min_amount) && $orderTotal < (float)$min_amount) {
+                return false;
+            }
+            if (!empty($max_amount) && $orderTotal > (float)$max_amount) {
+                return false;
+            }
         }
 
         return true;
