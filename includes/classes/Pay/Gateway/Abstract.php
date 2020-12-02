@@ -629,7 +629,7 @@ abstract class Pay_Gateway_Abstract extends WC_Payment_Gateway
 
         try {
             $this->loginSDK();       
-            $result = $transaction:refund($transactionId, $amount, $reason);         
+            $result = $transaction::refund($transactionId, $amount, $reason);         
             $order->add_order_note(sprintf(__('Refunded %s - Refund ID: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $amount,  $result->getRefundId()));
             return true;
         } catch (Exception $e) {
