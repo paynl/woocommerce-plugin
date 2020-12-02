@@ -11,7 +11,7 @@ WC requires at least: 3.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin adds the PAY. payment methods to your WooCommerce installation.
+This plugin adds the PAY. Payment Methods to your WooCommerce installation.
 
 == Description ==
 
@@ -169,14 +169,14 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 
 == Screenshots ==
 
-1. The added settings in woocommerce -> settings -> payments
+1. The added settings in WooCommerce -> settings -> payments
 2. The ideal configuration page
-3. The woocommerce checkout page with the PAY. payment methods
+3. The WooCommerce checkout page with the PAY. payment methods
 4. The iDEAL payment screen (Rabobank)
 
 == Changelog ==
 = 3.5.4 =
-Updated code and added Dutch translations
+Fixed a PHP notice, replaced the use of deprecated functions and added Dutch translations.
 = 3.5.3 =
 Added De Cadeaukaart payment method
 = 3.5.2 =
