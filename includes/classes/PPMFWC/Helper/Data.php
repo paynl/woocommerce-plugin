@@ -75,7 +75,7 @@ class PPMFWC_Helper_Data
         foreach ($paymentOptions as $paymentOption) {
             $image = '';
             if (isset($paymentOption['brand']['id'])) {
-                $image = PAYNL_PLUGIN_URL . 'assets/logos/' . $paymentOption['brand']['id'] . '.png';
+                $image = PPMFWC_PLUGIN_URL . 'assets/logos/' . $paymentOption['brand']['id'] . '.png';
             } else if (isset($paymentOption['id'])) {
                 $image = 'https://static.pay.nl/payment_profiles/25x25/' . $paymentOption['id'] . '.png';
             }
@@ -181,7 +181,7 @@ class PPMFWC_Helper_Data
     {
         return array(
             'Auto' => 'Auto',
-            0       => __('Don\'t show logos', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+            0       => __('Don\'t show logos', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             '50x32' => '50x32',
             '40x26' => '40x26',
             '20x20' => '20x20',
@@ -243,13 +243,13 @@ class PPMFWC_Helper_Data
     public static function ppmfwc_getAvailableLanguages()
     {
         return array(
-            'nl' => esc_html(__('Dutch', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
-            'en' => esc_html(__('English', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
-            'de' => esc_html(__('German', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
-            'es' => esc_html(__('Spanish', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
-            'it' => esc_html(__('Italian', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
-            'fr' => esc_html(__('French', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
-            'browser' => esc_html(__('Use browser language', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+            'nl' => esc_html(__('Dutch', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'en' => esc_html(__('English', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'de' => esc_html(__('German', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'es' => esc_html(__('Spanish', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'it' => esc_html(__('Italian', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'fr' => esc_html(__('French', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'browser' => esc_html(__('Use browser language', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
         );
     }
 

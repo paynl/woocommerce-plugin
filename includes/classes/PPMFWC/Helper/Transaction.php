@@ -137,7 +137,7 @@ class PPMFWC_Helper_Transaction
 
                 # Check the amount
                 if ($order->get_total() != $paidCurrencyAmount && $order->get_total() != $transaction->getPaidAmount()) {
-                  $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PAYNL_WOOCOMMERCE_TEXTDOMAIN), $paidCurrencyAmount . ' / ' . $transaction->getPaidAmount(), $order->get_total()));
+                  $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $paidCurrencyAmount . ' / ' . $transaction->getPaidAmount(), $order->get_total()));
                 } else {
                     $order->payment_complete($transactionId);
                 }
@@ -145,7 +145,7 @@ class PPMFWC_Helper_Transaction
                 update_post_meta($orderId, 'CustomerName', esc_attr($transaction->getAccountHolderName()));
                 update_post_meta($orderId, 'CustomerKey', esc_attr($transaction->getAccountNumber()));
 
-                $order->add_order_note(sprintf(__('PAY.: Payment complete. customerkey: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $transaction->getAccountNumber()));
+                $order->add_order_note(sprintf(__('PAY.: Payment complete. customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $transaction->getAccountNumber()));
 
                 $url = self::getOrderReturnUrl($order);
                 break;
@@ -166,13 +166,13 @@ class PPMFWC_Helper_Transaction
                 $order->set_status('failed');
                 $order->save();
 
-                $order->add_order_note(esc_html(__('PAY.: Payment canceled', PAYNL_WOOCOMMERCE_TEXTDOMAIN)));
+                $order->add_order_note(esc_html(__('PAY.: Payment canceled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
 
                 $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
 
                 break;
             case PPMFWC_Gateways::STATUS_VERIFY:
-                $order->update_status('on-hold', esc_html(__("Transaction needs to be verified", PAYNL_WOOCOMMERCE_TEXTDOMAIN)));
+                $order->update_status('on-hold', esc_html(__("Transaction needs to be verified", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
                 $url = self::getOrderReturnUrl($order);
                 break;
             default:

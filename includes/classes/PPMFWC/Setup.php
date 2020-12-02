@@ -114,8 +114,8 @@ class PPMFWC_Setup
     private static function checkRequirements()
     {
         if (!is_plugin_active('woocommerce/woocommerce.php') && !is_plugin_active_for_network('woocommerce/woocommerce.php')) {
-            $error = __('Cannot activate PAY. Payment Methods for WooCommerce because WooCommerce could not be found. Please install and activate WooCommerce first', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
-            $title = __('Woocommerce not found', PAYNL_WOOCOMMERCE_TEXTDOMAIN);
+            $error = __('Cannot activate PAY. Payment Methods for WooCommerce because WooCommerce could not be found. Please install and activate WooCommerce first', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+            $title = __('Woocommerce not found', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
 
             wp_die(esc_html($error), esc_html($title), array('back_link' => true));
         }

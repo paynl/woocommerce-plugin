@@ -25,7 +25,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         $this->has_fields         = true;
         $this->method_title       = esc_html('PAY. - ' . $this->getName());
-        $this->method_description = esc_html(sprintf(__('Activate this module to accept %s transactions', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName()));
+        $this->method_description = esc_html(sprintf(__('Activate this module to accept %s transactions', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $this->getName()));
 
         $this->supports = array('products', 'refunds');
 
@@ -44,7 +44,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $brandid = $this->get_option('brand_id');
 
         if (!empty($brandid) && $size == 'Auto') {
-            return PAYNL_PLUGIN_URL . 'assets/logos/' . $this->get_option('brand_id') . '.png';
+            return PPMFWC_PLUGIN_URL . 'assets/logos/' . $this->get_option('brand_id') . '.png';
         } elseif (!empty($size) && $size != 'Auto') {
             return 'https://static.pay.nl/payment_profiles/' . $size . '/' . $this->getOptionId() . '.png';
         }
@@ -91,7 +91,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $this->form_fields = array(
                     'enabled' => array('title' => esc_html(__('Enable/Disable', 'woocommerce')),
                     'type'    => 'checkbox',
-                    'label'   => esc_html(sprintf(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $this->getName())),
+                    'label'   => esc_html(sprintf(__('Enable PAY. %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $this->getName())),
                     'default' => 'no',
                 ),
                 'title'        => array(
@@ -114,16 +114,16 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     'desc_tip'    => true,
                 ),
                 'min_amount'   => array(
-                    'title'       => esc_html(__('Minimum amount', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+                    'title'       => esc_html(__('Minimum amount', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'price',
-                    'description' => esc_html(__('Minimum amount valid for this payment method, leave blank for no limit', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+                    'description' => esc_html(__('Minimum amount valid for this payment method, leave blank for no limit', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default' => '',                    
                     'desc_tip'    => true,
                 ),
                 'max_amount'   => array(
-                    'title'       => esc_html(__('Maximum amount', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+                    'title'       => esc_html(__('Maximum amount', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'price',
-                    'description' => esc_html(__('Maximum amount valid for this payment method, leave blank for no limit', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+                    'description' => esc_html(__('Maximum amount valid for this payment method, leave blank for no limit', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default'     => '',
                     'desc_tip'    => true,
                 ),
@@ -131,7 +131,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             if ($this->slowConfirmation()) {
                 $this->form_fields['initial_order_status'] = array(
-                    'title'       => esc_html( __('Initial order status', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+                    'title'       => esc_html( __('Initial order status', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'select',
                     'options'     => array(
                         self::STATUS_ON_HOLD => wc_get_order_status_name(self::STATUS_ON_HOLD) . esc_html( ' (' . __('default', 'woocommerce') . ')'),
@@ -139,7 +139,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     ),
                     'default'     => self::STATUS_ON_HOLD,
                     /* translators: Placeholder 1: Default order status, placeholder 2: Link to 'Hold Stock' setting */
-                    'description' => sprintf( esc_html(__('Some payment methods take longer than a few hours to complete. The initial order state is then set to \'%s\'. This ensures the order is not cancelled when the setting %s is used.', PAYNL_WOOCOMMERCE_TEXTDOMAIN))
+                    'description' => sprintf( esc_html(__('Some payment methods take longer than a few hours to complete. The initial order state is then set to \'%s\'. This ensures the order is not cancelled when the setting %s is used.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
                          , wc_get_order_status_name(self::STATUS_ON_HOLD)
                          , '<a href="' . admin_url('admin.php?page=wc-settings&tab=products&section=inventory') . '" target="_blank">' . esc_html( __('Hold Stock (minutes)', 'woocommerce')) . '</a>'
                     ),
@@ -164,7 +164,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
               $this->set_option_default('min_amount', (isset($payDefaults['min_amount'])) ? floatval($payDefaults['min_amount'] / 100)  : '', false);
               $this->set_option_default('max_amount', (isset($payDefaults['max_amount'])) ? floatval($payDefaults['max_amount'] / 100)  : '', false);
 
-              $pubDesc = isset($payDefaults['brand']['public_description']) ? $payDefaults['brand']['public_description'] : sprintf(esc_html(__('Pay with %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), $this->getName());
+              $pubDesc = isset($payDefaults['brand']['public_description']) ? $payDefaults['brand']['public_description'] : sprintf(esc_html(__('Pay with %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName());
               $this->set_option_default('description', $pubDesc, true);
             }
 
@@ -173,8 +173,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'message' => array(
                     'title'       => esc_html(__('Disabled', 'woocommerce')),
                     'type'        => 'hidden',
-                    'description' => esc_html(__('This payment method is not available, please enable this in the PAY. admin.', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
-                    'label'       => sprintf(esc_html(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
+                    'description' => esc_html(__('This payment method is not available, please enable this in the PAY. admin.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'label'       => sprintf(esc_html(__('Enable PAY. %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
                 )
             );
         }
@@ -255,16 +255,16 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         }
 
         if(!$payTransaction || $transactionFailed) {
-            wc_add_notice(esc_html(__('Payment error:', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), 'error');
+            wc_add_notice(esc_html(__('Payment error:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
             return;
         }
 
-        $order->add_order_note(sprintf(esc_html(__('PAY.: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), $payTransaction->getTransactionId()));
+        $order->add_order_note(sprintf(esc_html(__('PAY.: Transaction started: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payTransaction->getTransactionId()));
 
         if ($this->slowConfirmation()) {
             $initial_status = $this->get_option('initial_order_status');
 
-            $order->update_status($initial_status, sprintf(esc_html(__('Initial status set to %s ', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), wc_get_order_status_name($initial_status)));
+            $order->update_status($initial_status, sprintf(esc_html(__('Initial status set to %s ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), wc_get_order_status_name($initial_status)));
             if ($initial_status == self::STATUS_ON_HOLD) {
                 # Reduce stock levels
                 wc_reduce_stock_levels($order_id);
@@ -500,7 +500,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         if ($shipping != 0) {
             $aProducts[] = array(
                 'id'    => 'shipping',
-                'name'  => __('Shipping', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+                'name'  => __('Shipping', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                 'price' => $shipping,
                 'tax'   => $order->get_shipping_tax(),
                 'qty'   => 1,
@@ -516,7 +516,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             $aProducts[] = array(
                 'id'    => 'discount',
-                'name'  => __('Discount', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+                'name'  => __('Discount', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                 'price' => $discount * -1,
                 'qty'   => 1,
                 'type'  => \Paynl\Transaction::PRODUCT_TYPE_DISCOUNT,
@@ -569,7 +569,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             $result = \Paynl\Transaction::refund($transactionId, $amount, $reason);
 
-            $order->add_order_note(sprintf(__('Refunded %s - Refund ID: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $amount, $result->getRefundId()));
+            $order->add_order_note(sprintf(__('Refunded %s - Refund ID: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $amount, $result->getRefundId()));
 
             return true;
         } catch (Exception $e) {

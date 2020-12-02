@@ -30,7 +30,7 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                 ?>
                 <p>
                     <select name="option_sub_id">
-                        <option value=""><?php echo  esc_html(__('Choose your bank', PAYNL_WOOCOMMERCE_TEXTDOMAIN)); ?></option>
+                        <option value=""><?php echo  esc_html(__('Choose your bank', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)); ?></option>
                         <?php
                         foreach ($optionSubs as $optionSub) {
                             echo '<option value="' . esc_attr($optionSub['option_sub_id']) . '">' . esc_html($optionSub['name']) . '</option>';
@@ -63,14 +63,14 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                 $default = 'none';
             }
             $this->form_fields['paynl_bankselection'] = array(
-                    'title' => esc_html(__('Bankselection', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+                    'title' => esc_html(__('Bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'select',
-                    'options' => array('none' => esc_html( __('No bankselection', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
-                          'select' => esc_html(__('Selectbox', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
-                          'radio' => esc_html( __('Radiobuttons', PAYNL_WOOCOMMERCE_TEXTDOMAIN))
+                    'options' => array('none' => esc_html( __('No bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                          'select' => esc_html(__('Selectbox', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                          'radio' => esc_html( __('Radiobuttons', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
                         ),
 
-             'description' => esc_html( __('Pick the type of bankselection', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+             'description' => esc_html( __('Pick the type of bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
              'default' => $default,);
         }
     }

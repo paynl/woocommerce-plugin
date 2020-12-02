@@ -23,8 +23,8 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             $terminals = $this->get_terminals();
 
             $options = array();
-            $options['checkout'] = esc_html(__('Choose in checkout', PAYNL_WOOCOMMERCE_TEXTDOMAIN));
-            $options['checkout_save'] = esc_html(__('Choose in checkout and save in cookie', PAYNL_WOOCOMMERCE_TEXTDOMAIN));
+            $options['checkout'] = esc_html(__('Choose in checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+            $options['checkout_save'] = esc_html(__('Choose in checkout and save in cookie', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
 
             if (isset($terminals) && !empty($terminals)) {
                 foreach ($terminals as $terminal) {
@@ -33,10 +33,10 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             }
 
             $this->form_fields['paynl_instore_terminal'] =array(
-                'title' => esc_html(__('Selected terminal', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+                'title' => esc_html(__('Selected terminal', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'select',
                 'options' => $options,
-                'description' => esc_html(__('Select the terminal the payment should be sent to', PAYNL_WOOCOMMERCE_TEXTDOMAIN)));
+                'description' => esc_html(__('Select the terminal the payment should be sent to', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
         }
     }
 
@@ -83,7 +83,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             ?>
             <p>
                 <select name="terminal_id">
-                    <option value=""><?php echo esc_html(__('Choose the pin terminal', PAYNL_WOOCOMMERCE_TEXTDOMAIN)) ?></option>
+                    <option value=""><?php echo esc_html(__('Choose the pin terminal', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) ?></option>
                     <?php
                     foreach ($terminals as $terminal) {
                         echo '<option value="' . esc_attr($terminal['id']) . '">' . esc_html($terminal['name']) . '</option>';
@@ -106,11 +106,11 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
 
             $paymentOptionId = $this->getOptionId();
         } catch (Exception $e) {
-            wc_add_notice(esc_html(__('Payment error:', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), 'error');
+            wc_add_notice(esc_html(__('Payment error:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
             return;
         }
 
-        $order->add_order_note(sprintf( esc_html(__('PAY.: Transaction started: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), $result->getTransactionId()));
+        $order->add_order_note(sprintf( esc_html(__('PAY.: Transaction started: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $result->getTransactionId()));
 
         PPMFWC_Helper_Transaction::newTransaction($result->getTransactionId(), $paymentOptionId, $order->get_total(), $order->get_id(), '');
 
