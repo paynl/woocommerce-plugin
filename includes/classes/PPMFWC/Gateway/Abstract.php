@@ -10,10 +10,17 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     const STATUS_REFUNDED = 'refunded';
     const STATUS_FAILED = 'failed';
 
+    /**
+     * Payment Profile ID
+     *
+     * @var $optionId
+     */
+    public $optionId;
+
     public function __construct()
     {
         $this->id   = $this->getId();
-        $this->icon = $this->getIcon();     
+        $this->icon = $this->getIcon();
         $this->optionId = $this->getOptionId();          
 
         $this->has_fields         = true;
@@ -29,14 +36,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $this->description = $this->get_option('description');
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this,'process_admin_options'));
-    }
-
-    /**
-     * @throws Exception
-     */
-    public static function getId()
-    {
-        throw new Exception('Please implement the getId method');
     }
 
     public function getIcon()
@@ -63,25 +62,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
       return $size;
     }
 
-    /**
-     * @throws Exception
-     */
-    public static function getOptionId()
-    {
-        throw new Exception('Please implement the getOptionId method');
-    }
-
-    /**
-     * @throws Exception
-     */
-    public static function getName()
-    {
-        throw new Exception('Please implement the getName method');
-    }
-
     public function getVersion()
     {
-        return '3.5.3';
+        return '3.5.4';
     }
 
     /**
@@ -191,8 +174,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     'title'       => esc_html(__('Disabled', 'woocommerce')),
                     'type'        => 'hidden',
                     'description' => esc(__('This payment method is not available, please enable this in the PAY. admin.', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
-                    'label'       => sprintf( esc_html(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
-
+                    'label'       => sprintf(esc_html(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
                 )
             );
         }

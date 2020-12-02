@@ -3,7 +3,7 @@
 /**
  * Plugin Name: PAY. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
- * Description: PAY. payment methods for WooCommerce
+ * Description: PAY. Payment Methods for WooCommerce
  * Version: 3.5.4
  * Author: PAY.
  * Author URI: https://www.pay.nl
@@ -116,8 +116,8 @@ function ppmfwc_vatField($checkout)
   woocommerce_form_field('vat_number', array(
     'type' => 'text',
     'class' => array('vat-number-field form-row-wide'),
-    'label' => __('VAT Number'),
-    'placeholder' => __('Enter your VAT number'),
+    'label' => __('VAT Number', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
+    'placeholder' => __('Enter your VAT number', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
   ), $checkout->get_value('vat_number'));
 }
 
@@ -129,8 +129,8 @@ function ppmfwc_cocField($checkout)
   woocommerce_form_field('coc_number', array(
     'type' => 'text',
     'class' => array('coc-number-field form-row-wide'),
-    'label' => __('COC Number'),
-    'placeholder' => esc_html(__('Enter your COC number')),
+    'label' => esc_html(__('COC Number', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+    'placeholder' => esc_html(__('Enter your COC number', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
   ), $checkout->get_value('coc_number'));
 }
 
@@ -146,12 +146,12 @@ function ppmfwc_checkout_vat_number_update_order_meta($order_id)
 }
 
 /**
- * Show content in the WooCommerce admin
+ * Show VAT in the WooCommerce admin
  * @param $order
  */
 function ppmfwc_vat_number_display_admin_order_meta($order)
 {
-    echo '<p><strong>' . esc_html(__('VAT Number', 'woocommerce')) . ':</strong> ' . esc_html(get_post_meta($order->get_id(), '_vat_number', true)) . '</p>';
+    echo '<p><strong>' . esc_html(__('VAT Number', PAYNL_WOOCOMMERCE_TEXTDOMAIN)) . ':</strong> ' . esc_html(get_post_meta($order->get_id(), '_vat_number', true)) . '</p>';
 }
 
 /**
@@ -166,10 +166,10 @@ function ppmfwc_checkout_coc_number_update_order_meta($order_id)
 }
 
 /**
- * Show content in the WooCommerce admin
+ * Show COC in the WooCommerce admin
  * @param $order
  */
 function ppmfwc_coc_number_display_admin_order_meta($order)
 {
-    echo '<p><strong>' . esc_html(__('COC Number', 'woocommerce')) . ':</strong> ' . esc_html(get_post_meta($order->get_id(), '_coc_number', true)) . '</p>';
+    echo '<p><strong>' . esc_html(__('COC Number', PAYNL_WOOCOMMERCE_TEXTDOMAIN)) . ':</strong> ' . esc_html(get_post_meta($order->get_id(), '_coc_number', true)) . '</p>';
 }
