@@ -173,7 +173,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'message' => array(
                     'title'       => esc_html(__('Disabled', 'woocommerce')),
                     'type'        => 'hidden',
-                    'description' => esc(__('This payment method is not available, please enable this in the PAY. admin.', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
+                    'description' => esc_html(__('This payment method is not available, please enable this in the PAY. admin.', PAYNL_WOOCOMMERCE_TEXTDOMAIN)),
                     'label'       => sprintf(esc_html(__('Enable PAY. %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
                 )
             );

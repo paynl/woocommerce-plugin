@@ -151,7 +151,7 @@ class PPMFWC_Gateways
             'name' => __('Token Code', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'placeholder' => 'AT-####-####',
             'type' => 'text',
-            'desc' => esc_html(__('The AT-code belonging to your token, you can find this', PAYNL_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
+            'desc' => esc_html(__('The AT-code belonging to your token, you can find this ', PAYNL_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
             'id' => 'paynl_tokencode',
         );
         $addedSettings[] = array(
@@ -164,7 +164,7 @@ class PPMFWC_Gateways
             'name' => __('Service id', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
             'placeholder' => 'SL-####-####',
             'type' => 'text',
-            'desc' => esc_html(__('The serviceid to identify your website, you can find your serviceid here', PAYNL_WOOCOMMERCE_TEXTDOMAIN)). '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
+            'desc' => esc_html(__('The serviceid to identify your website, you can find your serviceid here ', PAYNL_WOOCOMMERCE_TEXTDOMAIN)). '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
             'id' => 'paynl_serviceid',
             'desc_tip' => __('The serviceid should be in the following format: SL-xxxx-xxxx', PAYNL_WOOCOMMERCE_TEXTDOMAIN),
         );

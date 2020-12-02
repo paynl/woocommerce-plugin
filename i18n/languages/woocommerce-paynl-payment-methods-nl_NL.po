@@ -438,7 +438,7 @@ msgstr "Transactie niet gevonden"
 #: includes/classes/PPMFWC/Setup.php:117
 msgid ""
 "Cannot activate PAY. Payment Methods for WooCommerce because WooCommerce "
-"could not be found. Please install and activate woocommerce first"
+"could not be found. Please install and activate WooCommerce first"
 msgstr ""
 "PAY. Payment Methods for WooCommerce kan niet worden geactiveerd omdat "
 "WooCommerce niet kan worden gevonden. Installeer en activeer WooCommerce "

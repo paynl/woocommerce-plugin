@@ -243,7 +243,7 @@ msgstr ""
 
 #: includes/classes/Pay/Setup.php:83
 msgid ""
-"Cannot activate PAY. Payment Methods for WooCommerce because woocommerce is not "
+"Cannot activate PAY. Payment Methods for WooCommerce because WooCommerce is not "
 "found. Please install and activate WooCommerce first"
 msgstr ""
 
@@ -252,7 +252,7 @@ msgid "Woocommerce not found"
 msgstr ""
 
 #: woocommerce-payment-paynl.php:31
-msgid "The PAY. payment methods plugin requires woocommerce to be active"
+msgid "The PAY. payment methods plugin requires WooCommerce to be active"
 msgstr ""
 
 #: woocommerce-payment-paynl.php:35
@@ -271,7 +271,7 @@ msgid "https://wordpress.org/plugins/woocommerce-paynl-payment-methods/"
 msgstr ""
 
 #. Description of the plugin/theme
-msgid "PAY. payment methods for woocommerce"
+msgid "PAY. payment methods for WooCommerce"
 msgstr ""
 
 #. Author of the plugin/theme

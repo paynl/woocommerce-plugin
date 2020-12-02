@@ -176,7 +176,7 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 
 == Changelog ==
 = 3.5.4 =
-Fixed a PHP notice, replaced the use of deprecated functions and added Dutch translations.
+Raised minimum version for WooCommerce to 3.0. Fixed a PHP notice, replaced the use of deprecated functions and added Dutch translations.
 = 3.5.3 =
 Added De Cadeaukaart payment method
 = 3.5.2 =
