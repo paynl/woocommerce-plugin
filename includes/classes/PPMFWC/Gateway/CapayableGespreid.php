@@ -22,7 +22,7 @@ class PPMFWC_Gateway_CapayableGespreid extends PPMFWC_Gateway_Abstract
     {
         parent::init_form_fields();
 
-        $this->form_fields['ask_birthdate'] = array('title' => __('Ask birthdate', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), 'type' => 'checkbox', 'description' => __('Ask the customer for his birthdate, this will fasten the checkout process', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), 'default' => 'yes');
+        $this->form_fields['ask_birthdate'] = array('title' => esc_html(__('Ask birthdate', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'type' => 'checkbox', 'description' => esc_html(__('Ask the customer for his birthdate, this will fasten the checkout process', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'default' => 'yes');
 
     }
 

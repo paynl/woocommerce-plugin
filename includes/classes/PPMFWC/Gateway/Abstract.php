@@ -251,11 +251,12 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $payTransaction = $this->startTransaction($order);
             $paymentOption = $this->getOptionId();
         } catch (Exception $e) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error: ' . esc_html($e->getMessage()));
             $transactionFailed = true;
         }
 
         if(!$payTransaction || $transactionFailed) {
-            wc_add_notice(esc_html(__('Payment error:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
+            wc_add_notice(esc_html(__('Could not initiate payment. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
             return;
         }
 
@@ -406,7 +407,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
     /**
      * @param $ppid
-     * @return false|string
+     * @return string
      */
     private function getBirthDate($ppid)
     {
@@ -431,7 +432,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     break;
             }
 
-            return $birthdate;
+            return empty($birthdate) ? '' : $birthdate;
     }
 
     /**

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PAY. Payment Methods for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
-"POT-Creation-Date: 2020-12-02 17:17+0100\n"
-"PO-Revision-Date: 2020-12-02 17:17+0100\n"
+"POT-Creation-Date: 2020-12-03 21:57+0100\n"
+"PO-Revision-Date: 2020-12-03 21:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -117,31 +117,33 @@ msgid ""
 msgstr ""
 "Deze betaalmethode is niet beschikbaar, schakel deze in op admin.pay.nl."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:254
-#: includes/classes/PPMFWC/Gateway/Instore.php:109
-msgid "Payment error:"
-msgstr "Betalingsfout:"
+#: includes/classes/PPMFWC/Gateway/Abstract.php:259
+msgid ""
+"Could not initiate payment. Please try again or use another payment method."
+msgstr ""
+"De betaling kon niet worden gestart. Probeer opnieuw of kies een andere "
+"betaalmethode."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:258
+#: includes/classes/PPMFWC/Gateway/Abstract.php:263
 #: includes/classes/PPMFWC/Gateway/Instore.php:113
 #, php-format
 msgid "PAY.: Transaction started: %s"
 msgstr "PAY.: Transactie gestart, TransactieId: %s"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:263
+#: includes/classes/PPMFWC/Gateway/Abstract.php:268
 #, php-format
 msgid "Initial status set to %s "
 msgstr "Initiële status op %s gezet "
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:499
+#: includes/classes/PPMFWC/Gateway/Abstract.php:504
 msgid "Shipping"
 msgstr "Verzendkosten"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:515
+#: includes/classes/PPMFWC/Gateway/Abstract.php:520
 msgid "Discount"
 msgstr "Korting"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:568
+#: includes/classes/PPMFWC/Gateway/Abstract.php:573
 #, php-format
 msgid "Refunded %s - Refund ID: %s"
 msgstr "Terugbetaald %s - Refund id: %s"
@@ -215,6 +217,10 @@ msgstr "Selecteer de terminal waar de betaling naartoe gestuurd moet worden"
 msgid "Choose the pin terminal"
 msgstr "Kies de pin terminal"
 
+#: includes/classes/PPMFWC/Gateway/Instore.php:109
+msgid "Payment error:"
+msgstr "Betalingsfout:"
+
 #: includes/classes/PPMFWC/Gateways.php:101
 msgid "The following payment methods can be enabled"
 msgstr "De volgende betaalmethoden kunnen worden ingeschakeld"
@@ -261,8 +267,8 @@ msgid "Token Code"
 msgstr "Token Code"
 
 #: includes/classes/PPMFWC/Gateways.php:154
-msgid "The AT-code belonging to your token, you can find this"
-msgstr "De AT-code behorende bij de API-Token kun je hier vinden"
+msgid "The AT-code belonging to your token, you can find this "
+msgstr "De AT-code behorende bij de API-Token kun je hier vinden "
 
 #: includes/classes/PPMFWC/Gateways.php:158
 msgid "Api token"
@@ -281,10 +287,11 @@ msgstr "Service id"
 
 #: includes/classes/PPMFWC/Gateways.php:167
 msgid ""
-"The serviceid to identify your website, you can find your serviceid here"
+"The serviceid to identify your website, you can find your serviceid here "
 msgstr ""
 "Het serviceId is de SL-code van je dienst, en wordt gebruikt om de "
-"betalingen aan de juiste dienst te koppelen. Je kunt je serviceId hier vinden"
+"betalingen aan de juiste dienst te koppelen. Je kunt je serviceId hier "
+"vinden "
 
 #: includes/classes/PPMFWC/Gateways.php:169
 msgid "The serviceid should be in the following format: SL-xxxx-xxxx"

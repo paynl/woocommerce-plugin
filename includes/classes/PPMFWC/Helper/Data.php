@@ -17,7 +17,7 @@ class PPMFWC_Helper_Data
     }
 
     /**
-     * Check for existing text field and retuns it sanitized
+     * Check for existing textfield and returns it sanitized
      *
      * @param $fieldName
      * @return false|string
@@ -181,7 +181,7 @@ class PPMFWC_Helper_Data
     {
         return array(
             'Auto' => 'Auto',
-            0       => __('Don\'t show logos', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            0       => esc_html(__('Don\'t show logos', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             '50x32' => '50x32',
             '40x26' => '40x26',
             '20x20' => '20x20',

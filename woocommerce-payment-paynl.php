@@ -116,8 +116,8 @@ function ppmfwc_vatField($checkout)
   woocommerce_form_field('vat_number', array(
     'type' => 'text',
     'class' => array('vat-number-field form-row-wide'),
-    'label' => __('VAT Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-    'placeholder' => __('Enter your VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+    'label' => esc_html(__('VAT Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+    'placeholder' => esc_html(__('Enter your VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
   ), $checkout->get_value('vat_number'));
 }
 

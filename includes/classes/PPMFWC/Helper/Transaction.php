@@ -145,7 +145,7 @@ class PPMFWC_Helper_Transaction
                 update_post_meta($orderId, 'CustomerName', esc_attr($transaction->getAccountHolderName()));
                 update_post_meta($orderId, 'CustomerKey', esc_attr($transaction->getAccountNumber()));
 
-                $order->add_order_note(sprintf(__('PAY.: Payment complete. customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $transaction->getAccountNumber()));
+                $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete. customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
 
                 $url = self::getOrderReturnUrl($order);
                 break;

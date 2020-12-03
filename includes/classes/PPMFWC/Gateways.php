@@ -142,26 +142,26 @@ class PPMFWC_Gateways
         $updatedSettings = array();
         $addedSettings = array();
         $addedSettings[] = array(
-            'title' => __('PAY. settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'title' => esc_html(__('PAY. settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'title',
             'desc' => '<p>' . $loadedPaymentMethods . '</p><p style="margin-top: 25px;">' . esc_html(__('The following options are required to use the PAY. Payment Gateway and are used by all PAY. Payment Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)). '</p>',
             'id' => 'paynl_global_settings',
         );
         $addedSettings[] = array(
-            'name' => __('Token Code', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => esc_html(__('Token Code', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'placeholder' => 'AT-####-####',
             'type' => 'text',
             'desc' => esc_html(__('The AT-code belonging to your token, you can find this ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
             'id' => 'paynl_tokencode',
         );
         $addedSettings[] = array(
-            'name' => __('Api token', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => esc_html( __('Api token', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'text',
             'desc' => esc_html(__('The api token used to communicate with the PAY. API, you can find your token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)).'<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
             'id' => 'paynl_apitoken',
         );
         $addedSettings[] = array(
-            'name' => __('Service id', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => esc_html(__('Service id', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'placeholder' => 'SL-####-####',
             'type' => 'text',
             'desc' => esc_html(__('The serviceid to identify your website, you can find your serviceid here ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)). '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
@@ -169,35 +169,35 @@ class PPMFWC_Gateways
             'desc_tip' => __('The serviceid should be in the following format: SL-xxxx-xxxx', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
         );
         $addedSettings[] = array(
-            'name' => __('Test mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => esc_html(__('Test mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'checkbox',
             'desc' => esc_html(__('Check this box if you want to enable test mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_test_mode',
             'default' => 'no',
         );
         $addedSettings[] = array(
-            'name' => __('SSL Verify Peer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => esc_html(__('SSL Verify Peer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'checkbox',
             'desc' => esc_html(__('Uncheck this box if you have SSL certificate errors that you don\'t know how to fix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_verify_peer',
             'default' => 'yes',
         );
         $addedSettings[] = array(
-            'name' => __('Send order data', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => esc_html(__('Send order data', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'checkbox',
             'desc' => esc_html(__('Check this box if you want to send the order data to PAY., this is required if you want use \'Pay after delivery\' paymentmethods ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_send_order_data',
             'default' => 'yes',
         );
         $addedSettings[] = array(
-            'name' => __('Show VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => esc_html(__('Show VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'checkbox',
             'desc' => esc_html(__('Check this box if you want to show VAT number in checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_show_vat_number',
             'default' => 'no',
         );
         $addedSettings[] = array(
-            'name' => __('Show COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => esc_html(__('Show COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'checkbox',
             'desc' => esc_html(__('Check this box if you want to show COC number in checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_show_coc_number',
