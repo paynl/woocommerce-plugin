@@ -38,7 +38,7 @@ class PPMFWC_Gateway_Yehhpay extends PPMFWC_Gateway_Abstract
     if ($ask_birthdate == 'yes') {
       echo esc_html(__('Birthdate: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . ' <input name="birthdate_yehhpay" id="birthdate_yehhpay">';
 
-      $js = 'jQuery( "#birthdate_yehhpay" ).css("w  idth","125px").datepicker({ changeMonth: true, changeYear: true, yearRange:"-100:+0", dateFormat: "dd-mm-yy" });';
+      $js = 'jQuery( "#birthdate_yehhpay" ).css("width","125px").datepicker({ changeMonth: true, changeYear: true, yearRange:"-100:+0", dateFormat: "dd-mm-yy" });';
         wp_enqueue_style('jquery-ui', PPMFWC_PLUGIN_URL . 'assets/css/jquery-ui.min.css');
         wp_enqueue_script('jquery-ui-datepicker');
 
