@@ -39,19 +39,19 @@ class Helper
     }
 
     /**
-     * Get the ip of the user
+     * Get the IP Address of the user
      *
      * @return string
      */
     public static function getIp()
     {
-        // Use $_SERVER or get the headers if we can
+        # Use $_SERVER or get the headers if we can
         $headers = $_SERVER;
         if (function_exists('apache_request_headers')) {
             $headers = apache_request_headers();
         }
 
-        // Get the forwarded IP if it exists
+        # Get the forwarded IP if it exists
         $the_ip = $_SERVER['REMOTE_ADDR'];
         if (array_key_exists('X-Forwarded-For', $headers)) {
             $the_ip = $headers['X-Forwarded-For'];
