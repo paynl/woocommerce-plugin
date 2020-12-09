@@ -64,7 +64,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
     public function getVersion()
     {
-        return '3.5.4';
+        return '3.5.5';
     }
 
     /**
