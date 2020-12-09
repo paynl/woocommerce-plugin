@@ -351,7 +351,7 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_onExchange()
     {
-        $action = isset($_GET['action']) ? strtolower(sanitize_text_field($_GET['action'])) : null;
+        $action = isset($_REQUEST['action']) ? strtolower(sanitize_text_field($_REQUEST['action'])) : null;
         $order_id = isset($_REQUEST['order_id']) ? sanitize_text_field($_REQUEST['order_id']) : null;
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
