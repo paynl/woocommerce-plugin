@@ -332,7 +332,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             'extra2'        => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
             'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
             'ipaddress'     => $ipAddress,
-            'object'        => substr('Woocommerce ' . $woocommerce->version . " | " . $this->getVersion() . " | " . $ver . " | " . $wp_version, 0, 64),
+            'object'        => substr('woocommerce ' . $woocommerce->version . " | " . $this->getVersion() . " | " . $ver . " | " . $wp_version, 0, 64),
         );
 
         if (get_option('paynl_send_order_data') == 'yes') {
