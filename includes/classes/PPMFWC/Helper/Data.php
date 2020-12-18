@@ -258,7 +258,7 @@ class PPMFWC_Helper_Data
         $phpVersion = (float)phpversion();
         $payVersion = self::getVersion();
 
-        $object = 'woocommerce ' . $woocommerce->version . " | " . $payVersion . " | " . $phpVersion . " | " . $wp_version;
+        $object = substr('woocommerce ' . $woocommerce->version . " | " . $payVersion . " | " . $phpVersion . " | " . $wp_version, 0, 64);
 
         return $object;
 
