@@ -251,8 +251,8 @@ class PPMFWC_Helper_Data
     /**
      * @return string
      */
-    public static function getObject() {
-
+    public static function getObject()
+    {
         global $wp_version;
         global $woocommerce;
         $phpVersion = (float)phpversion();
