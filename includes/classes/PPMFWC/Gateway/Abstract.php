@@ -282,22 +282,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @return false|string
-     */
-
-    public function getObject() {
-
-        global $wp_version;
-        global $woocommerce;
-        $ver = (float)phpversion();
-
-        $object = substr('woocommerce ' . $woocommerce->version . " | " . $this->getVersion() . " | " . $ver . " | " . $wp_version, 0, 64);
-
-        return $object;
-
-    }
-
-    /**
      * @param WC_Order $order
      * @return false|\Paynl\Result\Transaction\Start
      * @throws \Paynl\Error\Api
@@ -345,7 +329,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             'extra2'        => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
             'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
             'ipaddress'     => $ipAddress,
-            'object'        => $this->getObject(),
+            'object'        => PPMFWC_Helper_Data::getObject(),
         );
 
         if (get_option('paynl_send_order_data') == 'yes') {

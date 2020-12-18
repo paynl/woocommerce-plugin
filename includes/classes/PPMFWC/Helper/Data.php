@@ -240,6 +240,19 @@ class PPMFWC_Helper_Data
         return strtolower(substr($deflang, 0, 2));
     }
 
+    public static function getObject() {
+
+        global $wp_version;
+        global $woocommerce;
+        $ver = (float)phpversion();
+        $payversion = PPMFWC_Gateway_Abstract::getVersion();
+
+        $object = 'Woocommerce ' . $woocommerce->version . " | " . $payversion . " | " . $ver . " | " . $wp_version;
+
+        return $object;
+
+    }
+
     public static function ppmfwc_getAvailableLanguages()
     {
         return array(
