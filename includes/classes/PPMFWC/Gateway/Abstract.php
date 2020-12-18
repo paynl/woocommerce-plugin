@@ -62,11 +62,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
       return $size;
     }
 
-    public function getVersion()
-    {
-        return '3.5.4';
-    }
-
     /**
      * @param $key
      * @param $value
