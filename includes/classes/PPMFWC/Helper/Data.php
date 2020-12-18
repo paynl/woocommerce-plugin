@@ -247,7 +247,7 @@ class PPMFWC_Helper_Data
         $ver = (float)phpversion();
         $payversion = PPMFWC_Gateway_Abstract::getVersion();
 
-        $object = 'Woocommerce ' . $woocommerce->version . " | " . $payversion . " | " . $ver . " | " . $wp_version;
+        $object = 'woocommerce ' . $woocommerce->version . " | " . $payversion . " | " . $ver . " | " . $wp_version;
 
         return $object;
 
