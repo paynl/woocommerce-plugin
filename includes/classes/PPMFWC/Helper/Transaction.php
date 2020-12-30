@@ -109,6 +109,7 @@ class PPMFWC_Helper_Transaction
                 return add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
             }
             if ($status == PPMFWC_Gateways::STATUS_DENIED) {
+                wc_add_notice(esc_html(__('Payment denied. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
                 return add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_DENIED, wc_get_checkout_url());
             }
             if ($status == PPMFWC_Gateways::STATUS_PENDING) {
