@@ -2,18 +2,39 @@
 
 class PPMFWC_Helper_Data
 {
+    private static $paylog = null;
 
     /**
      * @param $message
+     * @param null $payTransactionId
+     * @param array $infoFields
      * @param string $type
      */
-    public static function ppmfwc_payLogger($message, $type = 'info')
+    public static function ppmfwc_payLogger($message, $payTransactionId = null, $infoFields = array(), $type = 'info')
     {
-        if(!in_array($type, array('emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'))) {
-            $type = 'info';
+        if (self::$paylog === true || self::$paylog === null) {
+            if (empty(self::$paylog)) {
+                self::$paylog = get_option('paynl_paylogger') == 'yes';
+                if (!self::$paylog) {
+                    return;
+                }
+            }
+            if (!in_array($type, array('emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'))) {
+                $type = 'info';
+            }
+            $payTransactionId = empty($payTransactionId) ? '-' : $payTransactionId;
+            $message = '[' . $payTransactionId . '] ' . ucfirst($message);
+            if (!empty($infoFields) && is_array($infoFields)) {
+                $message .= ' | ';
+                foreach ($infoFields as $k => $v) {
+                    $message .= $k . '=' . $v . ' | ';
+                }
+                $message = substr($message, 0, -2);
+            }
+
+            $logger = wc_get_logger();
+            $logger->log(strtolower($type), $message, array('source' => 'pay-payments-for-woocommerce'));
         }
-        $logger = wc_get_logger();
-        $logger->log(strtolower($type), $message, array('source' => 'pay-payments-for-woocommerce'));
     }
 
     /**
