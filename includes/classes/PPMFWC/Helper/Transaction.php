@@ -166,7 +166,7 @@ class PPMFWC_Helper_Transaction
 
                 $url = self::getOrderReturnUrl($order);
                 break;
-            case PPMFWC_Gateways::STATUS_DENIED;
+            case PPMFWC_Gateways::STATUS_DENIED:
                 wc_add_notice(esc_html(__('Payment denied. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
                 $order->add_order_note(esc_html(__('PAY.: Payment denied. Used : ' . $transaction->getPaymentMethodName(), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
                 $url = wc_get_checkout_url();
