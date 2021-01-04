@@ -4,9 +4,9 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Wechatpay, paypal, creditcard, mybank, sofortbanking, afterpay, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
-Stable tag: 3.5.4
+Stable tag: 3.5.5
 Tested up to: 5.6
-WC tested up to: 4.7.1
+WC tested up to: 4.8.0
 WC requires at least: 3.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -175,6 +175,8 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 4. The iDEAL payment screen (Rabobank)
 
 == Changelog ==
+= 3.5.5 =
+Fixed a problem with the exchange handler
 = 3.5.4 =
 Raised minimum version for WooCommerce to 3.0. Fixed a PHP notice, replaced the use of deprecated functions and added Dutch translations.
 = 3.5.3 =
