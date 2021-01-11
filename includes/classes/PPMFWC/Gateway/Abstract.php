@@ -559,22 +559,25 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         $order = wc_get_order($order_id);
 
-        $transactionId = PPMFWC_Helper_Transaction::getPaidTransactionIdForOrderId($order_id);
-
+        $transactionId = Pay_Helper_Transaction::getPaidTransactionIdForOrderId($order_id);
+        $transaction = new \Paynl\Transaction;
+        
         if ( ! $order || ! $transactionId) {
             return false;
         }
 
         try {
-            $this->loginSDK();
-
-            $result = \Paynl\Transaction::refund($transactionId, $amount, $reason);
-
-            $order->add_order_note(sprintf(__('Refunded %s - Refund ID: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $amount, $result->getRefundId()));
-
+            $this->loginSDK();       
+            $result = $transaction::refund($transactionId, $amount, $reason);         
+            $order->add_order_note(sprintf(__('Refunded %s - Refund ID: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $amount,  $result->getRefundId()));
             return true;
         } catch (Exception $e) {
-            return new WP_Error(1, $e->getMessage());
+            $status = $transaction::status($transactionId);
+            switch($status->getStateName()){
+                case "PAID": return new WP_Error(1, __('Your account is not authorized to refund transactions. For more information refer to: https://docs.pay.nl/merchants#refund-transaction', PAYNL_WOOCOMMERCE_TEXTDOMAIN)); break;
+                case "REFUND": return new WP_Error(1, __('This transaction has already been refunded trough the PAY. admin panel.', PAYNL_WOOCOMMERCE_TEXTDOMAIN)); break;
+                default: return new WP_Error(1, $e->getMessage()); break;
+            }            
         }
     }
 
