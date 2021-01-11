@@ -1,7 +1,7 @@
 <p align="center">
     <img src="https://www.pay.nl/uploads/1/brands/main_logo.png" />
   </p>
-  <h1 align="center">WooCommerce PAY. Plugin</h1>
+  <h1 align="center">PAY. Payment Methods for WooCommerce</h1>
   
   # Description
   
@@ -39,7 +39,7 @@
   
   1. Install the plugin via Plugins -> new plugin
   2. Search for pay.nl
-  3. Activate the plugin through the 'Plugins' menu in WordPress, the name of this plugin is: WooCommerce PAY. Payment Methods
+  3. Activate the plugin through the 'Plugins' menu in WordPress, the name of this plugin is: PAY. Payment Methods for WooCommerce
   4. Under WooCommerce -> Settings -> Payment, configure the apitoken and serviceid and activate the desired payment methods.
   5. You can now accept payments using PAY.
   
