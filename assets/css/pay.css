@@ -7,3 +7,25 @@
     vertical-align: middle;
     margin-right:5px;
 }
+
+#payment .payment_methods li label {
+    width:90%;
+}
+
+#payment .payment_methods li img {
+    float: right;
+    margin: 3px 0 3px 0 !important;
+}
+
+#payment .payment_methods li div {
+    display:inline-block;
+}
+
+div label{
+    width:95%;
+}
+
+div label img{
+    float: right;
+    margin: 3px 0 3px 0 !important;
+}
