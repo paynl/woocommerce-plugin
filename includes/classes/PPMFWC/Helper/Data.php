@@ -261,6 +261,33 @@ class PPMFWC_Helper_Data
         return strtolower(substr($deflang, 0, 2));
     }
 
+    /**
+     * @return string
+     */
+    public static function getVersion()
+    {
+        return '3.5.4';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getObject()
+    {
+        global $wp_version;
+        global $woocommerce;
+        $phpVersion = (float)phpversion();
+        $payVersion = self::getVersion();
+
+        $object = substr('woocommerce ' . $woocommerce->version . " | " . $payVersion . " | " . $phpVersion . " | " . $wp_version, 0, 64);
+
+        return $object;
+
+    }
+
+    /**
+     * @return array
+     */
     public static function ppmfwc_getAvailableLanguages()
     {
         return array(

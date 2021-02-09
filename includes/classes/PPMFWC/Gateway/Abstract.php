@@ -62,11 +62,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
       return $size;
     }
 
-    public function getVersion()
-    {
-        return '3.5.5';
-    }
-
     /**
      * @param $key
      * @param $value
@@ -320,6 +315,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             return false;
         }
 
+
         $startData = array(
             'amount'        => $order->get_total(),
             'returnUrl'     => $returnUrl,
@@ -332,7 +328,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             'extra2'        => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
             'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
             'ipaddress'     => $ipAddress,
-            'object'        => 'woocommerce ' . $this->getVersion(),
+            'object'        => PPMFWC_Helper_Data::getObject(),
         );
 
         if (get_option('paynl_send_order_data') == 'yes') {
