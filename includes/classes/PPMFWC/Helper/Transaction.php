@@ -127,7 +127,8 @@ class PPMFWC_Helper_Transaction
         $paidCurrencyAmount = $transaction->getPaidCurrencyAmount();
 
         $data = $transaction->getData();
-        $apiStatus = PPMFWC_Gateways::ppmfwc_getStatusFromStatusId($data['paymentDetails']['state']);
+        $internalPAYSatus = $data['paymentDetails']['state'];
+        $apiStatus = PPMFWC_Gateways::ppmfwc_getStatusFromStatusId($internalPAYSatus);
 
         if ($transaction->isAuthorized()) {
             $paidCurrencyAmount = $transaction->getCurrencyAmount();
@@ -140,6 +141,7 @@ class PPMFWC_Helper_Transaction
         $logArray['wc-order-id'] = $orderId;
         $logArray['wcOrderStatus'] = $wcOrderStatus;
         $logArray['PAY status'] = $apiStatus;
+        $logArray['PAY status id'] = $internalPAYSatus;
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $transactionId, $logArray);
 

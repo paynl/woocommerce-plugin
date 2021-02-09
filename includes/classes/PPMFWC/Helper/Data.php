@@ -266,7 +266,7 @@ class PPMFWC_Helper_Data
      */
     public static function getVersion()
     {
-        return '3.5.4';
+        return '3.5.6';
     }
 
     /**
@@ -276,13 +276,10 @@ class PPMFWC_Helper_Data
     {
         global $wp_version;
         global $woocommerce;
-        $phpVersion = (float)phpversion();
+        $phpVersion = substr(phpversion(), 0, 3);
         $payVersion = self::getVersion();
 
-        $object = substr('woocommerce ' . $woocommerce->version . " | " . $payVersion . " | " . $phpVersion . " | " . $wp_version, 0, 64);
-
-        return $object;
-
+        return substr('woocommerce ' . $payVersion . ' | ' . $wp_version . ' | ' . $phpVersion . ' | ' . $woocommerce->version, 0, 64);
     }
 
     /**
