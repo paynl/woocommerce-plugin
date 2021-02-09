@@ -2,18 +2,39 @@
 
 class PPMFWC_Helper_Data
 {
+    private static $paylog = null;
 
     /**
      * @param $message
+     * @param null $payTransactionId
+     * @param array $infoFields
      * @param string $type
      */
-    public static function ppmfwc_payLogger($message, $type = 'info')
+    public static function ppmfwc_payLogger($message, $payTransactionId = null, $infoFields = array(), $type = 'info')
     {
-        if(!in_array($type, array('emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'))) {
-            $type = 'info';
+        if (self::$paylog === true || self::$paylog === null) {
+            if (empty(self::$paylog)) {
+                self::$paylog = get_option('paynl_paylogger') == 'yes';
+                if (!self::$paylog) {
+                    return;
+                }
+            }
+            if (!in_array($type, array('emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'))) {
+                $type = 'info';
+            }
+            $payTransactionId = empty($payTransactionId) ? '-' : $payTransactionId;
+            $message = '[' . $payTransactionId . '] ' . ucfirst($message);
+            if (!empty($infoFields) && is_array($infoFields)) {
+                $message .= ' | ';
+                foreach ($infoFields as $k => $v) {
+                    $message .= $k . '=' . $v . ' | ';
+                }
+                $message = substr($message, 0, -2);
+            }
+
+            $logger = wc_get_logger();
+            $logger->log(strtolower($type), $message, array('source' => 'pay-payments-for-woocommerce'));
         }
-        $logger = wc_get_logger();
-        $logger->log(strtolower($type), $message, array('source' => 'pay-payments-for-woocommerce'));
     }
 
     /**
@@ -240,6 +261,30 @@ class PPMFWC_Helper_Data
         return strtolower(substr($deflang, 0, 2));
     }
 
+    /**
+     * @return string
+     */
+    public static function getVersion()
+    {
+        return '3.5.6';
+    }
+
+    /**
+     * @return string
+     */
+    public static function getObject()
+    {
+        global $wp_version;
+        global $woocommerce;
+        $phpVersion = substr(phpversion(), 0, 3);
+        $payVersion = self::getVersion();
+
+        return substr('woocommerce ' . $payVersion . ' | ' . $wp_version . ' | ' . $phpVersion . ' | ' . $woocommerce->version, 0, 64);
+    }
+
+    /**
+     * @return array
+     */
     public static function ppmfwc_getAvailableLanguages()
     {
         return array(
