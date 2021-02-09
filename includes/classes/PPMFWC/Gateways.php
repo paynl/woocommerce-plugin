@@ -332,6 +332,8 @@ class PPMFWC_Gateways
             $status = self::STATUS_VERIFY;
         } elseif ($statusId == -63) {
           $status = SELF::STATUS_DENIED;
+        } elseif ($statusId == -81) {
+          $status = SELF::STATUS_REFUND;
         } elseif ($statusId < 0) {
             $status = self::STATUS_CANCELED;
         } else {
@@ -375,7 +377,7 @@ class PPMFWC_Gateways
                 throw new PPMFWC_Exception_Notice('Unknown action: ' . $action);
             }
 
-            if (!in_array($action, array(SELF::ACTION_PENDING, SELF::ACTION_REFUND))) {
+            if (!in_array($action, array(SELF::ACTION_PENDING))) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id));
 
                 # Try to update the orderstatus.
