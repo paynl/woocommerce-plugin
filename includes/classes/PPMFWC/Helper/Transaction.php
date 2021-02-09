@@ -68,7 +68,7 @@ class PPMFWC_Helper_Transaction
     }
 
     /**
-     * @param $transactionId
+     * @param $transactionId TransactionID from PAY
      * @param null $status
      * @return mixed|string|void
      * @throws PPMFWC_Exception
@@ -102,9 +102,20 @@ class PPMFWC_Helper_Transaction
         }
 
         if ($status == $transaction['status']) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - status allready up-to-date', $transactionId, array('status' => $status));
+
+
             if ($status == PPMFWC_Gateways::STATUS_CANCELED) {
                 return add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
             }
+            if ($status == PPMFWC_Gateways::STATUS_DENIED) {
+                wc_add_notice(esc_html(__('Payment denied. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
+                return add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_DENIED, wc_get_checkout_url());
+            }
+            if ($status == PPMFWC_Gateways::STATUS_PENDING) {
+                return add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_PENDING, self::getOrderReturnUrl($order));
+            }
+
             # We dont have to update
             return self::getOrderReturnUrl($order);
         }
@@ -125,6 +136,12 @@ class PPMFWC_Helper_Transaction
         self::updateStatus($transactionId, $apiStatus);
 
         $wcOrderStatus = $order->get_status();
+
+        $logArray['wc-order-id'] = $orderId;
+        $logArray['wcOrderStatus'] = $wcOrderStatus;
+        $logArray['PAY status'] = $apiStatus;
+
+        PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $transactionId, $logArray);
 
         if ($wcOrderStatus == 'complete' || $wcOrderStatus == 'processing') {
             throw new PPMFWC_Exception_Notice('Order is already completed');
@@ -148,6 +165,11 @@ class PPMFWC_Helper_Transaction
                 $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete. customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
 
                 $url = self::getOrderReturnUrl($order);
+                break;
+            case PPMFWC_Gateways::STATUS_DENIED:
+                wc_add_notice(esc_html(__('Payment denied. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
+                $order->add_order_note(esc_html(__('PAY.: Payment denied. Used : ' . $transaction->getPaymentMethodName(), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+                $url = wc_get_checkout_url();
                 break;
             case PPMFWC_Gateways::STATUS_CANCELED:
 

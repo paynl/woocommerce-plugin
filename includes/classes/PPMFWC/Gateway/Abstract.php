@@ -251,11 +251,15 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $payTransaction = $this->startTransaction($order);
             $paymentOption = $this->getOptionId();
         } catch (Exception $e) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error: ' . esc_html($e->getMessage()));
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error: ' . esc_html($e->getMessage()), null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
             $transactionFailed = true;
         }
 
         if(!$payTransaction || $transactionFailed) {
+            if(empty($payTransaction)) {
+                # We want to know when no exception was thrown and startTransaction returned empty
+                PPMFWC_Helper_Data::ppmfwc_payLogger('startTransaction returned false', null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
+            }
             wc_add_notice(esc_html(__('Could not initiate payment. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
             return;
         }
@@ -398,6 +402,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $startData['language'] = $language;
 
         $payTransaction = \Paynl\Transaction::start($startData);
+
+        PPMFWC_Helper_Data::ppmfwc_payLogger('Start transaction', $payTransaction->getTransactionId(), array(
+          'amount' => $startData['amount'],
+          'method' => $this->get_method_title(),
+          'wc-order-id' => $order_id));
 
         $order->update_meta_data('transactionId', $payTransaction->getTransactionId());
         $order->save();
