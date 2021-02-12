@@ -4,6 +4,7 @@ class PPMFWC_Gateways
 {
     const STATUS_PENDING = 'PENDING';
     const STATUS_CANCELED = 'CANCELED';
+    const STATUS_DENIED = 'DENIED';
     const STATUS_SUCCESS = 'SUCCESS';
     const STATUS_VERIFY = 'VERIFY';
     const STATUS_REFUND = 'REFUND';
@@ -232,6 +233,13 @@ class PPMFWC_Gateways
             'desc' => esc_html(__('Check this box if you want to use the standard PAY. style in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_standard_style',
             'default' => 'no',
+          );
+       $addedSettings[] = array(
+          'name' => __('Extended Logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+          'type' => 'checkbox',
+          'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+          'id' => 'paynl_paylogger',
+          'default' => 'yes',
         );
         $addedSettings[] = array(
             'name' => __('Alternative Exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
@@ -299,6 +307,9 @@ class PPMFWC_Gateways
         $url = wc_get_checkout_url();
 
         $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);
+
+        PPMFWC_Helper_Data::ppmfwc_payLogger('Customer back from PAY payment', $orderId, array('orderStatusId' => $orderStatusId, 'status' => $status));
+
         try {
             # Retrieve URL to continue (and update status if necessary)
             if (!empty($orderId)) {
@@ -306,9 +317,9 @@ class PPMFWC_Gateways
             }
 
         } catch (PPMFWC_Exception_Notice $e) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue. Error: ' . $e->getMessage());
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue. Error: ' . $e->getMessage(), $orderId);
         } catch (Exception $e) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue. Error: ' . $e->getMessage(), 'error');
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue. Error: ' . $e->getMessage(), $orderId, array(), 'error');
         }
 
         wp_redirect($url);
@@ -322,13 +333,12 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_getStatusFromStatusId($statusId)
     {
-        if (
-            $statusId == 100 ||
-            $statusId == 95
-        ) {
+        if ($statusId == 100 || $statusId == 95) {
             $status = self::STATUS_SUCCESS;
         } elseif ($statusId == 85) {
             $status = self::STATUS_VERIFY;
+        } elseif ($statusId == -63) {
+          $status = SELF::STATUS_DENIED;
         } elseif ($statusId < 0) {
             $status = self::STATUS_CANCELED;
         } else {
@@ -360,6 +370,7 @@ class PPMFWC_Gateways
     {
         $action = isset($_REQUEST['action']) ? strtolower(sanitize_text_field($_REQUEST['action'])) : null;
         $order_id = isset($_REQUEST['order_id']) ? sanitize_text_field($_REQUEST['order_id']) : null;
+        $wc_order_id = isset($_REQUEST['extra1']) ? sanitize_text_field($_REQUEST['extra1']) : null;
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
 
@@ -372,6 +383,8 @@ class PPMFWC_Gateways
             }
 
             if (!in_array($action, array(SELF::ACTION_PENDING, SELF::ACTION_REFUND))) {
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id));
+
                 # Try to update the orderstatus.
                 PPMFWC_Helper_Transaction::processTransaction($order_id, $status);
                 $message = 'TRUE|Status updated to ' . $status;
@@ -398,10 +411,19 @@ class PPMFWC_Gateways
         if ($paynlstatus == self::STATUS_CANCELED) {
             add_action('woocommerce_before_checkout_form', array(__CLASS__, 'ppmfwc_displayFlashCanceled'), 20);
         }
+        if ($paynlstatus == self::STATUS_PENDING) {
+            add_action('woocommerce_before_thankyou', array(__CLASS__, 'ppmfwc_displayFlashPending'), 20);
+        }
     }
 
     public static function ppmfwc_displayFlashCanceled()
     {
         wc_print_notice(__('The payment has been canceled, please try again', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), 'error');
     }
+
+    public static function ppmfwc_displayFlashPending()
+    {
+        wc_print_notice(__('The payment is pending or not completed', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), 'notice');
+    }
+
 }
