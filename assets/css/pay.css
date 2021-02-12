@@ -2,30 +2,30 @@
     width: 100%;
 }
 
-#paynl_global_settings-description  img {
+#paynl_global_settings-description img {
     position: relative;
     vertical-align: middle;
-    margin-right:5px;
+    margin-right: 5px;
 }
 
-#payment .payment_methods li label {
-    width:90%;
+#payment .payment_methods li[class*="payment_method_pay_gateway"] label {
+    width: 90%;
 }
 
-#payment .payment_methods li img {
+#payment .payment_methods li[class*="payment_method_pay_gateway"] img {
     float: right;
     margin: 3px 0 3px 0 !important;
 }
 
-#payment .payment_methods li div {
-    display:inline-block;
+#payment .payment_methods li[class*="payment_method_pay_gateway"] div {
+    display: inline-block;
 }
 
-div label{
-    width:95%;
+div p[class*="payment_method_pay_gateway"] label {
+    width: 95%;
 }
 
-div label img{
+div p[class*="payment_method_pay_gateway"] label img {
     float: right;
     margin: 3px 0 3px 0 !important;
 }

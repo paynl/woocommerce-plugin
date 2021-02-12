@@ -76,9 +76,9 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     add_action('woocommerce_admin_order_data_after_billing_address', 'ppmfwc_coc_number_display_admin_order_meta', 10, 1);
   }
 
-  if(get_option('paynl_standard_style') == "yes"){
-      add_action('wp_enqueue_scripts', 'ppmfwc_payStyle');
-  }
+    if (get_option('paynl_standard_style') == "yes") {
+        add_action('wp_enqueue_scripts', 'ppmfwc_payStyle');
+    }
 
 } else {
 	# WooCommerce seems to be inactive, show eror message
@@ -125,9 +125,10 @@ function ppmfwc_vatField($checkout)
   ), $checkout->get_value('vat_number'));
 }
 
-function ppmfwc_payStyle(){
-    if(is_checkout() == true){
-        wp_enqueue_style('ppmfwc_checkout_style', PPMFWC_PLUGIN_URL . 'assets/css/pay.css');
+function ppmfwc_payStyle()
+{
+    if (is_checkout() == true) {
+        wp_register_style('ppmfwc_checkout_style', PPMFWC_PLUGIN_URL . 'assets/css/pay.css');
         wp_enqueue_style('ppmfwc_checkout_style');
     }
 }
