@@ -218,13 +218,9 @@ class PPMFWC_Helper_Transaction
         return $url;
     }
 
-    public static function getOrderReturnUrl(WC_Order $order, $status = null)
+    public static function getOrderReturnUrl(WC_Order $order)
     {
         $return_url = $order->get_checkout_order_received_url();
-
-        if ($status == PPMFWC_Gateways::STATUS_PENDING) {
-            $return_url = $order->get_cancel_order_url();
-        }
 
         if (is_ssl() || get_option('woocommerce_force_ssl_checkout') == 'yes') {
             $return_url = str_replace('http:', 'https:', $return_url);
