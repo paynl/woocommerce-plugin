@@ -175,9 +175,9 @@ class PPMFWC_Helper_Transaction
                 break;
             case PPMFWC_Gateways::STATUS_REFUND:
 
-                $arrResult = $order->set_status('refunded', 'PAY.: ');
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `refunded`', $transactionId);
 
-                PPMFWC_Helper_Data::ppmfwc_payLogger('refund result', $transactionId, print_r($arrResult, true));
+                $order->set_status('refunded', 'PAY.: ');
 
                 wc_increase_stock_levels($orderId);
 
