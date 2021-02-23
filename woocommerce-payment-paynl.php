@@ -128,7 +128,7 @@ function ppmfwc_vatField($checkout)
 function ppmfwc_payStyle()
 {
     if (is_checkout() == true) {
-        wp_register_style('ppmfwc_checkout_style', PPMFWC_PLUGIN_URL . 'assets/css/pay.css');
+        wp_register_style('ppmfwc_checkout_style', PPMFWC_PLUGIN_URL . 'assets/css/paycheckout.css');
         wp_enqueue_style('ppmfwc_checkout_style');
     }
 }
