@@ -10,7 +10,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
 
     public static function getName()
     {
-        return 'Pinnen';
+        return 'Pinnen (Instore)';
     }
 
     public function init_form_fields()
@@ -100,13 +100,19 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
     {
         /** @var $wpdb wpdb The database */
         $order = new WC_Order($order_id);
+        $result = null;
+        $transactionFailed = false;
 
         try {
             $result = $this->startTransaction($order);
-
             $paymentOptionId = $this->getOptionId();
         } catch (Exception $e) {
-            wc_add_notice(esc_html(__('Payment error:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate instore payment. Error: ' . esc_html($e->getMessage()));
+            $transactionFailed = true;
+        }
+
+        if (empty($result) || $transactionFailed) {
+            wc_add_notice(esc_html(__('Could not initiate instore payment.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
             return;
         }
 
