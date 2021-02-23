@@ -228,6 +228,13 @@ class PPMFWC_Gateways
             'default' => 'Auto',
         );
         $addedSettings[] = array(
+            'name' => __('Standard PAY. style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'type' => 'checkbox',
+            'desc' => esc_html(__('Check this box if you want to use the standard PAY. style in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'id' => 'paynl_standard_style',
+            'default' => 'no',
+          );
+       $addedSettings[] = array(
           'name' => __('Extended Logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
           'type' => 'checkbox',
           'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
