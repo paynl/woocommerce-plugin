@@ -6,6 +6,7 @@ class PPMFWC_Gateways
     const STATUS_CANCELED = 'CANCELED';
     const STATUS_DENIED = 'DENIED';
     const STATUS_SUCCESS = 'SUCCESS';
+    const STATUS_AUTHORIZE = 'AUTHORIZE';
     const STATUS_VERIFY = 'VERIFY';
     const STATUS_REFUND = 'REFUND';
 
@@ -308,14 +309,19 @@ class PPMFWC_Gateways
 
         $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);
 
-        PPMFWC_Helper_Data::ppmfwc_payLogger('Customer back from PAY payment', $orderId, array('orderStatusId' => $orderStatusId, 'status' => $status));
+        PPMFWC_Helper_Data::ppmfwc_payLogger('FINISH, back from PAY payment', $orderId, array('orderStatusId' => $orderStatusId, 'status' => $status));
 
         try {
             # Retrieve URL to continue (and update status if necessary)
-            if (!empty($orderId)) {
-                $url = PPMFWC_Helper_Transaction::processTransaction($orderId, $status);
+            if (!empty($orderId))
+            {
+                $newStatus = PPMFWC_Helper_Transaction::processTransaction($orderId, $status);
+                try {
+                    $order = new WC_Order($orderId);
+                    $url = self::getOrderReturnUrl($order, $newStatus);
+                } catch (Exception $e) {
+                }
             }
-
         } catch (PPMFWC_Exception_Notice $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue. Error: ' . $e->getMessage(), $orderId);
         } catch (Exception $e) {
@@ -325,6 +331,34 @@ class PPMFWC_Gateways
         wp_redirect($url);
     }
 
+
+    public static function getOrderReturnUrl(WC_Order $order, $newStatus)
+    {
+        if ($newStatus == PPMFWC_Gateways::STATUS_CANCELED)
+        {
+            $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
+        } elseif ($newStatus == PPMFWC_Gateways::STATUS_DENIED)
+        {
+            wc_add_notice(esc_html(__('Payment denied. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
+            $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_DENIED, wc_get_checkout_url());
+        } elseif ($newStatus == PPMFWC_Gateways::STATUS_PENDING)
+        {
+            $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_PENDING, self::getOrderReturnUrl($order));
+        } else
+        {
+
+            $return_url = $order->get_checkout_order_received_url();
+            if (is_ssl() || get_option('woocommerce_force_ssl_checkout') == 'yes') {
+                $return_url = str_replace('http:', 'https:', $return_url);
+            }
+
+            $url = apply_filters('woocommerce_get_return_url', $return_url, $order);
+        }
+
+        return $url;
+    }
+
+
     /**
      * Retrieve a textual-status by statusId
      *
@@ -333,17 +367,19 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_getStatusFromStatusId($statusId)
     {
-        if ($statusId == 100 || $statusId == 95) {
+        $status = null;
+        if ($statusId == 100) {
             $status = self::STATUS_SUCCESS;
+        } elseif ($statusId == 95) {
+            $status = self::STATUS_AUTHORIZE;
         } elseif ($statusId == 85) {
             $status = self::STATUS_VERIFY;
         } elseif ($statusId == -63) {
-          $status = SELF::STATUS_DENIED;
+            $status = SELF::STATUS_DENIED;
         } elseif ($statusId < 0) {
             $status = self::STATUS_CANCELED;
-        } else {
-            $status = self::STATUS_PENDING;
         }
+
         return $status;
     }
 
@@ -368,6 +404,8 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_onExchange()
     {
+        $test =1;
+        #exit('TRUE|EXIT');
         $action = isset($_REQUEST['action']) ? strtolower(sanitize_text_field($_REQUEST['action'])) : null;
         $order_id = isset($_REQUEST['order_id']) ? sanitize_text_field($_REQUEST['order_id']) : null;
         $wc_order_id = isset($_REQUEST['extra1']) ? sanitize_text_field($_REQUEST['extra1']) : null;
@@ -386,8 +424,8 @@ class PPMFWC_Gateways
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id));
 
                 # Try to update the orderstatus.
-                PPMFWC_Helper_Transaction::processTransaction($order_id, $status);
-                $message = 'TRUE|Status updated to ' . $status;
+                $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status);
+                $message = 'TRUE|Status updated to ' . $newStatus;
             }
 
         } catch (PPMFWC_Exception_Notice $e) {
