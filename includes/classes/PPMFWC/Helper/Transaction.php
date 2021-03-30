@@ -103,7 +103,10 @@ class PPMFWC_Helper_Transaction
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
 
-        if ($status == $localTransactionStatus)  {
+        if ($status == $localTransactionStatus) {
+            if (in_array($status, array(PPMFWC_Gateways::STATUS_SUCCESS, PPMFWC_Gateways::STATUS_AUTHORIZE))) {
+                WC()->cart->empty_cart();
+            }
             PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - status allready up-to-date', $transactionId, array('status' => $status));
             # We dont have to update
             return $status;
@@ -144,7 +147,6 @@ class PPMFWC_Helper_Transaction
         switch ($payApiStatus) {
             case PPMFWC_Gateways::STATUS_AUTHORIZE:
             case PPMFWC_Gateways::STATUS_SUCCESS:
-                $woocommerce->cart->empty_cart();
 
                 # Check the amount
                 if ($order->get_total() != $paidCurrencyAmount && $order->get_total() != $transaction->getPaidAmount()) {
