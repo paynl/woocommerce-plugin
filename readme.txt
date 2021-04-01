@@ -178,7 +178,7 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 
 == Changelog ==
 = 3.5.7 =
-Added paymentmethods Good4fun and Trustly. Fixed some minor issues.
+Added payment methods Good4fun and Trustly. Fixed some minor issues.
 = 3.5.6 =
 Added logging (enable with setting). Fixed some minor issues. Added paystyle for checkout.
 = 3.5.5 =
