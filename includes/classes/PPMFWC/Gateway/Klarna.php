@@ -18,6 +18,11 @@ class PPMFWC_Gateway_Klarna extends PPMFWC_Gateway_Abstract
         return 1717;
     }
 
+    public static function showAuthorizeSetting()
+    {
+        return true;
+    }
+
     public function init_form_fields()
     {
         parent::init_form_fields();
