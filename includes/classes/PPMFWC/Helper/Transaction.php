@@ -83,16 +83,16 @@ class PPMFWC_Helper_Transaction
         global $woocommerce;
 
         # Retrieve local paymentstate
-        $transaction = self::getTransaction($transactionId);
-
-        if (empty($transaction)) {
+        $transactionLocalDB = self::getTransaction($transactionId);
+        $localTransactionStatus = $transactionLocalDB['status'];
+        if (empty($transactionLocalDB)) {
             throw new PPMFWC_Exception(__('Local transaction not found: ' . $transactionId, ''));
         }
-        if (!isset($transaction['order_id'])) {
+        if (!isset($transactionLocalDB['order_id'])) {
             throw new PPMFWC_Exception(__('OrderId not set in local transaction: ' . $transactionId, ''));
         }
 
-        $orderId = $transaction['order_id'];
+        $orderId = $transactionLocalDB['order_id'];
 
         try {
           $order = new WC_Order($orderId);
@@ -101,46 +101,38 @@ class PPMFWC_Helper_Transaction
           throw new PPMFWC_Exception_Notice('Woocommerce could not find internal order ' . $orderId);
         }
 
-        if ($status == $transaction['status']) {
+        PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
+
+        if ($status == $localTransactionStatus) {
+            if (in_array($status, array(PPMFWC_Gateways::STATUS_SUCCESS, PPMFWC_Gateways::STATUS_AUTHORIZE))) {
+                WC()->cart->empty_cart();
+            }
             PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - status allready up-to-date', $transactionId, array('status' => $status));
-
-
-            if ($status == PPMFWC_Gateways::STATUS_CANCELED) {
-                return add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
-            }
-            if ($status == PPMFWC_Gateways::STATUS_DENIED) {
-                wc_add_notice(esc_html(__('Payment denied. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
-                return add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_DENIED, wc_get_checkout_url());
-            }
-            if ($status == PPMFWC_Gateways::STATUS_PENDING) {
-                return add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_PENDING, self::getOrderReturnUrl($order));
-            }
-
             # We dont have to update
-            return self::getOrderReturnUrl($order);
+            return $status;
         }
 
         # Retieve PAY. transaction paymentstate
         PPMFWC_Gateway_Abstract::loginSDK();
+
         $transaction = \Paynl\Transaction::get($transactionId);
-
         $paidCurrencyAmount = $transaction->getPaidCurrencyAmount();
-
         $data = $transaction->getData();
         $internalPAYSatus = $data['paymentDetails']['state'];
-        $apiStatus = PPMFWC_Gateways::ppmfwc_getStatusFromStatusId($internalPAYSatus);
+        $payApiStatus = PPMFWC_Gateways::ppmfwc_getStatusFromStatusId($internalPAYSatus);
 
         if ($transaction->isAuthorized()) {
             $paidCurrencyAmount = $transaction->getCurrencyAmount();
         }
 
-        self::updateStatus($transactionId, $apiStatus);
-
+        if ($localTransactionStatus != $payApiStatus) {
+            self::updateStatus($transactionId, $payApiStatus);
+        }
         $wcOrderStatus = $order->get_status();
 
         $logArray['wc-order-id'] = $orderId;
         $logArray['wcOrderStatus'] = $wcOrderStatus;
-        $logArray['PAY status'] = $apiStatus;
+        $logArray['PAY status'] = $payApiStatus;
         $logArray['PAY status id'] = $internalPAYSatus;
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $transactionId, $logArray);
@@ -149,33 +141,52 @@ class PPMFWC_Helper_Transaction
             throw new PPMFWC_Exception_Notice('Order is already completed');
         }
 
+        $newStatus = $payApiStatus;
+
         # Update status
-        switch ($apiStatus) {
+        switch ($payApiStatus) {
+            case PPMFWC_Gateways::STATUS_AUTHORIZE:
             case PPMFWC_Gateways::STATUS_SUCCESS:
-                $woocommerce->cart->empty_cart();
 
                 # Check the amount
                 if ($order->get_total() != $paidCurrencyAmount && $order->get_total() != $transaction->getPaidAmount()) {
-                  $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $paidCurrencyAmount . ' / ' . $transaction->getPaidAmount(), $order->get_total()));
+                    $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $paidCurrencyAmount . ' / ' . $transaction->getPaidAmount(), $order->get_total()));
                 } else {
-                    $order->payment_complete($transactionId);
+                    if($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE) {
+                        $method = $order->get_payment_method();
+                        $methodSettings = get_option('woocommerce_' . $method . '_settings');
+                        if (!empty($methodSettings['authorize_status'])) {
+                            $auth_status = $methodSettings['authorize_status'];
+                            if ($wcOrderStatus == $auth_status) {
+                                throw new PPMFWC_Exception_Notice('Order is already ' . $auth_status);
+                            }
+
+                            $order->update_status($auth_status);
+                            $newStatus = $auth_status . ' as configured in settings of ' . $method;
+                            $order->add_order_note(sprintf(esc_html(__('PAY.: Order state set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
+                        } else {
+                            $order->payment_complete($transactionId);
+                            $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete. customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
+                        }
+                    }
+                    else
+                    {
+                        $order->payment_complete($transactionId);
+                        $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete. customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
+                    }
                 }
 
                 update_post_meta($orderId, 'CustomerName', esc_attr($transaction->getAccountHolderName()));
                 update_post_meta($orderId, 'CustomerKey', esc_attr($transaction->getAccountNumber()));
 
-                $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete. customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
-
-                $url = self::getOrderReturnUrl($order);
                 break;
+
             case PPMFWC_Gateways::STATUS_DENIED:
-                wc_add_notice(esc_html(__('Payment denied. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
                 $order->add_order_note(esc_html(__('PAY.: Payment denied. Used : ' . $transaction->getPaymentMethodName(), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
                 $order->update_status('failed');
-                $url = wc_get_checkout_url();
                 break;
-            case PPMFWC_Gateways::STATUS_CANCELED:
 
+            case PPMFWC_Gateways::STATUS_CANCELED:
                 $method = $order->get_payment_method();
 
                 if (substr($method, 0, 11) != 'pay_gateway') {
@@ -192,30 +203,14 @@ class PPMFWC_Helper_Transaction
                 $order->save();
 
                 $order->add_order_note(esc_html(__('PAY.: Payment canceled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
-
-                $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
-
                 break;
+
             case PPMFWC_Gateways::STATUS_VERIFY:
                 $order->update_status('on-hold', esc_html(__("Transaction needs to be verified", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
-                $url = self::getOrderReturnUrl($order);
-                break;
-            default:
-                $url = self::getOrderReturnUrl($order);
                 break;
         }
 
-        return $url;
+        return $newStatus;
     }
 
-    public static function getOrderReturnUrl(WC_Order $order)
-    {
-        $return_url = $order->get_checkout_order_received_url();
-        if (is_ssl() || get_option('woocommerce_force_ssl_checkout') == 'yes') {
-            $return_url = str_replace('http:', 'https:', $return_url);
-        }
-
-        return apply_filters('woocommerce_get_return_url', $return_url, $order);
-
-    }
 }

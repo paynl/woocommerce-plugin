@@ -18,4 +18,9 @@ class PPMFWC_Gateway_Klarnakp extends PPMFWC_Gateway_Abstract
         return 2265;
     }
 
+    public static function showAuthorizeSetting()
+    {
+        return true;
+    }
+
 }

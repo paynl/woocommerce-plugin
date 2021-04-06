@@ -140,6 +140,20 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     ),
                 );
             }
+            if ($this->showAuthorizeSetting()) {
+                $this->form_fields['authorize_status'] = array(
+                  'title'       => esc_html( __('Authorize status', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                  'type'        => 'select',
+                  'options'     => array(
+                    self::STATUS_PROCESSING => wc_get_order_status_name(self::STATUS_PROCESSING) . esc_html( ' (' . __('default', 'woocommerce') . ')'),
+                    self::STATUS_PENDING => wc_get_order_status_name(self::STATUS_PENDING),
+                    self::STATUS_COMPLETED => wc_get_order_status_name(self::STATUS_COMPLETED),
+                    self::STATUS_ON_HOLD => wc_get_order_status_name(self::STATUS_ON_HOLD),
+                  ),
+                  'default'     => self::STATUS_PROCESSING,
+                  'description' => sprintf( esc_html(__('Set status for authorize  sed.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
+                );
+            }
 
             if (
               (!$this->get_option('brand_id')) || (strlen($this->get_option('brand_id')) == 0) ||
@@ -179,6 +193,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      * @return bool Payment methods that are confirmed slowly (like banktransfer) should return true here
      */
     public static function slowConfirmation()
+    {
+        return false;
+    }
+
+    public static function showAuthorizeSetting()
     {
         return false;
     }
