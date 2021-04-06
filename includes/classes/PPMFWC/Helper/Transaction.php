@@ -40,7 +40,7 @@ class PPMFWC_Helper_Transaction
         }
     }
 
-    private static function updateStatus($transactionId, $status)
+    public static function updateStatus($transactionId, $status)
     {
         global $wpdb;
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
@@ -137,7 +137,7 @@ class PPMFWC_Helper_Transaction
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $transactionId, $logArray);
 
-        if ($wcOrderStatus == 'complete' || $wcOrderStatus == 'processing') {
+        if (($wcOrderStatus == 'complete' || $wcOrderStatus == 'processing') && $payApiStatus != PPMFWC_Gateways::STATUS_REFUND) {
             throw new PPMFWC_Exception_Notice('Order is already completed');
         }
 
@@ -185,8 +185,19 @@ class PPMFWC_Helper_Transaction
                 $order->add_order_note(esc_html(__('PAY.: Payment denied. Used : ' . $transaction->getPaymentMethodName(), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
                 $order->update_status('failed');
                 break;
+            case PPMFWC_Gateways::STATUS_REFUND:
 
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `refunded`', $transactionId);
+
+                $order->set_status('refunded', 'PAY.: ');
+
+                wc_increase_stock_levels($orderId);
+
+                $order->save();
+
+                break;
             case PPMFWC_Gateways::STATUS_CANCELED:
+
                 $method = $order->get_payment_method();
 
                 if (substr($method, 0, 11) != 'pay_gateway') {
@@ -199,7 +210,7 @@ class PPMFWC_Helper_Transaction
                     throw new PPMFWC_Exception_Notice('Cancel ignored, order is ' . $order->get_status());
                 }
 
-                $order->set_status('failed');
+                $order->set_status('failed', 'PAY.: ');
                 $order->save();
 
                 $order->add_order_note(esc_html(__('PAY.: Payment canceled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
