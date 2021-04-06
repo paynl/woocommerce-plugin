@@ -42,6 +42,7 @@ With PAY. you can add the following payment options to your website:
 * Gezondheidsbon
 * Giropay
 * Givacard
+* Good4fun
 * iDEAL
 * IN3 Gespreid betalen
 * Incasso
@@ -62,6 +63,7 @@ With PAY. you can add the following payment options to your website:
 * Sofortbanking
 * SprayPay
 * Tikkie
+* Trustly
 * Visa
 * VVV giftcard
 * Webshop Giftcard
