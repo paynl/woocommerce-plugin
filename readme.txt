@@ -2,9 +2,9 @@
 Contributors: andypay
 Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
-Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Wechatpay, paypal, creditcard, mybank, sofortbanking, afterpay, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
+Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wechatpay, paypal, creditcard, mybank, sofortbanking, afterpay, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
-Stable tag: 3.5.6
+Stable tag: 3.5.7
 Tested up to: 5.7
 WC tested up to: 5.1.0
 WC requires at least: 3.0
@@ -42,6 +42,7 @@ With PAY. you can add the following payment options to your website:
 * Gezondheidsbon
 * Giropay
 * Givacard
+* Good4fun
 * iDEAL
 * IN3 Gespreid betalen
 * Incasso
@@ -62,6 +63,7 @@ With PAY. you can add the following payment options to your website:
 * Sofortbanking
 * SprayPay
 * Tikkie
+* Trustly
 * Visa
 * VVV giftcard
 * Webshop Giftcard
@@ -128,6 +130,7 @@ At the moment the plugin supports the following payment methods:
 * Gezondheidsbon
 * Giropay
 * Givacard
+* Good4fun
 * iDEAL
 * IN3 Gespreid betalen
 * Incasso
@@ -148,6 +151,7 @@ At the moment the plugin supports the following payment methods:
 * Sofortbanking
 * SprayPay
 * Tikkie
+* Trustly
 * Visa
 * VVV giftcard
 * Webshop Giftcard
@@ -175,6 +179,8 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 4. The iDEAL payment screen (Rabobank)
 
 == Changelog ==
+= 3.5.7 =
+Added payment methods Good4fun and Trustly. Fixed some minor issues.
 = 3.5.6 =
 Added logging (enable with setting). Fixed some minor issues. Added paystyle for checkout.
 = 3.5.5 =

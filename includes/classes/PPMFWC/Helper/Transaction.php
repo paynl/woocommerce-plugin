@@ -183,6 +183,7 @@ class PPMFWC_Helper_Transaction
 
             case PPMFWC_Gateways::STATUS_DENIED:
                 $order->add_order_note(esc_html(__('PAY.: Payment denied. Used : ' . $transaction->getPaymentMethodName(), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+                $order->update_status('failed');
                 break;
 
             case PPMFWC_Gateways::STATUS_CANCELED:
