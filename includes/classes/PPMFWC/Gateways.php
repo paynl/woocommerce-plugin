@@ -444,8 +444,7 @@ class PPMFWC_Gateways
                 throw new PPMFWC_Exception_Notice('Unknown action: ' . $action);
             }
 
-            if (!in_array($action, array(SELF::ACTION_PENDING)))
-            {
+            if (!in_array($action, array(SELF::ACTION_PENDING))) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id, 'methodid' => $methodId));
 
                 # Try to update the orderstatus.
