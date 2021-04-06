@@ -429,6 +429,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 case 1717:
                     $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_klarna');
                     break;
+                case 739:
+                    $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_afterpay');
+                    break;
                 case 1877:
                     $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_yehhpay');
                     break;
@@ -437,7 +440,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     break;
             }
 
-            return empty($birthdate) ? '' : $birthdate;
+            return empty($birthdate) ? null : $birthdate;
     }
 
     /**

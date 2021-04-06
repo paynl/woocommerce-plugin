@@ -31,6 +31,7 @@ class PPMFWC_Gateways
             'PPMFWC_Gateway_Clickandbuy',
             'PPMFWC_Gateway_CreditClick',
             'PPMFWC_Gateway_Cashly',
+            'PPMFWC_Gateway_Good4fun',
             'PPMFWC_Gateway_Dankort',
             'PPMFWC_Gateway_DeCadeaukaart',
             'PPMFWC_Gateway_Eps',
@@ -62,6 +63,7 @@ class PPMFWC_Gateways
             'PPMFWC_Gateway_Sofortbanking',
             'PPMFWC_Gateway_Spraypay',
             'PPMFWC_Gateway_Tikkie',
+            'PPMFWC_Gateway_Trustly',
             'PPMFWC_Gateway_Visamastercard',
             'PPMFWC_Gateway_Vvvgiftcard',
             'PPMFWC_Gateway_Webshopgiftcard',
@@ -228,6 +230,13 @@ class PPMFWC_Gateways
             'default' => 'Auto',
         );
         $addedSettings[] = array(
+            'name' => __('Standard PAY. style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'type' => 'checkbox',
+            'desc' => esc_html(__('Check this box if you want to use the standard PAY. style in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'id' => 'paynl_standard_style',
+            'default' => 'no',
+          );
+       $addedSettings[] = array(
           'name' => __('Extended Logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
           'type' => 'checkbox',
           'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
