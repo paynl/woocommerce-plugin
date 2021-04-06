@@ -71,17 +71,15 @@ class PPMFWC_Gateways
       'PPMFWC_Gateway_Yourgift',
       'PPMFWC_Gateway_Yehhpay',
     );
+
     public static function ppmfwc_getGateways($arrDefault)
     {
         $paymentOptions = self::$arrGateways;
 
         $paymentOptionsAvailable = array();
-        foreach ($paymentOptions as $paymentOption)
-        {
+        foreach ($paymentOptions as $paymentOption) {
             $optionId = call_user_func(array($paymentOption, 'getOptionId'));
-
             $available = PPMFWC_Helper_Data::isOptionAvailable($optionId);
-
             if ($available) {
                 $paymentOptionsAvailable[] = $paymentOption;
             }
@@ -96,11 +94,9 @@ class PPMFWC_Gateways
     }
 
 
-
-
-        /**
+    /**
      * @param $settings
-     * @return array|void
+     * @return array
      */
     public static function ppmfwc_addGlobalSettings($settings)
     {
@@ -417,10 +413,9 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_getGateWayById($payment_profile_id)
     {
-        $paymentOptions = self::$arrGateways;
-        foreach ($paymentOptions as $strGateway) {
+        foreach (self::$arrGateways as $strGateway) {
             $optionId = call_user_func(array($strGateway, 'getOptionId'));
-            if ($payment_profile_id == $optionId) {
+            if (!empty($optionId) && $payment_profile_id == $optionId) {
                 return new $strGateway();
             }
         }
@@ -433,15 +428,11 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_onExchange()
     {
-
-
-
         $action = isset($_REQUEST['action']) ? strtolower(sanitize_text_field($_REQUEST['action'])) : null;
         $order_id = isset($_REQUEST['order_id']) ? sanitize_text_field($_REQUEST['order_id']) : null;
         $wc_order_id = isset($_REQUEST['extra1']) ? sanitize_text_field($_REQUEST['extra1']) : null;
-        $methodid = isset($_REQUEST['payment_profile_id']) ? sanitize_text_field($_REQUEST['payment_profile_id']) : null;
+        $methodId = isset($_REQUEST['payment_profile_id']) ? sanitize_text_field($_REQUEST['payment_profile_id']) : null;
 
-#exit('TRUE|texit');
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
 
@@ -455,10 +446,10 @@ class PPMFWC_Gateways
 
             if (!in_array($action, array(SELF::ACTION_PENDING)))
             {
-                PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id, 'methodid' => $methodid));
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id, 'methodid' => $methodId));
 
                 # Try to update the orderstatus.
-                $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status, $methodid);
+                $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status, $methodId);
                 $message = 'TRUE|Status updated to ' . $newStatus;
             }
 

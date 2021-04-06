@@ -278,8 +278,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             return;
         }
 
-        $method = $order->get_payment_method_title();
-        $order->add_order_note(sprintf(esc_html(__('PAY.: Transaction started: %s (%s)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payTransaction->getTransactionId(), $method));
+        $order->add_order_note(sprintf(esc_html(__('PAY.: Transaction started: %s (%s)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payTransaction->getTransactionId(), $order->get_payment_method_title()));
 
         if ($this->slowConfirmation()) {
             $initial_status = $this->get_option('initial_order_status');
