@@ -16,68 +16,72 @@ class PPMFWC_Gateways
     const ACTION_VERIFY = 'verify';
     const ACTION_REFUND = 'refund:received';
 
+    private static $arrGateways = array(
+      'PPMFWC_Gateway_Alipay',
+      'PPMFWC_Gateway_Amazonpay',
+      'PPMFWC_Gateway_Amex',
+      'PPMFWC_Gateway_Applepay',
+      'PPMFWC_Gateway_Afterpay',
+      'PPMFWC_Gateway_Billink',
+      'PPMFWC_Gateway_Cartasi',
+      'PPMFWC_Gateway_Capayable',
+      'PPMFWC_Gateway_CapayableGespreid',
+      'PPMFWC_Gateway_Cartebleue',
+      'PPMFWC_Gateway_Clickandbuy',
+      'PPMFWC_Gateway_CreditClick',
+      'PPMFWC_Gateway_Cashly',
+      'PPMFWC_Gateway_Good4fun',
+      'PPMFWC_Gateway_Dankort',
+      'PPMFWC_Gateway_DeCadeaukaart',
+      'PPMFWC_Gateway_Eps',
+      'PPMFWC_Gateway_Fashioncheque',
+      'PPMFWC_Gateway_Fashiongiftcard',
+      'PPMFWC_Gateway_Focum',
+      'PPMFWC_Gateway_Gezondheidsbon',
+      'PPMFWC_Gateway_Giropay',
+      'PPMFWC_Gateway_Givacard',
+      'PPMFWC_Gateway_Ideal',
+      'PPMFWC_Gateway_Incasso',
+      'PPMFWC_Gateway_Instore',
+      'PPMFWC_Gateway_Klarna',
+      'PPMFWC_Gateway_Klarnakp',
+      'PPMFWC_Gateway_Maestro',
+      'PPMFWC_Gateway_Minitixsms',
+      'PPMFWC_Gateway_Mistercash',
+      'PPMFWC_Gateway_Multibanco',
+      'PPMFWC_Gateway_Mybank',
+      'PPMFWC_Gateway_OkPayments',
+      'PPMFWC_Gateway_Overboeking',
+      'PPMFWC_Gateway_P24',
+      'PPMFWC_Gateway_Payconiq',
+      'PPMFWC_Gateway_Paypal',
+      'PPMFWC_Gateway_Paysafecard',
+      'PPMFWC_Gateway_Phone',
+      'PPMFWC_Gateway_Podiumcadeaukaart',
+      'PPMFWC_Gateway_Postepay',
+      'PPMFWC_Gateway_Sofortbanking',
+      'PPMFWC_Gateway_Spraypay',
+      'PPMFWC_Gateway_Tikkie',
+      'PPMFWC_Gateway_Trustly',
+      'PPMFWC_Gateway_Visamastercard',
+      'PPMFWC_Gateway_Vvvgiftcard',
+      'PPMFWC_Gateway_Webshopgiftcard',
+      'PPMFWC_Gateway_Wijncadeau',
+      'PPMFWC_Gateway_Wechatpay',
+      'PPMFWC_Gateway_Yourgift',
+      'PPMFWC_Gateway_Yehhpay',
+    );
     public static function ppmfwc_getGateways($arrDefault)
     {
-        $paymentOptions = array(
-            'PPMFWC_Gateway_Alipay',
-            'PPMFWC_Gateway_Amazonpay',
-            'PPMFWC_Gateway_Amex',
-            'PPMFWC_Gateway_Applepay',
-            'PPMFWC_Gateway_Afterpay',
-            'PPMFWC_Gateway_Billink',
-            'PPMFWC_Gateway_Cartasi',
-            'PPMFWC_Gateway_Capayable',
-            'PPMFWC_Gateway_CapayableGespreid',
-            'PPMFWC_Gateway_Cartebleue',
-            'PPMFWC_Gateway_Clickandbuy',
-            'PPMFWC_Gateway_CreditClick',
-            'PPMFWC_Gateway_Cashly',
-            'PPMFWC_Gateway_Good4fun',
-            'PPMFWC_Gateway_Dankort',
-            'PPMFWC_Gateway_DeCadeaukaart',
-            'PPMFWC_Gateway_Eps',
-            'PPMFWC_Gateway_Fashioncheque',
-            'PPMFWC_Gateway_Fashiongiftcard',
-            'PPMFWC_Gateway_Focum',
-            'PPMFWC_Gateway_Gezondheidsbon',
-            'PPMFWC_Gateway_Giropay',
-            'PPMFWC_Gateway_Givacard',
-            'PPMFWC_Gateway_Ideal',
-            'PPMFWC_Gateway_Incasso',
-            'PPMFWC_Gateway_Instore',
-            'PPMFWC_Gateway_Klarna',
-            'PPMFWC_Gateway_Klarnakp',
-            'PPMFWC_Gateway_Maestro',
-            'PPMFWC_Gateway_Minitixsms',
-            'PPMFWC_Gateway_Mistercash',
-            'PPMFWC_Gateway_Multibanco',
-            'PPMFWC_Gateway_Mybank',
-            'PPMFWC_Gateway_OkPayments',
-            'PPMFWC_Gateway_Overboeking',
-            'PPMFWC_Gateway_P24',
-            'PPMFWC_Gateway_Payconiq',
-            'PPMFWC_Gateway_Paypal',
-            'PPMFWC_Gateway_Paysafecard',
-            'PPMFWC_Gateway_Phone',
-            'PPMFWC_Gateway_Podiumcadeaukaart',
-            'PPMFWC_Gateway_Postepay',
-            'PPMFWC_Gateway_Sofortbanking',
-            'PPMFWC_Gateway_Spraypay',
-            'PPMFWC_Gateway_Tikkie',
-            'PPMFWC_Gateway_Trustly',
-            'PPMFWC_Gateway_Visamastercard',
-            'PPMFWC_Gateway_Vvvgiftcard',
-            'PPMFWC_Gateway_Webshopgiftcard',
-            'PPMFWC_Gateway_Wijncadeau',
-            'PPMFWC_Gateway_Wechatpay',
-            'PPMFWC_Gateway_Yourgift',
-            'PPMFWC_Gateway_Yehhpay',
-        );
+        $paymentOptions = self::$arrGateways;
 
         $paymentOptionsAvailable = array();
-        foreach ($paymentOptions as $paymentOption) {
+        foreach ($paymentOptions as $paymentOption)
+        {
             $optionId = call_user_func(array($paymentOption, 'getOptionId'));
+
             $available = PPMFWC_Helper_Data::isOptionAvailable($optionId);
+
             if ($available) {
                 $paymentOptionsAvailable[] = $paymentOption;
             }
@@ -91,7 +95,10 @@ class PPMFWC_Gateways
         return $arrDefault;
     }
 
-    /**
+
+
+
+        /**
      * @param $settings
      * @return array|void
      */
@@ -325,9 +332,9 @@ class PPMFWC_Gateways
                 }
             }
         } catch (PPMFWC_Exception_Notice $e) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue. Error: ' . $e->getMessage(), $orderId);
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue: ' . $e->getMessage(), $orderId);
         } catch (Exception $e) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue. Error: ' . $e->getMessage(), $orderId, array(), 'error');
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue: ' . $e->getMessage(), $orderId, array(), 'error');
         }
 
         wp_redirect($url);
@@ -403,14 +410,38 @@ class PPMFWC_Gateways
     }
 
     /**
+     * Return Gateway object based on payment_profile_id
+     *
+     * @param $payment_profile_id
+     * @return mixed|null
+     */
+    public static function ppmfwc_getGateWayById($payment_profile_id)
+    {
+        $paymentOptions = self::$arrGateways;
+        foreach ($paymentOptions as $strGateway) {
+            $optionId = call_user_func(array($strGateway, 'getOptionId'));
+            if ($payment_profile_id == $optionId) {
+                return new $strGateway();
+            }
+        }
+        return null;
+    }
+
+    /**
      * Handles the PAY. Exchange requests
      *
      */
     public static function ppmfwc_onExchange()
     {
+
+
+
         $action = isset($_REQUEST['action']) ? strtolower(sanitize_text_field($_REQUEST['action'])) : null;
         $order_id = isset($_REQUEST['order_id']) ? sanitize_text_field($_REQUEST['order_id']) : null;
         $wc_order_id = isset($_REQUEST['extra1']) ? sanitize_text_field($_REQUEST['extra1']) : null;
+        $methodid = isset($_REQUEST['payment_profile_id']) ? sanitize_text_field($_REQUEST['payment_profile_id']) : null;
+
+#exit('TRUE|texit');
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
 
@@ -422,11 +453,12 @@ class PPMFWC_Gateways
                 throw new PPMFWC_Exception_Notice('Unknown action: ' . $action);
             }
 
-            if (!in_array($action, array(SELF::ACTION_PENDING))) {
-                PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id));
+            if (!in_array($action, array(SELF::ACTION_PENDING)))
+            {
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id, 'methodid' => $methodid));
 
                 # Try to update the orderstatus.
-                $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status);
+                $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status, $methodid);
                 $message = 'TRUE|Status updated to ' . $newStatus;
             }
 

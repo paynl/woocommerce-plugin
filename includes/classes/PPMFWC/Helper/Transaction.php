@@ -78,7 +78,7 @@ class PPMFWC_Helper_Transaction
      * @throws \Paynl\Error\Required\ApiToken
      * @throws \Paynl\Error\Required\ServiceId
      */
-    public static function processTransaction($transactionId, $status = null)
+    public static function processTransaction($transactionId, $status = null, $methodid = null)
     {
         global $woocommerce;
 
@@ -171,6 +171,22 @@ class PPMFWC_Helper_Transaction
                     }
                     else
                     {
+
+                        $initialMethod = $order->get_payment_method();
+                        $usedMethod = PPMFWC_Gateways::ppmfwc_getGateWayById($methodid);
+
+                        if (!empty($usedMethod) && $usedMethod->getId() != $initialMethod) {
+                            PPMFWC_Helper_Data::ppmfwc_payLogger('Chanching payment method', $transactionId, array('usedMethod' => $usedMethod->getId(), 'method' => $initialMethod));
+                            try {
+                                $order->set_payment_method($usedMethod->getId());
+                                $order->set_payment_method_title($usedMethod->getName());
+                                $order->add_order_note(sprintf(esc_html(__('PAY.: Changed method to %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $usedMethod->getName()));
+
+                            } catch (Exception $e) {
+
+                            }
+                        }
+
                         $order->payment_complete($transactionId);
                         $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete. customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
                     }
