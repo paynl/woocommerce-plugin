@@ -1,0 +1,21 @@
+#payment .payment_methods li[class*="payment_method_pay_gateway"] label {
+    width: 90%;
+}
+
+#payment .payment_methods li[class*="payment_method_pay_gateway"] img {
+    float: right;
+    margin: 3px 0 3px 0 !important;
+}
+
+#payment .payment_methods li[class*="payment_method_pay_gateway"] div {
+    display: inline-block;
+}
+
+div p[class*="payment_method_pay_gateway"] label {
+    width: 95%;
+}
+
+div p[class*="payment_method_pay_gateway"] label img {
+    float: right;
+    margin: 3px 0 3px 0 !important;
+}

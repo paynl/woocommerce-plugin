@@ -16,4 +16,10 @@ class PPMFWC_Gateway_Spraypay extends PPMFWC_Gateway_Abstract
     {
         return 1987;
     }
+
+    public static function showAuthorizeSetting()
+    {
+        return true;
+    }
+
 }

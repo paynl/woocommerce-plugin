@@ -140,6 +140,20 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     ),
                 );
             }
+            if ($this->showAuthorizeSetting()) {
+                $this->form_fields['authorize_status'] = array(
+                  'title'       => esc_html( __('Authorize status', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                  'type'        => 'select',
+                  'options'     => array(
+                    self::STATUS_PROCESSING => wc_get_order_status_name(self::STATUS_PROCESSING) . esc_html( ' (' . __('default', 'woocommerce') . ')'),
+                    self::STATUS_PENDING => wc_get_order_status_name(self::STATUS_PENDING),
+                    self::STATUS_COMPLETED => wc_get_order_status_name(self::STATUS_COMPLETED),
+                    self::STATUS_ON_HOLD => wc_get_order_status_name(self::STATUS_ON_HOLD),
+                  ),
+                  'default'     => self::STATUS_PROCESSING,
+                  'description' => sprintf( esc_html(__('Set status for authorize  sed.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
+                );
+            }
 
             if (
               (!$this->get_option('brand_id')) || (strlen($this->get_option('brand_id')) == 0) ||
@@ -179,6 +193,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      * @return bool Payment methods that are confirmed slowly (like banktransfer) should return true here
      */
     public static function slowConfirmation()
+    {
+        return false;
+    }
+
+    public static function showAuthorizeSetting()
     {
         return false;
     }
@@ -429,6 +448,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 case 1717:
                     $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_klarna');
                     break;
+                case 739:
+                    $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_afterpay');
+                    break;
                 case 1877:
                     $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_yehhpay');
                     break;
@@ -437,7 +459,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     break;
             }
 
-            return empty($birthdate) ? '' : $birthdate;
+            return empty($birthdate) ? null : $birthdate;
     }
 
     /**
@@ -558,31 +580,46 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function process_refund($order_id, $amount = null, $reason = '')
     {
+        PPMFWC_Helper_Data::ppmfwc_payLogger('process_refund', $order_id, array('orderid' => $order_id, 'amunt' => $amount));
+
         if ($amount <= 0) {
             return new WP_Error('1', "Refund amount must be greater than €0.00");
         }
 
         $order = wc_get_order($order_id);
 
-        $transactionId = Pay_Helper_Transaction::getPaidTransactionIdForOrderId($order_id);
+        $transactionId = PPMFWC_Helper_Transaction::getPaidTransactionIdForOrderId($order_id);
         $transaction = new \Paynl\Transaction;
-        
-        if ( ! $order || ! $transactionId) {
+        $status = $transaction::status($transactionId);
+
+        if (!$order || !$transactionId) {
             return false;
         }
 
+        if ($status->getStateName() == "REFUND") {
+            return new WP_Error(1, __('This transaction has already been refunded trough the PAY. admin panel.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+        }
+
         try {
-            $this->loginSDK();       
-            $result = $transaction::refund($transactionId, $amount, $reason);         
-            $order->add_order_note(sprintf(__('Refunded %s - Refund ID: %s', PAYNL_WOOCOMMERCE_TEXTDOMAIN), $amount,  $result->getRefundId()));
+            $this->loginSDK();
+
+            # First set local state to refund so that the exchange will not try to refund aswell.
+            PPMFWC_Helper_Transaction::updateStatus($transactionId, PPMFWC_Gateways::STATUS_REFUND);
+
+            $result = \Paynl\Transaction::refund($transactionId, $amount, $reason);
+
+            $order->add_order_note(sprintf(__('Refunded %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $amount));
+
             return true;
         } catch (Exception $e) {
-            $status = $transaction::status($transactionId);
-            switch($status->getStateName()){
-                case "PAID": return new WP_Error(1, __('Your account is not authorized to refund transactions. For more information refer to: https://docs.pay.nl/merchants#refund-transaction', PAYNL_WOOCOMMERCE_TEXTDOMAIN)); break;
-                case "REFUND": return new WP_Error(1, __('This transaction has already been refunded trough the PAY. admin panel.', PAYNL_WOOCOMMERCE_TEXTDOMAIN)); break;
-                default: return new WP_Error(1, $e->getMessage()); break;
-            }            
+            switch ($status->getStateName()) {
+                case "PAID":
+                    return new WP_Error(1, __('Your account is not authorized to refund transactions. For more information refer to: https://docs.pay.nl/merchants#refund-transaction', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+                    break;
+                default:
+                    return new WP_Error(1, $e->getMessage());
+                    break;
+            }
         }
     }
 

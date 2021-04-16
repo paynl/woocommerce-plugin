@@ -18,7 +18,7 @@
   
   Bank Payments  | Creditcards | Gift cards & Vouchers | Pay by invoice | Others | 
   :-----------: | :-----------: | :-----------: | :-----------: | :-----------: |
-  iDEAL + QR | Visa | VVV giftcard | Afterpay | Paypal
+  iDEAL + QR | Visa | VVV giftcard | AfterPay | Paypal
   Bancontact + QR | Mastercard | Webshop Giftcard | Achteraf betalen via Billink | Wechat Pay
   Giropay | American Express | Fashioncheque | Focum AchterafBetalen.nl | Amazon Pay
   Mybank | Postepay | Podiumcadeaukaart | Capayable Achteraf Betalen | Cashly
@@ -27,7 +27,7 @@
   Tikkie | Cartebleue | Givacard | SprayPay | Apple Pay
   Multibanco | Wijncadeau | Yourgift | Creditclick | Payconiq
   EPS-Überweising |  | Paysafecard |  | Alipay
-   |  |  |  |  | Phone payments
+  Trustly |  | Good4fun  |  |  | Phone payments
    |  |  |  |  | Manual transfer
    |  |  |  |  | Incasso
   

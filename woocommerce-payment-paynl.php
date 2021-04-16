@@ -4,12 +4,12 @@
  * Plugin Name: PAY. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
  * Description: PAY. Payment Methods for WooCommerce
- * Version: 3.5.6
+ * Version: 3.5.7
  * Author: PAY.
  * Author URI: https://www.pay.nl
  * Requires at least: 3.5.1
- * Tested up to: 5.6
- * WC tested up to: 4.8.0
+ * Tested up to: 5.7
+ * WC tested up to: 5.2.0
  * WC requires at least: 3.0
  *
  * Text Domain: woocommerce-paynl-payment-methods
@@ -76,6 +76,10 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     add_action('woocommerce_admin_order_data_after_billing_address', 'ppmfwc_coc_number_display_admin_order_meta', 10, 1);
   }
 
+    if (get_option('paynl_standard_style') == "yes") {
+        add_action('wp_enqueue_scripts', 'ppmfwc_payStyle');
+    }
+
 } else {
 	# WooCommerce seems to be inactive, show eror message
 	add_action( 'admin_notices', 'ppmfwc_error_woocommerce_not_active' );
@@ -119,6 +123,14 @@ function ppmfwc_vatField($checkout)
     'label' => esc_html(__('VAT Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
     'placeholder' => esc_html(__('Enter your VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
   ), $checkout->get_value('vat_number'));
+}
+
+function ppmfwc_payStyle()
+{
+    if (is_checkout() == true) {
+        wp_register_style('ppmfwc_checkout_style', PPMFWC_PLUGIN_URL . 'assets/css/paycheckout.css');
+        wp_enqueue_style('ppmfwc_checkout_style');
+    }
 }
 
 /**

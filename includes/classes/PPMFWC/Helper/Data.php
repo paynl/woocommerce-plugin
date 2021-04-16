@@ -90,8 +90,8 @@ class PPMFWC_Helper_Data
         $table_name_option_subs = $wpdb->prefix . "pay_option_subs";
 
         //eerst flushen
-        $wpdb->query('TRUNCATE TABLE ' . $table_name_option_subs);
-        $wpdb->query('TRUNCATE TABLE ' . $table_name_options);
+        $wpdb->query('DELETE FROM ' . $table_name_option_subs);
+        $wpdb->query('DELETE FROM ' . $table_name_options);
 
         foreach ($paymentOptions as $paymentOption) {
             $image = '';
@@ -266,7 +266,7 @@ class PPMFWC_Helper_Data
      */
     public static function getVersion()
     {
-        return '3.5.6';
+        return '3.5.7';
     }
 
     /**

@@ -22,4 +22,10 @@ class PPMFWC_Gateway_Overboeking extends PPMFWC_Gateway_Abstract
     {
         return true;
     }
+
+    public static function showAuthorizeSetting()
+    {
+        return true;
+    }
+
 }
