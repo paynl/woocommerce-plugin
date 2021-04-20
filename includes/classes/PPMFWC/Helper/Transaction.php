@@ -70,6 +70,7 @@ class PPMFWC_Helper_Transaction
     /**
      * @param $transactionId TransactionID from PAY
      * @param null $status
+     * @param null $methodid PAY's payment profile id
      * @return mixed|string|void
      * @throws PPMFWC_Exception
      * @throws PPMFWC_Exception_Notice
@@ -78,7 +79,7 @@ class PPMFWC_Helper_Transaction
      * @throws \Paynl\Error\Required\ApiToken
      * @throws \Paynl\Error\Required\ServiceId
      */
-    public static function processTransaction($transactionId, $status = null)
+    public static function processTransaction($transactionId, $status = null, $methodid = null)
     {
         global $woocommerce;
 
@@ -152,9 +153,10 @@ class PPMFWC_Helper_Transaction
                 if ($order->get_total() != $paidCurrencyAmount && $order->get_total() != $transaction->getPaidAmount()) {
                     $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $paidCurrencyAmount . ' / ' . $transaction->getPaidAmount(), $order->get_total()));
                 } else {
-                    if($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE) {
+                    if ($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE) {
                         $method = $order->get_payment_method();
                         $methodSettings = get_option('woocommerce_' . $method . '_settings');
+
                         if (!empty($methodSettings['authorize_status'])) {
                             $auth_status = $methodSettings['authorize_status'];
                             if ($wcOrderStatus == $auth_status) {
@@ -164,16 +166,26 @@ class PPMFWC_Helper_Transaction
                             $order->update_status($auth_status);
                             $newStatus = $auth_status . ' as configured in settings of ' . $method;
                             $order->add_order_note(sprintf(esc_html(__('PAY.: Order state set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
-                        } else {
-                            $order->payment_complete($transactionId);
-                            $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete. customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
+                            break;
                         }
                     }
-                    else
-                    {
-                        $order->payment_complete($transactionId);
-                        $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete. customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
+
+                    $initialMethod = $order->get_payment_method();
+                    $usedMethod = PPMFWC_Gateways::ppmfwc_getGateWayById($methodid);
+
+                    if (!empty($usedMethod) && $usedMethod->getId() != $initialMethod) {
+                        PPMFWC_Helper_Data::ppmfwc_payLogger('Changing payment method', $transactionId, array('usedMethod' => $usedMethod->getId(), 'method' => $initialMethod));
+                        try {
+                            $order->set_payment_method($usedMethod->getId());
+                            $order->set_payment_method_title($usedMethod->getName());
+                            $order->add_order_note(sprintf(esc_html(__('PAY.: Changed method to %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $usedMethod->getName()));
+                        } catch (Exception $e) {
+                            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not update new method names: ' . $e->getMessage(), $transactionId);
+                        }
                     }
+
+                    $order->payment_complete($transactionId);
+                    $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
                 }
 
                 update_post_meta($orderId, 'CustomerName', esc_attr($transaction->getAccountHolderName()));
