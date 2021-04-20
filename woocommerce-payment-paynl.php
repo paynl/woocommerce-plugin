@@ -4,12 +4,12 @@
  * Plugin Name: PAY. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
  * Description: PAY. Payment Methods for WooCommerce
- * Version: 3.5.7
+ * Version: 3.5.8
  * Author: PAY.
  * Author URI: https://www.pay.nl
  * Requires at least: 3.5.1
- * Tested up to: 5.7
- * WC tested up to: 5.2.0
+ * Tested up to: 5.7.1
+ * WC tested up to: 5.2.2
  * WC requires at least: 3.0
  *
  * Text Domain: woocommerce-paynl-payment-methods
@@ -18,7 +18,7 @@
 require_once dirname( __FILE__ ) . '/includes/classes/Autoload.php';
 require_once dirname( __FILE__ ) . '/vendor/autoload.php';
 
-# Load plugin functionality
+# Load plugin functionality§
 require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 
 define('PPMFWC_WOOCOMMERCE_TEXTDOMAIN', 'woocommerce-paynl-payment-methods');
