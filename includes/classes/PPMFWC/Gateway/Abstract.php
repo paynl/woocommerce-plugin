@@ -151,7 +151,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     self::STATUS_ON_HOLD => wc_get_order_status_name(self::STATUS_ON_HOLD),
                   ),
                   'default'     => self::STATUS_PROCESSING,
-                  'description' => sprintf( esc_html(__('Set status for authorize  sed.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
+                  'description' => sprintf( esc_html(__('Select which status authorized transactions initially should have.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
                 );
             }
 
