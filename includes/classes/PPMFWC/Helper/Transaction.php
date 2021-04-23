@@ -55,7 +55,7 @@ class PPMFWC_Helper_Transaction
      * @param $transactionId
      * @return false|mixed
      */
-    private static function getTransaction($transactionId)
+    public static function getTransaction($transactionId)
     {
         global $wpdb;
 

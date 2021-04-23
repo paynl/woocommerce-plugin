@@ -322,9 +322,15 @@ class PPMFWC_Gateways
             {
                 $newStatus = PPMFWC_Helper_Transaction::processTransaction($orderId, $status);
                 try {
-                    $order = new WC_Order($orderId);
+                    $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
+                    if (!$transactionLocalDB || empty($transactionLocalDB['order_id'])) {
+                        throw new PPMFWC_Exception_Notice('Could not find local transaction for order ' . $orderId);
+                    }
+                    $order = new WC_Order($transactionLocalDB['order_id']);
+
                     $url = self::getOrderReturnUrl($order, $newStatus);
                 } catch (Exception $e) {
+                    PPMFWC_Helper_Data::ppmfwc_payLogger('Exception: ' . $e->getMessage(), $orderId);
                 }
             }
         } catch (PPMFWC_Exception_Notice $e) {
@@ -348,7 +354,7 @@ class PPMFWC_Gateways
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_DENIED, wc_get_checkout_url());
         } elseif ($newStatus == PPMFWC_Gateways::STATUS_PENDING)
         {
-            $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_PENDING, self::getOrderReturnUrl($order));
+            $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_PENDING, $order->get_checkout_order_received_url());
         } else
         {
 
