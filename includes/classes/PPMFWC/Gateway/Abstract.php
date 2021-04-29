@@ -154,6 +154,21 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                   'description' => sprintf( esc_html(__('Select which status authorized transactions initially should have.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
                 );
             }
+            if ($this->showDOB()) {
+                $this->form_fields['ask_birthdate'] = array(
+                    'title' => esc_html(__('Ask birthdate', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'type' => 'checkbox',
+                    'description' => esc_html(__('Ask the customer for his birthdate, this will fasten the checkout process', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'default' => 'yes'
+                );
+
+                $this->form_fields['birthdate_required'] = array(
+                    'title' => esc_html(__('Birthdate required', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'type' => 'checkbox',
+                    'description' => esc_html(__('Make the birthdate required in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'default' => 'no'
+                );
+            }
 
             if (
               (!$this->get_option('brand_id')) || (strlen($this->get_option('brand_id')) == 0) ||
@@ -198,6 +213,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     public static function showAuthorizeSetting()
+    {
+        return false;
+    }
+
+    public static function showDOB()
     {
         return false;
     }
