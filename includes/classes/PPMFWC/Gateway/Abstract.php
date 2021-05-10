@@ -580,7 +580,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function process_refund($order_id, $amount = null, $reason = '')
     {
-        PPMFWC_Helper_Data::ppmfwc_payLogger('process_refund', $order_id, array('orderid' => $order_id, 'amunt' => $amount));
+        PPMFWC_Helper_Data::ppmfwc_payLogger('process_refund', $order_id, array('orderid' => $order_id, 'amount' => $amount));
 
         if ($amount <= 0) {
             return new WP_Error('1', "Refund amount must be greater than €0.00");
@@ -608,7 +608,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 throw new Exception($result['errorMessage']);
             }
 
-            $order->add_order_note(sprintf(__('Refunded %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $amount));
+            $order->add_order_note(sprintf(__('PAY.: Refunded: %s %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $order->get_currency(), $amount));
 
         } catch (Exception $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Refund exception:' . $e->getMessage(), $order_id, array('orderid' => $order_id, 'amunt' => $amount));
