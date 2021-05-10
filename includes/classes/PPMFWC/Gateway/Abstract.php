@@ -587,27 +587,40 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         }
 
         $order = wc_get_order($order_id);
+        $transactionLocalDB = PPMFWC_Helper_Transaction::getPaidTransactionIdForOrderId($order_id);
 
-        $transactionId = PPMFWC_Helper_Transaction::getPaidTransactionIdForOrderId($order_id);
-
-        if ( ! $order || ! $transactionId) {
-            return false;
+        if (empty($order) || empty($transactionLocalDB) || empty($transactionLocalDB['transaction_id'])) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Refund canceled, order empty', $order_id, array('orderid' => $order_id, 'amunt' => $amount, 'transactionId' => $transactionLocalDB['transaction_id']));
+            return new WP_Error(1, 'De transactie lijkt reeds terugbetaald. Controleer de transactie in admin.pay.nl en update eventueel uw order handmatig.');
         }
+
+        $transactionId = $transactionLocalDB['transaction_id'];
 
         try {
             $this->loginSDK();
 
             # First set local state to refund so that the exchange will not try to refund aswell.
             PPMFWC_Helper_Transaction::updateStatus($transactionId, PPMFWC_Gateways::STATUS_REFUND);
-
-            $result = \Paynl\Transaction::refund($transactionId, $amount, $reason);
+            $result = \Paynl\Transaction::refund($transactionId, $amount, mb_substr($reason, 0, 32));
 
             $order->add_order_note(sprintf(__('Refunded %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $amount));
 
-            return true;
+            $result = (array) $result->getRequest();
+            if (isset($result['result']) && empty($result['result'])) {
+                throw new Exception($result['errorMessage']);
+            }
+
         } catch (Exception $e) {
-            return new WP_Error(1, $e->getMessage());
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Refund exception:' . $e->getMessage(), $order_id, array('orderid' => $order_id, 'amunt' => $amount));
+
+            $message = 'PAY. heeft de refund niet kunnen verwerken. Raadpleeg of docspay.nl of probeer het later nog eens.';
+            $message = strpos($e->getMessage(), 'PAY-407') !== false ? 'omschrijving te lang' :$message;
+
+            PPMFWC_Helper_Transaction::updateStatus($transactionId, $transactionLocalDB['status']);
+            return new WP_Error(1, $message);
         }
+
+        return true;
     }
 
     /**
