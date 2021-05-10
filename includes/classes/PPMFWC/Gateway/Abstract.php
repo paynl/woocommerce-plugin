@@ -591,7 +591,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         if (empty($order) || empty($transactionLocalDB) || empty($transactionLocalDB['transaction_id'])) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Refund canceled, order empty', $order_id, array('orderid' => $order_id, 'amunt' => $amount, 'transactionId' => $transactionLocalDB['transaction_id']));
-            return new WP_Error(1, 'De transactie lijkt reeds terugbetaald. Controleer de transactie in admin.pay.nl en update eventueel uw order handmatig.');
+            return new WP_Error(1, esc_html(__('The transaction seems to be refunded already. Please check admin.pay.nl.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
         }
 
         $transactionId = $transactionLocalDB['transaction_id'];
@@ -603,18 +603,18 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             PPMFWC_Helper_Transaction::updateStatus($transactionId, PPMFWC_Gateways::STATUS_REFUND);
             $result = \Paynl\Transaction::refund($transactionId, $amount, mb_substr($reason, 0, 32));
 
-            $order->add_order_note(sprintf(__('Refunded %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $amount));
-
             $result = (array) $result->getRequest();
             if (isset($result['result']) && empty($result['result'])) {
                 throw new Exception($result['errorMessage']);
             }
 
+            $order->add_order_note(sprintf(__('Refunded %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $amount));
+
         } catch (Exception $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Refund exception:' . $e->getMessage(), $order_id, array('orderid' => $order_id, 'amunt' => $amount));
 
-            $message = 'PAY. heeft de refund niet kunnen verwerken. Raadpleeg of docspay.nl of probeer het later nog eens.';
-            $message = strpos($e->getMessage(), 'PAY-407') !== false ? 'omschrijving te lang' :$message;
+            $message = esc_html(__('PAY. could not refund the transaction.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+            $message = strpos($e->getMessage(), 'PAY-407') !== false ? esc_html(__('Refund reason too long', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) : $message;
 
             PPMFWC_Helper_Transaction::updateStatus($transactionId, $transactionLocalDB['status']);
             return new WP_Error(1, $message);
