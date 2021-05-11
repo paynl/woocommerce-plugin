@@ -601,6 +601,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             # First set local state to refund so that the exchange will not try to refund aswell.
             PPMFWC_Helper_Transaction::updateStatus($transactionId, PPMFWC_Gateways::STATUS_REFUND);
+
             $result = \Paynl\Transaction::refund($transactionId, $amount, mb_substr($reason, 0, 32));
 
             $result = (array) $result->getRequest();
@@ -614,7 +615,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             PPMFWC_Helper_Data::ppmfwc_payLogger('Refund exception:' . $e->getMessage(), $order_id, array('orderid' => $order_id, 'amunt' => $amount));
 
             $message = esc_html(__('PAY. could not refund the transaction.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
-            $message = strpos($e->getMessage(), 'PAY-407') !== false ? esc_html(__('Refund reason too long', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) : $message;
+            $message = strpos($e->getMessage(), 'PAY-14') !== false ? esc_html(__('A (partial) refund has just been made on this transaction, please wait a moment, and try again.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) : $message;
 
             PPMFWC_Helper_Transaction::updateStatus($transactionId, $transactionLocalDB['status']);
             return new WP_Error(1, $message);

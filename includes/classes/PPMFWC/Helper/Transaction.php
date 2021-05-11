@@ -31,7 +31,7 @@ class PPMFWC_Helper_Transaction
         global $wpdb;
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
         $result = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE order_id = %s  AND status = 'SUCCESS'", $orderId), ARRAY_A
+            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE order_id = %s  AND status IN ('SUCCESS', 'REFUND') ", $orderId), ARRAY_A
         );
         if (!empty($result))
         {
@@ -139,8 +139,13 @@ class PPMFWC_Helper_Transaction
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $transactionId, $logArray);
 
-        if (($wcOrderStatus == 'complete' || $wcOrderStatus == 'processing') && $payApiStatus != PPMFWC_Gateways::STATUS_REFUND) {
-            throw new PPMFWC_Exception_Notice('Order is already completed');
+        if (in_array($wcOrderStatus, array('complete', 'processing'))) {
+            if ($payApiStatus == PPMFWC_Gateways::STATUS_REFUND) {
+                PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process refund', $transactionId);
+            } else {
+                PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Done', $transactionId);
+                throw new PPMFWC_Exception_Notice('Order is already completed or processed');
+            }
         }
 
         $newStatus = $payApiStatus;
