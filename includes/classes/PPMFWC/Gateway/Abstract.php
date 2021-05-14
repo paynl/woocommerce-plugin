@@ -270,6 +270,30 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         if ($description = $this->get_description()) {
             echo wpautop(wptexturize($description));
         }
+
+        $ask_birthdate = $this->get_option('ask_birthdate');
+        if ($ask_birthdate == 'yes') {
+            $required = $this->get_option('birthdate_required');
+            $fieldName = str_replace("pay_gateway_", "birthdate_", $this->getId());
+
+            echo esc_html(__('Birthdate: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<input name="' . $fieldName . '" id="' . $fieldName . '">';
+
+            $js = 'jQuery("#' . $fieldName . '").css("width","125px").datepicker({ changeMonth: true, changeYear: true, yearRange:"-100:+0", dateFormat: "dd-mm-yy"});';
+            wp_enqueue_style('jquery-ui', PPMFWC_PLUGIN_URL . 'assets/css/jquery-ui.min.css');
+            wp_enqueue_script('jquery-ui-datepicker');
+
+            if ($required == 'yes') {
+                $js .= 'jQuery("#place_order").click(function(e){if (!jQuery("#' . $fieldName . '").val() && jQuery("input[name=payment_method]:checked").val() == "' . $this->getId() . '"){e.preventDefault();alert("Please select a date of birth before finishing the transaction!");}})';
+            }
+
+            echo "
+                <script type='text/javascript'>
+                    jQuery(document).ready(function(){
+                        " . $js . "
+                    });
+                </script>
+            ";
+        }
     }
 
     
@@ -463,7 +487,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_capayble');
                     break;
                 case 1813:
-                    $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_capayble_gespreid');
+                    $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_capayblegespreid');
                     break;
                 case 1717:
                     $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_klarna');
