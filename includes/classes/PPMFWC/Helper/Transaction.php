@@ -113,7 +113,7 @@ class PPMFWC_Helper_Transaction
             return $status;
         }
 
-        # Retieve PAY. transaction paymentstate
+        # Retrieve PAY. transaction paymentstate
         PPMFWC_Gateway_Abstract::loginSDK();
 
         $transaction = \Paynl\Transaction::status($transactionId);
