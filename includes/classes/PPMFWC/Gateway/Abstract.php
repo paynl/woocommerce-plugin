@@ -580,19 +580,21 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function process_refund($order_id, $amount = null, $reason = '')
     {
-        PPMFWC_Helper_Data::ppmfwc_payLogger('process_refund', $order_id, array('orderid' => $order_id, 'amunt' => $amount));
+        PPMFWC_Helper_Data::ppmfwc_payLogger('process_refund', $order_id, array('orderid' => $order_id, 'amount' => $amount));
 
         if ($amount <= 0) {
             return new WP_Error('1', "Refund amount must be greater than €0.00");
         }
 
         $order = wc_get_order($order_id);
+        $transactionLocalDB = PPMFWC_Helper_Transaction::getPaidTransactionIdForOrderId($order_id);
 
-        $transactionId = PPMFWC_Helper_Transaction::getPaidTransactionIdForOrderId($order_id);
-
-        if ( ! $order || ! $transactionId) {
-            return false;
+        if (empty($order) || empty($transactionLocalDB) || empty($transactionLocalDB['transaction_id'])) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Refund canceled, order empty', $order_id, array('orderid' => $order_id, 'amunt' => $amount, 'transactionId' => $transactionLocalDB['transaction_id']));
+            return new WP_Error(1, esc_html(__('The transaction seems to be refunded already. Please check admin.pay.nl.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
         }
+
+        $transactionId = $transactionLocalDB['transaction_id'];
 
         try {
             $this->loginSDK();
@@ -600,14 +602,26 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             # First set local state to refund so that the exchange will not try to refund aswell.
             PPMFWC_Helper_Transaction::updateStatus($transactionId, PPMFWC_Gateways::STATUS_REFUND);
 
-            $result = \Paynl\Transaction::refund($transactionId, $amount, $reason);
+            $result = \Paynl\Transaction::refund($transactionId, $amount, mb_substr($reason, 0, 32));
 
-            $order->add_order_note(sprintf(__('Refunded %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $amount));
+            $result = (array) $result->getRequest();
+            if (isset($result['result']) && empty($result['result'])) {
+                throw new Exception($result['errorMessage']);
+            }
 
-            return true;
+            $order->add_order_note(sprintf(__('PAY.: Refunded: %s %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $order->get_currency(), $amount));
+
         } catch (Exception $e) {
-            return new WP_Error(1, $e->getMessage());
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Refund exception:' . $e->getMessage(), $order_id, array('orderid' => $order_id, 'amunt' => $amount));
+
+            $message = esc_html(__('PAY. could not refund the transaction.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+            $message = strpos($e->getMessage(), 'PAY-14') !== false ? esc_html(__('A (partial) refund has just been made on this transaction, please wait a moment, and try again.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) : $message;
+
+            PPMFWC_Helper_Transaction::updateStatus($transactionId, $transactionLocalDB['status']);
+            return new WP_Error(1, $message);
         }
+
+        return true;
     }
 
     /**

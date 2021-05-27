@@ -9,6 +9,7 @@ class PPMFWC_Gateways
     const STATUS_AUTHORIZE = 'AUTHORIZE';
     const STATUS_VERIFY = 'VERIFY';
     const STATUS_REFUND = 'REFUND';
+    const STATUS_REFUND_PARTIALLY = 'PARTREF';
 
     const ACTION_NEWPPT = 'new_ppt';
     const ACTION_PENDING = 'pending';
@@ -387,6 +388,8 @@ class PPMFWC_Gateways
             $status = self::STATUS_VERIFY;
         } elseif ($statusId == -81) {
             $status = SELF::STATUS_REFUND;
+        } elseif ($statusId == -82) {
+            $status = SELF::STATUS_REFUND_PARTIALLY;
         } elseif ($statusId == -63) {
             $status = SELF::STATUS_DENIED;
         } elseif ($statusId < 0) {
@@ -447,7 +450,7 @@ class PPMFWC_Gateways
             if(in_array($action, array_keys($arrActions))) {
                 $status = $arrActions[$action];
             } else {
-                throw new PPMFWC_Exception_Notice('Unknown action: ' . $action);
+                throw new PPMFWC_Exception_Notice('Ignoring: ' . $action);
             }
 
             if (!in_array($action, array(SELF::ACTION_PENDING))) {
@@ -455,7 +458,11 @@ class PPMFWC_Gateways
 
                 # Try to update the orderstatus.
                 $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status, $methodId);
-                $message = 'TRUE|Status updated to ' . $newStatus;
+                if ($newStatus == $status) {
+                    $message = 'TRUE|Status remains ' . $newStatus;
+                } else {
+                    $message = 'TRUE|Status updated to ' . $newStatus;
+                }
             }
 
         } catch (PPMFWC_Exception_Notice $e) {
