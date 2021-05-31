@@ -114,10 +114,11 @@ class PPMFWC_Helper_Transaction
             return $status;
         }
 
-        # Retieve PAY. transaction paymentstate
+        # Retrieve PAY. transaction paymentstate
         PPMFWC_Gateway_Abstract::loginSDK();
 
-        $transaction = \Paynl\Transaction::get($transactionId);
+        $transaction = \Paynl\Transaction::status($transactionId);
+
         $paidCurrencyAmount = $transaction->getPaidCurrencyAmount();
         $data = $transaction->getData();
         $internalPAYSatus = $data['paymentDetails']['state'];
@@ -200,7 +201,7 @@ class PPMFWC_Helper_Transaction
                 break;
 
             case PPMFWC_Gateways::STATUS_DENIED:
-                $order->add_order_note(esc_html(__('PAY.: Payment denied. Used : ' . $transaction->getPaymentMethodName(), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+                $order->add_order_note(esc_html(__('PAY.: Payment denied. ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
                 $order->update_status('failed');
                 break;
             case PPMFWC_Gateways::STATUS_REFUND:
