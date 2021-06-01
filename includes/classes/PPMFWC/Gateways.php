@@ -458,11 +458,7 @@ class PPMFWC_Gateways
 
                 # Try to update the orderstatus.
                 $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status, $methodId);
-                if ($newStatus == $status) {
-                    $message = 'TRUE|Status remains ' . $newStatus;
-                } else {
-                    $message = 'TRUE|Status updated to ' . $newStatus;
-                }
+                $message = 'TRUE|Status updated to ' . $newStatus;
             }
 
         } catch (PPMFWC_Exception_Notice $e) {
