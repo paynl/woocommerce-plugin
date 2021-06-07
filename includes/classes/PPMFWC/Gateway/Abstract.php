@@ -446,7 +446,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'country'     => $order->get_shipping_country()
             );
 
-            if ($this->useInvoiceAddressAsShippingAddress()) {
+
+            if ($this->useInvoiceAddressAsShippingAddress() && $this->get_option('use_invoice_address') == 'yes') {
                 $address = array(
                     'streetName'  => $aBillingAddress[0],
                     'houseNumber' => $aBillingAddress[1],

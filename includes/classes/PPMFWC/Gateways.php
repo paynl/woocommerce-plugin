@@ -249,13 +249,6 @@ class PPMFWC_Gateways
           'default' => 'yes',
         );
         $addedSettings[] = array(
-            'name' => __('Duplicate invoice address', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            'type' => 'checkbox',
-            'desc' => esc_html(__("Check this box if you want the delivery address to duplicate the invoice address if it is missing.", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_shipping',
-            'default' => 'no',
-        );
-        $addedSettings[] = array(
             'name' => __('Alternative Exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'text',
             'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
