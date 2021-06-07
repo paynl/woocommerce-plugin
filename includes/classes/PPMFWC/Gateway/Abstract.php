@@ -170,6 +170,15 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 );
             }
 
+           if ($this->useInvoiceAddressAsShippingAddress()) {
+                $this->form_fields['use_invoice_address'] = array(
+                    'title' => esc_html(__('Use invoice address for shipping', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'type' => 'checkbox',
+                    'description' => esc_html(__('Enable this option when the required shipping address for post-payments is empty or is not being forwarded to PAY. correctly. ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'default' => 'no'
+                );
+            }
+
             if (
               (!$this->get_option('brand_id')) || (strlen($this->get_option('brand_id')) == 0) ||
               (!$this->get_option('min_amount')) || (strlen($this->get_option('min_amount')) == 0) ||
@@ -213,6 +222,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     public static function showAuthorizeSetting()
+    {
+        return false;
+    }
+
+    public static function useInvoiceAddressAsShippingAddress()
     {
         return false;
     }
@@ -430,10 +444,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'zipCode'     => $order->get_shipping_postcode(),
                 'city'        => $order->get_shipping_city(),
                 'country'     => $order->get_shipping_country()
-            );
+            );$address = array();
 
-            $ppm = $this->getPostPaymentMethod($pay_paymentOptionId);
-            if (get_option('paynl_shipping') == 'yes' && empty($address['country']) && $ppm == true) {
+            if ($this->useInvoiceAddressAsShippingAddress()) {
                 $address = array(
                     'streetName'  => $aBillingAddress[0],
                     'houseNumber' => $aBillingAddress[1],
@@ -482,35 +495,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $order->save();
 
         return $payTransaction;
-    }
-
-    /**
-     * @param $ppid
-     * @return bool
-     */
-    private function getPostPaymentMethod($ppid)
-    {
-        switch ($ppid) {
-            case 1672:
-                $ppm = true;
-                break;
-            case 1813:
-                $ppm = true;
-                break;
-            case 1717:
-                $ppm = true;
-                break;
-            case 2265:
-                $ppm = true;
-                break;
-            case 739:
-                $ppm = true;
-                break;
-            default:
-                $ppm = false;
-                break;
-        }
-        return $ppm;
     }
 
     /**

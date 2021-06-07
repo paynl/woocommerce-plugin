@@ -23,4 +23,9 @@ class PPMFWC_Gateway_Yehhpay extends PPMFWC_Gateway_Abstract
         return true;
     }
 
+    public static function useInvoiceAddressAsShippingAddress()
+    {
+        return true;
+    }
+
 }
