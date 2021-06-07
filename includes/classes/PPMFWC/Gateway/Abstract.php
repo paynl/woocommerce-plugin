@@ -444,7 +444,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'zipCode'     => $order->get_shipping_postcode(),
                 'city'        => $order->get_shipping_city(),
                 'country'     => $order->get_shipping_country()
-            );$address = array();
+            );
 
             if ($this->useInvoiceAddressAsShippingAddress()) {
                 $address = array(
