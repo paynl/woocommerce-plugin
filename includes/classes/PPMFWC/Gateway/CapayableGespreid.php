@@ -28,4 +28,9 @@ class PPMFWC_Gateway_CapayableGespreid extends PPMFWC_Gateway_Abstract
         return true;
     }
 
+    public static function useInvoiceAddressAsShippingAddress()
+    {
+        return true;
+    }
+
 }

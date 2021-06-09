@@ -18,4 +18,9 @@ class PPMFWC_Gateway_Focum extends PPMFWC_Gateway_Abstract
         return 1702;
     }
 
+    public static function useInvoiceAddressAsShippingAddress()
+    {
+        return true;
+    }
+
 }
