@@ -248,6 +248,13 @@ class PPMFWC_Gateways
           'id' => 'paynl_paylogger',
           'default' => 'yes',
         );
+       $addedSettings[] = array(
+          'name' => __('Refund status from PAY.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+          'type' => 'checkbox',
+          'desc' => esc_html(__(" Process refunds initiated from PAY admin", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+          'id' => 'paynl_externalrefund',
+          'default' => 'no',
+        );
         $addedSettings[] = array(
             'name' => __('Alternative Exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'text',
@@ -410,7 +417,9 @@ class PPMFWC_Gateways
         $arrPayActions[self::ACTION_PENDING] = self::STATUS_PENDING;
         $arrPayActions[self::ACTION_CANCEL] = self::STATUS_CANCELED;
         $arrPayActions[self::ACTION_VERIFY] = self::STATUS_VERIFY;
-        $arrPayActions[self::ACTION_REFUND] = self::STATUS_REFUND;
+        if (get_option('paynl_externalrefund') == "yes"){
+            $arrPayActions[self::ACTION_REFUND] = self::STATUS_REFUND;
+        }
         return $arrPayActions;
     }
 
