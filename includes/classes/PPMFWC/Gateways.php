@@ -417,9 +417,7 @@ class PPMFWC_Gateways
         $arrPayActions[self::ACTION_PENDING] = self::STATUS_PENDING;
         $arrPayActions[self::ACTION_CANCEL] = self::STATUS_CANCELED;
         $arrPayActions[self::ACTION_VERIFY] = self::STATUS_VERIFY;
-        if (get_option('paynl_externalrefund') == "yes"){
-            $arrPayActions[self::ACTION_REFUND] = self::STATUS_REFUND;
-        }
+        $arrPayActions[self::ACTION_REFUND] = self::STATUS_REFUND;
         return $arrPayActions;
     }
 
