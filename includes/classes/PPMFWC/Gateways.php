@@ -249,9 +249,9 @@ class PPMFWC_Gateways
           'default' => 'yes',
         );
        $addedSettings[] = array(
-          'name' => __('Refund status from PAY.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+          'name' => __('Refund processing', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
           'type' => 'checkbox',
-          'desc' => esc_html(__(" Process refunds initiated from PAY admin", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+          'desc' => esc_html(__("Process refunds initiated from PAY admin", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
           'id' => 'paynl_externalrefund',
           'default' => 'no',
         );
