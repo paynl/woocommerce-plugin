@@ -180,7 +180,7 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 
 == Changelog ==
 = 3.6.1 =
-Added option to disable refund processing which initiated from pay admin
+Added option to disable refund processing which initiated from PAY. admin
 = 3.6.0 =
 Added option to make date-of-birth a required field for post-payment methods
 Fixed a refund issue
