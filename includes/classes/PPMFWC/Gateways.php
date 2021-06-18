@@ -248,6 +248,13 @@ class PPMFWC_Gateways
           'id' => 'paynl_paylogger',
           'default' => 'yes',
         );
+       $addedSettings[] = array(
+          'name' => __('Refund processing', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+          'type' => 'checkbox',
+          'desc' => esc_html(__("Process refunds initiated from PAY admin", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+          'id' => 'paynl_externalrefund',
+          'default' => 'no',
+        );
         $addedSettings[] = array(
             'name' => __('Alternative Exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'text',

@@ -204,17 +204,17 @@ class PPMFWC_Helper_Transaction
                 $order->add_order_note(esc_html(__('PAY.: Payment denied. ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
                 $order->update_status('failed');
                 break;
+
             case PPMFWC_Gateways::STATUS_REFUND:
+                if(get_option('paynl_externalrefund') == "yes") {
+                    PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `refunded`', $transactionId);
 
-                PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `refunded`', $transactionId);
-
-                $order->set_status('refunded', 'PAY.: ');
-
-                wc_increase_stock_levels($orderId);
-
-                $order->save();
-
+                    $order->set_status('refunded', 'PAY.: ');
+                    wc_increase_stock_levels($orderId);
+                    $order->save();
+                }
                 break;
+
             case PPMFWC_Gateways::STATUS_CANCELED:
 
                 $method = $order->get_payment_method();
