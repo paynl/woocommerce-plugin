@@ -76,9 +76,13 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     add_action('woocommerce_admin_order_data_after_billing_address', 'ppmfwc_coc_number_display_admin_order_meta', 10, 1);
   }
 
-    if (get_option('paynl_standard_style') == "yes") {
-        add_action('wp_enqueue_scripts', 'ppmfwc_payStyle');
-    }
+  if (get_option('paynl_standard_style') == "yes") {
+    add_action('wp_enqueue_scripts', 'ppmfwc_payStyle');
+  }
+
+  if (get_option('paynl_auto_capture') == "yes") {
+    add_action('woocommerce_order_status_changed', 'ppmfwc_auto_capture', 10, 3);
+  }
 
 } else {
 	# WooCommerce seems to be inactive, show eror message
@@ -184,4 +188,29 @@ function ppmfwc_checkout_coc_number_update_order_meta($order_id)
 function ppmfwc_coc_number_display_admin_order_meta($order)
 {
     echo '<p><strong>' . esc_html(__('COC Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . ':</strong> ' . esc_html(get_post_meta($order->get_id(), '_coc_number', true)) . '</p>';
+}
+
+
+/**
+ * Perform auto capture
+ */
+function ppmfwc_auto_capture($order_id, $old_status, $new_status)
+{
+  if ($new_status == "completed") {
+    
+    # Get order
+    $order = new WC_Order($order_id);
+    $orderstatus = $order->status;
+    $transactionId = $order->get_transaction_id();
+
+    # Get transaction and make sure its status is Authorized
+    PPMFWC_Gateway_Abstract::loginSDK();
+    $transaction = \Paynl\Transaction::status($transactionId);
+    if ($transaction->isAuthorized()) {
+      # Perform PAY. capture    
+      \Paynl\Transaction::capture($transactionId);
+      $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-capture on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
+    }
+
+  }
 }

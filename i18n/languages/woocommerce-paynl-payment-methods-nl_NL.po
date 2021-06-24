@@ -4,16 +4,16 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
 "POT-Creation-Date: 2021-06-18 09:52+0200\n"
-"PO-Revision-Date: 2021-06-18 10:19+0200\n"
+"PO-Revision-Date: 2021-06-24 11:23+0000\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Loco-Source-Locale: nl_NL\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Loco https://localise.biz/\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -32,7 +32,7 @@ msgstr "Activeer deze module om %s betalingen te accepteren"
 msgid "Enable/Disable"
 msgstr "Inschakelen/uitschakelen"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:89
+#: includes/classes/PPMFWC/Gateway/Abstract.php:89 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:210
 #, php-format
 msgid "Enable PAY. %s"
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Initial order status"
 msgstr "Initiële order status"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:132
+#: includes/classes/PPMFWC/Gateway/Abstract.php:132 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:148
 msgid "default"
 msgstr "standaard"
@@ -265,7 +265,7 @@ msgstr "PAY.: Transactie gestart, TransactieId: %s"
 msgid "The following payment methods can be enabled"
 msgstr "De volgende betaalmethoden kunnen worden ingeschakeld"
 
-#: includes/classes/PPMFWC/Gateways.php:126
+#: includes/classes/PPMFWC/Gateways.php:126 
 #: includes/classes/PPMFWC/Gateways.php:131
 msgid "API token and Service id are required."
 msgstr "API token and Service id zijn vereist."
@@ -584,16 +584,16 @@ msgstr "KVK-nummer"
 msgid "Enter your COC number"
 msgstr "Vul je KVK-nummer in"
 
-#, php-format
-#~ msgid "Refunded %s - Refund ID: %s"
-#~ msgstr "Terugbetaald %s - Refund id: %s"
+msgid "PAY.: Performed auto-capture on transaction: %s"
+msgstr "PAY.: Auto-capture uitgevoerd voor transactie: %s"
 
-#~ msgid "Payment error:"
-#~ msgstr "Betalingsfout:"
+msgid "Auto-capture transaction upon order completion"
+msgstr "Auto-capture transactie bij het afgeronden van de bestelling"
 
-#~ msgid ""
-#~ "The AT-code belonging to your token, you can find this <a href=\"https://"
-#~ "admin.pay.nl/company/tokens\" target=\"api_token\">here</a>"
-#~ msgstr ""
-#~ "De AT-code die bij het token hoort, je kunt deze <a href=\"https://admin."
-#~ "pay.nl/company/tokens\" target=\"api_token\">hier</a> vinden"
+msgid ""
+"Check this box if you want to enable auto-capture on Authorized transactions "
+"when changing the order to complete"
+msgstr ""
+"Vink aan als u auto-capture wilt aanzetten voor geautoriseerde transacties "
+"bij het aanpassen van bestellingen naar \t\n"
+"afgerond"

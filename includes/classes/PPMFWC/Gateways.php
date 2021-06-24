@@ -10,12 +10,14 @@ class PPMFWC_Gateways
     const STATUS_VERIFY = 'VERIFY';
     const STATUS_REFUND = 'REFUND';
     const STATUS_REFUND_PARTIALLY = 'PARTREF';
+    const STATUS_CAPTURE = 'CAPTURE';
 
     const ACTION_NEWPPT = 'new_ppt';
     const ACTION_PENDING = 'pending';
     const ACTION_CANCEL = 'cancel';
     const ACTION_VERIFY = 'verify';
     const ACTION_REFUND = 'refund:received';
+    const ACTION_CAPTURE = 'capture';
 
     private static $arrGateways = array(
       'PPMFWC_Gateway_Alipay',
@@ -263,6 +265,13 @@ class PPMFWC_Gateways
                       'Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#'.
                       '<Br>For more info see: <a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
             'id' => 'paynl_exchange_url',
+        );
+        $addedSettings[] = array(
+            'name' => esc_html(__('Auto-capture transaction upon order completion', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'type' => 'checkbox',
+            'desc' => esc_html(__('Check this box if you want to enable auto-capture on Authorized transactions when changing the order to complete', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'id' => 'paynl_auto_capture',
+            'default' => 'no',
         );
         $addedSettings[] = array(
             'type' => 'sectionend',
