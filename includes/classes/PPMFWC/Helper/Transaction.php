@@ -88,7 +88,7 @@ class PPMFWC_Helper_Transaction
         $transactionLocalDB = self::getTransaction($transactionId);
         $localTransactionStatus = $transactionLocalDB['status'];
         if (empty($transactionLocalDB)) {
-            throw new PPMFWC_Exception(__('Local transaction not found: ' . $transactionId, ''));
+            throw new PPMFWC_Exception_Notice(__('Local transaction not found: ' . $transactionId, ''));
         }
         if (!isset($transactionLocalDB['order_id'])) {
             throw new PPMFWC_Exception(__('OrderId not set in local transaction: ' . $transactionId, ''));
