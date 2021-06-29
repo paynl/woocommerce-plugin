@@ -182,7 +182,10 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 
 == Changelog ==
 = 3.6.1 =
-Added option to disable refund processing which initiated from PAY. admin
+Added option to disable refund processing for refunds initiated from PAY. admin
+Added option to enable auto-capture for completed orders
+Added payment method Google Pay
+And some minor updates
 = 3.6.0 =
 Added option to make date-of-birth a required field for post-payment methods
 Fixed a refund issue
