@@ -192,25 +192,32 @@ function ppmfwc_coc_number_display_admin_order_meta($order)
 
 
 /**
- * Perform auto capture
+ * @param $order_id
+ * @param $old_status
+ * @param $new_status
  */
 function ppmfwc_auto_capture($order_id, $old_status, $new_status)
 {
-  if ($new_status == "completed") {
-    
-    # Get order
-    $order = new WC_Order($order_id);
-    $orderstatus = $order->status;
-    $transactionId = $order->get_transaction_id();
+    if ($new_status == "completed") {
+        $order = new WC_Order($order_id);
+        $transactionId = $order->get_transaction_id();
+        $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($transactionId);
 
-    # Get transaction and make sure its status is Authorized
-    PPMFWC_Gateway_Abstract::loginSDK();
-    $transaction = \Paynl\Transaction::status($transactionId);
-    if ($transaction->isAuthorized()) {
-      # Perform PAY. capture    
-      \Paynl\Transaction::capture($transactionId);
-      $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-capture on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
+        # Get transaction and make sure its status is Authorized
+        if (!empty($transactionLocalDB['status']) && $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE) {
+            try {
+                PPMFWC_Gateway_Abstract::loginSDK();
+
+                $bResult = \Paynl\Transaction::capture($transactionId);
+
+                if ($bResult) {
+                    $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-capture on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
+                } else {
+                    throw new Exception('Could not capture');
+                }
+            } catch (Exception $e) {
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Auto-capture failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
+            }
+        }
     }
-
-  }
 }
