@@ -30,6 +30,7 @@
   Trustly |  | Good4fun  |  |  | Phone payments
    |  |  |  |  | Manual transfer
    |  |  |  |  | Incasso
+   |  |  |  |  | Google Pay
   
   # Installation
   #### Installing
