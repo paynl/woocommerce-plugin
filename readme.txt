@@ -43,6 +43,7 @@ With PAY. you can add the following payment options to your website:
 * Giropay
 * Givacard
 * Good4fun
+* Google Pay
 * iDEAL
 * IN3 Gespreid betalen
 * Incasso
@@ -131,6 +132,7 @@ At the moment the plugin supports the following payment methods:
 * Giropay
 * Givacard
 * Good4fun
+* Google Pay
 * iDEAL
 * IN3 Gespreid betalen
 * Incasso

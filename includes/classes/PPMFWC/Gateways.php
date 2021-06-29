@@ -41,6 +41,7 @@ class PPMFWC_Gateways
       'PPMFWC_Gateway_Gezondheidsbon',
       'PPMFWC_Gateway_Giropay',
       'PPMFWC_Gateway_Givacard',
+      'PPMFWC_Gateway_Googlepay',
       'PPMFWC_Gateway_Ideal',
       'PPMFWC_Gateway_Incasso',
       'PPMFWC_Gateway_Instore',
