@@ -660,7 +660,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         if (empty($order) || empty($transactionLocalDB) || empty($transactionLocalDB['transaction_id'])) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Refund canceled, order empty', $order_id, array('orderid' => $order_id, 'amunt' => $amount, 'transactionId' => $transactionLocalDB['transaction_id']));
-            return new WP_Error(1, esc_html(__('The transaction seems to be refunded already. Please check admin.pay.nl.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+            return new WP_Error(1, esc_html(__('The transaction seems to be already refunded or may be not captured yet. Please check admin.pay.nl.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
         }
 
         $transactionId = $transactionLocalDB['transaction_id'];
