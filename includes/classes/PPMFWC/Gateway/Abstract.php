@@ -550,6 +550,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         \Paynl\Config::setApiToken(self::getApiToken());
         \Paynl\Config::setServiceId(self::getServiceId());
 
+        if (!empty(self::getApiBase())) {
+            \Paynl\Config::setApiBase(self::getApiBase());
+        }
+
         $tokenCode = self::getTokenCode();
         if (!empty($tokenCode)) {
             \Paynl\Config::setTokenCode($tokenCode);
@@ -567,6 +571,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     public static function getServiceId()
     {
         return get_option('paynl_serviceid');
+    }
+
+    public static function getApiBase()
+    {
+        return trim(get_option('paynl_failover_gateway'));
     }
 
     private function getProductLines(WC_Order $order)
