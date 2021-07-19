@@ -275,6 +275,13 @@ class PPMFWC_Gateways
             'default' => 'no',
         );
         $addedSettings[] = array(
+            'name' => esc_html(__('Failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'type' => 'text',
+            'placeholder' => '',
+            'desc' => 'Only fill this in when we at PAY. provide you with a gateway to fill in here',
+            'id' => 'paynl_failover_gateway',
+        );
+        $addedSettings[] = array(
             'type' => 'sectionend',
             'id' => 'paynl_global_settings',
         );
