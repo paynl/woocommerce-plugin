@@ -5,7 +5,7 @@ Link: https://www.pay.nl
 Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wechatpay, paypal, creditcard, mybank, sofortbanking, afterpay, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
 Stable tag: 3.6.1
-Tested up to: 5.7.2
+Tested up to: 5.8.0
 WC tested up to: 5.4.1
 WC requires at least: 3.0
 License: GPLv2
