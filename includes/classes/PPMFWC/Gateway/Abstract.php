@@ -287,74 +287,69 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         $ask_birthdate = $this->get_option('ask_birthdate');
         if ($ask_birthdate == 'yes') {
-            $required = $this->get_option('birthdate_required');
-            $fieldName = str_replace("pay_gateway_", "birthdate_", $this->getId());
-
-            echo esc_html(__('Birthdate: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<input name="' . $fieldName . '" id="' . $fieldName . '">';
-
-            $js = 'jQuery("#' . $fieldName . '").css("width","125px").datepicker({ changeMonth: true, changeYear: true, yearRange:"-100:+0", dateFormat: "dd-mm-yy"});';
-            wp_enqueue_style('jquery-ui', PPMFWC_PLUGIN_URL . 'assets/css/jquery-ui.min.css');
-            wp_enqueue_script('jquery-ui-datepicker');
-
-            if ($required == 'yes') {
-                $js .= 'jQuery("#place_order").click(function(e){if (!jQuery("#' . $fieldName . '").val() && jQuery("input[name=payment_method]:checked").val() == "' . $this->getId() . '"){e.preventDefault();alert("Please select a date of birth before finishing the transaction!");}})';
-            }
-
-            echo "
-                <script type='text/javascript'>
-                    jQuery(document).ready(function(){
-                        " . $js . "
-                    });
-                </script>
-            ";
+            $fieldName = $this->getId() . '_birthdate';
+            echo esc_html(__('Date of birth: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) .'<input class="paydate" placeholder="dd-mm-yyyy" name="' . $fieldName . '" id="' . $fieldName . '">';
         }
     }
 
-    
+    /**
+     * @param int $order_id
+     * @return array
+     */
     public function process_payment($order_id)
     {
-        /** @var $wpdb wpdb The database */
-        $order = new WC_Order($order_id);
-        $transactionFailed = false;
-        $payTransaction = false;
-        $paymentOption = null;
+        $paymentOption = $this->getOptionId();
 
-        try {
+        try
+        {
+            $dobRequired = $this->get_option('birthdate_required');
+            if ($dobRequired == 'yes') {
+                $birthdate = PPMFWC_Helper_Data::getPostTextField($this->getId() . '_birthdate');
+                if (empty($birthdate) || strlen(trim($birthdate)) != 10) {
+                    $message = esc_html(__('Please enter your date of birth, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+                    throw new PPMFWC_Exception_Notice($message);
+                }
+            }
+
+            /** @var $wpdb wpdb The database */
+            $order = new WC_Order($order_id);
             $payTransaction = $this->startTransaction($order);
-            $paymentOption = $this->getOptionId();
-        } catch (Exception $e) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error: ' . esc_html($e->getMessage()), null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
-            $transactionFailed = true;
-        }
 
-        if(!$payTransaction || $transactionFailed) {
             if(empty($payTransaction)) {
                 # We want to know when no exception was thrown and startTransaction returned empty
-                PPMFWC_Helper_Data::ppmfwc_payLogger('startTransaction returned false', null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
+                PPMFWC_Helper_Data::ppmfwc_payLogger('startTransaction returned false or empty', null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
+                throw new Exception('Could not start payment');
             }
+
+            $order->add_order_note(sprintf(esc_html(__('PAY.: Transaction started: %s (%s)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payTransaction->getTransactionId(), $order->get_payment_method_title()));
+
+            if ($this->slowConfirmation()) {
+                $initial_status = $this->get_option('initial_order_status');
+                $order->update_status($initial_status, sprintf(esc_html(__('Initial status set to %s ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), wc_get_order_status_name($initial_status)));
+                if ($initial_status == self::STATUS_ON_HOLD) {
+                    wc_reduce_stock_levels($order_id);
+                }
+            }
+
+            PPMFWC_Helper_Transaction::newTransaction($payTransaction->getTransactionId(), $paymentOption, $order->get_total(), $order_id, '');
+
+            # Return succes redirect
+            return array(
+              'result'   => 'success',
+              'redirect' => $payTransaction->getRedirectUrl()
+            );
+
+        }
+        catch (PPMFWC_Exception_Notice $e)
+        {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Process payment start notice: ' . $e->getMessage());
+            wc_add_notice($e->getMessage(), 'error');
+        }
+        catch (Exception $e)
+        {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error: ' . esc_html($e->getMessage()), null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
             wc_add_notice(esc_html(__('Could not initiate payment. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
-            return;
         }
-
-        $order->add_order_note(sprintf(esc_html(__('PAY.: Transaction started: %s (%s)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payTransaction->getTransactionId(), $order->get_payment_method_title()));
-
-        if ($this->slowConfirmation()) {
-            $initial_status = $this->get_option('initial_order_status');
-
-            $order->update_status($initial_status, sprintf(esc_html(__('Initial status set to %s ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), wc_get_order_status_name($initial_status)));
-            if ($initial_status == self::STATUS_ON_HOLD) {
-                # Reduce stock levels
-                wc_reduce_stock_levels($order_id);
-            }
-        }
-
-        PPMFWC_Helper_Transaction::newTransaction($payTransaction->getTransactionId(), $paymentOption, $order->get_total(), $order_id, '');
-
-        # Return succes redirect
-        return array(
-            'result'   => 'success',
-            'redirect' => $payTransaction->getRedirectUrl()
-        );
     }
 
     /**
@@ -416,7 +411,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'emailAddress' => $order->get_billing_email()
             );
 
-            $enduser['birthDate'] = $this->getBirthDate($pay_paymentOptionId);
+            $enduser['birthDate'] = $this->getCustomBirthdate();
             $enduser['company'] = array(
               'name' => $order->get_billing_company(),
               'countryCode' => $billing_country
@@ -498,37 +493,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         return $payTransaction;
     }
 
-    /**
-     * @param $ppid
-     * @return string
-     */
-    private function getBirthDate($ppid)
-    {
-            switch ($ppid) {
-                case 1672:
-                    $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_billink');
-                    break;
-                case 1774:
-                    $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_capayble');
-                    break;
-                case 1813:
-                    $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_capayblegespreid');
-                    break;
-                case 1717:
-                    $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_klarna');
-                    break;
-                case 739:
-                    $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_afterpay');
-                    break;
-                case 1877:
-                    $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_yehhpay');
-                    break;
-                default:
-                    $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate');
-                    break;
-            }
 
-            return empty($birthdate) ? null : $birthdate;
+    /**
+     * @return false|string|null
+     */
+    private function getCustomBirthdate()
+    {
+        $birthdate = PPMFWC_Helper_Data::getPostTextField($this->getId() . '_birthdate');
+        return empty($birthdate) ? null : $birthdate;
     }
 
     /**
