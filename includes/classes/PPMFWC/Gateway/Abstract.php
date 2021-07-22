@@ -522,8 +522,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         \Paynl\Config::setApiToken(self::getApiToken());
         \Paynl\Config::setServiceId(self::getServiceId());
 
-        if (!empty(trim(self::getApiBase()))) {
-            \Paynl\Config::setApiBase(trim(self::getApiBase()));
+        $failOver = trim(self::getApiBase());
+        if (!empty($failOver) && strlen($failOver) > 12) {
+            \Paynl\Config::setApiBase($failOver);
         }
 
         $tokenCode = self::getTokenCode();
