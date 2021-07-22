@@ -183,7 +183,7 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 == Changelog ==
 = 3.6.2 =
 Updated internal functionality
-Fixed a refund issue in combination with authorized transactions
+Fixed a refund issue which occured with authorized payments
 Added a security failover option
 = 3.6.1 =
 Added option to disable refund processing for refunds initiated from PAY. admin
