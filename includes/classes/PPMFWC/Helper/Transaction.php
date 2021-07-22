@@ -31,7 +31,7 @@ class PPMFWC_Helper_Transaction
         global $wpdb;
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
         $result = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE order_id = %s  AND status IN ('SUCCESS', 'REFUND') ", $orderId), ARRAY_A
+            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE order_id = %s  AND status IN ('SUCCESS', 'REFUND', 'AUTHORIZE') ", $orderId), ARRAY_A
         );
         if (!empty($result))
         {
