@@ -278,7 +278,7 @@ class PPMFWC_Gateways
             'name' => esc_html(__('Failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'text',
             'placeholder' => '',
-            'desc' => 'Only fill this in when we at PAY. provide you with a gateway to fill in here',
+            'desc' => esc_html(__('Leave empty. Unless PAY. provides you with a failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_failover_gateway',
         );
         $addedSettings[] = array(
