@@ -70,31 +70,6 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     add_action('woocommerce_admin_order_data_after_billing_address', 'ppmfwc_vat_number_display_admin_order_meta', 10, 1);
   }
 
-    add_action('woocommerce_checkout_process', 'is_phhone');
-
-    function is_phone()
-    {
-        $birthdate = PPMFWC_Helper_Data::getPostTextField('birthdate_klarna');
-        $pm = PPMFWC_Helper_Data::getPostTextField('payment_method');
-
-        if($pm == 'pay_gateway_klarna')
-        {
-            $required = true;
-
-            if(empty($birthdate) && $required)
-            {
-                wc_add_notice( __( 'Your dob is requred.' ), 'error');
-            }
-
-            wc_add_notice(__('error anyway'), 'error');
-        }
-        else {
-
-            wc_add_notice(__('this not klarna, so good'), 'notice');
-        }
-
-    }
-
   if(get_option('paynl_show_coc_number') == "yes") {
     add_action('woocommerce_before_order_notes', 'ppmfwc_cocField');
     add_action('woocommerce_checkout_update_order_meta', 'ppmfwc_checkout_coc_number_update_order_meta');
