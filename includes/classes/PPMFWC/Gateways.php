@@ -375,7 +375,13 @@ class PPMFWC_Gateways
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
         } elseif ($newStatus == PPMFWC_Gateways::STATUS_DENIED)
         {
-            wc_add_notice(esc_html(__('Payment denied. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
+            $methodName = $order->get_payment_method_title();
+            if (!empty($methodName)) {
+                wc_add_notice(esc_html(sprintf(__('Unfortenately the payment has been denied by %s. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $methodName)), 'error');
+            } else {
+                wc_add_notice(esc_html(sprintf(__('Unfortenately the payment has been denied by the payment method. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $methodName)), 'error');
+            }
+
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_DENIED, wc_get_checkout_url());
         } elseif ($newStatus == PPMFWC_Gateways::STATUS_PENDING)
         {
