@@ -282,6 +282,13 @@ class PPMFWC_Gateways
             'id' => 'paynl_failover_gateway',
         );
         $addedSettings[] = array(
+            'name' => esc_html(__('Order description prefix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'type' => 'text',
+            'placeholder' => '',
+            'desc' => esc_html(__('Change the order description prefix here. If left empty the order description will just be the order number.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'id' => 'paynl_order_description_prefix',
+        );
+        $addedSettings[] = array(
             'type' => 'sectionend',
             'id' => 'paynl_global_settings',
         );
