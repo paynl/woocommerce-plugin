@@ -387,9 +387,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             return false;
         }
 
-        if (!empty(get_option('paynl_order_description_prefix'))){
+        if (!empty(get_option('paynl_order_description_prefix'))) {
             $prefix = get_option('paynl_order_description_prefix');
-        }else{
+        } else {
             $prefix = '';
         }
 
