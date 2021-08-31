@@ -155,24 +155,24 @@ class PPMFWC_Gateways
         $addedSettings[] = array(
             'title' => esc_html(__('PAY. settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'title',
-            'desc' => '<p>' . $loadedPaymentMethods . '</p><p style="margin-top: 25px;">' . esc_html(__('The following options are required to use the PAY. Payment Gateway and are used by all PAY. Payment Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)). '</p>',
+            'desc' => '<p>' . $loadedPaymentMethods . '</p><p style="margin-top: 25px;">' . esc_html(__('Not registered at PAY? Sign up', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register">here</a>!</p>',
             'id' => 'paynl_global_settings',
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('Token Code', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html(__('Token Code *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'placeholder' => 'AT-####-####',
             'type' => 'text',
             'desc' => esc_html(__('The AT-code belonging to your token, you can find this ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
             'id' => 'paynl_tokencode',
         );
         $addedSettings[] = array(
-            'name' => esc_html( __('Api token', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html( __('Api token *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'text',
             'desc' => esc_html(__('The api token used to communicate with the PAY. API, you can find your token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)).'<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
             'id' => 'paynl_apitoken',
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('Service id', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html(__('Service id *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'placeholder' => 'SL-####-####',
             'type' => 'text',
             'desc' => esc_html(__('The serviceid to identify your website, you can find your serviceid here ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)). '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
