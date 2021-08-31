@@ -145,7 +145,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 $showForCompanyDefault = 'private';
             }
             $this->form_fields['show_for_company'] = array(
-                'title'       => esc_html(__('Show for company', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'title'       => esc_html(__('Customer type', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type'        => 'select',
                 'options'     => array(
                     'both' => esc_html(__('Show for both', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -154,7 +154,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 ),
                 'default'     => $showForCompanyDefault,
                 /* translators: Placeholder 1: Default order status, placeholder 2: Link to 'Hold Stock' setting */
-                'description' => esc_html(__('Allow payment method to be used for companies, private, or both.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+                'description' => esc_html(__('Allow payment method to be used for companies, private or both.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
             );
             if ($this->showAuthorizeSetting()) {
                 $this->form_fields['authorize_status'] = array(

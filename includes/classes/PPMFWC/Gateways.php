@@ -286,9 +286,9 @@ class PPMFWC_Gateways
             'id' => 'paynl_global_settings',
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('Show for company', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html(__('Customer type', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'select',            
-            'desc' => esc_html(__('Allow payment method to be used for companies, private, or both.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'desc' => esc_html(__('Allow payment method to be used for companies, private or both.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'show_for_company',
         );
         foreach ($settings as $setting) {

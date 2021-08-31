@@ -142,8 +142,21 @@ function ppmfwc_payStyle()
 function ppmfwc_payScript()
 {
   if (is_checkout() == true) {
-    wp_register_script('ppmfwc_checkout_script', PPMFWC_PLUGIN_URL . 'assets/js/paycheckout.js');
-    wp_enqueue_script('ppmfwc_checkout_script');
+    //Check if a setting has private or buisiness only
+    $gateways = WC()->payment_gateways->get_available_payment_gateways();
+    $enabled_gateways = [];
+    if ($gateways) {
+      foreach ($gateways as $gateway) {
+        if ($gateway->enabled == 'yes') {
+          if (!empty($gateway->settings['show_for_company']) && $gateway->settings['show_for_company'] != 'both') {
+            //Register the javascript
+            wp_register_script('ppmfwc_checkout_script', PPMFWC_PLUGIN_URL . 'assets/js/paycheckout.js');
+            wp_enqueue_script('ppmfwc_checkout_script');
+            break;
+          }
+        }
+      }
+    }
   }
 }
 
