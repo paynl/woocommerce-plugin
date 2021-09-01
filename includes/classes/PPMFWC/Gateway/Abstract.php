@@ -387,6 +387,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             return false;
         }
 
+        if (!empty(get_option('paynl_order_description_prefix'))) {
+            $prefix = get_option('paynl_order_description_prefix');
+        } else {
+            $prefix = '';
+        }
 
         $startData = array(
             'amount'        => $order->get_total(),
@@ -395,7 +400,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             'orderNumber'   => $order->get_order_number(),
             'paymentMethod' => $pay_paymentOptionId,
             'currency'      => $currency,
-            'description'   => $order->get_order_number(),
+            'description'   => $prefix . $order->get_order_number(),
             'extra1'        => apply_filters('paynl-extra1', $order->get_order_number(), $order),
             'extra2'        => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
             'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
