@@ -155,7 +155,7 @@ class PPMFWC_Gateways
         $addedSettings[] = array(
             'title' => esc_html(__('PAY. settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'title',
-            'desc' => '<p>' . $loadedPaymentMethods . '</p><p style="margin-top: 25px;">' . esc_html(__('Not registered at PAY? Sign up', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register">here</a>!</p>',
+            'desc' => '<p>' . $loadedPaymentMethods . '</p><p style="margin-top: 25px;">' . esc_html(__('Not registered at PAY? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register">here</a>!</p>',
             'id' => 'paynl_global_settings',
         );
         $addedSettings[] = array(
