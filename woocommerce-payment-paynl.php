@@ -149,7 +149,7 @@ function ppmfwc_payScript()
         if ($gateway->enabled == 'yes') {
           if (!empty($gateway->settings['show_for_company']) && $gateway->settings['show_for_company'] != 'both') {
             //Register the javascript
-            wp_register_script('ppmfwc_checkout_script', PPMFWC_PLUGIN_URL . 'assets/js/paycheckout.js');
+            wp_register_script('ppmfwc_checkout_script', PPMFWC_PLUGIN_URL . 'assets/js/paycheckout.js', array('jquery'), '1.0', true);
             wp_enqueue_script('ppmfwc_checkout_script');
             break;
           }

@@ -285,12 +285,7 @@ class PPMFWC_Gateways
             'type' => 'sectionend',
             'id' => 'paynl_global_settings',
         );
-        $addedSettings[] = array(
-            'name' => esc_html(__('Customer type', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'select',            
-            'desc' => esc_html(__('Allow payment method to be used for companies, private or both.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'show_for_company',
-        );
+        
         foreach ($settings as $setting) {
             if (isset($setting['id']) && $setting['id'] == 'payment_gateways_options' && $setting['type'] != 'sectionend') {
                 $updatedSettings = array_merge($updatedSettings, $addedSettings);
