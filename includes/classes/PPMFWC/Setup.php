@@ -67,7 +67,7 @@ class PPMFWC_Setup
         if (empty(get_option('paynl_order_description_prefix'))) {
             update_option('paynl_order_description_prefix', 'Order:');
         }
-        if (is_multisite() && is_plugin_active_for_network('woocommerce-paynl-payment-methods/woocommerce-payment-paynl.php')) {
+        if (is_multisite()) {
             global $wpdb, $blog_id;
             $dbquery = 'SELECT blog_id FROM ' . $wpdb->blogs;
             $ids = $wpdb->get_col($dbquery);
