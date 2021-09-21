@@ -143,7 +143,7 @@ function ppmfwc_payScript()
 {
   if (is_checkout() == true) {
     //Check if a setting has private or buisiness only
-    $gateways = WC()->payment_gateways->get_available_payment_gateways();
+    $gateways = WC()->payment_gateways->payment_gateways();
     if ($gateways) {
       foreach ($gateways as $gateway) {
         if ($gateway->enabled == 'yes') {
