@@ -7,7 +7,6 @@ jQuery(function ($) {
                 data:		$('form.checkout').serialize() + '&updatecustomer=true',
                 dataType:   'json',
                 success:	function( result ) {                  
-                    console.log(result); 
                     $(document.body).trigger('update_checkout');
                 }
             });
