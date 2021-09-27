@@ -22,6 +22,7 @@ Payment Service Provider PAY. offers online payment options for webshops and web
 With PAY. you can add the following payment options to your website:
 
 * AfterPay
+* Afterpay International
 * Alipay
 * Amazon Pay
 * American Express (AMEX)
@@ -112,6 +113,7 @@ If you need our help, please email us at: support[at]pay.nl
 At the moment the plugin supports the following payment methods:
 
 * AfterPay
+* Afterpay International
 * Amazon Pay
 * American Express (AMEX)
 * Apple Pay
