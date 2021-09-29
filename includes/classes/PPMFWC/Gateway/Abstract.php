@@ -140,6 +140,22 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     ),
                 );
             }
+            $showForCompanyDefault = 'both';
+            if (in_array($optionId, array(1717, 2265))) {
+                $showForCompanyDefault = 'private';
+            }
+            $this->form_fields['show_for_company'] = array(
+                'title'       => esc_html(__('Customer type', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type'        => 'select',
+                'options'     => array(
+                    'both' => esc_html(__('Show for both', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'private' => esc_html(__('Private only', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'business' => esc_html(__('Businesses only', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                ),
+                'default'     => $showForCompanyDefault,
+                /* translators: Placeholder 1: Default order status, placeholder 2: Link to 'Hold Stock' setting */
+                'description' => esc_html(__('Allow payment method to be used for companies, private or both.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+            );
             if ($this->showAuthorizeSetting()) {
                 $this->form_fields['authorize_status'] = array(
                   'title'       => esc_html( __('Authorize status', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -274,6 +290,12 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             if (!empty($max_amount) && $orderTotal > (float)$max_amount) {
                 return false;
             }
+            if (strlen(WC()->customer->get_billing_company()) > 0 && $this->get_option('show_for_company') == 'private') {
+                return false;
+            }
+            if (strlen(WC()->customer->get_billing_company()) == 0 && $this->get_option('show_for_company') == 'business') {
+                return false;
+            }
         }
 
         return true;
@@ -302,6 +324,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         try
         {
+            if (PPMFWC_Helper_Data::getPostTextField('updatecustomer')) {
+                throw new PPMFWC_Exception_Notice('Updated customer data');
+            }
+
             $dobRequired = $this->get_option('birthdate_required');
             if ($dobRequired == 'yes') {
                 $birthdate = PPMFWC_Helper_Data::getPostTextField($this->getId() . '_birthdate');
