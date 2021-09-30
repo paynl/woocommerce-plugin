@@ -4,9 +4,9 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wechatpay, paypal, creditcard, mybank, sofortbanking, afterpay, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
-Stable tag: 3.6.2
-Tested up to: 5.8.0
-WC tested up to: 5.5.2
+Stable tag: 3.7.0
+Tested up to: 5.8.1
+WC tested up to: 5.7.1
 WC requires at least: 3.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -22,7 +22,7 @@ Payment Service Provider PAY. offers online payment options for webshops and web
 With PAY. you can add the following payment options to your website:
 
 * AfterPay
-* Afterpay International
+* AfterPay International
 * Alipay
 * Amazon Pay
 * American Express (AMEX)
@@ -113,7 +113,7 @@ If you need our help, please email us at: support[at]pay.nl
 At the moment the plugin supports the following payment methods:
 
 * AfterPay
-* Afterpay International
+* AfterPay International
 * Amazon Pay
 * American Express (AMEX)
 * Apple Pay
@@ -183,6 +183,13 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 4. The iDEAL payment screen (Rabobank)
 
 == Changelog ==
+= 3.7.0 =
+Added option for post payment methods to filter out checkout methods based on customer-type
+Added option to prefix orderdescription
+Added PAY-register link to settings
+Optional date-of-birth field is now of type date
+Fixed a minor multistore issue
+Added method AfterPay International
 = 3.6.2 =
 Updated internal functionality
 Fixed a refund issue which occured with authorized payments
