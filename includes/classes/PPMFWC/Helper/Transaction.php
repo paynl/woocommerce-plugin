@@ -180,7 +180,7 @@ class PPMFWC_Helper_Transaction
                     $initialMethod = $order->get_payment_method();
                     $usedMethod = PPMFWC_Gateways::ppmfwc_getGateWayById($methodid);
 
-                    if (!empty($usedMethod) && $usedMethod->getId() != $initialMethod) {
+                    if (!empty($usedMethod) && $usedMethod->getId() != $initialMethod && get_option('paynl_payment_method_display') == 0) {
                         PPMFWC_Helper_Data::ppmfwc_payLogger('Changing payment method', $transactionId, array('usedMethod' => $usedMethod->getId(), 'method' => $initialMethod));
                         try {
                             $order->set_payment_method($usedMethod->getId());

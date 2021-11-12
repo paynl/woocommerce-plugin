@@ -290,6 +290,14 @@ class PPMFWC_Gateways
             'id' => 'paynl_order_description_prefix',
         );
         $addedSettings[] = array(
+            'name' => esc_html(__('Payment method display', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'type' => 'select',
+            'options' => array( 0 => esc_html(__('Last used', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 1 => esc_html(__('Initial', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))),
+            'desc' => esc_html(__('Select which payment method should be displayed in an order.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'id' => 'paynl_payment_method_display',
+            'default' => 'Auto',
+        );
+        $addedSettings[] = array(
             'type' => 'sectionend',
             'id' => 'paynl_global_settings',
         );
