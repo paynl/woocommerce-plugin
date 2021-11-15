@@ -28,7 +28,7 @@
   Multibanco | Wijncadeau | Yourgift | Creditclick | Payconiq
   EPS-Überweising |  | Paysafecard |  | Alipay
   Trustly |  | Good4fun  |  | Phone payments
-   |  |  |  |  | Manual transfer
+   |  |  | Biercheque |  | Manual transfer
    |  |  |  |  | Incasso
    |  |  |  |  | Google Pay
   

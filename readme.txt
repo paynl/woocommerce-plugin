@@ -28,6 +28,7 @@ With PAY. you can add the following payment options to your website:
 * American Express (AMEX)
 * Apple Pay
 * Bancontact
+* Biercheque
 * Billink
 * Capayable
 * CartaSi
