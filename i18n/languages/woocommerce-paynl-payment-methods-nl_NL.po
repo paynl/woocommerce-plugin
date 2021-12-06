@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
 "POT-Creation-Date: 2021-12-06 15:35+0100\n"
-"PO-Revision-Date: 2021-12-06 15:42+0100\n"
+"PO-Revision-Date: 2021-12-06 16:23+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -368,7 +368,7 @@ msgstr "Test Modus"
 
 #: includes/classes/PPMFWC/Gateways.php:187
 msgid "Check this box if you want to enable test mode"
-msgstr "Selecteer deze optie betalingen via testmodus te laten verlopen"
+msgstr "Selecteer deze optie om betalingen via testmodus te laten verlopen"
 
 #: includes/classes/PPMFWC/Gateways.php:192
 msgid "SSL Verify Peer"
