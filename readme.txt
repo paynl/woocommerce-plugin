@@ -120,6 +120,7 @@ At the moment the plugin supports the following payment methods:
 * Apple Pay
 * Bancontact
 * Billink
+* Biercheque
 * Capayable
 * CartaSi
 * Cartebleue
@@ -185,8 +186,8 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 
 == Changelog ==
 = 3.8.0 =
-Added payment methd Biercheque
-Added setting for optionally changing the behaviour of saving the used payment order within an order.
+Added payment method Biercheque
+Added setting for optionally changing the behaviour of saving the used payment method within an order.
 = 3.7.0 =
 Added option for post payment methods to filter out checkout methods based on customer-type
 Added option to prefix orderdescription
