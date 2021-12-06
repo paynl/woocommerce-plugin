@@ -133,15 +133,15 @@ class PPMFWC_Gateways
                     $error = '';
                 }
             } else if (strlen($current_apitoken . $current_serviceid) == 0) {
-                $error = __('API token and Service id are required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $error = __('API-token and Service id are required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             } else if (strlen($current_apitoken) == 0) {
-                $error = __('API token is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $error = __('API-token is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             } else if (strlen($current_serviceid) == 0) {
                 $error = __('Service id is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             }
 
             if ($error == 'HTTP/1.0 401 Unauthorized') {
-                $error = __('API token is invalid.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $error = __('API-token is invalid.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             }
             if ($error == 'PAY-404 - Service not found') {
                 $error = __('Service id is invalid.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
@@ -168,13 +168,13 @@ class PPMFWC_Gateways
             'id' => 'paynl_tokencode',
         );
         $addedSettings[] = array(
-            'name' => esc_html( __('Api token *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html( __('API-token *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'text',
-            'desc' => esc_html(__('The api token used to communicate with the PAY. API, you can find your token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)).'<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
+            'desc' => esc_html(__('The API-token used to communicate with the PAY. API, you can find your API-token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)).'<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
             'id' => 'paynl_apitoken',
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('Service id *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html(__('Service ID *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'placeholder' => 'SL-####-####',
             'type' => 'text',
             'desc' => esc_html(__('The serviceid to identify your website, you can find your serviceid here ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)). '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
@@ -182,7 +182,7 @@ class PPMFWC_Gateways
             'desc_tip' => __('The serviceid should be in the following format: SL-xxxx-xxxx', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('Test mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html(__('Test Mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'checkbox',
             'desc' => esc_html(__('Check this box if you want to enable test mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_test_mode',
@@ -196,35 +196,35 @@ class PPMFWC_Gateways
             'default' => 'yes',
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('Send order data', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html(__('Send Order Data', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'checkbox',
             'desc' => esc_html(__('Check this box if you want to send the order data to PAY., this is required if you want use \'Pay after delivery\' paymentmethods ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_send_order_data',
             'default' => 'yes',
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('Show VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html(__('Show VAT Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'checkbox',
             'desc' => esc_html(__('Check this box if you want to show VAT number in checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_show_vat_number',
             'default' => 'no',
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('Show COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html(__('Show COC Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'checkbox',
             'desc' => esc_html(__('Check this box if you want to show COC number in checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_show_coc_number',
             'default' => 'no',
         );
         $addedSettings[] = array(
-            'name' => __('Use high risk methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => __('Use High Risk Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'checkbox',
             'desc' => esc_html(__("Check this box if you are using high risk payment methods", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_high_risk',
             'default' => 'no',
         );
         $addedSettings[] = array(
-            'name' => __('Payment screen language', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => __('Payment Screen Language', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'select',
             'options' => PPMFWC_Helper_Data::ppmfwc_getAvailableLanguages(),
             'desc' => esc_html(__('This is the language in which the payment screen will be shown', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -232,7 +232,7 @@ class PPMFWC_Gateways
             'default' => 'nl',
         );
         $addedSettings[] = array(
-            'name' => __('Show payment method logos', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => __('Show Payment Method Logos', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'select',
             'options' => PPMFWC_Helper_Data::ppmfwc_getLogoSizes(),
             'desc' => esc_html(__('This is the size in which the payment method logos will be shown', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -240,7 +240,7 @@ class PPMFWC_Gateways
             'default' => 'Auto',
         );
         $addedSettings[] = array(
-            'name' => __('Standard PAY. style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => __('Standard PAY. Style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'checkbox',
             'desc' => esc_html(__('Check this box if you want to use the standard PAY. style in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_standard_style',
@@ -254,7 +254,7 @@ class PPMFWC_Gateways
           'default' => 'yes',
         );
        $addedSettings[] = array(
-          'name' => __('Refund processing', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+          'name' => __('Refund Processing', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
           'type' => 'checkbox',
           'desc' => esc_html(__("Process refunds initiated from PAY admin", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
           'id' => 'paynl_externalrefund',
@@ -277,24 +277,24 @@ class PPMFWC_Gateways
             'default' => 'no',
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('Failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html(__('Failover Gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'text',
             'placeholder' => '',
             'desc' => esc_html(__('Leave empty. Unless PAY. provides you with a failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_failover_gateway',
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('Order description prefix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html(__('Order Description Prefix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'text',
             'placeholder' => '',
-            'desc' => esc_html(__('Change the order description prefix here. If left empty the order description will just be the order number.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'desc' => esc_html(__('Optionally add a custom order description prefix. If left empty, the order description will just be the order number.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_order_description_prefix',
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('Payment method display', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html(__('Follow Payment Method', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'select',
-            'options' => array(0 => esc_html(__('Last used', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 1 => esc_html(__('Initial', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))),
-            'desc' => esc_html(__('Select which payment method should be displayed in an order.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'options' => array(0 => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 1 => esc_html(__('Yes', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))),
+            'desc' => esc_html(__('When `Yes`, the order will be updated with the actual used payment method in case this method differs from the initial method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_payment_method_display',
             'default' => 'Auto',
         );
