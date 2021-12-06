@@ -296,7 +296,7 @@ class PPMFWC_Gateways
             'options' => array(0 => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 1 => esc_html(__('Yes', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))),
             'desc' => esc_html(__('When `Yes`, the order will be updated with the actual used payment method in case this method differs from the initial method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_payment_method_display',
-            'default' => 'Auto',
+            'default' => 1,
         );
         $addedSettings[] = array(
             'type' => 'sectionend',
