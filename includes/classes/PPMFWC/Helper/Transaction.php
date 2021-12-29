@@ -180,14 +180,18 @@ class PPMFWC_Helper_Transaction
                     $initialMethod = $order->get_payment_method();
                     $usedMethod = PPMFWC_Gateways::ppmfwc_getGateWayById($methodid);
 
-                    if (!empty($usedMethod) && $usedMethod->getId() != $initialMethod && get_option('paynl_payment_method_display') == 0 && PPMFWC_Helper_Data::isOptionAvailable($usedMethod->getOptionId())) {
-                        PPMFWC_Helper_Data::ppmfwc_payLogger('Changing payment method', $transactionId, array('usedMethod' => $usedMethod->getId(), 'method' => $initialMethod));
-                        try {
-                            $order->set_payment_method($usedMethod->getId());
-                            $order->set_payment_method_title($usedMethod->getName());
-                            $order->add_order_note(sprintf(esc_html(__('PAY.: Changed method to %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $usedMethod->getName()));
-                        } catch (Exception $e) {
-                            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not update new method names: ' . $e->getMessage(), $transactionId);
+                    if (!empty($usedMethod) && $usedMethod->getId() != $initialMethod && get_option('paynl_payment_method_display') == 1) {
+                        if (PPMFWC_Helper_Data::isOptionAvailable($usedMethod->getOptionId())) {
+                            PPMFWC_Helper_Data::ppmfwc_payLogger('Changing payment method', $transactionId, array('usedMethod' => $usedMethod->getId(), 'method' => $initialMethod));
+                            try {
+                                $order->set_payment_method($usedMethod->getId());
+                                $order->set_payment_method_title($usedMethod->getName());
+                                $order->add_order_note(sprintf(esc_html(__('PAY.: Changed method to %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $usedMethod->getName()));
+                            } catch (Exception $e) {
+                                PPMFWC_Helper_Data::ppmfwc_payLogger('Could not update new method names: ' . $e->getMessage(), $transactionId);
+                            }
+                        } else {
+                            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not change method, option is not available: ' . $usedMethod->getOptionId(), $transactionId);
                         }
                     }
 
