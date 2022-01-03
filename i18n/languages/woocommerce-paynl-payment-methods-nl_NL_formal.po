@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
 "POT-Creation-Date: 2021-12-06 15:43+0100\n"
-"PO-Revision-Date: 2021-12-06 15:52+0100\n"
+"PO-Revision-Date: 2022-01-03 17:53+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -504,7 +504,7 @@ msgstr "Voeg optioneel een prefix toe aan uw order omschrijving."
 
 #: includes/classes/PPMFWC/Gateways.php:294
 msgid "Follow Payment Method"
-msgstr "Toon Logo's Betaalmethoden"
+msgstr "Volg betaalmethode"
 
 #: includes/classes/PPMFWC/Gateways.php:296
 msgid "No"
