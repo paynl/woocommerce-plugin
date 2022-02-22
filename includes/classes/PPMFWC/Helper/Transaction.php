@@ -119,14 +119,15 @@ class PPMFWC_Helper_Transaction
 
         $transaction = \Paynl\Transaction::status($transactionId);
 
-        $paidCurrencyAmount = $transaction->getCurrencyAmount();
+        $transactionPaid = [
+            $transaction->getCurrencyAmount(),
+            $transaction->getPaidCurrencyAmount(),
+            $transaction->getPaidAmount(),
+        ];
+
         $data = $transaction->getData();
         $internalPAYSatus = $data['paymentDetails']['state'];
         $payApiStatus = PPMFWC_Gateways::ppmfwc_getStatusFromStatusId($internalPAYSatus);
-
-        if ($transaction->isAuthorized()) {
-            $paidCurrencyAmount = $transaction->getCurrencyAmount();
-        }
 
         if ($localTransactionStatus != $payApiStatus) {
             self::updateStatus($transactionId, $payApiStatus);
@@ -157,8 +158,8 @@ class PPMFWC_Helper_Transaction
             case PPMFWC_Gateways::STATUS_SUCCESS:
 
                 # Check the amount
-                if ($order->get_total() != $paidCurrencyAmount && $order->get_total() != $transaction->getPaidAmount()) {
-                    $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $paidCurrencyAmount . ' / ' . $transaction->getPaidAmount(), $order->get_total()));
+                if (!in_array($order->get_total(), $transactionPaid)) {
+                    $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), implode(' / ', $transactionPaid), $order->get_total()));
                 } else {
                     if ($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE) {
                         $method = $order->get_payment_method();
