@@ -119,7 +119,7 @@ class PPMFWC_Helper_Transaction
 
         $transaction = \Paynl\Transaction::status($transactionId);
 
-        $paidCurrencyAmount = $transaction->getPaidCurrencyAmount();
+        $paidCurrencyAmount = $transaction->getCurrencyAmount();
         $data = $transaction->getData();
         $internalPAYSatus = $data['paymentDetails']['state'];
         $payApiStatus = PPMFWC_Gateways::ppmfwc_getStatusFromStatusId($internalPAYSatus);
