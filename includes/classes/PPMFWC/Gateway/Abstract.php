@@ -464,13 +464,23 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $billingAddress  = $order->get_billing_address_1() . ' ' . $order->get_billing_address_2();
             $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
 
-            $address = array(
-                'streetName'  => $aShippingAddress[0],
-                'houseNumber' => $aShippingAddress[1],
-                'zipCode'     => $order->get_shipping_postcode(),
-                'city'        => $order->get_shipping_city(),
-                'country'     => $order->get_shipping_country()
-            );
+            if ($order->get_shipping_address_1() == '' && $order->get_shipping_address_2() == '') {
+                $address = array(
+                    'streetName'  => $aBillingAddress[0],
+                    'houseNumber' => $aBillingAddress[1],
+                    'zipCode'     => $order->get_billing_postcode(),
+                    'city'        => $order->get_billing_city(),
+                    'country'     => $billing_country,
+                );
+            } else{
+                $address = array(
+                    'streetName'  => $aShippingAddress[0],
+                    'houseNumber' => $aShippingAddress[1],
+                    'zipCode'     => $order->get_shipping_postcode(),
+                    'city'        => $order->get_shipping_city(),
+                    'country'     => $order->get_shipping_country()
+                );
+            }
 
 
             if ($this->useInvoiceAddressAsShippingAddress() && $this->get_option('use_invoice_address') == 'yes') {
