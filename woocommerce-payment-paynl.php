@@ -225,6 +225,9 @@ function ppmfwc_auto_capture($order_id, $old_status, $new_status)
         $transactionId = $order->get_transaction_id();
         $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($transactionId);
 
+        $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-capture on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
+
+
         # Get transaction and make sure its status is Authorized
         if (!empty($transactionLocalDB['status']) && $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE) {
             try {
