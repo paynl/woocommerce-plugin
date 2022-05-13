@@ -223,11 +223,6 @@ function ppmfwc_auto_capture($order_id, $old_status, $new_status)
     if ($new_status == "completed") {
         $order = new WC_Order($order_id);
         $transactionId = $order->get_transaction_id();
-
-        if (empty($transactionId)) {
-            $transactionId = $order->get_meta_data()[1]->get_data()['value'];
-        }
-
         $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($transactionId);
 
         # Get transaction and make sure its status is Authorized

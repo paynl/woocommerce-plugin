@@ -518,7 +518,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
           'method' => $this->get_method_title(),
           'wc-order-id' => $order_id));
 
-        $order->update_meta_data('transactionId', $payTransaction->getTransactionId());
+        $order->update_meta_data('_transaction_id', $payTransaction->getTransactionId());
         $order->save();
 
         return $payTransaction;
