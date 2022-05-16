@@ -194,7 +194,7 @@ class PPMFWC_Helper_Transaction
 
                     if ($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE && !empty($order->get_transaction_id())) {
                         $order->save();
-                    }else{
+                    } else {
                         $order->payment_complete($transactionId);
                         $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
                     }
