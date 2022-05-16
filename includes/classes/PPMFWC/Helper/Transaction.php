@@ -167,9 +167,11 @@ class PPMFWC_Helper_Transaction
                                 throw new PPMFWC_Exception_Notice('Order is already ' . $auth_status);
                             }
 
+                            $order->set_transaction_id($transactionId);
                             $order->update_status($auth_status);
                             $newStatus = $auth_status . ' as configured in settings of ' . $method;
                             $order->add_order_note(sprintf(esc_html(__('PAY.: Order state set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
+                            $order->save();
                             break;
                         }
                     }
