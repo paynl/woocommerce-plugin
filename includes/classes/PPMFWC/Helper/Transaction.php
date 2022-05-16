@@ -171,8 +171,6 @@ class PPMFWC_Helper_Transaction
                             $order->update_status($auth_status);
                             $newStatus = $auth_status . ' as configured in settings of ' . $method;
                             $order->add_order_note(sprintf(esc_html(__('PAY.: Order state set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
-                            $order->save();
-                            break;
                         }
                     }
 
@@ -194,8 +192,12 @@ class PPMFWC_Helper_Transaction
                         }
                     }
 
-                    $order->payment_complete($transactionId);
-                    $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
+                    if ($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE && !empty($order->get_transaction_id())) {
+                        $order->save();
+                    }else{
+                        $order->payment_complete($transactionId);
+                        $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
+                    }
                 }
 
                 update_post_meta($orderId, 'CustomerName', esc_attr($transaction->getAccountHolderName()));
