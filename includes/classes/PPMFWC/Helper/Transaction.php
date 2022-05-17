@@ -160,6 +160,7 @@ class PPMFWC_Helper_Transaction
                     if ($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE) {
                         $method = $order->get_payment_method();
                         $methodSettings = get_option('woocommerce_' . $method . '_settings');
+                        $order->set_transaction_id($transactionId);
 
                         if (!empty($methodSettings['authorize_status'])) {
                             $auth_status = $methodSettings['authorize_status'];
@@ -167,7 +168,6 @@ class PPMFWC_Helper_Transaction
                                 throw new PPMFWC_Exception_Notice('Order is already ' . $auth_status);
                             }
 
-                            $order->set_transaction_id($transactionId);
                             $order->update_status($auth_status);
                             $newStatus = $auth_status . ' as configured in settings of ' . $method;
                             $order->add_order_note(sprintf(esc_html(__('PAY.: Order state set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
@@ -192,7 +192,7 @@ class PPMFWC_Helper_Transaction
                         }
                     }
 
-                    if ($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE && !empty($order->get_transaction_id())) {
+                    if ($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE && !empty($methodSettings['authorize_status'])) {
                         $order->save();
                     } else {
                         $order->payment_complete($transactionId);
