@@ -180,11 +180,9 @@ class PPMFWC_Helper_Transaction
 
                             if ($auth_status == PPMFWC_Gateway_Abstract::STATUS_PROCESSING) {
                                 # Treat as success. So continue, dont break, and set payment as complete...
-                                PPMFWC_Helper_Data::ppmfwc_payLogger('Treat as success. So continue, dont break, and set payment as complete...', $transactionId);
-
                             } else {
                                 # Save transaction and stop further actions
-                                PPMFWC_Helper_Data::ppmfwc_payLogger('setting transid, and break.', $transactionId);
+                                PPMFWC_Helper_Data::ppmfwc_payLogger('Setting transactionId, and break.', $transactionId);
                                 $order->save();
                                 break;
                             }
