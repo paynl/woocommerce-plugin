@@ -160,17 +160,32 @@ class PPMFWC_Helper_Transaction
                     if ($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE) {
                         $method = $order->get_payment_method();
                         $methodSettings = get_option('woocommerce_' . $method . '_settings');
+                        $auth_status = empty($methodSettings['authorize_status']) ? null : $methodSettings['authorize_status'];
 
-                        if (!empty($methodSettings['authorize_status'])) {
-                            $auth_status = $methodSettings['authorize_status'];
-                            if ($wcOrderStatus == $auth_status) {
-                                throw new PPMFWC_Exception_Notice('Order is already ' . $auth_status);
+                        try {
+                            $order->set_transaction_id($transactionId);
+                        } catch (Exception $e) {
+                            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not set transaction_id.', $transactionId);
+                        }
+
+                        # Launch action for custom implementation
+                        do_action('paynl_order_authorised', $order->get_id(), $auth_status);
+
+                        if ($auth_status !== null) {
+                            if ($wcOrderStatus != $auth_status) {
+                                $order->update_status($auth_status);
+                                $newStatus = $auth_status . ' as configured in settings of ' . $method;
+                                $order->add_order_note(sprintf(esc_html(__('PAY.: Authorised order set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
                             }
 
-                            $order->update_status($auth_status);
-                            $newStatus = $auth_status . ' as configured in settings of ' . $method;
-                            $order->add_order_note(sprintf(esc_html(__('PAY.: Order state set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
-                            break;
+                            if ($auth_status == PPMFWC_Gateway_Abstract::STATUS_PROCESSING) {
+                                # Treat as success. So continue, dont break, and set payment as complete...
+                            } else {
+                                # Save transaction and stop further actions
+                                PPMFWC_Helper_Data::ppmfwc_payLogger('Setting transactionId, and break.', $transactionId);
+                                $order->save();
+                                break;
+                            }
                         }
                     }
 
