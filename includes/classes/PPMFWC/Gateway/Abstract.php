@@ -448,23 +448,24 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
               'countryCode' => $billing_country
             );
 
-            if (!empty($_POST['vat_number'])) {
-              $enduser['company']['vatNumber'] = sanitize_text_field($_POST['vat_number']);
+            $vatNumber = PPMFWC_Helper_Data::getPostTextField('vat_number');
+            $cocNumber = PPMFWC_Helper_Data::getPostTextField('coc_number');
+
+            if (!empty($vatNumber)) {
+                $enduser['company']['vatNumber'] = $vatNumber;
             }
-            if (!empty($_POST['coc_number'])) {
-              $enduser['company']['cocNumber'] = sanitize_text_field($_POST['coc_number']);
+            if (!empty($cocNumber)) {
+                $enduser['company']['cocNumber'] = $cocNumber;
             }
 
             $startData['enduser'] = $enduser;
 
             # Retrieve order data
-            $shippingAddress  = $order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2();
-            $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
-
+            $shippingAddress = $order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2();
             $billingAddress  = $order->get_billing_address_1() . ' ' . $order->get_billing_address_2();
             $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
 
-            if (empty($order->get_shipping_address_1()) && empty($order->get_shipping_address_2())) {
+            if (empty(trim($shippingAddress))) {
                 $address = array(
                     'streetName' => $aBillingAddress[0],
                     'houseNumber' => $aBillingAddress[1],
@@ -473,6 +474,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     'country' => $billing_country,
                 );
             } else {
+                $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
                 $address = array(
                     'streetName' => $aShippingAddress[0],
                     'houseNumber' => $aShippingAddress[1],
@@ -491,9 +493,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     'country'     => $billing_country,
                 );
             }
-            $startData['address'] = $address;
 
-            $invoiceAddress = array(
+            $startData['address'] = $address;
+            $startData['invoiceAddress'] = array(
                 'initials'    => $order->get_billing_first_name(),
                 'lastName'    => substr($order->get_billing_last_name(), 0, 32),
                 'streetName'  => $aBillingAddress[0],
@@ -502,12 +504,13 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'city'        => $order->get_billing_city(),
                 'country'     => $billing_country,
             );
-            $startData['invoiceAddress'] = $invoiceAddress;
-            $startData['products']       = $this->getProductLines($order);
+
+            $startData['products'] = $this->getProductLines($order);
         }
 
-        if (!empty($_POST['option_sub_id'])) {
-            $startData['bank'] = sanitize_text_field($_POST['option_sub_id']);
+        $optionSubId = PPMFWC_Helper_Data::getPostTextField('option_sub_id');
+        if (!empty($optionSubId)) {
+            $startData['bank'] = $optionSubId;
         }
         if (get_option('paynl_test_mode') == 'yes') {
             $startData['testmode'] = true;
