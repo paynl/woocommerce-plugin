@@ -410,14 +410,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         try {
             $pay_paymentOptionId = $this->getOptionId();
         } catch (Exception $e) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('No option-ID found: ' . $e->getMessage(), '');
             return false;
         }
 
-        if (!empty(get_option('paynl_order_description_prefix'))) {
-            $prefix = get_option('paynl_order_description_prefix');
-        } else {
-            $prefix = '';
-        }
+        $prefix = empty(get_option('paynl_order_description_prefix')) ? '' : get_option('paynl_order_description_prefix');
 
         $startData = array(
             'amount'        => $order->get_total(),
@@ -437,7 +434,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         if (get_option('paynl_send_order_data') == 'yes') {
             $enduser = array(
                 'initials'     => $order->get_shipping_first_name(),
-                'lastName'     => substr($order->get_shipping_last_name(),0,32),
+                'lastName'     => substr($order->get_shipping_last_name(), 0, 32),
                 'phoneNumber'  => $order->get_billing_phone(),
                 'emailAddress' => $order->get_billing_email()
             );
@@ -465,26 +462,17 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $billingAddress  = $order->get_billing_address_1() . ' ' . $order->get_billing_address_2();
             $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
 
-            if (empty(trim($shippingAddress))) {
-                $address = array(
-                    'streetName' => $aBillingAddress[0],
-                    'houseNumber' => $aBillingAddress[1],
-                    'zipCode' => $order->get_billing_postcode(),
-                    'city' => $order->get_billing_city(),
-                    'country' => $billing_country,
-                );
-            } else {
-                $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
-                $address = array(
-                    'streetName' => $aShippingAddress[0],
-                    'houseNumber' => $aShippingAddress[1],
-                    'zipCode' => $order->get_shipping_postcode(),
-                    'city' => $order->get_shipping_city(),
-                    'country' => $order->get_shipping_country()
-                );
-            }
+            $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
+            $address = array(
+                'streetName' => $aShippingAddress[0],
+                'houseNumber' => $aShippingAddress[1],
+                'zipCode' => $order->get_shipping_postcode(),
+                'city' => $order->get_shipping_city(),
+                'country' => $order->get_shipping_country()
+            );
 
-            if ($this->useInvoiceAddressAsShippingAddress() && $this->get_option('use_invoice_address') == 'yes') {
+           if ($this->get_option('use_invoice_address') == 'yes') {
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Shipping addres empty ..using billingaddres', '');
                 $address = array(
                     'streetName'  => $aBillingAddress[0],
                     'houseNumber' => $aBillingAddress[1],
