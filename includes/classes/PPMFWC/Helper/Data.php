@@ -266,7 +266,7 @@ class PPMFWC_Helper_Data
      */
     public static function getVersion()
     {
-        return '3.8.2';
+        return '3.9.0';
     }
 
     /**
