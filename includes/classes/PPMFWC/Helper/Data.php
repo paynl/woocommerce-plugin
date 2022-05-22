@@ -3,6 +3,7 @@
 class PPMFWC_Helper_Data
 {
     private static $paylog = null;
+    private static $_payment_methods = null;
 
     /**
      * @param $message
@@ -55,7 +56,6 @@ class PPMFWC_Helper_Data
 
     public static function getIp()
     {
-
         # Just get the headers if we can or else use the SERVER global
         if (function_exists('apache_request_headers')) {
             $headers = apache_request_headers();
@@ -127,7 +127,6 @@ class PPMFWC_Helper_Data
         }
     }
 
-
     public static function getOptions()
     {
         global $wpdb;
@@ -151,6 +150,10 @@ class PPMFWC_Helper_Data
         return $wpdb->get_results($query, ARRAY_A);
     }
 
+    /**
+     * @param $optionId
+     * @return bool
+     */
     public static function isOptionAvailable($optionId)
     {
         global $wpdb;
@@ -163,34 +166,32 @@ class PPMFWC_Helper_Data
         return !empty($result);
     }
 
-  public static function getAllOptions()
-  {
-    global $wpdb;
-
-      $table_name_options = $wpdb->prefix . "pay_options";
-
-      $query = $wpdb->prepare("SELECT id, name, image, update_date FROM $table_name_options");
-
-      $result = $wpdb->get_results($query, ARRAY_A);
-
-      $methods = array();
-      foreach ($result as $paymentmethod) {
-        $methods[$paymentmethod['id']] = $paymentmethod;
-      }
-
-      return $methods;
-  }
-
-    private static $_payment_methods = null;
-    public static function getPaymentOptionsList()
+    public static function getAllOptions()
     {
-        if(empty(self::$_payment_methods)) {
-          PPMFWC_Gateway_Abstract::loginSDK();
-          $paymentOptions = \Paynl\Paymentmethods::getList();
-          self::$_payment_methods = $paymentOptions;
+        global $wpdb;
+
+        $table_name_options = $wpdb->prefix . "pay_options";
+
+        $query = $wpdb->prepare("SELECT id, name, image, update_date FROM $table_name_options");
+        $result = $wpdb->get_results($query, ARRAY_A);
+
+        $methods = array();
+        foreach ($result as $paymentmethod) {
+            $methods[$paymentmethod['id']] = $paymentmethod;
         }
 
-      return self::$_payment_methods;
+        return $methods;
+    }
+
+    public static function getPaymentOptionsList()
+    {
+        if (empty(self::$_payment_methods)) {
+            PPMFWC_Gateway_Abstract::loginSDK();
+            $paymentOptions = \Paynl\Paymentmethods::getList();
+            self::$_payment_methods = $paymentOptions;
+        }
+
+        return self::$_payment_methods;
     }
 
     public static function ppmfwc_getLogoSizes()
@@ -217,6 +218,11 @@ class PPMFWC_Helper_Data
         }
     }
 
+    /**
+     * @param $http_accept
+     * @param string $deflang
+     * @return string
+     */
     private static function parseDefaultLanguage($http_accept, $deflang = "en")
     {
         if (isset($http_accept) && strlen($http_accept) > 1) {
@@ -235,10 +241,9 @@ class PPMFWC_Helper_Data
             $arrAvailableLanguages = self::ppmfwc_getAvailableLanguages();
             $arrAvailableLanguages = array_keys($arrAvailableLanguages);
 
-            //laatste er af halen (browsertaal)
             array_pop($arrAvailableLanguages);
 
-            #return default language (highest q-value)
+            # Return default language (highest q-value)
             $qval = 0.0;
             if(isset($lang) && is_array($lang)) {
                 foreach ($lang as $key => $value) {
@@ -292,5 +297,4 @@ class PPMFWC_Helper_Data
             'browser' => esc_html(__('Use browser language', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
         );
     }
-
 }
