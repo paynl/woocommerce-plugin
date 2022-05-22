@@ -41,23 +41,28 @@ class PPMFWC_Helper_Data
      * Check for existing textfield and returns it sanitized
      *
      * @param $fieldName
+     * @param false $bForceString
      * @return false|string
      */
-    public static function getPostTextField($fieldName)
+    public static function getPostTextField($fieldName, $bForceString = false)
     {
-        return isset($_POST[$fieldName]) ? sanitize_text_field($_POST[$fieldName]) : false;
+        $result = isset($_POST[$fieldName]) ? sanitize_text_field($_POST[$fieldName]) : false;
+        if (empty($result) && $bForceString === true) {
+            $result = '';
+        }
+        return $result;
     }
 
     public static function getIp()
     {
 
-        //Just get the headers if we can or else use the SERVER global
+        # Just get the headers if we can or else use the SERVER global
         if (function_exists('apache_request_headers')) {
             $headers = apache_request_headers();
         } else {
             $headers = $_SERVER;
         }
-        //Get the forwarded IP if it exists
+        # Get the forwarded IP if it exists
         if (array_key_exists('X-Forwarded-For', $headers)) {
             $the_ip = $headers['X-Forwarded-For'];
         } elseif (array_key_exists('HTTP_X_FORWARDED_FOR', $headers)) {
@@ -68,16 +73,14 @@ class PPMFWC_Helper_Data
         $arrIp = explode(',', $the_ip);
         $the_ip = $arrIp[0];
 
-        // Remove the portnumber if there is one (only ipv4)
+        # Remove the portnumber if there is one (only ipv4)
         if (!filter_var(trim($the_ip), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             if ($pos = strpos($the_ip, ':')) {
                 $the_ip = substr($the_ip, 0, $pos);
             }
         }
 
-        $the_ip = filter_var(trim($the_ip), FILTER_VALIDATE_IP);
-
-        return $the_ip;
+        return filter_var(trim($the_ip), FILTER_VALIDATE_IP);
     }
 
     public static function loadPaymentMethods()
@@ -89,7 +92,6 @@ class PPMFWC_Helper_Data
         $table_name_options = $wpdb->prefix . "pay_options";
         $table_name_option_subs = $wpdb->prefix . "pay_option_subs";
 
-        //eerst flushen
         $wpdb->query('DELETE FROM ' . $table_name_option_subs);
         $wpdb->query('DELETE FROM ' . $table_name_options);
 
@@ -133,9 +135,7 @@ class PPMFWC_Helper_Data
         $table_name_options = $wpdb->prefix . "pay_options";
         $query = "SELECT id, name, image, update_date FROM $table_name_options";
 
-        $options = $wpdb->get_results($query, ARRAY_A);
-
-        return $options;
+        return $wpdb->get_results($query, ARRAY_A);
     }
 
     public static function getOptionSubs($optionId)
@@ -148,9 +148,7 @@ class PPMFWC_Helper_Data
             . "WHERE active = 1 AND option_id = %d", $optionId
         );
 
-        $optionSubs = $wpdb->get_results($query, ARRAY_A);
-
-        return $optionSubs;
+        return $wpdb->get_results($query, ARRAY_A);
     }
 
     public static function isOptionAvailable($optionId)
@@ -162,10 +160,7 @@ class PPMFWC_Helper_Data
 
         $result = $wpdb->get_results($query, ARRAY_A);
 
-        if (empty($result))
-            return false;
-        else
-            return true;
+        return !empty($result);
     }
 
   public static function getAllOptions()

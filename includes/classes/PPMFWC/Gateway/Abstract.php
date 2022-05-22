@@ -444,16 +444,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
               'name' => $order->get_billing_company(),
               'countryCode' => $billing_country
             );
-
-            $vatNumber = PPMFWC_Helper_Data::getPostTextField('vat_number');
-            $cocNumber = PPMFWC_Helper_Data::getPostTextField('coc_number');
-
-            if (!empty($vatNumber)) {
-                $enduser['company']['vatNumber'] = $vatNumber;
-            }
-            if (!empty($cocNumber)) {
-                $enduser['company']['cocNumber'] = $cocNumber;
-            }
+            $enduser['company']['vatNumber'] = PPMFWC_Helper_Data::getPostTextField('vat_number', true);
+            $enduser['company']['cocNumber'] = PPMFWC_Helper_Data::getPostTextField('coc_number', true);
 
             $startData['enduser'] = $enduser;
 
