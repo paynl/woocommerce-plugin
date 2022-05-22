@@ -464,14 +464,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             );
 
            if ($this->get_option('use_invoice_address') == 'yes') {
-                PPMFWC_Helper_Data::ppmfwc_payLogger('Shipping addres empty ..using billingaddres', '');
-                $address = array(
+               PPMFWC_Helper_Data::ppmfwc_payLogger('Use_invoice_address=yes. Updating shipping address');
+               $address = array(
                     'streetName'  => $aBillingAddress[0],
                     'houseNumber' => $aBillingAddress[1],
                     'zipCode'     => $order->get_billing_postcode(),
                     'city'        => $order->get_billing_city(),
-                    'country'     => $billing_country,
-                );
+                    'country'     => $billing_country
+                 );
             }
 
             $startData['address'] = $address;
