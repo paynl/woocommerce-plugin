@@ -302,15 +302,8 @@ class PPMFWC_Gateways
             'type' => 'sectionend',
             'id' => 'paynl_global_settings',
         );
-        
-        foreach ($settings as $setting) {
-            if (isset($setting['id']) && $setting['id'] == 'payment_gateways_options' && $setting['type'] != 'sectionend') {
-                $updatedSettings = array_merge($updatedSettings, $addedSettings);
-            }
-            $updatedSettings[] = $setting;
-        }
 
-        return $updatedSettings;
+        return array_merge($addedSettings, $settings);
     }
 
     /**
