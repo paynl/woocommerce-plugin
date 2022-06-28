@@ -452,6 +452,7 @@ class PPMFWC_Gateways
         $arrPayActions[self::ACTION_CANCEL] = self::STATUS_CANCELED;
         $arrPayActions[self::ACTION_VERIFY] = self::STATUS_VERIFY;
         $arrPayActions[self::ACTION_REFUND] = self::STATUS_REFUND;
+        $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
         return $arrPayActions;
     }
 
