@@ -16,21 +16,21 @@
   
   # Available payment methods
   
-  Bank Payments  | Creditcards | Gift cards & Vouchers | Pay by invoice | Others | 
-  :-----------: | :-----------: | :-----------: | :-----------: | :-----------: |
-  iDEAL + QR | Visa | VVV giftcard | AfterPay | Paypal
-  Bancontact + QR | Mastercard | Webshop Giftcard | Achteraf betalen via Billink | Wechat Pay
+  Bank Payments  |   Creditcards    | Gift cards & Vouchers | Pay by invoice | Others | 
+  :-----------: |:----------------:| :-----------: | :-----------: | :-----------: |
+  iDEAL + QR |       Visa       | VVV giftcard | AfterPay | Paypal
+  Bancontact + QR |    Mastercard    | Webshop Giftcard | Achteraf betalen via Billink | Wechat Pay
   Giropay | American Express | Fashioncheque | Focum AchterafBetalen.nl | Amazon Pay
-  Mybank | Postepay | Podiumcadeaukaart | Capayable Achteraf Betalen | Cashly
-  SOFORT | Dankort | Gezondheidsbon | in3 keer betalen, 0% rente | Instore payments (PIN)
-  Maestro | CartaSi | Fashion Giftcard | Klarna | Przelewy24
-  Tikkie | Cartebleue | Givacard | SprayPay | Apple Pay
-  Multibanco | Wijncadeau | Yourgift | Creditclick | Payconiq
-  EPS-Überweising |  | Paysafecard |  | Alipay
-  Trustly |  | Good4fun  |  | Phone payments
-   |  |  | Biercheque |  | Manual transfer
-   |  |  |  |  | Incasso
-   |  |  |  |  | Google Pay
+  Mybank |     Postepay     | Podiumcadeaukaart | Capayable Achteraf Betalen | Cashly
+  SOFORT |     Dankort      | Gezondheidsbon | in3 keer betalen, 0% rente | Instore payments (PIN)
+  Maestro |     CartaSi      | Fashion Giftcard | Klarna | Przelewy24
+  Tikkie |    Cartebleue    | Givacard | SprayPay | Apple Pay
+  Multibanco |    Wijncadeau    | Yourgift | Creditclick | Payconiq
+  EPS-Überweising |       Nexi       | Paysafecard |  | Alipay
+  Trustly |                  | Good4fun  |  | Phone payments
+   |  |                  | Biercheque |  | Manual transfer
+   |  |                  |  |  | Incasso
+   |  |                  |  |  | Google Pay
   
   # Installation
   #### Installing
