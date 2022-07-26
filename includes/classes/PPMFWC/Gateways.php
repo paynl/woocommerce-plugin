@@ -56,6 +56,7 @@ class PPMFWC_Gateways
       'PPMFWC_Gateway_Mistercash',
       'PPMFWC_Gateway_Multibanco',
       'PPMFWC_Gateway_Mybank',
+      'PPMFWC_Gateway_Nexi',
       'PPMFWC_Gateway_OkPayments',
       'PPMFWC_Gateway_Overboeking',
       'PPMFWC_Gateway_P24',
