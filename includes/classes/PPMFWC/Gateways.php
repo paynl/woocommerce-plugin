@@ -480,7 +480,7 @@ class PPMFWC_Gateways
     public static function ppmfwc_onExchange()
     {
         $exchange = $_REQUEST;
-        if (wp_is_json_request()){
+        if (wp_is_json_request()) {
             $jsonRequest = file_get_contents('php://input');
             $exchange = json_decode($jsonRequest, true);
         }
