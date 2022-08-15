@@ -23,4 +23,9 @@ class PPMFWC_Gateway_Focum extends PPMFWC_Gateway_Abstract
         return true;
     }
 
+    public static function differentReturnURL()
+    {
+        return true;
+    }
+
 }

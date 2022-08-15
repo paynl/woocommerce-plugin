@@ -195,6 +195,15 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 );
             }
 
+           if ($this->differentReturnURL()){
+               $this->form_fields['different_return_url'] = array(
+                   'title'       => esc_html(__('Different Return URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                   'type'        => 'text',
+                   'description' => esc_html(__('In case a different return URL is needed for post payment methods and Google Analytics.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                   'default'     => esc_html('')
+               );
+           }
+
             if (
               (!$this->get_option('brand_id')) || (strlen($this->get_option('brand_id')) == 0) ||
               (!$this->get_option('min_amount')) || (strlen($this->get_option('min_amount')) == 0) ||
@@ -243,6 +252,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     public static function useInvoiceAddressAsShippingAddress()
+    {
+        return false;
+    }
+
+    public static function differentReturnURL()
     {
         return false;
     }
