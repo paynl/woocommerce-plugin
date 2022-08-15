@@ -81,6 +81,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
   }
 
   add_action('wp_enqueue_scripts', 'ppmfwc_payScript');
+  add_action('wp_enqueue_scripts', 'ppmfwc_applePayScript');
 
   if (get_option('paynl_auto_capture') == "yes") {
     add_action('woocommerce_order_status_changed', 'ppmfwc_auto_capture', 10, 3);
@@ -151,6 +152,26 @@ function ppmfwc_payScript()
             //Register the javascript
             wp_register_script('ppmfwc_checkout_script', PPMFWC_PLUGIN_URL . 'assets/js/paycheckout.js', array('jquery'), '1.0', true);
             wp_enqueue_script('ppmfwc_checkout_script');
+            break;
+          }
+        }
+      }
+    }
+  }
+}
+
+function ppmfwc_applePayScript()
+{
+  if (is_checkout() == true) {
+    // Checks if apple pay is availeble
+    $gateways = WC()->payment_gateways->payment_gateways();
+    if ($gateways) {
+      foreach ($gateways as $gateway) {
+        if ($gateway->enabled == 'yes') {
+          if ($gateway->getOptionId() == 2277) {
+            //Register the javascript
+            wp_register_script('ppmfwc_applepay_script', PPMFWC_PLUGIN_URL . 'assets/js/applepay.js', array('jquery'), '1.0', true);
+            wp_enqueue_script('ppmfwc_applepay_script');
             break;
           }
         }
