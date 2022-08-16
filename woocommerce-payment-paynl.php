@@ -163,7 +163,7 @@ function ppmfwc_payScript()
 function ppmfwc_applePayScript()
 {
   if (is_checkout() == true) {
-    // Checks if apple pay is availeble
+    // Checks if apple pay is available
     $gateways = WC()->payment_gateways->payment_gateways();
     if ($gateways) {
       foreach ($gateways as $gateway) {

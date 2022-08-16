@@ -296,7 +296,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             if (strlen(WC()->customer->get_billing_company()) == 0 && $this->get_option('show_for_company') == 'business') {
                 return false;
             }
-            if ($this->getOptionId() == 2277 && empty($_COOKIE['applePayAvaileble'])) {
+            if ($this->getOptionId() == 2277 && empty($_COOKIE['applePayAvailable'])) {
                 return false;
             }
         }
