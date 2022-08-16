@@ -479,16 +479,17 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_onExchange()
     {
-        $exchange = $_REQUEST;
-        if (wp_is_json_request()) {
-            $jsonRequest = file_get_contents('php://input');
-            $exchange = json_decode($jsonRequest, true);
-        }
+        $action = PPMFWC_Helper_Data::getPostTextField('action');
+        $order_id = PPMFWC_Helper_Data::getPostTextField('order_id');
+        $wc_order_id = PPMFWC_Helper_Data::getPostTextField('extra1');
+        $methodId = PPMFWC_Helper_Data::getPostTextField('payment_profile_id');
 
-        $action = isset($exchange['action']) ? strtolower(sanitize_text_field($exchange['action'])) : null;
-        $order_id = isset($exchange['order_id']) ? sanitize_text_field($exchange['order_id']) : null;
-        $wc_order_id = isset($exchange['extra1']) ? sanitize_text_field($exchange['extra1']) : null;
-        $methodId = isset($exchange['payment_profile_id']) ? sanitize_text_field($exchange['payment_profile_id']) : null;
+        if (wp_is_json_request()) {
+            $action = PPMFWC_Helper_Data::getRequestArg('action');
+            $order_id = PPMFWC_Helper_Data::getRequestArg('order_id');
+            $wc_order_id = PPMFWC_Helper_Data::getRequestArg('extra1');
+            $methodId = PPMFWC_Helper_Data::getRequestArg('payment_profile_id');
+        }
 
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;

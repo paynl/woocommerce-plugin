@@ -54,6 +54,23 @@ class PPMFWC_Helper_Data
         return $result;
     }
 
+    /**
+     * @param $fieldName
+     * @param $bForceString
+     * @return false|string
+     */
+    public static function getRequestArg($fieldName, $bForceString = false)
+    {
+        $jsonRequest = file_get_contents('php://input');
+        $exchange = json_decode($jsonRequest, true);
+
+        $result = isset($exchange[$fieldName]) ? sanitize_text_field($exchange[$fieldName]) : false;
+        if (empty($result) && $bForceString === true) {
+            $result = '';
+        }
+        return $result;
+    }
+
     public static function getIp()
     {
         # Just get the headers if we can or else use the SERVER global
