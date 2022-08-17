@@ -368,7 +368,7 @@ class PPMFWC_Gateways
                     $method = $order->get_payment_method();
                     $methodSettings = get_option('woocommerce_' . $method . '_settings');
 
-                    if ($methodSettings['different_return_url']){
+                    if ($methodSettings['different_return_url'] && $status == self::STATUS_PENDING){
                         $url = $methodSettings['different_return_url'];
                     }else{
                         $url = self::getOrderReturnUrl($order, $newStatus);
@@ -435,6 +435,8 @@ class PPMFWC_Gateways
             $status = self::STATUS_AUTHORIZE;
         } elseif ($statusId == 85) {
             $status = self::STATUS_VERIFY;
+        } elseif ($statusId == 20 || $statusId == 25) {
+            $status = self::STATUS_PENDING;
         } elseif ($statusId == -81) {
             $status = SELF::STATUS_REFUND;
         } elseif ($statusId == -82) {

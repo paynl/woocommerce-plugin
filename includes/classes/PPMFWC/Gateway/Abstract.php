@@ -199,7 +199,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                $this->form_fields['different_return_url'] = array(
                    'title'       => esc_html(__('Different Return URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                    'type'        => 'text',
-                   'description' => esc_html(__('In case a different return URL is needed for post payment methods and Google Analytics.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                   'description' => esc_html(__('In case a different return URL is needed for post payment methods and Google Analytics when the orderstatus is pending.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                    'default'     => esc_html('')
                );
            }
