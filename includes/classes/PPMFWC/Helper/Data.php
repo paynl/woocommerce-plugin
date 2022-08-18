@@ -61,8 +61,11 @@ class PPMFWC_Helper_Data
      */
     public static function getRequestArg($fieldName, $bForceString = false)
     {
-        $jsonRequest = file_get_contents('php://input');
-        $exchange = json_decode($jsonRequest, true);
+        $exchange = $_REQUEST;
+        if (wp_is_json_request()) {
+            $jsonRequest = file_get_contents('php://input');
+            $exchange = json_decode($jsonRequest, true);
+        }
 
         $result = isset($exchange[$fieldName]) ? sanitize_text_field($exchange[$fieldName]) : false;
         if (empty($result) && $bForceString === true) {

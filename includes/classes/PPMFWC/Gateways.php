@@ -479,17 +479,10 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_onExchange()
     {
-        $action = PPMFWC_Helper_Data::getPostTextField('action');
-        $order_id = PPMFWC_Helper_Data::getPostTextField('order_id');
-        $wc_order_id = PPMFWC_Helper_Data::getPostTextField('extra1');
-        $methodId = PPMFWC_Helper_Data::getPostTextField('payment_profile_id');
-
-        if (wp_is_json_request()) {
-            $action = PPMFWC_Helper_Data::getRequestArg('action');
-            $order_id = PPMFWC_Helper_Data::getRequestArg('order_id');
-            $wc_order_id = PPMFWC_Helper_Data::getRequestArg('extra1');
-            $methodId = PPMFWC_Helper_Data::getRequestArg('payment_profile_id');
-        }
+        $action = PPMFWC_Helper_Data::getRequestArg('action');
+        $order_id = PPMFWC_Helper_Data::getRequestArg('order_id');
+        $wc_order_id = PPMFWC_Helper_Data::getRequestArg('extra1');
+        $methodId = PPMFWC_Helper_Data::getRequestArg('payment_profile_id');
 
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
