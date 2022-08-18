@@ -368,9 +368,9 @@ class PPMFWC_Gateways
                     $method = $order->get_payment_method();
                     $methodSettings = get_option('woocommerce_' . $method . '_settings');
 
-                    if ($methodSettings['different_return_url'] && $status == self::STATUS_PENDING){
+                    if ($methodSettings['different_return_url'] && $status == self::STATUS_PENDING) {
                         $url = $methodSettings['different_return_url'];
-                    }else{
+                    } else {
                         $url = self::getOrderReturnUrl($order, $newStatus);
                     }
                 } catch (Exception $e) {
