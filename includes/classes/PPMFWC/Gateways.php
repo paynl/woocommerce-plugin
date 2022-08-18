@@ -368,11 +368,7 @@ class PPMFWC_Gateways
                     $method = $order->get_payment_method();
                     $methodSettings = get_option('woocommerce_' . $method . '_settings');
 
-                    if ($methodSettings['different_return_url'] && $status == self::STATUS_PENDING) {
-                        $url = $methodSettings['different_return_url'];
-                    } else {
-                        $url = self::getOrderReturnUrl($order, $newStatus);
-                    }
+                    $url = self::getOrderReturnUrl($order, $newStatus);
                 } catch (Exception $e) {
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Exception: ' . $e->getMessage(), $orderId);
                 }
@@ -405,6 +401,12 @@ class PPMFWC_Gateways
         } elseif ($newStatus == PPMFWC_Gateways::STATUS_PENDING)
         {
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_PENDING, $order->get_checkout_order_received_url());
+
+            $method = $order->get_payment_method();
+            $methodSettings = get_option('woocommerce_' . $method . '_settings');
+            if ($methodSettings['different_return_url']) {
+                $url = $methodSettings['different_return_url'];
+            }
         } else
         {
 
@@ -435,8 +437,6 @@ class PPMFWC_Gateways
             $status = self::STATUS_AUTHORIZE;
         } elseif ($statusId == 85) {
             $status = self::STATUS_VERIFY;
-        } elseif ($statusId == 20 || $statusId == 25) {
-            $status = self::STATUS_PENDING;
         } elseif ($statusId == -81) {
             $status = SELF::STATUS_REFUND;
         } elseif ($statusId == -82) {

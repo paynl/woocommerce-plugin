@@ -197,9 +197,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             if ($this->differentReturnURL()) {
                 $this->form_fields['different_return_url'] = array(
-                    'title' => esc_html(__('Different Return URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'title' => esc_html(__('Different Return URL when the orderstatus is pending', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'text',
-                    'description' => esc_html(__('In case a different return URL is needed for post payment methods and Google Analytics when the orderstatus is pending.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'description' => esc_html(__('When the orderstatus is pending, the transaction will go to a different finish page as to not conflict with Google Analytics', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default' => esc_html('')
                 );
             }
