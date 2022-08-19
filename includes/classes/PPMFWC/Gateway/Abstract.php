@@ -186,6 +186,20 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 );
             }
 
+            if ($this->showApplePayDetection()) {
+                $this->form_fields['applepay_detection'] = array(
+                    'title'       => esc_html(__('Detect Apple Product', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'type'        => 'select',
+                    'options'     => array(
+                        'no'  => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                        'yes' => esc_html(__('Yes', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+                    ),
+                    'default'     => 'no',
+                    /* translators: Placeholder 1: Default order status, placeholder 2: Link to 'Hold Stock' setting */
+                    'description' => esc_html(__('Detect if product allows the use of Apple Pay, disable payment option if not.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+                );
+            }
+
            if ($this->useInvoiceAddressAsShippingAddress()) {
                 $this->form_fields['use_invoice_address'] = array(
                     'title' => esc_html(__('Use invoice address for shipping', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -252,6 +266,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         return false;
     }
 
+    public static function showApplePayDetection()
+    {
+        return false;
+    }
+
     public function init_settings()
     {
         add_action('woocommerce_thankyou_' . $this->getId(), array($this, 'thankyou_page'));
@@ -296,7 +315,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             if (strlen(WC()->customer->get_billing_company()) == 0 && $this->get_option('show_for_company') == 'business') {
                 return false;
             }
-            if ($this->getOptionId() == 2277 && empty($_COOKIE['applePayAvailable'])) {
+            if ($this->getOptionId() == 2277 && empty($_COOKIE['applePayAvailable']) && !empty($this->get_option('applepay_detection'))  && $this->get_option('applepay_detection') == 'yes') {
                 return false;
             }
         }

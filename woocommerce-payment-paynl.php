@@ -168,7 +168,7 @@ function ppmfwc_applePayScript()
     if ($gateways) {
       foreach ($gateways as $gateway) {
         if ($gateway->enabled == 'yes') {
-          if ($gateway->getOptionId() == 2277) {
+          if (!empty($gateway->settings['applepay_detection']) && $gateway->settings['applepay_detection'] == 'yes') {
             //Register the javascript
             wp_register_script('ppmfwc_applepay_script', PPMFWC_PLUGIN_URL . 'assets/js/applepay.js', array('jquery'), '1.0', true);
             wp_enqueue_script('ppmfwc_applepay_script');

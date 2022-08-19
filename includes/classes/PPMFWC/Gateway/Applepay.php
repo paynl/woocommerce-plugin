@@ -18,4 +18,9 @@ class PPMFWC_Gateway_Applepay extends PPMFWC_Gateway_Abstract
         return 2277;
     }
 
+    public static function showApplePayDetection()
+    {
+        return true;
+    }
+
 }
