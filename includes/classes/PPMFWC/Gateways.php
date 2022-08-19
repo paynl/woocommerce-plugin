@@ -365,9 +365,6 @@ class PPMFWC_Gateways
                     }
                     $order = new WC_Order($transactionLocalDB['order_id']);
 
-                    $method = $order->get_payment_method();
-                    $methodSettings = get_option('woocommerce_' . $method . '_settings');
-
                     $url = self::getOrderReturnUrl($order, $newStatus);
                 } catch (Exception $e) {
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Exception: ' . $e->getMessage(), $orderId);
