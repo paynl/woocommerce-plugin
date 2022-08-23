@@ -195,11 +195,12 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 );
             }
 
-            if ($this->differentReturnURL()) {
-                $this->form_fields['different_return_url'] = array(
-                    'title' => esc_html(__('Different Return URL when the orderstatus is pending', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            if ($this->alternativeReturnURL()) {
+                $this->form_fields['alternative_return_url'] = array(
+                    'title' => esc_html(__('Alternative Return URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'text',
-                    'description' => esc_html(__('When the orderstatus is pending, the transaction will go to a different finish page as to not conflict with Google Analytics', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'placeholder' => 'Enter a valid URL',
+                    'description' => esc_html(__('Use this alternative URL when a payment finishes and the paymentstatus is still pending/awaiting payment.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default' => esc_html('')
                 );
             }
@@ -256,7 +257,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         return false;
     }
 
-    public static function differentReturnURL()
+    public static function alternativeReturnURL()
     {
         return false;
     }

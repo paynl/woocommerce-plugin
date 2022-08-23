@@ -401,8 +401,8 @@ class PPMFWC_Gateways
 
             $method = $order->get_payment_method();
             $methodSettings = get_option('woocommerce_' . $method . '_settings');
-            if ($methodSettings['different_return_url']) {
-                $url = $methodSettings['different_return_url'];
+            if ($methodSettings['alternative_return_url']) {
+                $url = $methodSettings['alternative_return_url'];
             }
         } else
         {

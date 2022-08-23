@@ -28,7 +28,7 @@ class PPMFWC_Gateway_Klarnakp extends PPMFWC_Gateway_Abstract
         return true;
     }
 
-    public static function differentReturnURL()
+    public static function alternativeReturnURL()
     {
         return true;
     }
