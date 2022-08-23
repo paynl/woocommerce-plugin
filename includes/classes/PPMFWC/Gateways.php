@@ -401,7 +401,8 @@ class PPMFWC_Gateways
 
             $method = $order->get_payment_method();
             $methodSettings = get_option('woocommerce_' . $method . '_settings');
-            if ($methodSettings['alternative_return_url']) {
+
+            if (!empty($methodSettings['alternative_return_url'])) {
                 $url = $methodSettings['alternative_return_url'];
             }
         } else
@@ -440,6 +441,8 @@ class PPMFWC_Gateways
             $status = SELF::STATUS_REFUND_PARTIALLY;
         } elseif ($statusId == -63) {
             $status = SELF::STATUS_DENIED;
+        } elseif ($statusId == 50) {
+            $status = SELF::STATUS_PENDING;
         } elseif ($statusId < 0) {
             $status = self::STATUS_CANCELED;
         }
