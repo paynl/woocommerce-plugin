@@ -442,7 +442,7 @@ class PPMFWC_Gateways
         } elseif ($statusId == -63) {
             $status = SELF::STATUS_DENIED;
         } elseif (in_array($statusId, array(20, 25, 50, 90))) {
-            $status = SELF::STATUS_PENDING;
+            $status = SELF::STATUS_PENDING; 
         } elseif ($statusId < 0) {
             $status = self::STATUS_CANCELED;
         }
