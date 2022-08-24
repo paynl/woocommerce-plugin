@@ -199,8 +199,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 $this->form_fields['alternative_return_url'] = array(
                     'title' => esc_html(__('Alternative Return URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'text',
-                    'placeholder' => 'Enter a valid URL',
-                    'description' => esc_html(__('Use this alternative URL when a payment finishes and the paymentstatus is still pending/awaiting payment.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'placeholder' => 'Enter a valid return URL for pending payments.',
+                    'description' => esc_html(__('Use this URL for when the paymentstatus is (still) pending/ payment after payment finish.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default' => esc_html('')
                 );
             }
