@@ -441,7 +441,7 @@ class PPMFWC_Gateways
             $status = SELF::STATUS_REFUND_PARTIALLY;
         } elseif ($statusId == -63) {
             $status = SELF::STATUS_DENIED;
-        } elseif ($statusId == 20 || $statusId == 25 || $statusId == 50 || $statusId == 90) {
+        } elseif (in_array($statusId, array(20, 25, 50, 90))) {
             $status = SELF::STATUS_PENDING;
         } elseif ($statusId < 0) {
             $status = self::STATUS_CANCELED;
