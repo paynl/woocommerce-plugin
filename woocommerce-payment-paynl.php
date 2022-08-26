@@ -143,7 +143,7 @@ function ppmfwc_payStyle()
 function ppmfwc_payScript()
 {
   if (is_checkout() == true) {
-    //Check if a setting has private or buisiness only
+    //Check if a setting has private or business only
     $gateways = WC()->payment_gateways->payment_gateways();
     if ($gateways) {
       foreach ($gateways as $gateway) {
@@ -163,7 +163,7 @@ function ppmfwc_payScript()
 function ppmfwc_applePayScript()
 {
   if (is_checkout() == true) {
-    // Checks if apple pay is available
+    // Checks if Apple Pay is available
     $gateways = WC()->payment_gateways->payment_gateways();
     if ($gateways) {
       foreach ($gateways as $gateway) {
