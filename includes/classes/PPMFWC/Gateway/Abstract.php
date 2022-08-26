@@ -195,7 +195,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                         'yes' => esc_html(__('Yes', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
                     ),
                     'default'     => 'no',
-                    'description' => esc_html(__('Only show Apple Pay on Apple devices.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+                    /* translators: Placeholder 1: Default order status, placeholder 2: Link to 'Hold Stock' setting */
+                    'description' => esc_html(__('Detect if product allows the use of Apple Pay, disable payment option if not.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
                 );
             }
 
