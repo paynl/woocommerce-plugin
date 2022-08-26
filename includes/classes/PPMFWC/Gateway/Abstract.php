@@ -188,15 +188,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             if ($this->showApplePayDetection()) {
                 $this->form_fields['applepay_detection'] = array(
-                    'title'       => esc_html(__('Detect Apple Product', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'title'       => esc_html(__('Apple Detection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'select',
                     'options'     => array(
                         'no'  => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                         'yes' => esc_html(__('Yes', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
                     ),
                     'default'     => 'no',
-                    /* translators: Placeholder 1: Default order status, placeholder 2: Link to 'Hold Stock' setting */
-                    'description' => esc_html(__('Detect if product allows the use of Apple Pay, disable payment option if not.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+                    'description' => esc_html(__('Only show Apple Pay on Apple devices.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
                 );
             }
 
