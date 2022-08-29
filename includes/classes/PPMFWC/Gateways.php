@@ -480,10 +480,10 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_onExchange()
     {
-        $action = isset($_REQUEST['action']) ? strtolower(sanitize_text_field($_REQUEST['action'])) : null;
-        $order_id = isset($_REQUEST['order_id']) ? sanitize_text_field($_REQUEST['order_id']) : null;
-        $wc_order_id = isset($_REQUEST['extra1']) ? sanitize_text_field($_REQUEST['extra1']) : null;
-        $methodId = isset($_REQUEST['payment_profile_id']) ? sanitize_text_field($_REQUEST['payment_profile_id']) : null;
+        $action = strtolower(PPMFWC_Helper_Data::getRequestArg('action'));
+        $order_id = PPMFWC_Helper_Data::getRequestArg('order_id');
+        $wc_order_id = PPMFWC_Helper_Data::getRequestArg('extra1');
+        $methodId = PPMFWC_Helper_Data::getRequestArg('payment_profile_id');
 
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
