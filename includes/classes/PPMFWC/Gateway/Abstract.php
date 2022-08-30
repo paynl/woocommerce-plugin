@@ -186,6 +186,19 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 );
             }
 
+            if ($this->showApplePayDetection()) {
+                $this->form_fields['applepay_detection'] = array(
+                  'title'       => esc_html(__('Apple Detection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                  'type'        => 'select',
+                  'options'     => array(
+                    'no'  => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'yes' => esc_html(__('Yes', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+                  ),
+                  'default'     => 'no',
+                  'description' => esc_html(__('Only show Apple Pay on Apple devices.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+                );
+            }
+
            if ($this->useInvoiceAddressAsShippingAddress()) {
                 $this->form_fields['use_invoice_address'] = array(
                     'title' => esc_html(__('Use invoice address for shipping', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -252,6 +265,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         return false;
     }
 
+    public static function showApplePayDetection()
+    {
+        return false;
+    }
+
     public function init_settings()
     {
         add_action('woocommerce_thankyou_' . $this->getId(), array($this, 'thankyou_page'));
@@ -294,6 +312,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 return false;
             }
             if (strlen(WC()->customer->get_billing_company()) == 0 && $this->get_option('show_for_company') == 'business') {
+                return false;
+            }
+            if ($this->getOptionId() == 2277 && empty($_COOKIE['applePayAvailable']) && !empty($this->get_option('applepay_detection')) && $this->get_option('applepay_detection') == 'yes') {
                 return false;
             }
         }

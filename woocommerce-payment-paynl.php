@@ -141,17 +141,23 @@ function ppmfwc_payStyle()
 
 function ppmfwc_payScript()
 {
+  $scriptsAdded = array();
   if (is_checkout() == true) {
-    //Check if a setting has private or buisiness only
     $gateways = WC()->payment_gateways->payment_gateways();
     if ($gateways) {
       foreach ($gateways as $gateway) {
         if ($gateway->enabled == 'yes') {
-          if (!empty($gateway->settings['show_for_company']) && $gateway->settings['show_for_company'] != 'both') {
-            //Register the javascript
+          if (!empty($gateway->settings['show_for_company']) && $gateway->settings['show_for_company'] != 'both' && !in_array('ppmfwc_checkout_script', $scriptsAdded)) {
+            //Register the Show for Company javascript
             wp_register_script('ppmfwc_checkout_script', PPMFWC_PLUGIN_URL . 'assets/js/paycheckout.js', array('jquery'), '1.0', true);
             wp_enqueue_script('ppmfwc_checkout_script');
-            break;
+            $scriptsAdded[] = 'ppmfwc_checkout_script';
+          }
+          if (!empty($gateway->settings['applepay_detection']) && $gateway->settings['applepay_detection'] == 'yes' && !in_array('ppmfwc_applepay_script', $scriptsAdded)) {
+            //Register the Apple Pay Detection javascript
+            wp_register_script('ppmfwc_applepay_script', PPMFWC_PLUGIN_URL . 'assets/js/applepay.js', array('jquery'), '1.0', true);
+            wp_enqueue_script('ppmfwc_applepay_script');
+            $scriptsAdded[] = 'ppmfwc_applepay_script';
           }
         }
       }
