@@ -27,4 +27,9 @@ class PPMFWC_Gateway_Spraypay extends PPMFWC_Gateway_Abstract
         return true;
     }
 
+    public static function alternativeReturnURL()
+    {
+        return true;
+    }
+
 }

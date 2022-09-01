@@ -398,6 +398,13 @@ class PPMFWC_Gateways
         } elseif ($newStatus == PPMFWC_Gateways::STATUS_PENDING)
         {
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_PENDING, $order->get_checkout_order_received_url());
+
+            $method = $order->get_payment_method();
+            $methodSettings = get_option('woocommerce_' . $method . '_settings');
+
+            if (!empty($methodSettings['alternative_return_url'])) {
+                $url = $methodSettings['alternative_return_url'];
+            }
         } else
         {
 
@@ -434,6 +441,8 @@ class PPMFWC_Gateways
             $status = SELF::STATUS_REFUND_PARTIALLY;
         } elseif ($statusId == -63) {
             $status = SELF::STATUS_DENIED;
+        } elseif (in_array($statusId, array(20, 25, 50, 90))) {
+            $status = SELF::STATUS_PENDING; 
         } elseif ($statusId < 0) {
             $status = self::STATUS_CANCELED;
         }

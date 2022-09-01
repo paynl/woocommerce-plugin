@@ -208,6 +208,16 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 );
             }
 
+            if ($this->alternativeReturnURL()) {
+                $this->form_fields['alternative_return_url'] = array(
+                    'title' => esc_html(__('Alternative Return URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'type' => 'text',
+                    'placeholder' => 'Enter a valid return URL for pending payments.',
+                    'description' => esc_html(__('Use this URL for when the paymentstatus is (still) pending/ payment after payment finish.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'default' => esc_html('')
+                );
+            }
+
             if (
               (!$this->get_option('brand_id')) || (strlen($this->get_option('brand_id')) == 0) ||
               (!$this->get_option('min_amount')) || (strlen($this->get_option('min_amount')) == 0) ||
@@ -256,6 +266,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     public static function useInvoiceAddressAsShippingAddress()
+    {
+        return false;
+    }
+
+    public static function alternativeReturnURL()
     {
         return false;
     }
