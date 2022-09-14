@@ -21,8 +21,6 @@ Payment Service Provider PAY. offers online payment options for webshops and web
 
 With PAY. you can add the following payment options to your website:
 
-* AfterPay
-* AfterPay International
 * Alipay
 * Amazon Pay
 * American Express (AMEX)
@@ -63,6 +61,8 @@ With PAY. you can add the following payment options to your website:
 * Podiumcadeaukaart
 * Postepay
 * Przelewy24
+* Riverty
+* Riverty International
 * Sofortbanking
 * SprayPay
 * Tikkie
