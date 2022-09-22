@@ -245,7 +245,7 @@ class PPMFWC_Gateways
             'type' => 'checkbox',
             'desc' => esc_html(__('Check this box if you want to use the standard PAY. style in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_standard_style',
-            'default' => 'no',
+            'default' => 'yes',
           );
        $addedSettings[] = array(
           'name' => __('Extended Logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
