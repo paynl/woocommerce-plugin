@@ -112,9 +112,9 @@ class PPMFWC_Helper_Data
         $table_name_options = $wpdb->prefix . "pay_options";
         $table_name_option_subs = $wpdb->prefix . "pay_option_subs";
 
-        $wpdb->query('DELETE FROM ' . $table_name_option_subs);
-        $wpdb->query('DELETE FROM ' . $table_name_options);
-
+        $wpdb->query('DELETE FROM `' . $table_name_option_subs . '`');
+        $wpdb->query('DELETE FROM `' . $table_name_options . '`');
+        
         foreach ($paymentOptions as $paymentOption) {
             $image = '';
             if (isset($paymentOption['brand']['id'])) {
@@ -122,26 +122,17 @@ class PPMFWC_Helper_Data
             } else if (isset($paymentOption['id'])) {
                 $image = 'https://static.pay.nl/payment_profiles/25x25/' . $paymentOption['id'] . '.png';
             }
-            $wpdb->insert(
-                $table_name_options, array(
-                    'id' => $paymentOption['id'],
-                    'name' => $paymentOption['visibleName'],
-                    'image' => $image,
-                    'update_date' => current_time('mysql'),
-                ), array('%d', '%s', '%s', '%s')
-            );
+
+            $sql = 'INSERT INTO `' . $table_name_options . '` (id,name,image,update_date) VALUES (%d,%s,%s,%s) ON DUPLICATE KEY UPDATE name = %s, image = %s, update_date = %s';
+            $sql = $wpdb->prepare($sql, $paymentOption['id'], $paymentOption['visibleName'], $image, current_time('mysql'), $paymentOption['visibleName'], $image, current_time('mysql'));
+            $wpdb->query($sql);
+
             if ($paymentOption['id'] == 10 && isset($paymentOption['banks'])) {
                 foreach ($paymentOption['banks'] as $paymentOptionSub) {
                     $image = 'https://static.pay.nl/ideal/banks/' . $paymentOptionSub['id'] . '.png';
-                    $wpdb->insert(
-                        $table_name_option_subs, array(
-                        'option_id' => $paymentOption['id'],
-                        'option_sub_id' => $paymentOptionSub['id'],
-                        'name' => $paymentOptionSub['visibleName'],
-                        'image' => $image,
-                        'active' => true,
-                    ), array('%d', '%d', '%s', '%s', '%d')
-                    );
+                    $sql = 'INSERT INTO `' . $table_name_option_subs . '` (option_id,option_sub_id,name,image,active) VALUES (%d,%s,%s,%s,%d) ON DUPLICATE KEY UPDATE name = %s, image = %s';
+                    $sql = $wpdb->prepare($sql, $paymentOption['id'], $paymentOptionSub['id'], $paymentOptionSub['visibleName'], $image, true, $paymentOptionSub['visibleName'], $image);
+                    $wpdb->query($sql);
                 }
             }
         }
