@@ -76,7 +76,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     add_action('woocommerce_admin_order_data_after_billing_address', 'ppmfwc_coc_number_display_admin_order_meta', 10, 1);
   }
 
-  if (get_option('paynl_standard_style') == "yes") {
+  if (get_option('paynl_standard_style') == "yes" || empty(get_option('paynl_standard_style'))) {
     add_action('wp_enqueue_scripts', 'ppmfwc_payStyle');
   }
 
