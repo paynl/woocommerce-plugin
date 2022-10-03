@@ -2,7 +2,7 @@
 Contributors: andypay
 Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
-Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wechatpay, paypal, creditcard, mybank, sofortbanking, afterpay, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
+Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wechatpay, paypal, creditcard, mybank, sofortbanking, Riverty, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
 Stable tag: 3.9.1
 Tested up to: 6.0.1
@@ -62,7 +62,6 @@ With PAY. you can add the following payment options to your website:
 * Postepay
 * Przelewy24
 * Riverty
-* Riverty International
 * Sofortbanking
 * SprayPay
 * Tikkie
@@ -113,8 +112,6 @@ If you need our help, please email us at: support[at]pay.nl
 
 At the moment the plugin supports the following payment methods:
 
-* AfterPay
-* AfterPay International
 * Amazon Pay
 * American Express (AMEX)
 * Apple Pay
@@ -154,6 +151,7 @@ At the moment the plugin supports the following payment methods:
 * Podiumcadeaukaart
 * Postepay
 * Przelewy24
+* Riverty
 * Sofortbanking
 * SprayPay
 * Tikkie
