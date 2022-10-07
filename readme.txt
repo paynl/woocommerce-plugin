@@ -30,6 +30,7 @@ With PAY. you can add the following payment options to your website:
 * Bancontact
 * Biercheque
 * Billink
+* Blik
 * Capayable
 * CartaSi
 * Cartebleue
@@ -122,6 +123,7 @@ At the moment the plugin supports the following payment methods:
 * Bancontact
 * Billink
 * Biercheque
+* Blik
 * Capayable
 * CartaSi
 * Cartebleue

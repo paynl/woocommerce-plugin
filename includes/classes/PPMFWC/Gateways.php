@@ -28,6 +28,7 @@ class PPMFWC_Gateways
       'PPMFWC_Gateway_AfterpayInternational',
       'PPMFWC_Gateway_Biercheque',
       'PPMFWC_Gateway_Billink',
+      'PPMFWC_Gateway_Blik',
       'PPMFWC_Gateway_Cartasi',
       'PPMFWC_Gateway_Capayable',
       'PPMFWC_Gateway_CapayableGespreid',
