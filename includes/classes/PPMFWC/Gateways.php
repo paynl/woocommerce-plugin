@@ -501,7 +501,7 @@ class PPMFWC_Gateways
         try {
             if ($action == self::ACTION_NEWPPT) {
                 if (PPMFWC_Helper_Transaction::checkProcessing($order_id)) {
-                    die('FALSE| Already Processing payment');
+                    die('FALSE| Already processing payment');
                 }
             }
             if(in_array($action, array_keys($arrActions))) {
