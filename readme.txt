@@ -47,7 +47,7 @@ With PAY. you can add the following payment options to your website:
 * Good4fun
 * Google Pay
 * iDEAL
-* IN3 Gespreid betalen
+* IN3 – Betaal in 3 delen, 0% rente
 * Incasso
 * Instore payments (PIN)
 * Klarna KP
@@ -139,7 +139,7 @@ At the moment the plugin supports the following payment methods:
 * Good4fun
 * Google Pay
 * iDEAL
-* IN3 Gespreid betalen
+* IN3 – Betaal in 3 delen, 0% rente
 * Incasso
 * Instore payments (PIN)
 * Klarna KP
