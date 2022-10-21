@@ -245,7 +245,7 @@ class PPMFWC_Helper_Transaction
                     throw new PPMFWC_Exception_Notice('Cancel ignored, order is ' . $order->get_status());
                 }
 
-                $order->set_status('failed', 'PAY.: ');
+                $order->set_status('cancelled', 'PAY.: ');
                 $order->save();
 
                 $order->add_order_note(esc_html(__('PAY.: Payment canceled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
