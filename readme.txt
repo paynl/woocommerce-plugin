@@ -4,9 +4,9 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wechatpay, paypal, creditcard, mybank, sofortbanking, afterpay, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
-Stable tag: 3.11.0
-Tested up to: 6.0.2
-WC tested up to: 6.9.4
+Stable tag: 3.11.1
+Tested up to: 6.0.3
+WC tested up to: 7.0.0
 WC requires at least: 3.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -14,74 +14,55 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 This plugin adds the PAY. Payment Methods to your WooCommerce installation.
 
 == Description ==
+**Receive payments quickly, easily and securely via Pay.**
 
-*By installing this plugin you'll be able to integrate the PAY. Payment Methods for WooCommerce into your WooCommerce Webshop. This will only take a few minutes. If the plugin is successfully installed your customers will then be able to checkout their orders through the payment options such as iDeal, PayPal, Creditcard and so on.*
+*By installing this plugin you’ll be able to integrate the Pay. omnichannel payment methods for WooCommerce into your WooCommerce webshop.
+This will only take a few minutes. When the plugin is successfully installed your customers will be able to checkout their orders through payment options such as iDeal, PayPal, Creditcard and so on.*
 
-Payment Service Provider PAY. offers online payment options for webshops and websites. PAY. has different payment option packages available. These packages range from the smallest one (XS) to the largest one (XL). Not sure which package is suitable for you? Start with the try-out package called Pioneer XS! With the Pioneer XS you will be able to use all payment options  except for the options credit card and direct debit. Just fill in the registration form and you'll receive a personal account by email. With this account you have direct access to the PAY. Administration Panel where you can add your website(s) and install the payment options that are essential for your website.
+**Behind every payment**
+Pay. is the payment service provider that makes online and offline selling easy and fun. A reliable and smart partner who processes hundreds of thousands of payments every day. All popular payment methods are available through Pay, as the company works hard to become the largest full-service omnichannel payment processor in the market.
 
-With PAY. you can add the following payment options to your website:
+**Why Pay?**
+Pay. unburdens you when it comes to payments. So that you can focus on your core business and can realize further growth. Pay. knows that payments are more than just a transaction. That is why the company does not only facilitate payments, but they also create the smoothest and safest experience - for you **and** for your customers. With a higher conversion and more revenue as ultimate results.
 
-* AfterPay
-* AfterPay International
-* Alipay
-* Amazon Pay
-* American Express (AMEX)
-* Apple Pay
-* Bancontact
-* Biercheque
-* Billink
-* Capayable
-* CartaSi
-* Cartebleue
-* Cashly
-* Creditclick
-* Dankort
-* De Cadeaukaart
-* EPS-Überweising
-* Fashioncheque
-* Fashion Giftcard
-* Focum
-* Gezondheidsbon
-* Giropay
-* Givacard
-* Good4fun
-* Google Pay
-* iDEAL
-* IN3 – Betaal in 3 delen, 0% rente
-* Incasso
-* Instore payments (PIN)
-* Klarna KP
-* Maestro
-* Manual transfer
-* Mastercard
-* Multibanco
-* Mybank
-* Nexi
-* Payconiq
-* Paypal
-* Paysafecard
-* Phone payments
-* Podiumcadeaukaart
-* Postepay
-* Przelewy24
-* Sofortbanking
-* SprayPay
-* Tikkie
-* Trustly
-* Visa
-* VVV giftcard
-* Webshop Giftcard
-* Wechat Pay
-* Wijncadeau
-* Yehhpay
-* Yourgift
+**The benefits of Pay.**
+*The all-in-one payment provider*
+One contract, one integration, one payout, one invoice. Go live in 15 minutes! Pay. has simple matching modules for the well-known accounting programs. And Pay.’s synchronization module lets you automatically prepare a file in any desired format. It doesn't get any easier.
 
-For the registration form, visit the registration page (in Dutch): [www.pay.nl/registreren](http://www.pay.nl/registreren)
-For more information about the payment rates go to [www.pay.nl/tarieven](htp://www.pay.nl/tarieven)
-For more information about the payment solution packages, just visit [www.pay.nl/pakketten](http://www.pay.nl/pakketten)
+*All popular payment methods in the Netherlands and Europe*
+Let your customers pay how they want with Pay. That's how you get more orders and a higher conversion. Pay. is specialized in letting you offer post-payment, payment in installments and payment on credit options in your webshop or retail location.
 
-You can download the manual for this plugin (in Dutch) [here](http://www.pay.nl/plugin/woocommerce/pdf)
+*Your payments are always transparent and at hand*
+The Pay. platform gives you real-time insight into all your payments, even on the go with the handy Pay. app.
 
+*Pay. is available for help and advice 24/7*
+Personal service is essential. That is why Pay. gives you the best access to your own account manager, technical support via chat, mail and telephone and the 24/7 breakdown service.
+
+**Payment methods and features**
+The full list of payment methods implemented in the WooCommerce omnichannel payment gateway by Pay. can be viewed [here](https://docs.pay.nl/plugins?language=en#woocommerce-paymentoptions).
+
+A brief overview of some of the options:
+**Internetbanking** : iDEAL, Bancontact, Giropay, EPS, Sofort....
+**Creditcards** : Visa, Mastercard, AMEX...
+**Buy Now Pay Later / Instalments** : IN3, AfterPay, Klarna, Billink, SprayPay...
+**Wallets** : PayPal, Amazon Pay, WeChat Pay, AliPay, ApplePay...
+**Vouchers & prepaid** : Paysafecard, VVV Giftcard, Fashion Cheque, YourGift, Givacard...
+**Instore** payments: can be enabled when you have a card terminal via Pay.
+Bank transfers and telephone payments are also possible...
+
+... and much more!
+
+* **Start accepting payments within minutes!**
+* **Single integration and contract**  to start accepting all major payment methods, including iDEAL, Visa, Mastercard, American Express, PayPal, Bancontact, SOFORT and more...
+* **Largest offer Buy Now Pay Later and Instalment** options like AfterPay, in3, Klarna, SprayPay and more...
+* Create **Paylinks** to send to your customer when manually creating orders
+* **Instore payments**; easily start card payments on your Pay. POS terminal (for example, for a self-service kiosk or click & collect)
+* **Easy (partial)refunds** straight from your WooCommerce backend
+* **Personal dashboard** for all your succesful transactions
+* **Pay. app** for your financial overview, always and everywhere! You can even start and receive payments via the app for your convenience; never miss a payment...
+
+To sign up, visit the registration page: [https://www.pay.nl/en/register-now](https://www.pay.nl/en/register-now)
+For more information about the payment solution packages and rates, go to [https://www.pay.nl/en/prices](https://www.pay.nl/en/prices)
 For any further questions please send an email to support@pay.nl
 
 == Installation ==
@@ -114,8 +95,7 @@ If you need our help, please email us at: support[at]pay.nl
 
 At the moment the plugin supports the following payment methods:
 
-* AfterPay
-* AfterPay International
+* AfterPay (by Riverty)
 * Amazon Pay
 * American Express (AMEX)
 * Apple Pay
@@ -187,6 +167,9 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 4. The iDEAL payment screen (Rabobank)
 
 == Changelog ==
+= 3.11.1 =
+Order status will now be `cancelled` instead of `failed` when a payment gets cancelled.
+Update AfterPay/Riverty naming.
 = 3.11.0 =
 Update AfterPay/Riverty logo
 Made under the hood improvements
@@ -420,7 +403,7 @@ Fixed a small typo in Pay_Helper_Transaction
 * Updated the translations
 * Tested with wordpress 4.2
 = 2.3 =
-* Added new paymenbtmethods (Gezondheidsbon, Fashioncheque and podiumkadokaart)
+* Added new payment methods (Gezondheidsbon, Fashioncheque and podiumkadokaart)
 * Added a notice, in case CURL is not installed
 * Payment methods, that are not enabled in PAY. cannot be activated in woocommerce
 * Vat was not sent to PAY. correctly in the product lines
