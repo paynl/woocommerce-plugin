@@ -499,6 +499,11 @@ class PPMFWC_Gateways
 
         ob_start();
         try {
+            if ($action == self::ACTION_NEWPPT) {
+                if (PPMFWC_Helper_Transaction::checkProcessing($order_id)) {
+                    die('FALSE| Already processing payment');
+                }
+            }
             if(in_array($action, array_keys($arrActions))) {
                 $status = $arrActions[$action];
             } else {
@@ -524,6 +529,9 @@ class PPMFWC_Gateways
 
         if (!empty($suppressed)) {
             $message .= ' |Suppressed Output: ' . $suppressed;
+        }
+        if ($action == self::ACTION_NEWPPT) {
+            PPMFWC_Helper_Transaction::removeProcessing($order_id);
         }
         die($message);
     }
