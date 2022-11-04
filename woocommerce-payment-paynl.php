@@ -4,12 +4,10 @@
  * Plugin Name: PAY. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
  * Description: PAY. Payment Methods for WooCommerce
- * Version: 3.10.0
+ * Version: 3.12.0
  * Author: PAY.
  * Author URI: https://www.pay.nl
  * Requires at least: 3.5.1
- * Tested up to: 6.0.2
- * WC tested up to: 6.9.2
  * WC requires at least: 3.0
  *
  * Text Domain: woocommerce-paynl-payment-methods
@@ -38,6 +36,7 @@ PPMFWC_Autoload::ppmfwc_register();
 
 # Register installer
 register_activation_hook(__FILE__, array('PPMFWC_Setup', 'ppmfwc_install'));
+add_action('init', array('PPMFWC_Setup', 'ppmfwc_install'));
 
 if (is_plugin_active_for_network('woocommerce-paynl-payment-methods/woocommerce-payment-paynl.php')) {
   add_action('wp_initialize_site', array('PPMFWC_Setup', 'ppmfwc_newBlog'), 11);

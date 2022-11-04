@@ -245,7 +245,7 @@ class PPMFWC_Helper_Transaction
                     throw new PPMFWC_Exception_Notice('Cancel ignored, order is ' . $order->get_status());
                 }
 
-                $order->set_status('failed', 'PAY.: ');
+                $order->set_status('cancelled', 'PAY.: ');
                 $order->save();
 
                 $order->add_order_note(esc_html(__('PAY.: Payment canceled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
@@ -259,4 +259,34 @@ class PPMFWC_Helper_Transaction
         return $newStatus;
     }
 
+    /**
+     * @param $transactionId
+     * @return array|object|stdClass[]
+     */
+    public static function checkProcessing($transactionId)
+    {
+        global $wpdb;
+
+        $table_name_processing = $wpdb->prefix . "pay_processing";
+        try {
+            $result = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name_processing WHERE transaction_id = %s AND created > date_sub('%s', interval 1 minute)",
+              $transactionId, date('Y-m-d H:i:s')), ARRAY_A);
+            $processing = !empty($result[0]);
+
+            if (!$processing) {
+                $wpdb->replace($table_name_processing, array('transaction_id' => $transactionId, 'created' => date('Y-m-d H:i:s')), array('%s', '%s'));
+            }
+        } catch (\Exception $e) {
+            $processing = false;
+        }
+
+        return $processing;
+    }
+
+    public static function removeProcessing($transactionId)
+    {
+        global $wpdb;
+        $table_name_processing = $wpdb->prefix . "pay_processing";
+        $wpdb->delete($table_name_processing, array('transaction_id' => $transactionId), array('%s'));
+    } 
 }

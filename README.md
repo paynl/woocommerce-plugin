@@ -18,11 +18,11 @@
   
   Bank Payments  |   Creditcards    | Gift cards & Vouchers | Pay by invoice | Others | 
   :-----------: |:----------------:| :-----------: | :-----------: | :-----------: |
-  iDEAL + QR |       Visa       | VVV giftcard | AfterPay | Paypal
+  iDEAL + QR |       Visa       | VVV giftcard | AfterPay (by Riverty) | Paypal
   Bancontact + QR |    Mastercard    | Webshop Giftcard | Achteraf betalen via Billink | Wechat Pay
   Giropay | American Express | Fashioncheque | Focum AchterafBetalen.nl | Amazon Pay
   Mybank |     Postepay     | Podiumcadeaukaart | Capayable Achteraf Betalen | Cashly
-  SOFORT |     Dankort      | Gezondheidsbon | in3 keer betalen, 0% rente | Instore payments (PIN)
+  SOFORT |     Dankort      | Gezondheidsbon | IN3 – Betaal in 3 delen, 0% rente | Instore payments (PIN)
   Maestro |     CartaSi      | Fashion Giftcard | Klarna | Przelewy24
   Tikkie |    Cartebleue    | Givacard | SprayPay | Apple Pay
   Multibanco |    Wijncadeau    | Yourgift | Creditclick | Payconiq
