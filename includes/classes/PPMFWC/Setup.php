@@ -133,6 +133,8 @@ class PPMFWC_Setup
         $tables[] = $wpdb->prefix . 'pay_option_subs';
         $tables[] = $wpdb->prefix . 'pay_processing';
 
+        update_option("pay_db_version", 0);
+
         return $tables;
     }
 
