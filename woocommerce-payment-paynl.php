@@ -36,7 +36,9 @@ PPMFWC_Autoload::ppmfwc_register();
 
 # Register installer
 register_activation_hook(__FILE__, array('PPMFWC_Setup', 'ppmfwc_install'));
-add_action('init', array('PPMFWC_Setup', 'ppmfwc_install'));
+
+# On plugin update
+add_action( 'upgrader_process_complete', 'ppmfwc_upgrade_completed', 10, 2 );
 
 if (is_plugin_active_for_network('woocommerce-paynl-payment-methods/woocommerce-payment-paynl.php')) {
   add_action('wp_initialize_site', array('PPMFWC_Setup', 'ppmfwc_newBlog'), 11);
@@ -88,6 +90,23 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
 } else {
 	# WooCommerce seems to be inactive, show eror message
 	add_action( 'admin_notices', 'ppmfwc_error_woocommerce_not_active' );
+}
+
+/**
+ * @param $upgrader_object
+ * @param $options
+ * @return void
+ */
+function ppmfwc_upgrade_completed($upgrader_object, $options) {
+    $ppmfwc = plugin_basename( __FILE__ );
+
+    if( $options['action'] == 'update' && $options['type'] == 'plugin' && isset( $options['plugins'] ) ) {
+        foreach( $options['plugins'] as $plugin ) {
+            if( $plugin == $ppmfwc ) {
+                add_action('init', array('PPMFWC_Setup', 'ppmfwc_install'));
+            }
+        }
+    }
 }
 
 /**
