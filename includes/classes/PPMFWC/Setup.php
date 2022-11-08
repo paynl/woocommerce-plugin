@@ -7,7 +7,6 @@ class PPMFWC_Setup
 
     public static function ppmfwc_installBlog()
     {
-        self::checkRequirements();
         global $wpdb;
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -15,6 +14,7 @@ class PPMFWC_Setup
         $pay_db_version = get_option("pay_db_version");
 
         if ($pay_db_version != self::db_version) {
+            self::checkRequirements();
 
             $table_name_transactions = $wpdb->prefix . "pay_transactions";
             $table_name_options = $wpdb->prefix . "pay_options";
@@ -91,6 +91,15 @@ class PPMFWC_Setup
         } else {
             self::ppmfwc_installBlog();
         }
+    }
+
+
+    public static function ppmfwc_install_innit()
+    {
+        if (empty(get_option('paynl_order_description_prefix'))) {
+            update_option('paynl_order_description_prefix', 'Order:');
+        }
+        self::ppmfwc_installBlog();
     }
 
     /**
