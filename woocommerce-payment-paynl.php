@@ -36,7 +36,7 @@ PPMFWC_Autoload::ppmfwc_register();
 
 # Register installer
 register_activation_hook(__FILE__, array('PPMFWC_Setup', 'ppmfwc_install'));
-add_action('init', array('PPMFWC_Setup', 'ppmfwc_install'));
+add_action('init', array('PPMFWC_Setup', 'ppmfwc_install_init'));
 
 if (is_plugin_active_for_network('woocommerce-paynl-payment-methods/woocommerce-payment-paynl.php')) {
   add_action('wp_initialize_site', array('PPMFWC_Setup', 'ppmfwc_newBlog'), 11);

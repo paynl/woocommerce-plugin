@@ -7,7 +7,6 @@ class PPMFWC_Setup
 
     public static function ppmfwc_installBlog()
     {
-        self::checkRequirements();
         global $wpdb;
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
@@ -15,6 +14,7 @@ class PPMFWC_Setup
         $pay_db_version = get_option("pay_db_version");
 
         if ($pay_db_version != self::db_version) {
+            self::checkRequirements();
 
             $table_name_transactions = $wpdb->prefix . "pay_transactions";
             $table_name_options = $wpdb->prefix . "pay_options";
@@ -70,15 +70,16 @@ class PPMFWC_Setup
         );";
             maybe_create_table($table_name_processing, $sqlProcessing);
 
+            if (empty(get_option('paynl_order_description_prefix'))) {
+                update_option('paynl_order_description_prefix', 'Order:');
+            }
+
             update_option("pay_db_version", self::db_version);
         }
     }
 
     public static function ppmfwc_install()
     {
-        if (empty(get_option('paynl_order_description_prefix'))) {
-            update_option('paynl_order_description_prefix', 'Order:');
-        }
         if (is_multisite() && is_plugin_active('woocommerce-paynl-payment-methods/woocommerce-payment-paynl.php')) {
             global $wpdb, $blog_id;
             $dbquery = 'SELECT blog_id FROM ' . $wpdb->blogs;
@@ -91,6 +92,12 @@ class PPMFWC_Setup
         } else {
             self::ppmfwc_installBlog();
         }
+    }
+
+
+    public static function ppmfwc_install_init()
+    {
+        self::ppmfwc_installBlog();
     }
 
     /**
@@ -122,6 +129,9 @@ class PPMFWC_Setup
         $tables[] = $wpdb->prefix . 'pay_transactions';
         $tables[] = $wpdb->prefix . 'pay_options';
         $tables[] = $wpdb->prefix . 'pay_option_subs';
+        $tables[] = $wpdb->prefix . 'pay_processing';
+
+        update_option("pay_db_version", 0);
 
         return $tables;
     }
