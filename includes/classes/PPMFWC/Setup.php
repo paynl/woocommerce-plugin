@@ -94,7 +94,7 @@ class PPMFWC_Setup
     }
 
 
-    public static function ppmfwc_install_innit()
+    public static function ppmfwc_install_init()
     {
         if (empty(get_option('paynl_order_description_prefix'))) {
             update_option('paynl_order_description_prefix', 'Order:');
