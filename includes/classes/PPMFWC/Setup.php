@@ -70,15 +70,16 @@ class PPMFWC_Setup
         );";
             maybe_create_table($table_name_processing, $sqlProcessing);
 
+            if (empty(get_option('paynl_order_description_prefix'))) {
+                update_option('paynl_order_description_prefix', 'Order:');
+            }
+
             update_option("pay_db_version", self::db_version);
         }
     }
 
     public static function ppmfwc_install()
     {
-        if (empty(get_option('paynl_order_description_prefix'))) {
-            update_option('paynl_order_description_prefix', 'Order:');
-        }
         if (is_multisite() && is_plugin_active('woocommerce-paynl-payment-methods/woocommerce-payment-paynl.php')) {
             global $wpdb, $blog_id;
             $dbquery = 'SELECT blog_id FROM ' . $wpdb->blogs;
@@ -96,9 +97,6 @@ class PPMFWC_Setup
 
     public static function ppmfwc_install_init()
     {
-        if (empty(get_option('paynl_order_description_prefix'))) {
-            update_option('paynl_order_description_prefix', 'Order:');
-        }
         self::ppmfwc_installBlog();
     }
 
