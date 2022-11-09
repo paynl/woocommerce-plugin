@@ -100,8 +100,9 @@ At the moment the plugin supports the following payment methods:
 * American Express (AMEX)
 * Apple Pay
 * Bancontact
-* Billink
 * Biercheque
+* Billink
+* Biller
 * Blik
 * Capayable
 * CartaSi
@@ -170,6 +171,7 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 == Changelog ==
 = 3.12.1 =
 Added support for payment method Blik
+Added support for payment method Biller
 Fixed a multisite install issue
 = 3.12.0 =
 Textual updates for IN3

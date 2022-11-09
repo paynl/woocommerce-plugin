@@ -26,7 +26,7 @@
   Maestro |     CartaSi      | Fashion Giftcard | Klarna | Przelewy24
   Tikkie |    Cartebleue    | Givacard | SprayPay | Apple Pay
   Multibanco |    Wijncadeau    | Yourgift | Creditclick | Payconiq
-  EPS-Überweising |       Nexi       | Paysafecard |  | Alipay
+  EPS-Überweising |       Nexi       | Paysafecard | Biller | Alipay
   Trustly |                  | Good4fun  |  | Phone payments
   Blik |                  | Biercheque |  | Manual transfer
    |  |                  |  |  | Incasso
