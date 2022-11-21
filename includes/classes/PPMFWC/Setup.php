@@ -21,53 +21,52 @@ class PPMFWC_Setup
             $table_name_option_subs = $wpdb->prefix . "pay_option_subs";
             $table_name_processing = $wpdb->prefix . "pay_processing";
 
-            if ($pay_db_version < 1.1) {
+            $sqlTransactions = "CREATE TABLE `$table_name_transactions` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `transaction_id` varchar(50) NOT NULL,
+                `option_id` int(11) NOT NULL,
+                `option_sub_id` int(11) DEFAULT NULL,
+                `amount` int(11) NOT NULL,
+                `order_id` bigint(20) NOT NULL,
+                `status` varchar(10) NOT NULL DEFAULT 'PENDING',
+                `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `last_update` datetime DEFAULT NULL,
+                `start_data` text NOT NULL,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `{$table_name_transactions}_transaction_id` (`transaction_id`));";
+
+            maybe_create_table($table_name_transactions, $sqlTransactions);
+
+            if (!is_null($pay_db_version) && $pay_db_version < 1.1) {
                 $sql = "ALTER TABLE `$table_name_transactions` MODIFY order_id BIGINT(20);";
                 $wpdb->query($sql);
             }
 
-            $sqlTransactions = "CREATE TABLE `$table_name_transactions` (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `transaction_id` varchar(50) NOT NULL,
-            `option_id` int(11) NOT NULL,
-            `option_sub_id` int(11) DEFAULT NULL,
-            `amount` int(11) NOT NULL,
-            `order_id` bigint(20) NOT NULL,
-            `status` varchar(10) NOT NULL DEFAULT 'PENDING',
-            `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            `last_update` datetime DEFAULT NULL,
-            `start_data` text NOT NULL,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `{$table_name_transactions}_transaction_id` (`transaction_id`)
-        );";
-            maybe_create_table($table_name_transactions, $sqlTransactions);
-
             $sqlOptions = "CREATE TABLE `$table_name_options` (
-            `id` int(10) unsigned NOT NULL COMMENT 'Payment option Id',
-            `name` varchar(255) NOT NULL COMMENT 'Payment option name',
-            `image` varchar(255) NOT NULL COMMENT 'The url to the icon image',
-            `update_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'The datetime this payment option was refreshed',
-            PRIMARY KEY (`id`)
-        );";
+                `id` int(10) unsigned NOT NULL COMMENT 'Payment option Id',
+                `name` varchar(255) NOT NULL COMMENT 'Payment option name',
+                `image` varchar(255) NOT NULL COMMENT 'The url to the icon image',
+                `update_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'The datetime this payment option was refreshed',
+                PRIMARY KEY (`id`));";
+
             maybe_create_table($table_name_options, $sqlOptions);
 
             $sqlOptionSub = "CREATE TABLE `$table_name_option_subs` (
-            `option_id` int(10) unsigned NOT NULL COMMENT 'Payment option Id',
-            `option_sub_id` int(10) unsigned NOT NULL COMMENT 'Payment option sub Id',  
-            `name` varchar(255) NOT NULL COMMENT 'The name of the option sub',
-            `image` varchar(255) NOT NULL COMMENT 'The url to the icon image',
-            `active` tinyint(1) NOT NULL COMMENT 'OptionSub  active or not',
-            PRIMARY KEY (`option_id`, option_sub_id)
-        );";
+                `option_id` int(10) unsigned NOT NULL COMMENT 'Payment option Id',
+                `option_sub_id` int(10) unsigned NOT NULL COMMENT 'Payment option sub Id',  
+                `name` varchar(255) NOT NULL COMMENT 'The name of the option sub',
+                `image` varchar(255) NOT NULL COMMENT 'The url to the icon image',
+                `active` tinyint(1) NOT NULL COMMENT 'OptionSub  active or not',
+                PRIMARY KEY (`option_id`, option_sub_id));";
+
             maybe_create_table($table_name_option_subs, $sqlOptionSub);
 
             $sqlProcessing = "CREATE TABLE `$table_name_processing` (
-            `id` int(11) NOT NULL AUTO_INCREMENT,
-            `transaction_id` varchar(50) NOT NULL,
-            `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (`id`),
-            UNIQUE KEY `{$table_name_processing}_transaction_id` (`transaction_id`)
-        );";
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `transaction_id` varchar(50) NOT NULL,
+                `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`), UNIQUE KEY `{$table_name_processing}_transaction_id` (`transaction_id`));";
+
             maybe_create_table($table_name_processing, $sqlProcessing);
 
             if (empty(get_option('paynl_order_description_prefix'))) {
