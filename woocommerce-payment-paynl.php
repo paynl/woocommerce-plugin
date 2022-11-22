@@ -4,7 +4,7 @@
  * Plugin Name: PAY. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
  * Description: PAY. Payment Methods for WooCommerce
- * Version: 3.12.1
+ * Version: 3.12.2
  * Author: PAY.
  * Author URI: https://www.pay.nl
  * Requires at least: 3.5.1
@@ -84,6 +84,8 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
   if (get_option('paynl_auto_capture') == "yes") {
     add_action('woocommerce_order_status_changed', 'ppmfwc_auto_capture', 10, 3);
   }
+
+
 
 } else {
 	# WooCommerce seems to be inactive, show eror message
