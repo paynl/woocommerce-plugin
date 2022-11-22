@@ -163,10 +163,14 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 
 == Screenshots ==
 
-1. The added settings in WooCommerce -> settings -> payments
-2. The ideal configuration page
-3. The WooCommerce checkout page with the PAY. payment methods
-4. The iDEAL payment screen (Rabobank)
+1. Make a connection with Pay. by using your connection data
+2. Configure the payment options to your own wishes
+3. Payment options are instantly available in your checkout
+4. Payment screens directly available to the customer
+5. Pay. app available for direct overview on your phone
+6. Infinite insight in your payments.
+7. The widest range of payment methods, always up-to-date.
+8. One platform for all payments.
 
 == Changelog ==
 = 3.12.1 =
