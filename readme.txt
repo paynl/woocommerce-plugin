@@ -99,6 +99,7 @@ At the moment the plugin supports the following payment methods:
 * Amazon Pay
 * American Express (AMEX)
 * Apple Pay
+* Bataviastad Cadeaukaart
 * Bancontact
 * Biercheque
 * Billink
@@ -128,9 +129,11 @@ At the moment the plugin supports the following payment methods:
 * Maestro
 * Manual transfer
 * Mastercard
+* Monizze
 * Multibanco
 * Mybank
 * Nexi
+* Online Bankbetaling
 * Payconiq
 * Paypal
 * Paysafecard
@@ -138,6 +141,8 @@ At the moment the plugin supports the following payment methods:
 * Podiumcadeaukaart
 * Postepay
 * Przelewy24
+* Shoes and Sneakers
+* Sodexo
 * Sofortbanking
 * SprayPay
 * Tikkie
@@ -149,6 +154,7 @@ At the moment the plugin supports the following payment methods:
 * Wijncadeau
 * Yehhpay
 * Yourgift
+* Your Green Gift Card
 
 = What does it cost? =
 
