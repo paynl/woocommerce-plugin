@@ -459,7 +459,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             'orderNumber'   => $order->get_order_number(),
             'paymentMethod' => $pay_paymentOptionId,
             'currency'      => $currency,
-            'description'   => $prefix . $order->get_order_number(),
+            'description'   => str_replace('__', ' ', $prefix) . $order->get_order_number(),
             'extra1'        => apply_filters('paynl-extra1', $order->get_order_number(), $order),
             'extra2'        => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
             'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
