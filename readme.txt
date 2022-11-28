@@ -141,7 +141,7 @@ At the moment the plugin supports the following payment methods:
 * Podiumcadeaukaart
 * Postepay
 * Przelewy24
-* Shoes and Sneakers
+* Shoes & Sneakers
 * Sodexo
 * Sofortbanking
 * SprayPay

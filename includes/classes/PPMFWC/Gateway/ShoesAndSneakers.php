@@ -10,7 +10,7 @@ class PPMFWC_Gateway_ShoesAndSneakers extends PPMFWC_Gateway_Abstract
 
     public static function getName()
     {
-        return 'Shoes and Sneakers Cadeau';
+        return 'Shoes & Sneakers Cadeau';
     }
 
     public static function getOptionId()
