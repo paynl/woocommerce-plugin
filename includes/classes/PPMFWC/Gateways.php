@@ -20,71 +20,71 @@ class PPMFWC_Gateways
     const ACTION_CAPTURE = 'capture';
 
     private static $arrGateways = array(
-        'PPMFWC_Gateway_Alipay',
-        'PPMFWC_Gateway_Amazonpay',
-        'PPMFWC_Gateway_Amex',
-        'PPMFWC_Gateway_Applepay',
-        'PPMFWC_Gateway_Afterpay',
-        'PPMFWC_Gateway_AfterpayInternational',
-        'PPMFWC_Gateway_BataviastadCadeaukaart',
-        'PPMFWC_Gateway_Biercheque',
-        'PPMFWC_Gateway_Biller',
-        'PPMFWC_Gateway_Billink',
-        'PPMFWC_Gateway_Blik',
-        'PPMFWC_Gateway_Cartasi',
-        'PPMFWC_Gateway_Capayable',
-        'PPMFWC_Gateway_CapayableGespreid',
-        'PPMFWC_Gateway_Cartebleue',
-        'PPMFWC_Gateway_Clickandbuy',
-        'PPMFWC_Gateway_CreditClick',
-        'PPMFWC_Gateway_Cashly',
-        'PPMFWC_Gateway_Good4fun',
-        'PPMFWC_Gateway_Dankort',
-        'PPMFWC_Gateway_DeCadeaukaart',
-        'PPMFWC_Gateway_Eps',
-        'PPMFWC_Gateway_Fashioncheque',
-        'PPMFWC_Gateway_Fashiongiftcard',
-        'PPMFWC_Gateway_Focum',
-        'PPMFWC_Gateway_Gezondheidsbon',
-        'PPMFWC_Gateway_Giropay',
-        'PPMFWC_Gateway_Givacard',
-        'PPMFWC_Gateway_Googlepay',
-        'PPMFWC_Gateway_Ideal',
-        'PPMFWC_Gateway_Incasso',
-        'PPMFWC_Gateway_Instore',
-        'PPMFWC_Gateway_Klarna',
-        'PPMFWC_Gateway_Klarnakp',
-        'PPMFWC_Gateway_Maestro',
-        'PPMFWC_Gateway_Minitixsms',
-        'PPMFWC_Gateway_Mistercash',
-        'PPMFWC_Gateway_Monizze',
-        'PPMFWC_Gateway_Multibanco',
-        'PPMFWC_Gateway_Mybank',
-        'PPMFWC_Gateway_Nexi',
-        'PPMFWC_Gateway_OkPayments',
-        'PPMFWC_Gateway_Overboeking',
-        'PPMFWC_Gateway_OnlineBankbetaling',
-        'PPMFWC_Gateway_P24',
-        'PPMFWC_Gateway_Payconiq',
-        'PPMFWC_Gateway_Paypal',
-        'PPMFWC_Gateway_Paysafecard',
-        'PPMFWC_Gateway_Phone',
-        'PPMFWC_Gateway_Podiumcadeaukaart',
-        'PPMFWC_Gateway_Postepay',
-        'PPMFWC_Gateway_ShoesAndSneakers',
-        'PPMFWC_Gateway_Sodexo',
-        'PPMFWC_Gateway_Sofortbanking',
-        'PPMFWC_Gateway_Spraypay',
-        'PPMFWC_Gateway_Tikkie',
-        'PPMFWC_Gateway_Trustly',
-        'PPMFWC_Gateway_Visamastercard',
-        'PPMFWC_Gateway_Vvvgiftcard',
-        'PPMFWC_Gateway_Webshopgiftcard',
-        'PPMFWC_Gateway_Wijncadeau',
-        'PPMFWC_Gateway_Wechatpay',
-        'PPMFWC_Gateway_Yourgift',
-        'PPMFWC_Gateway_YourGreenGiftCard',
-        'PPMFWC_Gateway_Yehhpay',
+      'PPMFWC_Gateway_Alipay',
+      'PPMFWC_Gateway_Amazonpay',
+      'PPMFWC_Gateway_Amex',
+      'PPMFWC_Gateway_Applepay',
+      'PPMFWC_Gateway_Afterpay',
+      'PPMFWC_Gateway_AfterpayInternational',
+      'PPMFWC_Gateway_BataviastadCadeaukaart',
+      'PPMFWC_Gateway_Biercheque',
+      'PPMFWC_Gateway_Biller',
+      'PPMFWC_Gateway_Billink',
+      'PPMFWC_Gateway_Blik',
+      'PPMFWC_Gateway_Cartasi',
+      'PPMFWC_Gateway_Capayable',
+      'PPMFWC_Gateway_CapayableGespreid',
+      'PPMFWC_Gateway_Cartebleue',
+      'PPMFWC_Gateway_Clickandbuy',
+      'PPMFWC_Gateway_CreditClick',
+      'PPMFWC_Gateway_Cashly',
+      'PPMFWC_Gateway_Good4fun',
+      'PPMFWC_Gateway_Dankort',
+      'PPMFWC_Gateway_DeCadeaukaart',
+      'PPMFWC_Gateway_Eps',
+      'PPMFWC_Gateway_Fashioncheque',
+      'PPMFWC_Gateway_Fashiongiftcard',
+      'PPMFWC_Gateway_Focum',
+      'PPMFWC_Gateway_Gezondheidsbon',
+      'PPMFWC_Gateway_Giropay',
+      'PPMFWC_Gateway_Givacard',
+      'PPMFWC_Gateway_Googlepay',
+      'PPMFWC_Gateway_Ideal',
+      'PPMFWC_Gateway_Incasso',
+      'PPMFWC_Gateway_Instore',
+      'PPMFWC_Gateway_Klarna',
+      'PPMFWC_Gateway_Klarnakp',
+      'PPMFWC_Gateway_Maestro',
+      'PPMFWC_Gateway_Minitixsms',
+      'PPMFWC_Gateway_Mistercash',
+      'PPMFWC_Gateway_Monizze',
+      'PPMFWC_Gateway_Multibanco',
+      'PPMFWC_Gateway_Mybank',
+      'PPMFWC_Gateway_Nexi',
+      'PPMFWC_Gateway_OkPayments',
+      'PPMFWC_Gateway_Overboeking',
+      'PPMFWC_Gateway_OnlineBankbetaling',
+      'PPMFWC_Gateway_P24',
+      'PPMFWC_Gateway_Payconiq',
+      'PPMFWC_Gateway_Paypal',
+      'PPMFWC_Gateway_Paysafecard',
+      'PPMFWC_Gateway_Phone',
+      'PPMFWC_Gateway_Podiumcadeaukaart',
+      'PPMFWC_Gateway_Postepay',
+      'PPMFWC_Gateway_ShoesAndSneakers',
+      'PPMFWC_Gateway_Sodexo',
+      'PPMFWC_Gateway_Sofortbanking',
+      'PPMFWC_Gateway_Spraypay',
+      'PPMFWC_Gateway_Tikkie',
+      'PPMFWC_Gateway_Trustly',
+      'PPMFWC_Gateway_Visamastercard',
+      'PPMFWC_Gateway_Vvvgiftcard',
+      'PPMFWC_Gateway_Webshopgiftcard',
+      'PPMFWC_Gateway_Wijncadeau',
+      'PPMFWC_Gateway_Wechatpay',
+      'PPMFWC_Gateway_Yourgift',
+      'PPMFWC_Gateway_YourGreenGiftCard',
+      'PPMFWC_Gateway_Yehhpay',
     );
 
     public static function ppmfwc_getGateways($arrDefault)
@@ -219,16 +219,16 @@ class PPMFWC_Gateways
             'id' => 'paynl_tokencode',
         );
         $addedSettings[] = array(
-            'name' => esc_html(__('API-token *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'name' => esc_html( __('API-token *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'text',
-            'desc' => esc_html(__('The API-token used to communicate with the Pay. API, you can find your API-token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
+            'desc' => esc_html(__('The API-token used to communicate with the Pay. API, you can find your API-token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)).'<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
             'id' => 'paynl_apitoken',
         );
         $addedSettings[] = array(
             'name' => esc_html(__('Service ID *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'placeholder' => 'SL-####-####',
             'type' => 'text',
-            'desc' => esc_html(__('The serviceid to identify your website, you can find your serviceid here ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
+            'desc' => esc_html(__('The serviceid to identify your website, you can find your serviceid here ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)). '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
             'id' => 'paynl_serviceid',
             'desc_tip' => __('The serviceid should be in the following format: SL-xxxx-xxxx', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
         );
@@ -296,28 +296,28 @@ class PPMFWC_Gateways
             'desc' => esc_html(__('Check this box if you want to use the standard Pay. style in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_standard_style',
             'default' => 'yes',
+          );
+       $addedSettings[] = array(
+          'name' => __('Extended Logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+          'type' => 'checkbox',
+          'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+          'id' => 'paynl_paylogger',
+          'default' => 'yes',
         );
-        $addedSettings[] = array(
-            'name' => __('Extended Logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            'type' => 'checkbox',
-            'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_paylogger',
-            'default' => 'yes',
-        );
-        $addedSettings[] = array(
-            'name' => __('Refund Processing', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            'type' => 'checkbox',
-            'desc' => esc_html(__("Process refunds initiated from PAY admin", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_externalrefund',
-            'default' => 'no',
+       $addedSettings[] = array(
+          'name' => __('Refund Processing', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+          'type' => 'checkbox',
+          'desc' => esc_html(__("Process refunds initiated from PAY admin", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+          'id' => 'paynl_externalrefund',
+          'default' => 'no',
         );
         $addedSettings[] = array(
             'name' => __('Alternative Exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'text',
             'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
-            'desc' => '<br>Use your own exchange-handler. Requests will be send as GET. <br> ' .
-                'Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#' .
-                '<Br>For more info see: <a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
+            'desc' => '<br>Use your own exchange-handler. Requests will be send as GET. <br> '.
+                      'Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#'.
+                      '<Br>For more info see: <a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
             'id' => 'paynl_exchange_url',
         );
         $addedSettings[] = array(
@@ -405,7 +405,8 @@ class PPMFWC_Gateways
 
         try {
             # Retrieve URL to continue (and update status if necessary)
-            if (!empty($orderId)) {
+            if (!empty($orderId))
+            {
                 $newStatus = PPMFWC_Helper_Transaction::processTransaction($orderId, $status);
                 try {
                     $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
@@ -431,9 +432,11 @@ class PPMFWC_Gateways
 
     public static function getOrderReturnUrl(WC_Order $order, $newStatus)
     {
-        if ($newStatus == PPMFWC_Gateways::STATUS_CANCELED) {
+        if ($newStatus == PPMFWC_Gateways::STATUS_CANCELED)
+        {
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
-        } elseif ($newStatus == PPMFWC_Gateways::STATUS_DENIED) {
+        } elseif ($newStatus == PPMFWC_Gateways::STATUS_DENIED)
+        {
             $methodName = $order->get_payment_method_title();
             if (!empty($methodName)) {
                 wc_add_notice(esc_html(sprintf(__('Unfortunately the payment has been denied by %s. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $methodName)), 'error');
@@ -442,7 +445,8 @@ class PPMFWC_Gateways
             }
 
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_DENIED, wc_get_checkout_url());
-        } elseif ($newStatus == PPMFWC_Gateways::STATUS_PENDING) {
+        } elseif ($newStatus == PPMFWC_Gateways::STATUS_PENDING)
+        {
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_PENDING, $order->get_checkout_order_received_url());
 
             $method = $order->get_payment_method();
@@ -451,7 +455,8 @@ class PPMFWC_Gateways
             if (!empty($methodSettings['alternative_return_url'])) {
                 $url = $methodSettings['alternative_return_url'];
             }
-        } else {
+        } else
+        {
 
             $return_url = $order->get_checkout_order_received_url();
             if (is_ssl() || get_option('woocommerce_force_ssl_checkout') == 'yes') {
@@ -487,7 +492,7 @@ class PPMFWC_Gateways
         } elseif ($statusId == -63) {
             $status = SELF::STATUS_DENIED;
         } elseif (in_array($statusId, array(20, 25, 50, 90))) {
-            $status = SELF::STATUS_PENDING;
+            $status = SELF::STATUS_PENDING; 
         } elseif ($statusId < 0) {
             $status = self::STATUS_CANCELED;
         }
@@ -549,7 +554,7 @@ class PPMFWC_Gateways
                     die('FALSE| Already processing payment');
                 }
             }
-            if (in_array($action, array_keys($arrActions))) {
+            if(in_array($action, array_keys($arrActions))) {
                 $status = $arrActions[$action];
             } else {
                 throw new PPMFWC_Exception_Notice('Ignoring: ' . $action);
@@ -562,6 +567,7 @@ class PPMFWC_Gateways
                 $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status, $methodId);
                 $message = 'TRUE|Status updated to ' . $newStatus;
             }
+
         } catch (PPMFWC_Exception_Notice $e) {
             $message = 'TRUE|Notice: ' . $e->getMessage();
         } catch (PPMFWC_Exception $e) {
@@ -600,4 +606,5 @@ class PPMFWC_Gateways
     {
         wc_print_notice(__('The payment is pending or not completed', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), 'notice');
     }
+
 }
