@@ -162,10 +162,10 @@ class PPMFWC_Gateways
 
         if (strlen($warning) > 0) {
             $message = '<span style="color:#ff8300; font-weight:bold;">' . esc_html($warning) . '</span>';
-            $message .= '<p class="description">' . esc_html(__('Not registered at Pay.? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register">here</a>!</p>';
+            $message .= '<p class="description">' . esc_html(__('Not registered at Pay.? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register-now">here</a>!</p>';
         } elseif (strlen($error) > 0) {
             $message = '<span style="color:#ff0000; font-weight:bold;">' . esc_html(__('Pay. Connection failed.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . ' (' . esc_html($error) . ')</span>';
-            $message .= '<p class="description">' . esc_html(__('Not registered at Pay.? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register">here</a>!</p>';
+            $message .= '<p class="description">' . esc_html(__('Not registered at Pay.? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register-now">here</a>!</p>';
         } else {
             $message = '<span style="color:#10723a; font-weight:bold;">' . esc_html(__('Pay. Successfully connected.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span>';
         }
