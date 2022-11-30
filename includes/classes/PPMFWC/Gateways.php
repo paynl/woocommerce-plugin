@@ -296,7 +296,7 @@ class PPMFWC_Gateways
             'name' => esc_html(__('Order Description Prefix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'text',
             'placeholder' => '',
-            'desc' => esc_html(__('Optionally add a custom order description prefix. If left empty, the order description will just be the order number.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'desc' => esc_html(__('Optionally add a custom order description prefix. Use a double underscore to add an extra space.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_order_description_prefix',
         );
         $addedSettings[] = array(
