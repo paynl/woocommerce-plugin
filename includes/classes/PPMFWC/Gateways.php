@@ -110,22 +110,21 @@ class PPMFWC_Gateways
 
 
     /**
-     * @param $settings
-     * @return array
+     * @return string
      */
-    public static function ppmfwc_addGlobalSettings($settings)
+    public static function ppmfwc_loadPaymentMethods()
     {
-        $loadedPaymentMethods = "";
+        $loadedPaymentMethods = '';
+        $warning = '';
+        $error = '';
         try {
             PPMFWC_Helper_Data::loadPaymentMethods();
-
             $arrOptions = PPMFWC_Helper_Data::getOptions();
             $loadedPaymentMethods .= '<br /><br />' . esc_html(__('The following payment methods can be enabled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
-
             $loadedPaymentMethods .= '<ul>';
             foreach ($arrOptions as $option) {
                 $loadedPaymentMethods .= '<li style="float: left; width:300px; display:block;"><img height="50px" src="' . esc_attr($option['image']) . '" alt="' . esc_attr($option['name'])
-                  . '" title="' . esc_attr($option['name']) . '" /> ' . esc_attr($option['name']) . '</li>';
+                    . '" title="' . esc_attr($option['name']) . '" /> ' . esc_attr($option['name']) . '</li>';
             }
             $loadedPaymentMethods .= '</ul>';
             $loadedPaymentMethods .= '<div class="clear"></div>';
@@ -133,13 +132,15 @@ class PPMFWC_Gateways
             $current_apitoken = get_option('paynl_apitoken');
             $current_serviceid = get_option('paynl_serviceid');
             $current_tokencode = get_option('paynl_tokencode');
-
             $error = $e->getMessage();
             if (strlen($current_apitoken . $current_serviceid . $current_tokencode) == 0) {
-                if (count($_POST) > 0) {
+                $post_apitoken = PPMFWC_Helper_Data::getPostTextField('paynl_apitoken');
+                $post_serviceid = PPMFWC_Helper_Data::getPostTextField('paynl_serviceid');
+                $post_tokencode = PPMFWC_Helper_Data::getPostTextField('paynl_tokencode');
+                if (!empty($post_apitoken) || !empty($post_serviceid) || !empty($post_tokencode)) {
                     $error = __('API token and Service id are required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
                 } else {
-                    $error = '';
+                    $warning = __('Pay. Not connected.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);;
                 }
             } else if (strlen($current_apitoken . $current_serviceid) == 0) {
                 $error = __('API-token and Service id are required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
@@ -149,24 +150,72 @@ class PPMFWC_Gateways
                 $error = __('Service id is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             }
 
-            if ($error == 'HTTP/1.0 401 Unauthorized') {
-                $error = __('API-token is invalid.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-            }
-            if ($error == 'PAY-404 - Service not found') {
-                $error = __('Service id is invalid.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-            }
-
-            if (strlen($error) > 0) {
-                $loadedPaymentMethods = '<span style="color:#ff0000; font-weight:bold;">' . esc_html(__('Error:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . ' ' . esc_html($error) . '</span>';
+            switch ($error) {
+                case 'HTTP/1.0 401 Unauthorized':
+                    $error = __('Service-ID, API-Token or Tokencode invalid', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                    break;
+                case 'PAY-404 - Service not found':
+                    $error = __('Service-ID is invalid.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                    break;
+                case 'PAY-403 - Access denied: Token not valid for this company':
+                    $error = __('Service-ID / API-Token combination is invalid.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                    break;
             }
         }
 
-        $updatedSettings = array();
+        if (strlen($warning) > 0) {
+            $message = '<span style="color:#ff8300; font-weight:bold;">' . esc_html($warning) . '</span>';
+            $message .= '<p class="description">' . esc_html(__('Not registered at Pay.? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register-now">here</a>!</p>';
+        } elseif (strlen($error) > 0) {
+            $message = '<span style="color:#ff0000; font-weight:bold;">' . esc_html(__('Pay. Connection failed.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . ' (' . esc_html($error) . ')</span>';
+            $message .= '<p class="description">' . esc_html(__('Not registered at Pay.? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register-now">here</a>!</p>';
+        } else {
+            $message = '<span style="color:#10723a; font-weight:bold;">' . esc_html(__('Pay. Successfully connected.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span>';
+        }
+
+        $loadedPaymentMethods .= '<table class="form-table">';
+        $loadedPaymentMethods .= '<tr valign="top">';
+        $loadedPaymentMethods .= '<th scope="row" class="titledesc">';
+        $loadedPaymentMethods .= '<label>Status</label>';
+        $loadedPaymentMethods .= '</th>';
+        $loadedPaymentMethods .= '<td class="forminp forminp-text">';
+        $loadedPaymentMethods .= $message;
+        $loadedPaymentMethods .= '</td>';
+        $loadedPaymentMethods .= '</tr>';
+        $loadedPaymentMethods .= '</table>';
+
+        return $loadedPaymentMethods;
+    }
+
+
+    /**
+     * @param $settings
+     * @return array
+     */
+    public static function ppmfwc_addGlobalSettings($settings)
+    {
+        $loadedPaymentMethods = '';
+
+        $post_apitoken = PPMFWC_Helper_Data::getPostTextField('paynl_apitoken');
+        $post_serviceid = PPMFWC_Helper_Data::getPostTextField('paynl_serviceid');
+        $post_tokencode = PPMFWC_Helper_Data::getPostTextField('paynl_tokencode');
+
+        if (!empty($post_apitoken) || !empty($post_serviceid) || !empty($post_tokencode)) {
+            $current_apitoken = get_option('paynl_apitoken');
+            $current_serviceid = get_option('paynl_serviceid');
+            $current_tokencode = get_option('paynl_tokencode');
+            if (($post_apitoken == $current_apitoken) && ($post_serviceid == $current_serviceid) && ($post_tokencode == $current_tokencode)) {
+                $loadedPaymentMethods = self::ppmfwc_loadPaymentMethods();
+            }
+        } else {
+            $loadedPaymentMethods = self::ppmfwc_loadPaymentMethods();
+        }
+
         $addedSettings = array();
         $addedSettings[] = array(
-            'title' => esc_html(__('PAY. settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'title' => esc_html(__('Pay. settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'title',
-            'desc' => '<p>' . $loadedPaymentMethods . '</p><p style="margin-top: 25px;">' . esc_html(__('Not registered at PAY? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register">here</a>!</p>',
+            'desc' => '<p>' . $loadedPaymentMethods . '</p>',
             'id' => 'paynl_global_settings',
         );
         $addedSettings[] = array(
@@ -179,7 +228,7 @@ class PPMFWC_Gateways
         $addedSettings[] = array(
             'name' => esc_html( __('API-token *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'text',
-            'desc' => esc_html(__('The API-token used to communicate with the PAY. API, you can find your API-token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)).'<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
+            'desc' => esc_html(__('The API-token used to communicate with the Pay. API, you can find your API-token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)).'<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
             'id' => 'paynl_apitoken',
         );
         $addedSettings[] = array(
@@ -207,7 +256,7 @@ class PPMFWC_Gateways
         $addedSettings[] = array(
             'name' => esc_html(__('Send Order Data', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'checkbox',
-            'desc' => esc_html(__('Check this box if you want to send the order data to PAY., this is required if you want use \'Pay after delivery\' paymentmethods ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'desc' => esc_html(__('Check this box if you want to send the order data to Pay., this is required if you want use \'Pay after delivery\' paymentmethods ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_send_order_data',
             'default' => 'yes',
         );
@@ -249,9 +298,9 @@ class PPMFWC_Gateways
             'default' => 'Auto',
         );
         $addedSettings[] = array(
-            'name' => __('Standard PAY. Style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'name' => __('Standard Pay. Style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'type' => 'checkbox',
-            'desc' => esc_html(__('Check this box if you want to use the standard PAY. style in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'desc' => esc_html(__('Check this box if you want to use the standard Pay. style in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_standard_style',
             'default' => 'yes',
           );
@@ -289,7 +338,7 @@ class PPMFWC_Gateways
             'name' => esc_html(__('Failover Gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'type' => 'text',
             'placeholder' => '',
-            'desc' => esc_html(__('Leave empty. Unless PAY. provides you with a failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+            'desc' => esc_html(__('Leave empty. Unless Pay. provides you with a failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'id' => 'paynl_failover_gateway',
         );
         $addedSettings[] = array(
