@@ -180,7 +180,7 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 
 == Changelog ==
 = 3.13.0 =
-Added Online Bankbetaling, Shoes & Sneakers, Your Green Gift Card
+Added Online Bankbetaling, Shoes & Sneakers, Your Green Gift Card, Sodexo, Monizze, Batavia Stad Cadeaukaart
 Added Pay. connection status
 Fixed error showing on multisite installation
 = 3.12.2 =
