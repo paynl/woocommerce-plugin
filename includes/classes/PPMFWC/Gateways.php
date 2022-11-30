@@ -114,7 +114,7 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_loadPaymentMethods()
     {
-        $loadedPaymentMethods = "";
+        $loadedPaymentMethods = '';
         $warning = '';
         $error = '';
         try {
@@ -134,7 +134,10 @@ class PPMFWC_Gateways
             $current_tokencode = get_option('paynl_tokencode');
             $error = $e->getMessage();
             if (strlen($current_apitoken . $current_serviceid . $current_tokencode) == 0) {
-                if (count($_POST) > 0) {
+                $post_apitoken = PPMFWC_Helper_Data::getPostTextField('paynl_apitoken');
+                $post_serviceid = PPMFWC_Helper_Data::getPostTextField('paynl_serviceid');
+                $post_tokencode = PPMFWC_Helper_Data::getPostTextField('paynl_tokencode');
+                if (!empty($post_apitoken) || !empty($post_serviceid) || !empty($post_tokencode)) {
                     $error = __('API token and Service id are required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
                 } else {
                     $warning = __('Pay. Not connected.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);;
@@ -191,19 +194,23 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_addGlobalSettings($settings)
     {
-        $loadedPaymentMethods = "";
-        if (count($_POST) > 0) {
+        $loadedPaymentMethods = '';
+
+        $post_apitoken = PPMFWC_Helper_Data::getPostTextField('paynl_apitoken');
+        $post_serviceid = PPMFWC_Helper_Data::getPostTextField('paynl_serviceid');
+        $post_tokencode = PPMFWC_Helper_Data::getPostTextField('paynl_tokencode');
+
+        if (!empty($post_apitoken) || !empty($post_serviceid) || !empty($post_tokencode)) {
             $current_apitoken = get_option('paynl_apitoken');
             $current_serviceid = get_option('paynl_serviceid');
             $current_tokencode = get_option('paynl_tokencode');
-            if (($_POST['paynl_apitoken'] == $current_apitoken) && ($_POST['paynl_serviceid'] == $current_serviceid) && ($_POST['paynl_tokencode'] == $current_tokencode)) {
+            if (($post_apitoken == $current_apitoken) && ($post_serviceid == $current_serviceid) && ($post_tokencode == $current_tokencode)) {
                 $loadedPaymentMethods = self::ppmfwc_loadPaymentMethods();
             }
         } else {
             $loadedPaymentMethods = self::ppmfwc_loadPaymentMethods();
         }
 
-        $updatedSettings = array();
         $addedSettings = array();
         $addedSettings[] = array(
             'title' => esc_html(__('Pay. settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
