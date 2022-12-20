@@ -18,4 +18,9 @@ class PPMFWC_Gateway_Givacard extends PPMFWC_Gateway_Abstract
         return 1657;
     }
 
+    public static function showLogoSetting()
+    {
+        return true;
+    }
+
 }

@@ -43,6 +43,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $size = $this->getIconSize();
         $brandid = $this->get_option('brand_id');
 
+        if ($this->getOptionId() == 1657 && !empty($this->get_option('external_logo'))) {
+            return $this->get_option('external_logo');
+        }
         if (!empty($brandid) && $size == 'Auto') {
             return PPMFWC_PLUGIN_URL . 'assets/logos/' . $this->get_option('brand_id') . '.png';
         } elseif (!empty($size) && $size != 'Auto') {
@@ -170,6 +173,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                   'description' => sprintf( esc_html(__('Select which status authorized transactions initially should have.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
                 );
             }
+            if ($this->showLogoSetting()) {
+                $this->form_fields['external_logo'] = array(
+                    'title' => esc_html(__('External logo', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'type' => 'text',
+                    'description' => esc_html(__('URL to a different logo to be used in the checkout.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'default' => esc_html('')
+                );
+            }
             if ($this->showDOB()) {
                 $this->form_fields['ask_birthdate'] = array(
                     'title' => esc_html(__('Ask birthdate', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -261,6 +272,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     public static function showAuthorizeSetting()
+    {
+        return false;
+    }
+
+    public static function showLogoSetting()
     {
         return false;
     }
