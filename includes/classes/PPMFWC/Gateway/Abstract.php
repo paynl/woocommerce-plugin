@@ -43,7 +43,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $size = $this->getIconSize();
         $brandid = $this->get_option('brand_id');
 
-        if ($this->getOptionId() == 1657 && !empty($this->get_option('external_logo'))) {
+        if (!empty($this->get_option('external_logo')) && wc_is_valid_url($this->get_option('external_logo'))) {
             return $this->get_option('external_logo');
         }
         if (!empty($brandid) && $size == 'Auto') {
@@ -276,6 +276,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         return false;
     }
 
+    /**
+     * @return false
+     */
     public static function showLogoSetting()
     {
         return false;
