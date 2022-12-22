@@ -19,7 +19,7 @@ class PPMFWC_Gateway_Givacard extends PPMFWC_Gateway_Abstract
     }
 
     /**
-     * @return true
+     * @return bool
      */
     public static function showLogoSetting()
     {

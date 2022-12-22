@@ -277,7 +277,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @return false
+     * @return bool
      */
     public static function showLogoSetting()
     {
