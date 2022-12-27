@@ -19,6 +19,30 @@ class PPMFWC_Gateways
     const ACTION_REFUND = 'refund:received';
     const ACTION_CAPTURE = 'capture';
 
+    /**
+     * @param $default
+     * @return array
+     */
+    private static function getAvailableWoocomStatus($default)
+    {
+        $txt = esc_html(' (' . __('default', 'woocommerce') . ')');
+
+        $arrStates['processing'] = PPMFWC_Gateway_Abstract::STATUS_PROCESSING;
+        $arrStates['pending'] = PPMFWC_Gateway_Abstract::STATUS_PENDING;
+        $arrStates['cancel'] = PPMFWC_Gateway_Abstract::STATUS_CANCELLED;
+        $arrStates['refunded'] = PPMFWC_Gateway_Abstract::STATUS_REFUNDED;
+        $arrStates['failed'] = PPMFWC_Gateway_Abstract::STATUS_FAILED;
+        $arrStates['onhold'] = PPMFWC_Gateway_Abstract::STATUS_ON_HOLD;
+        $arrStates['completed'] = PPMFWC_Gateway_Abstract::STATUS_COMPLETED;
+
+        $availableStatuses = array();
+        foreach ($arrStates as $state) {
+            $availableStatuses[$state] = wc_get_order_status_name($state) . ($state == $default ? $txt : '');
+        }
+
+        return $availableStatuses;
+    }
+
     private static $arrGateways = array(
       'PPMFWC_Gateway_Alipay',
       'PPMFWC_Gateway_Amazonpay',
@@ -356,6 +380,26 @@ class PPMFWC_Gateways
             'id' => 'paynl_payment_method_display',
             'default' => 1,
         );
+
+        $statusSettings = [
+          'paid' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
+          'cancel' => ['cancelled', PPMFWC_Gateway_Abstract::STATUS_CANCELLED],
+          'failed' => ['failed', PPMFWC_Gateway_Abstract::STATUS_FAILED],
+          'authorized' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
+          'verify' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING]
+        ];
+
+        foreach ($statusSettings as $statusname => $statusValues) {
+            $addedSettings[] = array(
+              'id' => 'paynl_status_' . $statusname,
+              'name'       => esc_html( __('Pay. status ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+              'type'        => 'select',
+              'options'     => self::getAvailableWoocomStatus($statusValues[0]),
+              'default'     => $statusValues[1],
+              'desc'    => sprintf(esc_html(__('Select which status an order should have when Pay.\'s transaction status is ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
+            );
+        }
+
         $addedSettings[] = array(
             'type' => 'sectionend',
             'id' => 'paynl_global_settings',
@@ -380,7 +424,7 @@ class PPMFWC_Gateways
     }
 
     /**
-     * This function adds the Pay Global Settings to the WooCommerce payment method settings
+     * This function adds the Pay. Payment Methods global-settings, to the WooCommerce Payments-tab
      */
     public static function ppmfwc_addSettings()
     {
