@@ -258,7 +258,7 @@ class PPMFWC_Helper_Transaction
                 if(get_option('paynl_externalrefund') == "yes") {
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `refunded`', $transactionId);
 
-                    $order->set_status(self::getCustomWooComOrderStatus('refunded'), 'PAY.: ');
+                    $order->set_status('refunded');
 
                     wc_increase_stock_levels($orderId);
                     $order->save();
