@@ -6,7 +6,6 @@ class PPMFWC_Helper_Transaction
     /**
      * @param $payStatus
      * @return false|mixed|null
-     * @throws Exception
      */
     public static function getCustomWooComOrderStatus($payStatus)
     {
@@ -15,10 +14,6 @@ class PPMFWC_Helper_Transaction
         $arrStatus['failed'] = get_option('paynl_status_failed');
         $arrStatus['authorised'] = get_option('paynl_status_authorized');
         $arrStatus['verify'] = get_option('paynl_status_verify');
-
-        if (!isset($arrStatus[$payStatus])) {
-            throw new Exception('payStatus not defined');
-        }
 
         return $arrStatus[$payStatus];
     }
