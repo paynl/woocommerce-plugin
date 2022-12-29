@@ -20,10 +20,11 @@ class PPMFWC_Gateways
     const ACTION_CAPTURE = 'capture';
 
     /**
-     * @param $default
+     * @param $default Adds text 'default' for the selected option
+     * @param $excludeStates List of statusus that should not return
      * @return array
      */
-    private static function getAvailableWoocomStatus($default)
+    private static function getAvailableWoocomStatus($default, $excludeStates = array())
     {
         $txt = esc_html(' (' . __('default', 'woocommerce') . ')');
 
@@ -37,7 +38,9 @@ class PPMFWC_Gateways
 
         $availableStatuses = array();
         foreach ($arrStates as $state) {
-            $availableStatuses[$state] = wc_get_order_status_name($state) . ($state == $default ? $txt : '');
+            if (!in_array($state, $excludeStates)) {
+                $availableStatuses[$state] = wc_get_order_status_name($state) . ($state == $default ? $txt : '');
+            }
         }
 
         return $availableStatuses;
@@ -383,7 +386,8 @@ class PPMFWC_Gateways
 
         $statusSettings = [
           'paid' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
-          'cancel' => ['cancelled', PPMFWC_Gateway_Abstract::STATUS_CANCELLED],
+          'cancel' => ['cancelled', PPMFWC_Gateway_Abstract::STATUS_CANCELLED, [PPMFWC_Gateway_Abstract::STATUS_PROCESSING, PPMFWC_Gateway_Abstract::STATUS_REFUNDED,
+            PPMFWC_Gateway_Abstract::STATUS_COMPLETED, PPMFWC_Gateway_Abstract::STATUS_ON_HOLD]],
           'failed' => ['failed', PPMFWC_Gateway_Abstract::STATUS_FAILED],
           'authorized' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
           'verify' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING]
@@ -394,7 +398,7 @@ class PPMFWC_Gateways
               'id' => 'paynl_status_' . $statusname,
               'name'       => esc_html( __('Pay. status ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
               'type'        => 'select',
-              'options'     => self::getAvailableWoocomStatus($statusValues[0]),
+              'options' => self::getAvailableWoocomStatus($statusValues[0], isset($statusValues[2]) ? $statusValues[2] : array()),
               'default'     => $statusValues[1],
               'desc'    => sprintf(esc_html(__('Select which status an order should have when Pay.\'s transaction status is ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
             );

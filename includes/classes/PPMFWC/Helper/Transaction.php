@@ -130,7 +130,7 @@ class PPMFWC_Helper_Transaction
                 WC()->cart->empty_cart();
             }
             PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - status allready up-to-date', $transactionId, array('status' => $status));
-            # We dont have to update
+            # We don't have to update
             return $status;
         }
 
@@ -232,16 +232,15 @@ class PPMFWC_Helper_Transaction
                         }
                     }
 
-                    $customStatus = self::getCustomWooComOrderStatus('paid');
+                    $customStatus = self::getCustomWooComOrderStatus($payApiStatus == STATUS_AUTHORIZE ? 'paid' : 'authorised');
                     if($customStatus != 'paid') {
-                        $order->update_status($customStatus, 'According to pay. plugin settings');
+                        $order->add_order_note(sprintf(esc_html(__('PAY.: Orderstatus set to custom-status: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $customStatus));
+                        $order->update_status($customStatus, 'According to Pay. plugin settings');
                         $order->save();
                     } else {
                         $order->payment_complete($transactionId);
                         $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
                     }
-
-                    $order->add_order_note(sprintf(esc_html(__('PAY.: Paym2ent complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
                 }
 
                 update_post_meta($orderId, 'CustomerName', esc_attr($transaction->getAccountHolderName()));
