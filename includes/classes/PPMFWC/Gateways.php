@@ -390,7 +390,7 @@ class PPMFWC_Gateways
             PPMFWC_Gateway_Abstract::STATUS_COMPLETED, PPMFWC_Gateway_Abstract::STATUS_ON_HOLD]],
           'failed' => ['failed', PPMFWC_Gateway_Abstract::STATUS_FAILED],
           'authorized' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
-          'verify' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING]
+          'verify' => ['processing', PPMFWC_Gateway_Abstract::STATUS_ON_HOLD]
         ];
 
         foreach ($statusSettings as $statusname => $statusValues) {
