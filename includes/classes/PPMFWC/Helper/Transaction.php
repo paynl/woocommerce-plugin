@@ -195,7 +195,7 @@ class PPMFWC_Helper_Transaction
                         # Launch action for custom implementation
                         do_action('paynl_order_authorised', $order->get_id(), $auth_status);
 
-                        # auth_status is null bij betaalmethoden die deze instelling niet hebben (komt doorgaans ook niet voor, gezien ze dan niet op auth komen).
+                        # auth_status is null when paymentmethods don't have the authorize_status-setting, like iDEAL.
                         if ($auth_status !== null) {
                             if ($wcOrderStatus != $auth_status) {
                                 $order->update_status($auth_status);
