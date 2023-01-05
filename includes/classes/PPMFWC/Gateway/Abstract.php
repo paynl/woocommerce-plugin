@@ -161,13 +161,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                   'title'       => esc_html( __('Authorize status', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                   'type'        => 'select',
                   'options'     => array(
-                    self::STATUS_PROCESSING => wc_get_order_status_name(self::STATUS_PROCESSING) . esc_html( ' (' . __('default', 'woocommerce') . ')'),
+                    self::STATUS_PROCESSING => wc_get_order_status_name(self::STATUS_PROCESSING),
                     self::STATUS_PENDING => wc_get_order_status_name(self::STATUS_PENDING),
                     self::STATUS_COMPLETED => wc_get_order_status_name(self::STATUS_COMPLETED),
                     self::STATUS_ON_HOLD => wc_get_order_status_name(self::STATUS_ON_HOLD),
+                    'parent_status' => esc_html(__('Use default (parent) setting ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
                   ),
                   'default'     => self::STATUS_PROCESSING,
-                  'description' => sprintf( esc_html(__('Select which status authorized transactions initially should have.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
+                  'description' => sprintf( esc_html(__('Select which status authorized transactions initially should have. Select `Use default` to use the global setting. ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
                 );
             }
             if ($this->showDOB()) {

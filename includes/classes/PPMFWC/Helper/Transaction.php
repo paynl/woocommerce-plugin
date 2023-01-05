@@ -3,6 +3,21 @@
 class PPMFWC_Helper_Transaction
 {
 
+    /**
+     * @param $payStatus
+     * @return false|mixed|null
+     */
+    public static function getCustomWooComOrderStatus($payStatus)
+    {
+        $arrStatus['paid'] = get_option('paynl_status_paid');
+        $arrStatus['cancel'] = get_option('paynl_status_cancel');
+        $arrStatus['failed'] = get_option('paynl_status_failed');
+        $arrStatus['authorised'] = get_option('paynl_status_authorized');
+        $arrStatus['verify'] = get_option('paynl_status_verify');
+
+        return $arrStatus[$payStatus];
+    }
+
     public static function newTransaction($transactionId, $opionId, $amount, $orderId, $startData, $optionSubId = null)
     {
         global $wpdb;
@@ -110,7 +125,7 @@ class PPMFWC_Helper_Transaction
                 WC()->cart->empty_cart();
             }
             PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - status allready up-to-date', $transactionId, array('status' => $status));
-            # We dont have to update
+            # We don't have to update
             return $status;
         }
 
@@ -162,6 +177,10 @@ class PPMFWC_Helper_Transaction
                         $methodSettings = get_option('woocommerce_' . $method . '_settings');
                         $auth_status = empty($methodSettings['authorize_status']) ? null : $methodSettings['authorize_status'];
 
+                        if ($auth_status == 'parent_status') {
+                            $auth_status = self::getCustomWooComOrderStatus('authorised');
+                        }
+
                         try {
                             $order->set_transaction_id($transactionId);
                         } catch (Exception $e) {
@@ -171,6 +190,7 @@ class PPMFWC_Helper_Transaction
                         # Launch action for custom implementation
                         do_action('paynl_order_authorised', $order->get_id(), $auth_status);
 
+                        # auth_status is null when paymentmethods don't have the authorize_status-setting, like iDEAL.
                         if ($auth_status !== null) {
                             if ($wcOrderStatus != $auth_status) {
                                 $order->update_status($auth_status);
@@ -179,7 +199,7 @@ class PPMFWC_Helper_Transaction
                             }
 
                             if ($auth_status == PPMFWC_Gateway_Abstract::STATUS_PROCESSING) {
-                                # Treat as success. So continue, dont break, and set payment as complete...
+                                # Treat as success. So continue, don't break, and set payment as complete...
                             } else {
                                 # Save transaction and stop further actions
                                 PPMFWC_Helper_Data::ppmfwc_payLogger('Setting transactionId, and break.', $transactionId);
@@ -207,8 +227,15 @@ class PPMFWC_Helper_Transaction
                         }
                     }
 
-                    $order->payment_complete($transactionId);
-                    $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
+                    $customStatus = self::getCustomWooComOrderStatus($payApiStatus == STATUS_AUTHORIZE ? 'paid' : 'authorised');
+                    if($customStatus != 'paid') {
+                        $order->add_order_note(sprintf(esc_html(__('PAY.: Orderstatus set to custom-status: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $customStatus));
+                        $order->update_status($customStatus, 'According to Pay. plugin settings');
+                        $order->save();
+                    } else {
+                        $order->payment_complete($transactionId);
+                        $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
+                    }
                 }
 
                 update_post_meta($orderId, 'CustomerName', esc_attr($transaction->getAccountHolderName()));
@@ -218,14 +245,15 @@ class PPMFWC_Helper_Transaction
 
             case PPMFWC_Gateways::STATUS_DENIED:
                 $order->add_order_note(esc_html(__('PAY.: Payment denied. ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
-                $order->update_status('failed');
+                $order->update_status(self::getCustomWooComOrderStatus('failed'));
                 break;
 
             case PPMFWC_Gateways::STATUS_REFUND:
                 if(get_option('paynl_externalrefund') == "yes") {
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `refunded`', $transactionId);
 
-                    $order->set_status('refunded', 'PAY.: ');
+                    $order->set_status('refunded');
+
                     wc_increase_stock_levels($orderId);
                     $order->save();
                 }
@@ -245,14 +273,15 @@ class PPMFWC_Helper_Transaction
                     throw new PPMFWC_Exception_Notice('Cancel ignored, order is ' . $order->get_status());
                 }
 
-                $order->set_status('cancelled', 'PAY.: ');
+                $order->set_status(self::getCustomWooComOrderStatus('cancel'));
                 $order->save();
 
                 $order->add_order_note(esc_html(__('PAY.: Payment canceled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
                 break;
 
             case PPMFWC_Gateways::STATUS_VERIFY:
-                $order->update_status('on-hold', esc_html(__("Transaction needs to be verified", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+                $order->set_status(self::getCustomWooComOrderStatus('verify'), 'PAY.: ' . esc_html(__("To be verified. ", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+                $order->save();
                 break;
         }
 
