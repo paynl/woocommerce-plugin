@@ -1,9 +1,33 @@
-#paynl_global_settings-description ul {
+#paynl_payment_methods-description ul {
     width: 100%;
 }
 
-#paynl_global_settings-description img {
+#paynl_payment_methods-description ul li {
+    display: inline-block;
+    width: 295px;
+    margin-right: 5px;
+}
+
+#paynl_payment_methods-description ul li a {
+    width: 100%;
+    display: inline-block;
+    color: #585fff;
+    text-decoration: none;
+}
+
+#paynl_payment_methods-description ul li a .enabled {
+    margin-left: 5px;
+    color: #10723a;
+    font-weight: bold;
+}
+
+#paynl_payment_methods-description ul li a:hover {
+    color: #272fcf;
+    background: #00000012;
+}
+
+#paynl_payment_methods-description img {
     position: relative;
     vertical-align: middle;
-    margin-right: 5px;
+    margin-right: 10px;
 }

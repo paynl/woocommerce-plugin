@@ -13,9 +13,9 @@ class PPMFWC_Gateway_Dankort extends PPMFWC_Gateway_Abstract
         return 'Dankort';
     }
 
-    public static function getOptionId()
+    public static function getOptionId($getDefault = false)
     {
-        if (self::is_high_risk()) {
+        if (self::is_high_risk() && !$getDefault) {
             return 1942;
         }
         return 1939;

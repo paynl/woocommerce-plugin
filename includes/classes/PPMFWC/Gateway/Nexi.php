@@ -13,9 +13,9 @@ class PPMFWC_Gateway_Nexi extends PPMFWC_Gateway_Abstract
         return 'Nexi';
     }
 
-    public static function getOptionId()
+    public static function getOptionId($getDefault = false)
     {
-        if (self::is_high_risk()) {
+        if (self::is_high_risk() && !$getDefault) {
             return 1948;
         }
         return 1945;

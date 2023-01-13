@@ -13,9 +13,9 @@ class PPMFWC_Gateway_Postepay extends PPMFWC_Gateway_Abstract
         return 'Postepay';
     }
 
-    public static function getOptionId()
+    public static function getOptionId($getDefault = false)
     {
-        if (self::is_high_risk()) {
+        if (self::is_high_risk() && !$getDefault) {
             return 708;
         }
         return 707;

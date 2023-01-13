@@ -13,9 +13,9 @@ class PPMFWC_Gateway_Visamastercard extends PPMFWC_Gateway_Abstract
         return 'Visa/Mastercard';
     }
 
-    public static function getOptionId()
+    public static function getOptionId($getDefault = false)
     {
-        if (self::is_high_risk()) {
+        if (self::is_high_risk() && !$getDefault) {
             return 709;
         }
         return 706;

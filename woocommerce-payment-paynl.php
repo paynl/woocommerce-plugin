@@ -54,11 +54,11 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
   # Register checkoutFlash
 	PPMFWC_Gateways::ppmfwc_registerCheckoutFlash();
 
-	# Add global settings
-	PPMFWC_Gateways::ppmfwc_addSettings();
-
 	# Register function calls to WooCommerce API
 	PPMFWC_Gateways::ppmfwc_registerApi();
+
+  # Add PAY settings tab in WooCcommerce
+  PPMFWC_Gateways::ppmfwc_settingsTab();
 
 	# Add settings link on the plugin-page
   add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'ppmfwc_plugin_add_settings_link');
@@ -114,9 +114,9 @@ function ppmfwc_error_curl_not_installed()
  */
 function ppmfwc_plugin_add_settings_link($links)
 {
-    $settings_link = '<a href="' . admin_url('/admin.php?page=wc-settings&tab=checkout#paynl_apitoken') . '">' . esc_html(__('Settings')) . '</a>';
-    array_push($links, $settings_link);
-    return $links;
+  $settings_link = '<a href="' . admin_url('/admin.php?page=wc-settings&tab=' . PPMFWC_Gateways::TAB_ID . '#paynl_tokencode') . '">' . esc_html(__('Settings')) . '</a>';
+  array_push($links, $settings_link);
+  return $links;
 }
 
 /**

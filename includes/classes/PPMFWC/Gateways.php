@@ -19,6 +19,8 @@ class PPMFWC_Gateways
     const ACTION_REFUND = 'refund:received';
     const ACTION_CAPTURE = 'capture';
 
+    const TAB_ID = 'pay_settings';
+
     /**
      * @param $default Adds text 'default' for the selected option
      * @param $excludeStates List of statusus that should not return
@@ -135,26 +137,73 @@ class PPMFWC_Gateways
         return $arrDefault;
     }
 
+    /**
+     * Add Settings Tab function
+     * @param array $settings_tabs
+     * @return array
+     */
+    public function ppmfwc_addSettingsTab($settings_tabs)
+    {
+        $settings_tabs[self::TAB_ID] = __('Pay.', 'woocommerce');
+        return $settings_tabs;
+    }
+
+    /**
+     * Add Sectcions function
+     * @return array
+     */
+    public function ppmfwc_addSettingsSections()
+    {
+        global $current_section;
+        $sections = array(
+            ''              => __('Setup', 'woocommerce'),
+            'payment_methods'  => __('Payment Methods', 'woocommerce'),
+            'settings'  => __('Settings', 'woocommerce'),
+            'order_state_automation'  => __('Order State Automation', 'woocommerce')
+        );
+        echo '<ul class="subsubsub">';
+        $array_keys = array_keys($sections);
+        foreach ($sections as $id => $label) {
+            echo '<li><a href="' . admin_url('admin.php?page=wc-settings&tab=' . self::TAB_ID . '&section=' . sanitize_title($id)) . '" class="' . ($current_section == $id ? 'current' : '') . '">' . $label . '</a> ' . (end($array_keys) == $id ? '' : '|') . ' </li>';
+        }
+        echo '</ul><br class="clear" />';     
+    }
+
+    /**
+     * Add Global Settings function
+     */
+    public function ppmfwc_addGlobalSettingsTab()
+    {
+        $settings = self::ppmfwc_addGlobalSettings();
+        WC_Admin_Settings::output_fields($settings);
+    }
+ 
+    /**
+     * Save Settings function
+     */
+    public function ppmfwc_saveGlobalSettingsTab()
+    {
+        global $current_section;
+
+        $settings = self::ppmfwc_addGlobalSettings();
+        WC_Admin_Settings::save_fields($settings);
+
+        $section_id = $current_section;
+        if ($section_id) {
+            do_action('woocommerce_update_options_' . self::TAB_ID . '_' . $section_id);
+        }
+    }
 
     /**
      * @return string
      */
-    public static function ppmfwc_loadPaymentMethods()
-    {
-        $loadedPaymentMethods = '';
+    public static function ppmfwc_checkCredentials()
+    {        
+        $status = '';
         $warning = '';
         $error = '';
         try {
-            PPMFWC_Helper_Data::loadPaymentMethods();
-            $arrOptions = PPMFWC_Helper_Data::getOptions();
-            $loadedPaymentMethods .= '<br /><br />' . esc_html(__('The following payment methods can be enabled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
-            $loadedPaymentMethods .= '<ul>';
-            foreach ($arrOptions as $option) {
-                $loadedPaymentMethods .= '<li style="float: left; width:300px; display:block;"><img height="50px" src="' . esc_attr($option['image']) . '" alt="' . esc_attr($option['name'])
-                    . '" title="' . esc_attr($option['name']) . '" /> ' . esc_attr($option['name']) . '</li>';
-            }
-            $loadedPaymentMethods .= '</ul>';
-            $loadedPaymentMethods .= '<div class="clear"></div>';
+            PPMFWC_Helper_Data::loadPaymentMethods();   
         } catch (Exception $e) {
             $current_apitoken = get_option('paynl_apitoken');
             $current_serviceid = get_option('paynl_serviceid');
@@ -200,216 +249,309 @@ class PPMFWC_Gateways
             $message = '<span style="color:#10723a; font-weight:bold;">' . esc_html(__('Pay. Successfully connected.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span>';
         }
 
-        $loadedPaymentMethods .= '<table class="form-table">';
-        $loadedPaymentMethods .= '<tr valign="top">';
-        $loadedPaymentMethods .= '<th scope="row" class="titledesc">';
-        $loadedPaymentMethods .= '<label>Status</label>';
-        $loadedPaymentMethods .= '</th>';
-        $loadedPaymentMethods .= '<td class="forminp forminp-text">';
-        $loadedPaymentMethods .= $message;
-        $loadedPaymentMethods .= '</td>';
-        $loadedPaymentMethods .= '</tr>';
-        $loadedPaymentMethods .= '</table>';
+        $status .= '<table class="form-table">';
+        $status .= '<tr valign="top">';
+        $status .= '<th scope="row" class="titledesc">';
+        $status .= '<label>Status</label>';
+        $status .= '</th>';
+        $status .= '<td class="forminp forminp-text">';
+        $status .= $message;
+        $status .= '</td>';
+        $status .= '</tr>';
+        $status .= '</table>';
 
-        return $loadedPaymentMethods;
-    }
-
+        return $status;
+    }    
 
     /**
-     * @param $settings
+     * @return string
+     */
+    public static function ppmfwc_loadPaymentMethods()
+    {
+
+        $paymentOptions = self::$arrGateways;
+
+        $enabledGateways = WC()->payment_gateways->get_available_payment_gateways();
+
+        $paymentOptionsAvailable = array();
+        foreach ($paymentOptions as $paymentOption) {
+            $optionId = call_user_func(array($paymentOption, 'getOptionId'), array(true));
+            $id = call_user_func(array($paymentOption, 'getId'));
+            $name = call_user_func(array($paymentOption, 'getName'));
+
+            $paymentOptionsAvailable[$optionId] = array(
+                'optionId' => $optionId,
+                'name' => $name,
+                'id' => $id,
+                'enabled' => (isset($enabledGateways[$id]))
+            );
+        }
+        $loadedPaymentMethods = '';
+        try {
+            PPMFWC_Helper_Data::loadPaymentMethods();
+            $arrOptions = PPMFWC_Helper_Data::getOptions();
+            $loadedPaymentMethods .= '<br /><br />' . esc_html(__('The following payment methods can be enabled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+            $loadedPaymentMethods .= '<ul>';
+            foreach ($arrOptions as $option) {
+                if (isset($paymentOptionsAvailable[$option['id']])) {
+                    $section = $paymentOptionsAvailable[$option['id']]['id'];
+                    $enabled = $paymentOptionsAvailable[$option['id']]['enabled'];
+                    $href = admin_url('/admin.php?page=wc-settings&tab=checkout&section=' . $section);
+                    $loadedPaymentMethods .= '<li><a href="' . $href . '" target="_BLANK"><img height="50px" src="' . esc_attr($option['image']) . '" alt="' . esc_attr($option['name'])
+                        . '" title="' . esc_attr($option['name']) . '" />' . esc_attr($option['name']) . ($enabled ? '<span class="enabled">&#10003;</span>' : '') . '</a></li>';
+                }
+            }
+            $loadedPaymentMethods .= '</ul>';
+            $loadedPaymentMethods .= '<div class="clear"></div>';
+        } catch (Exception $e) {
+            return false;
+        }    
+
+        return $loadedPaymentMethods;
+    }    
+
+    /**
      * @return array
      */
-    public static function ppmfwc_addGlobalSettings($settings)
+    public static function ppmfwc_addGlobalSettings()
     {
-        $loadedPaymentMethods = '';
-
-        $post_apitoken = PPMFWC_Helper_Data::getPostTextField('paynl_apitoken');
-        $post_serviceid = PPMFWC_Helper_Data::getPostTextField('paynl_serviceid');
-        $post_tokencode = PPMFWC_Helper_Data::getPostTextField('paynl_tokencode');
-
-        if (!empty($post_apitoken) || !empty($post_serviceid) || !empty($post_tokencode)) {
-            $current_apitoken = get_option('paynl_apitoken');
-            $current_serviceid = get_option('paynl_serviceid');
-            $current_tokencode = get_option('paynl_tokencode');
-            if (($post_apitoken == $current_apitoken) && ($post_serviceid == $current_serviceid) && ($post_tokencode == $current_tokencode)) {
-                $loadedPaymentMethods = self::ppmfwc_loadPaymentMethods();
-            }
-        } else {
-            $loadedPaymentMethods = self::ppmfwc_loadPaymentMethods();
-        }
+        global $current_section;
 
         $addedSettings = array();
-        $addedSettings[] = array(
-            'title' => esc_html(__('Pay. settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'title',
-            'desc' => '<p>' . $loadedPaymentMethods . '</p>',
-            'id' => 'paynl_global_settings',
-        );
-        $addedSettings[] = array(
-            'name' => esc_html(__('Token Code *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'placeholder' => 'AT-####-####',
-            'type' => 'text',
-            'desc' => esc_html(__('The AT-code belonging to your token, you can find this ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
-            'id' => 'paynl_tokencode',
-        );
-        $addedSettings[] = array(
-            'name' => esc_html( __('API-token *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'text',
-            'desc' => esc_html(__('The API-token used to communicate with the Pay. API, you can find your API-token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)).'<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
-            'id' => 'paynl_apitoken',
-        );
-        $addedSettings[] = array(
-            'name' => esc_html(__('Service ID *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'placeholder' => 'SL-####-####',
-            'type' => 'text',
-            'desc' => esc_html(__('The serviceid to identify your website, you can find your serviceid here ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)). '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
-            'id' => 'paynl_serviceid',
-            'desc_tip' => __('The serviceid should be in the following format: SL-xxxx-xxxx', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-        );
-        $addedSettings[] = array(
-            'name' => esc_html(__('Test Mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'checkbox',
-            'desc' => esc_html(__('Check this box if you want to enable test mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_test_mode',
-            'default' => 'no',
-        );
-        $addedSettings[] = array(
-            'name' => esc_html(__('SSL Verify Peer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'checkbox',
-            'desc' => esc_html(__('Uncheck this box if you have SSL certificate errors that you don\'t know how to fix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_verify_peer',
-            'default' => 'yes',
-        );
-        $addedSettings[] = array(
-            'name' => esc_html(__('Send Order Data', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'checkbox',
-            'desc' => esc_html(__('Check this box if you want to send the order data to Pay., this is required if you want use \'Pay after delivery\' paymentmethods ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_send_order_data',
-            'default' => 'yes',
-        );
-        $addedSettings[] = array(
-            'name' => esc_html(__('Show VAT Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'checkbox',
-            'desc' => esc_html(__('Check this box if you want to show VAT number in checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_show_vat_number',
-            'default' => 'no',
-        );
-        $addedSettings[] = array(
-            'name' => esc_html(__('Show COC Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'checkbox',
-            'desc' => esc_html(__('Check this box if you want to show COC number in checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_show_coc_number',
-            'default' => 'no',
-        );
-        $addedSettings[] = array(
-            'name' => __('Use High Risk Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            'type' => 'checkbox',
-            'desc' => esc_html(__("Check this box if you are using high risk payment methods", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_high_risk',
-            'default' => 'no',
-        );
-        $addedSettings[] = array(
-            'name' => __('Payment Screen Language', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            'type' => 'select',
-            'options' => PPMFWC_Helper_Data::ppmfwc_getAvailableLanguages(),
-            'desc' => esc_html(__('This is the language in which the payment screen will be shown', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_language',
-            'default' => 'nl',
-        );
-        $addedSettings[] = array(
-            'name' => __('Show Payment Method Logos', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            'type' => 'select',
-            'options' => PPMFWC_Helper_Data::ppmfwc_getLogoSizes(),
-            'desc' => esc_html(__('This is the size in which the payment method logos will be shown', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_logo_size',
-            'default' => 'Auto',
-        );
-        $addedSettings[] = array(
-            'name' => __('Standard Pay. Style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            'type' => 'checkbox',
-            'desc' => esc_html(__('Check this box if you want to use the standard Pay. style in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_standard_style',
-            'default' => 'yes',
-          );
-       $addedSettings[] = array(
-          'name' => __('Extended Logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-          'type' => 'checkbox',
-          'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-          'id' => 'paynl_paylogger',
-          'default' => 'yes',
-        );
-       $addedSettings[] = array(
-          'name' => __('Refund Processing', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-          'type' => 'checkbox',
-          'desc' => esc_html(__("Process refunds initiated from PAY admin", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-          'id' => 'paynl_externalrefund',
-          'default' => 'no',
-        );
-        $addedSettings[] = array(
-            'name' => __('Alternative Exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            'type' => 'text',
-            'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
-            'desc' => '<br>Use your own exchange-handler. Requests will be send as GET. <br> '.
-                      'Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#'.
-                      '<Br>For more info see: <a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
-            'id' => 'paynl_exchange_url',
-        );
-        $addedSettings[] = array(
-            'name' => esc_html(__('Auto-capture', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'checkbox',
-            'desc' => esc_html(__('Enable auto-capture for authorize-transactions. Capture will be initiated when an order gets the status: `Completed`.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_auto_capture',
-            'default' => 'no',
-        );
-        $addedSettings[] = array(
-            'name' => esc_html(__('Failover Gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'text',
-            'placeholder' => '',
-            'desc' => esc_html(__('Leave empty. Unless Pay. provides you with a failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_failover_gateway',
-        );
-        $addedSettings[] = array(
-            'name' => esc_html(__('Order Description Prefix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'text',
-            'placeholder' => '',
-            'desc' => esc_html(__('Optionally add a custom order description prefix. Use a double underscore to add an extra space.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_order_description_prefix',
-        );
-        $addedSettings[] = array(
-            'name' => esc_html(__('Follow Payment Method', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'type' => 'select',
-            'options' => array(0 => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 1 => esc_html(__('Yes', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))),
-            'desc' => esc_html(__('When `Yes`, the order will be updated with the actual used payment method in case this method differs from the initial method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            'id' => 'paynl_payment_method_display',
-            'default' => 1,
-        );
 
-        $statusSettings = [
-          'paid' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
-          'cancel' => ['cancelled', PPMFWC_Gateway_Abstract::STATUS_CANCELLED, [PPMFWC_Gateway_Abstract::STATUS_PROCESSING, PPMFWC_Gateway_Abstract::STATUS_REFUNDED,
-            PPMFWC_Gateway_Abstract::STATUS_COMPLETED, PPMFWC_Gateway_Abstract::STATUS_ON_HOLD]],
-          'failed' => ['failed', PPMFWC_Gateway_Abstract::STATUS_FAILED],
-          'authorized' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
-          'verify' => ['on-hold', PPMFWC_Gateway_Abstract::STATUS_ON_HOLD]
-        ];
-
-        foreach ($statusSettings as $statusname => $statusValues) {
+        if ($current_section == 'payment_methods') {              
+            $loadedPaymentMethods = self::ppmfwc_loadPaymentMethods();            
+            if($loadedPaymentMethods ){
+                $addedSettings[] = array(
+                    'title' => esc_html(__('Pay. Payment Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'type' => 'title',
+                    'desc' => '<p>' . $loadedPaymentMethods . '</p>',
+                    'id' => 'paynl_payment_methods',
+                );
+            } else {
+                $addedSettings[] = array(
+                    'title' => esc_html(__('Pay. Payment Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'type' => 'title',
+                    'desc' => '<p>Cannot load Payment Methods, please check your credentials.</p>',
+                    'id' => 'paynl_payment_methods',
+                );
+            }            
             $addedSettings[] = array(
-              'id' => 'paynl_status_' . $statusname,
-              'name'       => esc_html( __('Pay. status ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-              'type'        => 'select',
-              'options' => self::getAvailableWoocomStatus($statusValues[0], isset($statusValues[2]) ? $statusValues[2] : array()),
-              'default'     => $statusValues[1],
-              'desc'    => sprintf(esc_html(__('Select which status an order should have when Pay.\'s transaction status is ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
+                'type' => 'sectionend',
+                'id' => 'paynl_payment_methods',
+            );
+        } elseif ($current_section == 'order_state_automation') {
+            $addedSettings[] = array(
+                'title' => esc_html(__('Pay. Order State Automation', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'title',
+                'desc' => '',
+                'id' => 'paynl_order_state_automation',
+            );            
+            $statusSettings = [
+                'paid' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
+                'cancel' => ['cancelled', PPMFWC_Gateway_Abstract::STATUS_CANCELLED, [
+                    PPMFWC_Gateway_Abstract::STATUS_PROCESSING, PPMFWC_Gateway_Abstract::STATUS_REFUNDED,
+                    PPMFWC_Gateway_Abstract::STATUS_COMPLETED, PPMFWC_Gateway_Abstract::STATUS_ON_HOLD
+                ]],
+                'failed' => ['failed', PPMFWC_Gateway_Abstract::STATUS_FAILED],
+                'authorized' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
+                'verify' => ['on-hold', PPMFWC_Gateway_Abstract::STATUS_ON_HOLD]
+            ];
+
+            foreach ($statusSettings as $statusname => $statusValues) {
+                $addedSettings[] = array(
+                    'id' => 'paynl_status_' . $statusname,
+                    'name'       => esc_html(__('Pay. status ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'type'        => 'select',
+                    'options' => self::getAvailableWoocomStatus($statusValues[0], isset($statusValues[2]) ? $statusValues[2] : array()),
+                    'default'     => $statusValues[1],
+                    'desc'    => sprintf(esc_html(__('Select which status an order should have when Pay.\'s transaction status is ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
+                );
+            }
+            $addedSettings[] = array(
+                'type' => 'sectionend',
+                'id' => 'paynl_order_state_automation',
+            );
+        } elseif ($current_section == 'settings') {
+            $addedSettings[] = array(
+                'title' => esc_html(__('Pay. Settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'title',
+                'desc' => '',
+                'id' => 'paynl_global_settings',
+            );
+            $addedSettings[] = array(
+                'name' => __('Show Payment Method Logos', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'select',
+                'options' => PPMFWC_Helper_Data::ppmfwc_getLogoSizes(),
+                'desc' => esc_html(__('This is the size in which the payment method logos will be shown', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_logo_size',
+                'default' => 'Auto',
+            );
+            $addedSettings[] = array(
+                'name' => __('Standard Pay. Style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'checkbox',
+                'desc' => esc_html(__('Check this box if you want to use the standard Pay. style in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_standard_style',
+                'default' => 'yes',
+            );
+            $addedSettings[] = array(
+                'name' => __('Refund Processing', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'checkbox',
+                'desc' => esc_html(__("Process refunds initiated from PAY admin", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_externalrefund',
+                'default' => 'no',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Auto-capture', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'checkbox',
+                'desc' => esc_html(__('Enable auto-capture for authorize-transactions. Capture will be initiated when an order gets the status: `Completed`.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_auto_capture',
+                'default' => 'no',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Send Order Data', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'checkbox',
+                'desc' => esc_html(__('Check this box if you want to send the order data to Pay., this is required if you want use \'Pay after delivery\' paymentmethods ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_send_order_data',
+                'default' => 'yes',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Show VAT Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'checkbox',
+                'desc' => esc_html(__('Check this box if you want to show VAT number in checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_show_vat_number',
+                'default' => 'no',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Show COC Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'checkbox',
+                'desc' => esc_html(__('Check this box if you want to show COC number in checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_show_coc_number',
+                'default' => 'no',
+            );
+            $addedSettings[] = array(
+                'name' => __('Use High Risk Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'checkbox',
+                'desc' => esc_html(__("Check this box if you are using high risk payment methods", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_high_risk',
+                'default' => 'no',
+            );
+            $addedSettings[] = array(
+                'name' => __('Extended Logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'checkbox',
+                'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_paylogger',
+                'default' => 'yes',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('SSL Verify Peer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'checkbox',
+                'desc' => esc_html(__('Uncheck this box if you have SSL certificate errors that you don\'t know how to fix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_verify_peer',
+                'default' => 'yes',
+            );
+            $addedSettings[] = array(
+                'name' => __('Alternative Exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'text',
+                'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
+                'desc' => '<br>Use your own exchange-handler. Requests will be send as GET. <br> ' .
+                    'Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#' .
+                    '<Br>For more info see: <a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
+                'id' => 'paynl_exchange_url',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Failover Gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'text',
+                'placeholder' => '',
+                'desc' => esc_html(__('Leave empty. Unless Pay. provides you with a failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_failover_gateway',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Order Description Prefix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'text',
+                'placeholder' => '',
+                'desc' => esc_html(__('Optionally add a custom order description prefix. Use a double underscore to add an extra space.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_order_description_prefix',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Follow Payment Method', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'select',
+                'options' => array(0 => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 1 => esc_html(__('Yes', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))),
+                'desc' => esc_html(__('When `Yes`, the order will be updated with the actual used payment method in case this method differs from the initial method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_payment_method_display',
+                'default' => 1,
+            );           
+
+            $addedSettings[] = array(
+                'type' => 'sectionend',
+                'id' => 'paynl_global_settings',
+            );
+        } else {     
+            $status = '';
+
+            $post_apitoken = PPMFWC_Helper_Data::getPostTextField('paynl_apitoken');
+            $post_serviceid = PPMFWC_Helper_Data::getPostTextField('paynl_serviceid');
+            $post_tokencode = PPMFWC_Helper_Data::getPostTextField('paynl_tokencode');
+
+            if (!empty($post_apitoken) || !empty($post_serviceid) || !empty($post_tokencode)) {
+                $current_apitoken = get_option('paynl_apitoken');
+                $current_serviceid = get_option('paynl_serviceid');
+                $current_tokencode = get_option('paynl_tokencode');
+                if (($post_apitoken == $current_apitoken) && ($post_serviceid == $current_serviceid) && ($post_tokencode == $current_tokencode)) {
+                    $status = self::ppmfwc_checkCredentials();
+                }
+            } else {
+                $status = self::ppmfwc_checkCredentials();
+            } 
+            $addedSettings[] = array(
+                'title' => esc_html(__('Pay. Setup', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'title',
+                'desc' => $status,
+                'id' => 'paynl_setup',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Token Code *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'placeholder' => 'AT-####-####',
+                'type' => 'text',
+                'desc' => esc_html(__('The AT-code belonging to your token, you can find this ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
+                'id' => 'paynl_tokencode',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('API-token *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'text',
+                'desc' => esc_html(__('The API-token used to communicate with the Pay. API, you can find your API-token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
+                'id' => 'paynl_apitoken',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Service ID *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'placeholder' => 'SL-####-####',
+                'type' => 'text',
+                'desc' => esc_html(__('The serviceid to identify your website, you can find your serviceid here ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
+                'id' => 'paynl_serviceid',
+                'desc_tip' => __('The serviceid should be in the following format: SL-xxxx-xxxx', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            );
+            $addedSettings[] = array(
+                'name' => __('Payment Screen Language', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'select',
+                'options' => PPMFWC_Helper_Data::ppmfwc_getAvailableLanguages(),
+                'desc' => esc_html(__('This is the language in which the payment screen will be shown', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_language',
+                'default' => 'nl',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Test Mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'checkbox',
+                'desc' => esc_html(__('Check this box if you want to enable test mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_test_mode',
+                'default' => 'no',
+            );
+            $addedSettings[] = array(
+                'type' => 'sectionend',
+                'id' => 'paynl_setup',
             );
         }
 
-        $addedSettings[] = array(
-            'type' => 'sectionend',
-            'id' => 'paynl_global_settings',
-        );
-
-        return array_merge($addedSettings, $settings);
+        return $addedSettings;
     }
 
     /**
@@ -428,12 +570,15 @@ class PPMFWC_Gateways
     }
 
     /**
-     * This function adds the Pay. Payment Methods global-settings, to the WooCommerce Payments-tab
+     * This function adds the Pay Settings Tab
      */
-    public static function ppmfwc_addSettings()
-    {
+    public static function ppmfwc_settingsTab()
+    {          
         add_action('admin_enqueue_scripts', array(__CLASS__, 'ppmfwc_addPayStyleSheet'));
-        add_filter('woocommerce_payment_gateways_settings', array(__CLASS__, 'ppmfwc_addGlobalSettings'));
+        add_filter('woocommerce_settings_tabs_array', array(__CLASS__, 'ppmfwc_addSettingsTab'), 50);
+        add_action('woocommerce_sections_' . self::TAB_ID, array(__CLASS__, 'ppmfwc_addSettingsSections'));
+        add_action('woocommerce_settings_' . self::TAB_ID, array(__CLASS__, 'ppmfwc_addGlobalSettingsTab'), 10);
+        add_action('woocommerce_settings_save_' . self::TAB_ID, array(__CLASS__, 'ppmfwc_saveGlobalSettingsTab'), 10);
     }
 
     /**
