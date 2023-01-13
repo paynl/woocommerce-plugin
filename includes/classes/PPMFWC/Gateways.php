@@ -290,7 +290,7 @@ class PPMFWC_Gateways
         try {
             PPMFWC_Helper_Data::loadPaymentMethods();
             $arrOptions = PPMFWC_Helper_Data::getOptions();
-            $loadedPaymentMethods .= '<br /><br />' . esc_html(__('The following payment methods can be enabled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+            $loadedPaymentMethods .= '<br /><br />' . esc_html(__('The following payment methods can be enabled, please select a payment method to open the settings:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
             $loadedPaymentMethods .= '<ul>';
             foreach ($arrOptions as $option) {
                 if (isset($paymentOptionsAvailable[$option['id']])) {
