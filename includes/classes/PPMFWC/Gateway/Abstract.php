@@ -156,6 +156,17 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 /* translators: Placeholder 1: Default order status, placeholder 2: Link to 'Hold Stock' setting */
                 'description' => esc_html(__('Allow payment method to be used for companies, private or both.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
             );
+
+            $this->form_fields['country_limit'] = array(
+                'title'       => esc_html(__('Country', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type'        => 'multiselect',
+                'options'     => array_merge(array('all' => esc_html(__('Available for all countries', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))), WC()->countries->get_countries()),
+                'default'     => 'none',
+                'description' => sprintf(esc_html(__('Select one or more billing-countries for which %s should be availble', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName() ),
+                'desc_tip'    => esc_html(__('Select in which (billing) country this method should be available.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'class'       => 'countryLimit'
+            );
+
             if ($this->showAuthorizeSetting()) {
                 $this->form_fields['authorize_status'] = array(
                   'title'       => esc_html( __('Authorize status', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -317,6 +328,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $max_amount = $this->get_option('max_amount');
 
             $orderTotal = $this->get_order_total();
+            $billingCountry = WC()->customer->get_billing_country();
+            $arrCountriesAllowed = $this->get_option('country_limit');
+
+            if (is_array($arrCountriesAllowed) && !in_array('all', $arrCountriesAllowed)) {
+                if (!in_array(strtoupper($billingCountry), $arrCountriesAllowed)) {
+                    return false;
+                }
+            }
 
             if (!empty($min_amount) && $orderTotal < (float)$min_amount) {
                 return false;

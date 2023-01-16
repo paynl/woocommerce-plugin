@@ -7,3 +7,7 @@
     vertical-align: middle;
     margin-right: 5px;
 }
+
+.woocommerce table.form-table select.multiselect.countryLimit {
+    height: 190px;
+}
