@@ -142,7 +142,7 @@ class PPMFWC_Gateways
      * @param array $settings_tabs
      * @return array
      */
-    public function ppmfwc_addSettingsTab($settings_tabs)
+    public static function ppmfwc_addSettingsTab($settings_tabs)
     {
         $settings_tabs[self::TAB_ID] = __('Pay.', 'woocommerce');
         return $settings_tabs;
@@ -152,7 +152,7 @@ class PPMFWC_Gateways
      * Add Sectcions function
      * @return array
      */
-    public function ppmfwc_addSettingsSections()
+    public static function ppmfwc_addSettingsSections()
     {
         global $current_section;
         $sections = array(
@@ -172,7 +172,7 @@ class PPMFWC_Gateways
     /**
      * Add Global Settings function
      */
-    public function ppmfwc_addGlobalSettingsTab()
+    public static function ppmfwc_addGlobalSettingsTab()
     {
         $settings = self::ppmfwc_addGlobalSettings();
         WC_Admin_Settings::output_fields($settings);
@@ -181,7 +181,7 @@ class PPMFWC_Gateways
     /**
      * Save Settings function
      */
-    public function ppmfwc_saveGlobalSettingsTab()
+    public static function ppmfwc_saveGlobalSettingsTab()
     {
         global $current_section;
 
