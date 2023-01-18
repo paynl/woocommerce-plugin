@@ -18,7 +18,7 @@
   
   Bank Payments  |   Creditcards    | Gift cards & Vouchers | Pay by invoice | Others | 
   :-----------: |:----------------:|:---------------------:| :-----------: | :-----------: |
-  iDEAL + QR | Visa | VVV giftcard | AfterPay (by Riverty) | Paypal
+  iDEAL + QR | Visa | VVV giftcard | Riverty | Paypal
   Bancontact + QR | Mastercard | Webshop Giftcard | Achteraf betalen via Billink | Wechat Pay
   Giropay | American Express | Fashioncheque | Focum AchterafBetalen.nl | Amazon Pay
   Mybank | Postepay | Podiumcadeaukaart | Capayable Achteraf Betalen | Cashly

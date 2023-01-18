@@ -10,7 +10,7 @@ class PPMFWC_Gateway_Mistercash extends PPMFWC_Gateway_Abstract
 
     public static function getName()
     {
-        return 'MisterCash / Bancontact';
+        return 'Bancontact';
     }
 
     public static function getOptionId()

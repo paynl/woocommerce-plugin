@@ -2,7 +2,7 @@
 Contributors: andypay
 Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
-Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wechatpay, paypal, creditcard, mybank, sofortbanking, afterpay, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
+Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wechatpay, paypal, creditcard, mybank, sofortbanking, riverty, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
 Stable tag: 3.13.0
 Tested up to: 6.1.1
@@ -44,7 +44,7 @@ The full list of payment methods implemented in the WooCommerce omnichannel paym
 A brief overview of some of the options:
 **Internetbanking** : iDEAL, Bancontact, Giropay, EPS, Sofort....
 **Creditcards** : Visa, Mastercard, AMEX...
-**Buy Now Pay Later / Instalments** : IN3, AfterPay, Klarna, Billink, SprayPay...
+**Buy Now Pay Later / Instalments** : IN3, Riverty, Klarna, Billink, SprayPay...
 **Wallets** : PayPal, Amazon Pay, WeChat Pay, AliPay, ApplePay...
 **Vouchers & prepaid** : Paysafecard, VVV Giftcard, Fashion Cheque, YourGift, Givacard...
 **Instore** payments: can be enabled when you have a card terminal via Pay.
@@ -54,7 +54,7 @@ Bank transfers and telephone payments are also possible...
 
 * **Start accepting payments within minutes!**
 * **Single integration and contract**  to start accepting all major payment methods, including iDEAL, Visa, Mastercard, American Express, PayPal, Bancontact, SOFORT and more...
-* **Largest offer Buy Now Pay Later and Instalment** options like AfterPay, in3, Klarna, SprayPay and more...
+* **Largest offer Buy Now Pay Later and Instalment** options like Riverty, in3, Klarna, SprayPay and more...
 * Create **Paylinks** to send to your customer when manually creating orders
 * **Instore payments**; easily start card payments on your Pay. POS terminal (for example, for a self-service kiosk or click & collect)
 * **Easy (partial)refunds** straight from your WooCommerce backend
@@ -95,7 +95,6 @@ If you need our help, please email us at: support[at]pay.nl
 
 At the moment the plugin supports the following payment methods:
 
-* AfterPay (by Riverty)
 * Amazon Pay
 * American Express (AMEX)
 * Apple Pay
@@ -141,6 +140,8 @@ At the moment the plugin supports the following payment methods:
 * Podiumcadeaukaart
 * Postepay
 * Przelewy24
+* Riverty
+* Riverty (was AfterPay)
 * Shoes & Sneakers
 * Sodexo
 * Sofortbanking
