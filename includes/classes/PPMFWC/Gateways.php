@@ -156,17 +156,17 @@ class PPMFWC_Gateways
     {
         global $current_section;
         $sections = array(
-            ''              => __('Setup', 'woocommerce'),
-            'payment_methods'  => __('Payment Methods', 'woocommerce'),
-            'settings'  => __('Settings', 'woocommerce'),
-            'order_state_automation'  => __('Order State Automation', 'woocommerce')
+            '' => __('Setup', 'woocommerce'),
+            'payment_methods' => __('Payment Methods', 'woocommerce'),
+            'settings' => __('Settings', 'woocommerce'),
+            'order_state_automation' => __('Order State Automation', 'woocommerce')
         );
         echo '<ul class="subsubsub">';
         $array_keys = array_keys($sections);
         foreach ($sections as $id => $label) {
             echo '<li><a href="' . admin_url('admin.php?page=wc-settings&tab=' . self::TAB_ID . '&section=' . sanitize_title($id)) . '" class="' . ($current_section == $id ? 'current' : '') . '">' . $label . '</a> ' . (end($array_keys) == $id ? '' : '|') . ' </li>';
         }
-        echo '</ul><br class="clear" />';     
+        echo '</ul><br class="clear" />';
     }
 
     /**
@@ -177,7 +177,7 @@ class PPMFWC_Gateways
         $settings = self::ppmfwc_addGlobalSettings();
         WC_Admin_Settings::output_fields($settings);
     }
- 
+
     /**
      * Save Settings function
      */
@@ -198,7 +198,7 @@ class PPMFWC_Gateways
      * @return string
      */
     public static function ppmfwc_checkCredentials()
-    {        
+    {
         $status = '';
         $warning = '';
         $error = '';
@@ -261,7 +261,7 @@ class PPMFWC_Gateways
         $status .= '</table>';
 
         return $status;
-    }    
+    }
 
     /**
      * @return string
@@ -305,10 +305,10 @@ class PPMFWC_Gateways
             $loadedPaymentMethods .= '<div class="clear"></div>';
         } catch (Exception $e) {
             return false;
-        }    
+        }
 
         return $loadedPaymentMethods;
-    }    
+    }
 
     /**
      * @return array
@@ -319,9 +319,9 @@ class PPMFWC_Gateways
 
         $addedSettings = array();
 
-        if ($current_section == 'payment_methods') {              
-            $loadedPaymentMethods = self::ppmfwc_loadPaymentMethods();            
-            if($loadedPaymentMethods ){
+        if ($current_section == 'payment_methods') {
+            $loadedPaymentMethods = self::ppmfwc_loadPaymentMethods();
+            if ($loadedPaymentMethods) {
                 $addedSettings[] = array(
                     'title' => esc_html(__('Pay. Payment Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'title',
@@ -335,7 +335,7 @@ class PPMFWC_Gateways
                     'desc' => '<p>Cannot load Payment Methods, please check your credentials.</p>',
                     'id' => 'paynl_payment_methods',
                 );
-            }            
+            }
             $addedSettings[] = array(
                 'type' => 'sectionend',
                 'id' => 'paynl_payment_methods',
@@ -346,7 +346,7 @@ class PPMFWC_Gateways
                 'type' => 'title',
                 'desc' => '',
                 'id' => 'paynl_order_state_automation',
-            );            
+            );
             $statusSettings = [
                 'paid' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
                 'cancel' => ['cancelled', PPMFWC_Gateway_Abstract::STATUS_CANCELLED, [
@@ -361,11 +361,11 @@ class PPMFWC_Gateways
             foreach ($statusSettings as $statusname => $statusValues) {
                 $addedSettings[] = array(
                     'id' => 'paynl_status_' . $statusname,
-                    'name'       => esc_html(__('Pay. status ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'type'        => 'select',
+                    'name' => esc_html(__('Pay. status ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'type' => 'select',
                     'options' => self::getAvailableWoocomStatus($statusValues[0], isset($statusValues[2]) ? $statusValues[2] : array()),
-                    'default'     => $statusValues[1],
-                    'desc'    => sprintf(esc_html(__('Select which status an order should have when Pay.\'s transaction status is ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
+                    'default' => $statusValues[1],
+                    'desc' => sprintf(esc_html(__('Select which status an order should have when Pay.\'s transaction status is ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
                 );
             }
             $addedSettings[] = array(
@@ -480,13 +480,13 @@ class PPMFWC_Gateways
                 'desc' => esc_html(__('When `Yes`, the order will be updated with the actual used payment method in case this method differs from the initial method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_payment_method_display',
                 'default' => 1,
-            );           
+            );
 
             $addedSettings[] = array(
                 'type' => 'sectionend',
                 'id' => 'paynl_global_settings',
             );
-        } else {     
+        } else {
             $status = '';
 
             $post_apitoken = PPMFWC_Helper_Data::getPostTextField('paynl_apitoken');
@@ -502,7 +502,7 @@ class PPMFWC_Gateways
                 }
             } else {
                 $status = self::ppmfwc_checkCredentials();
-            } 
+            }
             $addedSettings[] = array(
                 'title' => esc_html(__('Pay. Setup', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'title',
@@ -573,7 +573,7 @@ class PPMFWC_Gateways
      * This function adds the Pay Settings Tab
      */
     public static function ppmfwc_settingsTab()
-    {          
+    {
         add_action('admin_enqueue_scripts', array(__CLASS__, 'ppmfwc_addPayStyleSheet'));
         add_filter('woocommerce_settings_tabs_array', array(__CLASS__, 'ppmfwc_addSettingsTab'), 50);
         add_action('woocommerce_sections_' . self::TAB_ID, array(__CLASS__, 'ppmfwc_addSettingsSections'));
