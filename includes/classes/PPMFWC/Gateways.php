@@ -275,7 +275,7 @@ class PPMFWC_Gateways
 
         $paymentOptionsAvailable = array();
         foreach ($paymentOptions as $paymentOption) {
-            $optionId = call_user_func(array($paymentOption, 'getOptionId'), array(true));
+            $optionId = call_user_func(array($paymentOption, 'getOptionId'));
             $id = call_user_func(array($paymentOption, 'getId'));
             $name = call_user_func(array($paymentOption, 'getName'));
 

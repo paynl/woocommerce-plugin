@@ -13,9 +13,9 @@ class PPMFWC_Gateway_Maestro extends PPMFWC_Gateway_Abstract
         return 'Maestro';
     }
 
-    public static function getOptionId($getDefault = false)
+    public static function getOptionId()
     {
-        if (self::is_high_risk() && !$getDefault) {
+        if (self::is_high_risk()) {
             return 715;
         }
         return 712;

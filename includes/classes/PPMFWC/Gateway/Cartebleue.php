@@ -13,9 +13,9 @@ class PPMFWC_Gateway_Cartebleue extends PPMFWC_Gateway_Abstract
         return 'Carte Bleue';
     }
 
-    public static function getOptionId($getDefault = false)
+    public static function getOptionId()
     {
-        if (self::is_high_risk() && !$getDefault) {
+        if (self::is_high_risk()) {
             return 711;
         }
         return 710;
