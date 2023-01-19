@@ -103,7 +103,10 @@ At the moment the plugin supports the following payment methods:
 * Biercheque
 * Billink
 * Biller
+* Bioscoopbon
 * Blik
+* Bloemen Cadeaukaart
+* Boekenbon
 * Capayable
 * CartaSi
 * Cartebleue
@@ -111,15 +114,18 @@ At the moment the plugin supports the following payment methods:
 * Creditclick
 * Dankort
 * De Cadeaukaart
+* Dinerbon
 * EPS-Überweising
 * Fashioncheque
 * Fashion Giftcard
+* Fastival Cadeaukaart
 * Focum
 * Gezondheidsbon
 * Giropay
 * Givacard
 * Good4fun
 * Google Pay
+* Huis & Tuin Cadeau
 * iDEAL
 * IN3 – Betaal in 3 delen, 0% rente
 * Incasso
@@ -133,6 +139,7 @@ At the moment the plugin supports the following payment methods:
 * Mybank
 * Nexi
 * Online Bankbetaling
+* Parfum Cadeaukaart
 * Payconiq
 * Paypal
 * Paysafecard
@@ -153,6 +160,7 @@ At the moment the plugin supports the following payment methods:
 * Webshop Giftcard
 * Wechat Pay
 * Wijncadeau
+* Winkelcheque
 * Yehhpay
 * Yourgift
 * Your Green Gift Card

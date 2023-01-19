@@ -33,9 +33,16 @@
    |  |  | Your Green Gift Cadeaukaart |  | Google Pay
    |  |  | Sodexo |  | 
    |  |  | Monizze |  | 
-   |  |  | Bataviastad Cadeaukaart |  | 
-  
-  # Installation
+   |  |  | Bataviastad Cadeaukaart |  |
+|  |  | Bioscoopbon |  |
+|  |  | Bloemen Cadeaukaart |  |
+|  |  | Boekenbon |  |
+|  |  | Dinerbon |  |
+|  |  | Festival Cadeaukaart |  |
+|  |  | Huis & Tuin Cadeau |  |
+|  |  | Winkelcheque |  |
+
+# Installation
   #### Installing
   
   
