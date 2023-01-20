@@ -9,7 +9,7 @@ class PPMFWC_Helper_Transaction
      */
     public static function getCustomWooComOrderStatus($payStatus)
     {
-        $arrStatus['paid'] = get_option('paynl_status_paid');
+        $arrStatus['processing'] = get_option('paynl_status_paid');
         $arrStatus['cancel'] = get_option('paynl_status_cancel');
         $arrStatus['failed'] = get_option('paynl_status_failed');
         $arrStatus['authorised'] = get_option('paynl_status_authorized');
@@ -227,8 +227,8 @@ class PPMFWC_Helper_Transaction
                         }
                     }
 
-                    $customStatus = self::getCustomWooComOrderStatus($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE ? 'authorised' : 'paid');
-                    if($customStatus != 'paid') {
+                    $customStatus = self::getCustomWooComOrderStatus($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE ? 'authorised' : 'processing');
+                    if($customStatus != 'processing') {
                         $order->add_order_note(sprintf(esc_html(__('PAY.: Orderstatus set to custom-status: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $customStatus));
                         $order->update_status($customStatus, 'According to Pay. plugin settings');
                         $order->save();
