@@ -199,7 +199,7 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_checkCredentials()
     {
-        $status = '';
+        $html = '';
         $warning = '';
         $error = '';
         try {
@@ -249,18 +249,27 @@ class PPMFWC_Gateways
             $message = '<span style="color:#10723a; font-weight:bold;">' . esc_html(__('Pay. Successfully connected.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span>';
         }
 
-        $status .= '<table class="form-table">';
-        $status .= '<tr valign="top">';
-        $status .= '<th scope="row" class="titledesc">';
-        $status .= '<label>Status</label>';
-        $status .= '</th>';
-        $status .= '<td class="forminp forminp-text">';
-        $status .= $message;
-        $status .= '</td>';
-        $status .= '</tr>';
-        $status .= '</table>';
+        $html .= '<table class="form-table">';
+        $html .= '<tr valign="top">';
+        $html .= '<th scope="row" class="titledesc">';
+        $html .= '<label>Version</label>';
+        $html .= '</th>';
+        $html .= '<td class="forminp forminp-text">';
+        $html .= PPMFWC_Helper_Data::getVersion();
+        $html .= '</td>';
+        $html .= '</tr>';
+       
+        $html .= '<tr valign="top">';
+        $html .= '<th scope="row" class="titledesc">';
+        $html .= '<label>Status</label>';
+        $html .= '</th>';
+        $html .= '<td class="forminp forminp-text">';
+        $html .= $message;
+        $html .= '</td>';
+        $html .= '</tr>';
+        $html .= '</table>';
 
-        return $status;
+        return $html;
     }
 
     /**
@@ -393,6 +402,14 @@ class PPMFWC_Gateways
                 'desc' => esc_html(__('Check this box if you want to use the standard Pay. style in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_standard_style',
                 'default' => 'yes',
+            );
+            $addedSettings[] = array(
+                'name' => __('Payment Screen Language', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'select',
+                'options' => PPMFWC_Helper_Data::ppmfwc_getAvailableLanguages(),
+                'desc' => esc_html(__('This is the language in which the payment screen will be shown', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_language',
+                'default' => 'nl',
             );
             $addedSettings[] = array(
                 'name' => __('Refund Processing', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
@@ -529,15 +546,7 @@ class PPMFWC_Gateways
                 'desc' => esc_html(__('The serviceid to identify your website, you can find your serviceid here ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
                 'id' => 'paynl_serviceid',
                 'desc_tip' => __('The serviceid should be in the following format: SL-xxxx-xxxx', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            );
-            $addedSettings[] = array(
-                'name' => __('Payment Screen Language', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                'type' => 'select',
-                'options' => PPMFWC_Helper_Data::ppmfwc_getAvailableLanguages(),
-                'desc' => esc_html(__('This is the language in which the payment screen will be shown', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'id' => 'paynl_language',
-                'default' => 'nl',
-            );
+            );            
             $addedSettings[] = array(
                 'name' => esc_html(__('Test Mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
