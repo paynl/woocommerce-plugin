@@ -114,9 +114,9 @@ function ppmfwc_error_curl_not_installed()
  */
 function ppmfwc_plugin_add_settings_link($links)
 {
-  $settings_link = '<a href="' . admin_url('/admin.php?page=wc-settings&tab=' . PPMFWC_Gateways::TAB_ID . '#paynl_tokencode') . '">' . esc_html(__('Settings')) . '</a>';
-  array_push($links, $settings_link);
-  return $links;
+    $settings_link = '<a href="' . admin_url('/admin.php?page=wc-settings&tab=' . PPMFWC_Gateways::TAB_ID) . '">' . esc_html(__('Settings')) . '</a>';
+    array_push($links, $settings_link);
+    return $links;
 }
 
 /**
