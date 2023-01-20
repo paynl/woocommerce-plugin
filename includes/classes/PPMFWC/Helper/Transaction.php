@@ -15,7 +15,7 @@ class PPMFWC_Helper_Transaction
         $arrStatus['authorised'] = get_option('paynl_status_authorized');
         $arrStatus['verify'] = get_option('paynl_status_verify');
 
-        return empty($arrStatus[$payStatus]) ? $payStatus : $arrStatus[$payStatus];
+        return $arrStatus[$payStatus] === false ? $payStatus : $arrStatus[$payStatus];
     }
 
     public static function newTransaction($transactionId, $opionId, $amount, $orderId, $startData, $optionSubId = null)
