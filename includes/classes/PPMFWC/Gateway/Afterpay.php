@@ -10,7 +10,7 @@ class PPMFWC_Gateway_Afterpay extends PPMFWC_Gateway_Abstract
 
     public static function getName()
     {
-        return 'AfterPay (by Riverty)';
+        return 'Riverty (was AfterPay)';
     }
 
     public static function getOptionId()

@@ -1,22 +1,21 @@
 <?php
 
-class PPMFWC_Gateway_Mistercash extends PPMFWC_Gateway_Abstract
+class PPMFWC_Gateway_Bioscoopbon extends PPMFWC_Gateway_Abstract
 {
 
     public static function getId()
     {
-        return 'pay_gateway_mistercash';
+        return 'pay_gateway_bioscoopbon';
     }
 
     public static function getName()
     {
-        return 'Bancontact';
+        return 'Bioscoopbon';
     }
 
     public static function getOptionId()
     {
-        return 436;
+        return 2133;
     }
 
 }
-    
