@@ -228,7 +228,7 @@ class PPMFWC_Helper_Transaction
                     }
 
                     $customStatus = self::getCustomWooComOrderStatus($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE ? 'authorised' : 'processing');
-                    if($customStatus != 'processing') {
+                    if(!in_array($customStatus, array('processing', 'authorised'))) {
                         $order->add_order_note(sprintf(esc_html(__('PAY.: Orderstatus set to custom-status: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $customStatus));
                         $order->update_status($customStatus, 'According to Pay. plugin settings');
                         $order->save();
