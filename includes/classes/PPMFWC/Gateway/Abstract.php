@@ -165,7 +165,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'type'        => 'multiselect',
                 'options'     => array_merge(array('all' => esc_html(__('Available for all countries', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))), WC()->countries->get_countries()),
                 'default'     => 'all',
-                'description' => sprintf(esc_html(__('Select one or more billing-countries for which %s should be availble', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName() ),
+                'description' => sprintf(esc_html(__('Select one or more billing-countries for which %s should be available', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName() ),
                 'desc_tip'    => esc_html(__('Select in which (billing) country this method should be available.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'class'       => 'countryLimit'
             );
