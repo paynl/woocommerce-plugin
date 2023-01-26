@@ -21,6 +21,8 @@ class PPMFWC_Gateways
 
     const TAB_ID = 'pay_settings';
 
+    const TEST = 'test';
+
     /**
      * @param $default Adds text 'default' for the selected option
      * @param $excludeStates List of statusus that should not return
