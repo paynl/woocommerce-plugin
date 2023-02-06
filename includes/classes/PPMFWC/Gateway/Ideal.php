@@ -28,16 +28,17 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
         if (!empty($optionSubs) && $selectionType != 'none') {
             if ($selectionType == 'select') {
                 ?>
-                <p>
+                <fieldset>
+                    <legend><?php echo  esc_html(__('Choose your bank', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)); ?></legend>
                     <select name="option_sub_id">
-                        <option value=""><?php echo  esc_html(__('Choose your bank', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)); ?></option>
+                        <option value="">-</option>
                         <?php
                         foreach ($optionSubs as $optionSub) {
                             echo '<option value="' . esc_attr($optionSub['option_sub_id']) . '">' . esc_html($optionSub['name']) . '</option>';
                         }
                         ?>
                     </select>
-                </p>
+                </fieldset>   
             <?php } elseif ($selectionType == 'radio') {
                 ?>
                 <ul style="border:none;width:200px;list-style: none; margin:0; margin-top:20px;">

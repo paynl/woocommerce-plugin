@@ -204,22 +204,7 @@ class PPMFWC_Helper_Data
 
         return self::$_payment_methods;
     }
-
-    public static function ppmfwc_getLogoSizes()
-    {
-        return array(
-            'Auto' => 'Auto',
-            0       => esc_html(__('Don\'t show logos', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            '50x32' => '50x32',
-            '40x26' => '40x26',
-            '20x20' => '20x20',
-            '25x25' => '25x25',
-            '50x50' => '50x50',
-            '75x75' => '75x75',
-            '100x100' => '100x100'
-        );
-    }
-
+    
     public static function getBrowserLanguage()
     {
         if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {

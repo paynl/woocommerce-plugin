@@ -396,15 +396,7 @@ class PPMFWC_Gateways
                 'type' => 'title',
                 'desc' => '',
                 'id' => 'paynl_global_settings',
-            );
-            $addedSettings[] = array(
-                'name' => __('Show Payment Method Logos', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                'type' => 'select',
-                'options' => PPMFWC_Helper_Data::ppmfwc_getLogoSizes(),
-                'desc' => esc_html(__('This is the size in which the payment method logos will be shown', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'id' => 'paynl_logo_size',
-                'default' => 'Auto',
-            );
+            );            
             $addedSettings[] = array(
                 'name' => __('Standard Pay. Style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                 'type' => 'checkbox',

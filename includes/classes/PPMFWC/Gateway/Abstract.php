@@ -40,29 +40,15 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
     public function getIcon()
     {
-        $size = $this->getIconSize();
         $brandid = $this->get_option('brand_id');
 
         if (!empty($this->get_option('external_logo')) && wc_is_valid_url($this->get_option('external_logo'))) {
             return $this->get_option('external_logo');
         }
-        if (!empty($brandid) && $size == 'Auto') {
+        if (!empty($brandid)) {
             return PPMFWC_PLUGIN_URL . 'assets/logos/' . $this->get_option('brand_id') . '.png';
-        } elseif (!empty($size) && $size != 'Auto') {
-            return 'https://static.pay.nl/payment_profiles/' . $size . '/' . $this->getOptionId() . '.png';
         }
-
         return '';
-    }
-
-    private function getIconSize()
-    {
-      $size = get_option('paynl_logo_size');
-      if (is_null($size)) {
-        $size = 'Auto';
-      }
-
-      return $size;
     }
 
     /**
@@ -385,7 +371,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $ask_birthdate = $this->get_option('ask_birthdate');
         if ($ask_birthdate == 'yes') {
             $fieldName = $this->getId() . '_birthdate';
-            echo esc_html(__('Date of birth: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) .'<input type="date" class="paydate" placeholder="dd-mm-yyyy" name="' . $fieldName . '" id="' . $fieldName . '">';
+            echo '<fieldset><legend>' . esc_html(__('Date of birth: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</legend><input type="date" class="paydate" placeholder="dd-mm-yyyy" name="' . $fieldName . '" id="' . $fieldName . '"></fieldset> ';
         }
     }
 

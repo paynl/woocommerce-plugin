@@ -1,21 +1,98 @@
-#payment .payment_methods li[class*="payment_method_pay_gateway"] label {
-    width: 90%;
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+#payment .payment_methods li[class*="payment_method_pay_gateway"] *,
+div p[class*="payment_method_pay_gateway"] * {
+    font-family: 'Lato', sans-serif;
 }
 
-#payment .payment_methods li[class*="payment_method_pay_gateway"] img {
-    float: right;
-    margin: 3px 0 3px 0 !important;
-}
-
-#payment .payment_methods li[class*="payment_method_pay_gateway"] div {
-    display: inline-block;
-}
-
+#payment .payment_methods li[class*="payment_method_pay_gateway"] label,
 div p[class*="payment_method_pay_gateway"] label {
-    width: 95%;
+    display: block;
 }
 
+#payment .payment_methods li[class*="payment_method_pay_gateway"] img,
 div p[class*="payment_method_pay_gateway"] label img {
     float: right;
     margin: 3px 0 3px 0 !important;
+    max-width: 100px;
+    max-height: 100px;
+    object-fit: contain;
+    height: 35px;
+    width: 35px;
+}
+
+#payment .payment_methods li[class*="payment_method_pay_gateway"] div,
+div p[class*="payment_method_pay_gateway"] div {
+    display: block;
+}
+
+#payment .payment_methods li[class*="payment_method_pay_gateway"] div:empty,
+div p[class*="payment_method_pay_gateway"] div:empty {
+    display: none !important;
+}
+
+#payment .payment_methods li[class*="payment_method_pay_gateway"] label::after,
+div p[class*="payment_method_pay_gateway"] label::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+#payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box fieldset,
+div p[class*="payment_method_pay_gateway"] fieldset {
+    border: 1px solid #c2c2c2;
+    line-height: 1.42857143;
+    vertical-align: baseline;
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    border-radius: 10px;
+    height: 60px;
+    padding: 10px;
+    margin-top: 10px;
+    background: transparent;
+}
+
+#payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box fieldset legend,
+div p[class*="payment_method_pay_gateway"] legend {
+    padding: 0px 5px;
+    margin: 0;
+    font-weight: normal;
+    font-size: 14px;
+    position: relative;
+    z-index: 2;
+    height: 20px;
+    background: transparent;
+}
+
+#payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box input,
+#payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box select,
+div p[class*="payment_method_pay_gateway"] .payment_box input,
+div p[class*="payment_method_pay_gateway"] .payment_box select {
+    border: none;
+    font-size: 16px;
+    position: absolute;
+    top: -10px;
+    background: transparent;
+    left: 0;
+    border-radius: 10px;
+    padding: 11px 10px 11px 15px;
+    width: 100%;
+    box-sizing: border-box;
+    line-height: 1.618;
+    text-rendering: optimizeLegibility;
+    font-weight: 400;
+}
+
+#payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box select,
+div p[class*="payment_method_pay_gateway"] .payment_box select {
+    padding: 14px 10px 14px 15px;
+    width: calc(100% - 10px);
+}
+
+#payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box input:focus,
+#payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box select:focus,
+div p[class*="payment_method_pay_gateway"] .payment_box input:focus,
+div p[class*="payment_method_pay_gateway"] .payment_box select:focus {
+    outline: none;
 }
