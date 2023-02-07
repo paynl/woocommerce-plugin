@@ -41,10 +41,10 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                 </fieldset>   
             <?php } elseif ($selectionType == 'radio') {
                 ?>
-                <ul style="border:none;width:200px;list-style: none; margin:0; margin-top:20px;">
+                <ul class="pay_radio_select">
                     <?php
                     foreach ($optionSubs as $optionSub) {
-                        echo '<li style="float: left; width: 200px;"><label><input type="radio" name="option_sub_id" value="' . esc_attr($optionSub['option_sub_id']) . '" />&nbsp;<img src="' . esc_attr($optionSub['image']) . '" alt="' . esc_attr($optionSub['name']) . '" title="' . esc_attr($optionSub['name']) . '" /></label></li>';
+                        echo '<li><label><input type="radio" name="option_sub_id" value="' . esc_attr($optionSub['option_sub_id']) . '" />&nbsp;<img src="' . PPMFWC_PLUGIN_URL . 'assets/logos_issuers/qr-' . esc_attr($optionSub['option_sub_id']) . '.svg" alt="' . esc_attr($optionSub['name']) . '" title="' . esc_attr($optionSub['name']) . '" /><span>' . esc_attr($optionSub['name']) . '</span></label></li>';
                     }
                     ?>
                 </ul>
