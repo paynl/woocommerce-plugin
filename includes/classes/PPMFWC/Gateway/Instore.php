@@ -82,9 +82,9 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
         if (!empty($terminals)) {
             ?>
             <fieldset>
-                <legend><?php echo esc_html(__('Choose the pin terminal', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) ?></legend>
+                <legend><?php echo esc_html(__('Pay safely via pin', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)); ?></legend>
                 <select name="terminal_id">
-                    <option value="">-</option>
+                    <option value=""><?php echo esc_html(__('Choose the pin terminal...', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) ?></option>
                     <?php
                     foreach ($terminals as $terminal) {
                         echo '<option value="' . esc_attr($terminal['id']) . '">' . esc_html($terminal['name']) . '</option>';

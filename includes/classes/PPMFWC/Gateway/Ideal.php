@@ -29,9 +29,9 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
             if ($selectionType == 'select') {
                 ?>
                 <fieldset>
-                    <legend><?php echo  esc_html(__('Choose your bank', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)); ?></legend>
+                    <legend><?php echo esc_html(__('Pay safely via your bank', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)); ?></legend>
                     <select name="option_sub_id">
-                        <option value="">-</option>
+                        <option value=""><?php echo esc_html(__('Select your bank...', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)); ?></option>
                         <?php
                         foreach ($optionSubs as $optionSub) {
                             echo '<option value="' . esc_attr($optionSub['option_sub_id']) . '">' . esc_html($optionSub['name']) . '</option>';
