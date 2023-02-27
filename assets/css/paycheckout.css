@@ -8,6 +8,7 @@ div p[class*="payment_method_pay_gateway"] * {
 #payment .payment_methods li[class*="payment_method_pay_gateway"] label,
 div p[class*="payment_method_pay_gateway"] label {
     display: block;
+    width: 100%;
 }
 
 #payment .payment_methods li[class*="payment_method_pay_gateway"] img,
@@ -63,38 +64,46 @@ div p[class*="payment_method_pay_gateway"] .payment_box fieldset legend {
     z-index: 2;
     height: 20px;
     background: transparent;
+    float: none;
+    width: auto;
 }
 
 #payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box input:not([type=checkbox]):not([type=radio]),
 #payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box select,
 div p[class*="payment_method_pay_gateway"] .payment_box input:not([type=checkbox]):not([type=radio]),
 div p[class*="payment_method_pay_gateway"] .payment_box select {
-    border: none;
+    border: none !important;
     font-size: 16px;
     position: absolute;
     top: -10px;
     background: transparent;
     left: 0;
     border-radius: 10px;
-    padding: 11px 10px 11px 15px;
+    padding: 11px 10px 11px 15px !important;
     width: 100%;
     box-sizing: border-box;
     line-height: 1.618;
     text-rendering: optimizeLegibility;
     font-weight: 400;
+    height: auto;
+    background-color: transparent !important;
 }
 
 #payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box select,
 div p[class*="payment_method_pay_gateway"] .payment_box select {
     padding: 14px 10px 14px 15px;
-    width: calc(100% - 10px);
+    width: calc(100% - 10px);    
 }
 
 #payment .payment_methods li[class*="payment_method_pay_gateway"]>.payment_box input:not([type=checkbox]):not([type=radio]):focus,
 #payment .payment_methods li[class*="payment_method_pay_gateway"]>.payment_box select:focus,
 div p[class*="payment_method_pay_gateway"]>.payment_box input:not([type=checkbox]):not([type=radio]):focus,
-div p[class*="payment_method_pay_gateway"]>.payment_box select:focus {
+div p[class*="payment_method_pay_gateway"]>.payment_box select:focus {   
     outline: none;
+    border: none;
+    border-color: transparent;
+    text-decoration: none;
+    box-shadow: none;
 }
 
 #payment .payment_methods li[class*="payment_method_pay_gateway"]>.payment_box .pay_radio_select,
@@ -103,6 +112,7 @@ div p[class*="payment_method_pay_gateway"]>.payment_box .pay_radio_select {
     list-style: none;
     margin: 0;
     margin-top: 20px;
+    padding: 0;
 }
 
 #payment .payment_methods li[class*="payment_method_pay_gateway"]>.payment_box .pay_radio_select>li,
@@ -143,4 +153,30 @@ div p[class*="payment_method_pay_gateway"]>.payment_box .pay_radio_select>li>lab
 div p[class*="payment_method_pay_gateway"]>.payment_box .pay_radio_select>li>label>span {
     display: inline-block;
     vertical-align: middle;
+}
+
+#payment .payment_methods>.woocommerce-PaymentMethod>input[type="radio"], #payment .payment_methods>.wc_payment_method>input[type="radio"] {
+    display:none !important;
+}
+
+#payment .payment_methods>.woocommerce-PaymentMethod>label::before, #payment .payment_methods>.wc_payment_method>label::before {   
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1; 
+    font-weight: 900;
+    line-height: inherit;
+    vertical-align: baseline;
+    content: "\1F785";
+    margin-right: 0.5407911001em;
+    transition: color,ease,.2s;  
+    color:#6d6d6d;  
+    border: none;
+    background: transparent;
+    transform: none;
+}
+
+#payment .payment_methods li.woocommerce-PaymentMethod>input[type=radio]:first-child:checked+label::before, #payment .payment_methods li.wc_payment_method>input[type=radio]:first-child:checked+label::before {
+    content: "\1F789";    
 }
