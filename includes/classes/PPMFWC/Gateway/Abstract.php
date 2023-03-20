@@ -9,13 +9,13 @@
  */
 abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 {
-    public const STATUS_PENDING = 'pending';
-    public const STATUS_PROCESSING = 'processing';
-    public const STATUS_ON_HOLD = 'on-hold';
-    public const STATUS_COMPLETED = 'completed';
-    public const STATUS_CANCELLED = 'cancelled';
-    public const STATUS_REFUNDED = 'refunded';
-    public const STATUS_FAILED = 'failed';
+    const STATUS_PENDING = 'pending';
+    const STATUS_PROCESSING = 'processing';
+    const STATUS_ON_HOLD = 'on-hold';
+    const STATUS_COMPLETED = 'completed';
+    const STATUS_CANCELLED = 'cancelled';
+    const STATUS_REFUNDED = 'refunded';
+    const STATUS_FAILED = 'failed';
 
     /**
      * Payment Profile ID

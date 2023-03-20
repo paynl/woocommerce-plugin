@@ -9,24 +9,24 @@
  */
 class PPMFWC_Gateways
 {
-    public const STATUS_PENDING = 'PENDING';
-    public const STATUS_CANCELED = 'CANCELED';
-    public const STATUS_DENIED = 'DENIED';
-    public const STATUS_SUCCESS = 'SUCCESS';
-    public const STATUS_AUTHORIZE = 'AUTHORIZE';
-    public const STATUS_VERIFY = 'VERIFY';
-    public const STATUS_REFUND = 'REFUND';
-    public const STATUS_REFUND_PARTIALLY = 'PARTREF';
-    public const STATUS_CAPTURE = 'CAPTURE';
+    const STATUS_PENDING = 'PENDING';
+    const STATUS_CANCELED = 'CANCELED';
+    const STATUS_DENIED = 'DENIED';
+    const STATUS_SUCCESS = 'SUCCESS';
+    const STATUS_AUTHORIZE = 'AUTHORIZE';
+    const STATUS_VERIFY = 'VERIFY';
+    const STATUS_REFUND = 'REFUND';
+    const STATUS_REFUND_PARTIALLY = 'PARTREF';
+    const STATUS_CAPTURE = 'CAPTURE';
 
-    public const ACTION_NEWPPT = 'new_ppt';
-    public const ACTION_PENDING = 'pending';
-    public const ACTION_CANCEL = 'cancel';
-    public const ACTION_VERIFY = 'verify';
-    public const ACTION_REFUND = 'refund:received';
-    public const ACTION_CAPTURE = 'capture';
+    const ACTION_NEWPPT = 'new_ppt';
+    const ACTION_PENDING = 'pending';
+    const ACTION_CANCEL = 'cancel';
+    const ACTION_VERIFY = 'verify';
+    const ACTION_REFUND = 'refund:received';
+    const ACTION_CAPTURE = 'capture';
 
-    public const TAB_ID = 'pay_settings';
+    const TAB_ID = 'pay_settings';
 
     /**
      * @param string $default Adds text 'default' for the selected option
