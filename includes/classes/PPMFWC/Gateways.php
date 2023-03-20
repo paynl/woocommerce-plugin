@@ -165,9 +165,9 @@ class PPMFWC_Gateways
     {
         global $current_section;
         $sections = array(
-            '' => __('Setup', 'woocommerce'),
-            'payment_methods' => __('Payment Methods', 'woocommerce'),
-            'settings' => __('Settings', 'woocommerce'),
+            '' => __('Setup', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'payment_methods' => __('Payment Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            'settings' => __('Settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'order_state_automation' => __('Order State Automation', 'woocommerce')
         );
         echo '<ul class="subsubsub">';
