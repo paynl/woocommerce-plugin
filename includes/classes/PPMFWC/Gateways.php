@@ -32,8 +32,9 @@ class PPMFWC_Gateways
      * @param string $default Adds text 'default' for the selected option
      * @param array $excludeStates List of statusus that should not return
      * @return array
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
      */
-    private static function getAvailableWoocomStatus($default, array $excludeStates = array())
+    private static function getAvailableWoocomStatus($default, $excludeStates = array())
     {
         $txt = esc_html(' (' . __('default', 'woocommerce') . ')');
 
@@ -135,8 +136,9 @@ class PPMFWC_Gateways
     /**
      * @param array $arrDefault
      * @return array
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
-    public static function ppmfwc_getGateways(array $arrDefault)
+    public static function ppmfwc_getGateways($arrDefault)
     {
         $paymentOptions = self::$arrGateways;
 
@@ -161,8 +163,9 @@ class PPMFWC_Gateways
      * Add Settings Tab function
      * @param array $settings_tabs
      * @return array
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
-    public static function ppmfwc_addSettingsTab(array $settings_tabs)
+    public static function ppmfwc_addSettingsTab($settings_tabs)
     {
         $settings_tabs[self::TAB_ID] = __('Pay.', 'woocommerce');
         return $settings_tabs;

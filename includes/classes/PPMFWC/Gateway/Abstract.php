@@ -68,7 +68,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      * @param string $key
      * @param mixed $value
      * @param boolean $update
-     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     * @phpcs:disable Squiz.Commenting.FunctionComment.MissingReturn
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
     public function set_option_default($key, $value, $update = false)
     {

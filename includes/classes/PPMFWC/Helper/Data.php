@@ -17,9 +17,10 @@ class PPMFWC_Helper_Data
      * @param string|null $payTransactionId
      * @param array $infoFields
      * @param string $type
-     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     * @phpcs:disable Squiz.Commenting.FunctionComment.MissingReturn     
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
      */
-    public static function ppmfwc_payLogger($message, $payTransactionId = null, array $infoFields = array(), $type = 'info')
+    public static function ppmfwc_payLogger($message, $payTransactionId = null, $infoFields = array(), $type = 'info')
     {
         if (self::$paylog === true || self::$paylog === null) {
             if (empty(self::$paylog)) {
