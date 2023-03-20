@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
 "POT-Creation-Date: 2023-01-23 19:35+0100\n"
-"PO-Revision-Date: 2023-01-23 19:36+0100\n"
+"PO-Revision-Date: 2023-02-07 11:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -358,10 +358,8 @@ msgid "Setup"
 msgstr ""
 
 #: includes/classes/PPMFWC/Gateways.php:169
-#, fuzzy
-#| msgid "Follow Payment Method"
 msgid "Payment Methods"
-msgstr "Volg betaalmethode"
+msgstr "Betaalmethoden"
 
 #: includes/classes/PPMFWC/Gateways.php:170 woocommerce-payment-paynl.php:117
 msgid "Settings"
@@ -432,10 +430,8 @@ msgstr "De volgende betaalmethoden kunnen worden ingeschakeld"
 
 #: includes/classes/PPMFWC/Gateways.php:344
 #: includes/classes/PPMFWC/Gateways.php:351
-#, fuzzy
-#| msgid "Follow Payment Method"
 msgid "Pay. Payment Methods"
-msgstr "Volg betaalmethode"
+msgstr "Pay. Betaalmethoden"
 
 #: includes/classes/PPMFWC/Gateways.php:363
 #, fuzzy
