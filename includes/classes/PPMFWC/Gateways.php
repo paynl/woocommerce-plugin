@@ -1,32 +1,39 @@
 <?php
 
+/**
+ * PPMFWC_Gateways
+ *
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @phpcs:disable PSR1.Methods.CamelCapsMethodName
+ */
 class PPMFWC_Gateways
 {
-    const STATUS_PENDING = 'PENDING';
-    const STATUS_CANCELED = 'CANCELED';
-    const STATUS_DENIED = 'DENIED';
-    const STATUS_SUCCESS = 'SUCCESS';
-    const STATUS_AUTHORIZE = 'AUTHORIZE';
-    const STATUS_VERIFY = 'VERIFY';
-    const STATUS_REFUND = 'REFUND';
-    const STATUS_REFUND_PARTIALLY = 'PARTREF';
-    const STATUS_CAPTURE = 'CAPTURE';
+    public const STATUS_PENDING = 'PENDING';
+    public const STATUS_CANCELED = 'CANCELED';
+    public const STATUS_DENIED = 'DENIED';
+    public const STATUS_SUCCESS = 'SUCCESS';
+    public const STATUS_AUTHORIZE = 'AUTHORIZE';
+    public const STATUS_VERIFY = 'VERIFY';
+    public const STATUS_REFUND = 'REFUND';
+    public const STATUS_REFUND_PARTIALLY = 'PARTREF';
+    public const STATUS_CAPTURE = 'CAPTURE';
 
-    const ACTION_NEWPPT = 'new_ppt';
-    const ACTION_PENDING = 'pending';
-    const ACTION_CANCEL = 'cancel';
-    const ACTION_VERIFY = 'verify';
-    const ACTION_REFUND = 'refund:received';
-    const ACTION_CAPTURE = 'capture';
+    public const ACTION_NEWPPT = 'new_ppt';
+    public const ACTION_PENDING = 'pending';
+    public const ACTION_CANCEL = 'cancel';
+    public const ACTION_VERIFY = 'verify';
+    public const ACTION_REFUND = 'refund:received';
+    public const ACTION_CAPTURE = 'capture';
 
-    const TAB_ID = 'pay_settings';
+    public const TAB_ID = 'pay_settings';
 
     /**
-     * @param $default Adds text 'default' for the selected option
-     * @param $excludeStates List of statusus that should not return
+     * @param string $default Adds text 'default' for the selected option
+     * @param array $excludeStates List of statusus that should not return
      * @return array
      */
-    private static function getAvailableWoocomStatus($default, $excludeStates = array())
+    private static function getAvailableWoocomStatus($default, array $excludeStates = array())
     {
         $txt = esc_html(' (' . __('default', 'woocommerce') . ')');
 
@@ -125,7 +132,11 @@ class PPMFWC_Gateways
       'PPMFWC_Gateway_Yehhpay',
     );
 
-    public static function ppmfwc_getGateways($arrDefault)
+    /**
+     * @param array $arrDefault
+     * @return array
+     */
+    public static function ppmfwc_getGateways(array $arrDefault)
     {
         $paymentOptions = self::$arrGateways;
 
@@ -151,7 +162,7 @@ class PPMFWC_Gateways
      * @param array $settings_tabs
      * @return array
      */
-    public static function ppmfwc_addSettingsTab($settings_tabs)
+    public static function ppmfwc_addSettingsTab(array $settings_tabs)
     {
         $settings_tabs[self::TAB_ID] = __('Pay.', 'woocommerce');
         return $settings_tabs;
@@ -159,7 +170,7 @@ class PPMFWC_Gateways
 
     /**
      * Add Sectcions function
-     * @return array
+     * @return array|void
      */
     public static function ppmfwc_addSettingsSections()
     {
@@ -173,13 +184,14 @@ class PPMFWC_Gateways
         echo '<ul class="subsubsub">';
         $array_keys = array_keys($sections);
         foreach ($sections as $id => $label) {
-            echo '<li><a href="' . admin_url('admin.php?page=wc-settings&tab=' . self::TAB_ID . '&section=' . sanitize_title($id)) . '" class="' . ($current_section == $id ? 'current' : '') . '">' . $label . '</a> ' . (end($array_keys) == $id ? '' : '|') . ' </li>';
+            echo '<li><a href="' . admin_url('admin.php?page=wc-settings&tab=' . self::TAB_ID . '&section=' . sanitize_title($id)) . '" class="' . ($current_section == $id ? 'current' : '') . '">' . $label . '</a> ' . (end($array_keys) == $id ? '' : '|') . ' </li>'; // phpcs:ignore
         }
         echo '</ul><br class="clear" />';
     }
 
     /**
      * Add Global Settings function
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public static function ppmfwc_addGlobalSettingsTab()
     {
@@ -189,6 +201,7 @@ class PPMFWC_Gateways
 
     /**
      * Save Settings function
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public static function ppmfwc_saveGlobalSettingsTab()
     {
@@ -212,7 +225,7 @@ class PPMFWC_Gateways
         $warning = '';
         $error = '';
         try {
-            PPMFWC_Helper_Data::loadPaymentMethods();   
+            PPMFWC_Helper_Data::loadPaymentMethods();
         } catch (Exception $e) {
             $current_apitoken = get_option('paynl_apitoken');
             $current_serviceid = get_option('paynl_serviceid');
@@ -225,13 +238,14 @@ class PPMFWC_Gateways
                 if (!empty($post_apitoken) || !empty($post_serviceid) || !empty($post_tokencode)) {
                     $error = __('API token and Service id are required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
                 } else {
-                    $warning = __('Pay. Not connected.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);;
+                    $warning = __('Pay. Not connected.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                    ;
                 }
-            } else if (strlen($current_apitoken . $current_serviceid) == 0) {
+            } elseif (strlen($current_apitoken . $current_serviceid) == 0) {
                 $error = __('API-token and Service id are required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-            } else if (strlen($current_apitoken) == 0) {
+            } elseif (strlen($current_apitoken) == 0) {
                 $error = __('API-token is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-            } else if (strlen($current_serviceid) == 0) {
+            } elseif (strlen($current_serviceid) == 0) {
                 $error = __('Service id is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             }
 
@@ -250,10 +264,10 @@ class PPMFWC_Gateways
 
         if (strlen($warning) > 0) {
             $message = '<span style="color:#ff8300; font-weight:bold;">' . esc_html($warning) . '</span>';
-            $message .= '<p class="description">' . esc_html(__('Not registered at Pay.? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register-now">here</a>!</p>';
+            $message .= '<p class="description">' . esc_html(__('Not registered at Pay.? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register-now">here</a>!</p>'; // phpcs:ignore
         } elseif (strlen($error) > 0) {
             $message = '<span style="color:#ff0000; font-weight:bold;">' . esc_html(__('Pay. Connection failed.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . ' (' . esc_html($error) . ')</span>';
-            $message .= '<p class="description">' . esc_html(__('Not registered at Pay.? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register-now">here</a>!</p>';
+            $message .= '<p class="description">' . esc_html(__('Not registered at Pay.? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register-now">here</a>!</p>'; // phpcs:ignore
         } else {
             $message = '<span style="color:#10723a; font-weight:bold;">' . esc_html(__('Pay. Successfully connected.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span>';
         }
@@ -267,7 +281,7 @@ class PPMFWC_Gateways
         $html .= PPMFWC_Helper_Data::getVersion();
         $html .= '</td>';
         $html .= '</tr>';
-       
+
         $html .= '<tr valign="top">';
         $html .= '<th scope="row" class="titledesc">';
         $html .= '<label>Status</label>';
@@ -396,7 +410,7 @@ class PPMFWC_Gateways
                 'type' => 'title',
                 'desc' => '',
                 'id' => 'paynl_global_settings',
-            );            
+            );
             $addedSettings[] = array(
                 'name' => __('Standard Pay. Style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                 'type' => 'checkbox',
@@ -429,7 +443,7 @@ class PPMFWC_Gateways
             $addedSettings[] = array(
                 'name' => esc_html(__('Send Order Data', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
-                'desc' => esc_html(__('Check this box if you want to send the order data to Pay., this is required if you want use \'Pay after delivery\' paymentmethods ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'desc' => esc_html(__('Check this box if you want to send the order data to Pay., this is required if you want use \'Pay after delivery\' paymentmethods ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
                 'id' => 'paynl_send_order_data',
                 'default' => 'yes',
             );
@@ -531,23 +545,38 @@ class PPMFWC_Gateways
                 'name' => esc_html(__('Token Code *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'placeholder' => 'AT-####-####',
                 'type' => 'text',
-                'desc' => esc_html(__('The AT-code belonging to your token, you can find this ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
+                'desc' => esc_html(
+                    __(
+                        'The AT-code belonging to your token, you can find this ',
+                        PPMFWC_WOOCOMMERCE_TEXTDOMAIN
+                    )
+                ) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
                 'id' => 'paynl_tokencode',
             );
             $addedSettings[] = array(
                 'name' => esc_html(__('API-token *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'text',
-                'desc' => esc_html(__('The API-token used to communicate with the Pay. API, you can find your API-token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
+                'desc' => esc_html(
+                    __(
+                        'The API-token used to communicate with the Pay. API, you can find your API-token ',
+                        PPMFWC_WOOCOMMERCE_TEXTDOMAIN
+                    )
+                ) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
                 'id' => 'paynl_apitoken',
             );
             $addedSettings[] = array(
                 'name' => esc_html(__('Service ID *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'placeholder' => 'SL-####-####',
                 'type' => 'text',
-                'desc' => esc_html(__('The serviceid to identify your website, you can find your serviceid here ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
+                'desc' => esc_html(
+                    __(
+                        'The serviceid to identify your website, you can find your serviceid here ',
+                        PPMFWC_WOOCOMMERCE_TEXTDOMAIN
+                    )
+                ) . '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
                 'id' => 'paynl_serviceid',
                 'desc_tip' => __('The serviceid should be in the following format: SL-xxxx-xxxx', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            );            
+            );
             $addedSettings[] = array(
                 'name' => esc_html(__('Test Mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
@@ -566,13 +595,16 @@ class PPMFWC_Gateways
 
     /**
      * This function registers the Pay Payment Gateways
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public static function ppmfwc_register()
     {
         add_filter('woocommerce_payment_gateways', array(__CLASS__, 'ppmfwc_getGateways'));
     }
 
-
+    /**
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
     public static function ppmfwc_addPayStyleSheet()
     {
         wp_register_style('paynl_wp_admin_css', PPMFWC_PLUGIN_URL . 'assets/css/pay.css', false, '1.0.0');
@@ -581,6 +613,7 @@ class PPMFWC_Gateways
 
     /**
      * This function adds the Pay Settings Tab
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public static function ppmfwc_settingsTab()
     {
@@ -593,6 +626,7 @@ class PPMFWC_Gateways
 
     /**
      * Register the API's to catch the return and exchange
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public static function ppmfwc_registerApi()
     {
@@ -602,6 +636,7 @@ class PPMFWC_Gateways
 
     /**
      * After a (successfull, failed, cancelled etc.) PAY payment the user wil end up here
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public static function ppmfwc_onReturn()
     {
@@ -615,8 +650,7 @@ class PPMFWC_Gateways
 
         try {
             # Retrieve URL to continue (and update status if necessary)
-            if (!empty($orderId))
-            {
+            if (!empty($orderId)) {
                 $newStatus = PPMFWC_Helper_Transaction::processTransaction($orderId, $status);
                 try {
                     $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
@@ -639,24 +673,36 @@ class PPMFWC_Gateways
         wp_redirect($url);
     }
 
-
+    /**
+     * @param WC_Order $order
+     * @param string $newStatus
+     * @return array
+     */
     public static function getOrderReturnUrl(WC_Order $order, $newStatus)
     {
-        if ($newStatus == PPMFWC_Gateways::STATUS_CANCELED)
-        {
+        if ($newStatus == PPMFWC_Gateways::STATUS_CANCELED) {
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
-        } elseif ($newStatus == PPMFWC_Gateways::STATUS_DENIED)
-        {
+        } elseif ($newStatus == PPMFWC_Gateways::STATUS_DENIED) {
             $methodName = $order->get_payment_method_title();
             if (!empty($methodName)) {
-                wc_add_notice(esc_html(sprintf(__('Unfortunately the payment has been denied by %s. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $methodName)), 'error');
+                wc_add_notice(
+                    esc_html(
+                        sprintf(
+                            __(
+                                'Unfortunately the payment has been denied by %s. Please try again or use another payment method.',
+                                PPMFWC_WOOCOMMERCE_TEXTDOMAIN
+                            ),
+                            $methodName
+                        )
+                    ),
+                    'error'
+                );
             } else {
                 wc_add_notice(esc_html(__('Unfortunately the payment has been denied by the payment method. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
             }
 
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_DENIED, wc_get_checkout_url());
-        } elseif ($newStatus == PPMFWC_Gateways::STATUS_PENDING)
-        {
+        } elseif ($newStatus == PPMFWC_Gateways::STATUS_PENDING) {
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_PENDING, $order->get_checkout_order_received_url());
 
             $method = $order->get_payment_method();
@@ -665,9 +711,7 @@ class PPMFWC_Gateways
             if (!empty($methodSettings['alternative_return_url'])) {
                 $url = $methodSettings['alternative_return_url'];
             }
-        } else
-        {
-
+        } else {
             $return_url = $order->get_checkout_order_received_url();
             if (is_ssl() || get_option('woocommerce_force_ssl_checkout') == 'yes') {
                 $return_url = str_replace('http:', 'https:', $return_url);
@@ -683,7 +727,7 @@ class PPMFWC_Gateways
     /**
      * Retrieve a textual-status by statusId
      *
-     * @param $statusId
+     * @param integer $statusId
      * @return string
      */
     public static function ppmfwc_getStatusFromStatusId($statusId)
@@ -696,13 +740,13 @@ class PPMFWC_Gateways
         } elseif ($statusId == 85) {
             $status = self::STATUS_VERIFY;
         } elseif ($statusId == -81) {
-            $status = SELF::STATUS_REFUND;
+            $status = self::STATUS_REFUND;
         } elseif ($statusId == -82) {
-            $status = SELF::STATUS_REFUND_PARTIALLY;
+            $status = self::STATUS_REFUND_PARTIALLY;
         } elseif ($statusId == -63) {
-            $status = SELF::STATUS_DENIED;
+            $status = self::STATUS_DENIED;
         } elseif (in_array($statusId, array(20, 25, 50, 90))) {
-            $status = SELF::STATUS_PENDING; 
+            $status = self::STATUS_PENDING;
         } elseif ($statusId < 0) {
             $status = self::STATUS_CANCELED;
         }
@@ -729,7 +773,7 @@ class PPMFWC_Gateways
     /**
      * Return Gateway object based on payment_profile_id
      *
-     * @param $payment_profile_id
+     * @param integer $payment_profile_id
      * @return mixed|null
      */
     public static function ppmfwc_getGateWayById($payment_profile_id)
@@ -745,7 +789,7 @@ class PPMFWC_Gateways
 
     /**
      * Handles the PAY. Exchange requests
-     *
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public static function ppmfwc_onExchange()
     {
@@ -764,20 +808,19 @@ class PPMFWC_Gateways
                     die('FALSE| Already processing payment');
                 }
             }
-            if(in_array($action, array_keys($arrActions))) {
+            if (in_array($action, array_keys($arrActions))) {
                 $status = $arrActions[$action];
             } else {
                 throw new PPMFWC_Exception_Notice('Ignoring: ' . $action);
             }
 
-            if (!in_array($action, array(SELF::ACTION_PENDING))) {
+            if (!in_array($action, array(self::ACTION_PENDING))) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id, 'methodid' => $methodId));
 
                 # Try to update the orderstatus.
                 $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status, $methodId);
                 $message = 'TRUE|Status updated to ' . $newStatus;
             }
-
         } catch (PPMFWC_Exception_Notice $e) {
             $message = 'TRUE|Notice: ' . $e->getMessage();
         } catch (PPMFWC_Exception $e) {
@@ -796,6 +839,9 @@ class PPMFWC_Gateways
         die($message);
     }
 
+    /**
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
     public static function ppmfwc_registerCheckoutFlash()
     {
         $paynlstatus = isset($_REQUEST['paynl_status']) ? sanitize_text_field($_REQUEST['paynl_status']) : null;
@@ -807,14 +853,19 @@ class PPMFWC_Gateways
         }
     }
 
+    /**
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
     public static function ppmfwc_displayFlashCanceled()
     {
         wc_print_notice(__('The payment has been canceled, please try again', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), 'error');
     }
 
+    /**
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
     public static function ppmfwc_displayFlashPending()
     {
         wc_print_notice(__('The payment is pending or not completed', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), 'notice');
     }
-
 }

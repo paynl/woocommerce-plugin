@@ -1,22 +1,41 @@
 <?php
 
+/**
+ * PPMFWC_Gateway_Ideal
+ *
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @phpcs:disable PSR1.Methods.CamelCapsMethodName
+ */
 class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
 {
+    /**
+     * @return string
+     */
     public static function getId()
     {
         return 'pay_gateway_ideal';
     }
 
+    /**
+     * @return string
+     */
     public static function getName()
     {
         return 'iDEAL';
     }
 
+    /**
+     * @return integer
+     */
     public static function getOptionId()
     {
         return 10;
     }
 
+    /**
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
     public function payment_fields()
     {
         parent::payment_fields();
@@ -44,7 +63,7 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                 <ul class="pay_radio_select">
                     <?php
                     foreach ($optionSubs as $optionSub) {
-                        echo '<li><label><input type="radio" name="option_sub_id" value="' . esc_attr($optionSub['option_sub_id']) . '" />&nbsp;<img src="' . PPMFWC_PLUGIN_URL . 'assets/logos_issuers/qr-' . esc_attr($optionSub['option_sub_id']) . '.svg" alt="' . esc_attr($optionSub['name']) . '" title="' . esc_attr($optionSub['name']) . '" /><span>' . esc_attr($optionSub['name']) . '</span></label></li>';
+                        echo '<li><label><input type="radio" name="option_sub_id" value="' . esc_attr($optionSub['option_sub_id']) . '" />&nbsp;<img src="' . PPMFWC_PLUGIN_URL . 'assets/logos_issuers/qr-' . esc_attr($optionSub['option_sub_id']) . '.svg" alt="' . esc_attr($optionSub['name']) . '" title="' . esc_attr($optionSub['name']) . '" /><span>' . esc_attr($optionSub['name']) . '</span></label></li>'; // phpcs:ignore
                     }
                     ?>
                 </ul>
@@ -54,6 +73,9 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
         }
     }
 
+    /**
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
     public function init_form_fields()
     {
         parent::init_form_fields();
@@ -66,12 +88,12 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
             $this->form_fields['paynl_bankselection'] = array(
                     'title' => esc_html(__('Bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'select',
-                    'options' => array('none' => esc_html( __('No bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'options' => array('none' => esc_html(__('No bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                           'select' => esc_html(__('Selectbox', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                          'radio' => esc_html( __('Radiobuttons', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+                          'radio' => esc_html(__('Radiobuttons', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
                         ),
 
-             'description' => esc_html( __('Pick the type of bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+             'description' => esc_html(__('Pick the type of bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
              'default' => $default,);
         }
     }
