@@ -159,24 +159,18 @@ div p[class*="payment_method_pay_gateway"]>.payment_box .pay_radio_select>li>lab
     display:none !important;
 }
 
-#payment .payment_methods>.woocommerce-PaymentMethod>label::before, #payment .payment_methods>.wc_payment_method>label::before {   
+#payment .payment_methods>.woocommerce-PaymentMethod>label::before, #payment .payment_methods>.wc_payment_method>label::before {
     display: inline-block;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: normal;
-    line-height: 1; 
-    font-weight: 900;
-    line-height: inherit;
-    vertical-align: baseline;
-    content: "\1F785";
+    content: "";
     margin-right: 0.5407911001em;
-    transition: color,ease,.2s;  
-    color:#6d6d6d;  
     border: none;
-    background: transparent;
-    transform: none;
+    background-image: url("icons/radio_unchecked.svg");
+    width: 20px;
+    height: 20px;
+    vertical-align: text-top;
+    background-size: contain;
 }
 
 #payment .payment_methods li.woocommerce-PaymentMethod>input[type=radio]:first-child:checked+label::before, #payment .payment_methods li.wc_payment_method>input[type=radio]:first-child:checked+label::before {
-    content: "\1F789";    
+    background-image: url("icons/radio_checked.svg");
 }
