@@ -1,5 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 
+/*!
+* Font Awesome Free 5.13.0 by @fontawesome - https://fontawesome.com
+* License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+*/
+@font-face {
+    font-family: "Font Awesome 5 Free";
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url("../../assets/fonts/fa-solid-900.eot");
+    src: url("../../assets/fonts/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("../../assets/fonts/fa-solid-900.woff2") format("woff2"), url("../../assets/fonts/fa-solid-900.woff") format("woff"), url("../../assets/fonts/fa-solid-900.ttf") format("truetype"), url("../../assets/fonts/fa-solid-900.svg#fontawesome") format("svg")
+}
+
 #payment .payment_methods li[class*="payment_method_pay_gateway"] *,
 div p[class*="payment_method_pay_gateway"] * {
     font-family: 'Lato', sans-serif;
@@ -92,13 +105,13 @@ div p[class*="payment_method_pay_gateway"] .payment_box select {
 #payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box select,
 div p[class*="payment_method_pay_gateway"] .payment_box select {
     padding: 14px 10px 14px 15px;
-    width: calc(100% - 10px);    
+    width: calc(100% - 10px);
 }
 
 #payment .payment_methods li[class*="payment_method_pay_gateway"]>.payment_box input:not([type=checkbox]):not([type=radio]):focus,
 #payment .payment_methods li[class*="payment_method_pay_gateway"]>.payment_box select:focus,
 div p[class*="payment_method_pay_gateway"]>.payment_box input:not([type=checkbox]):not([type=radio]):focus,
-div p[class*="payment_method_pay_gateway"]>.payment_box select:focus {   
+div p[class*="payment_method_pay_gateway"]>.payment_box select:focus {
     outline: none;
     border: none;
     border-color: transparent;
@@ -156,21 +169,28 @@ div p[class*="payment_method_pay_gateway"]>.payment_box .pay_radio_select>li>lab
 }
 
 #payment .payment_methods>.woocommerce-PaymentMethod>input[type="radio"], #payment .payment_methods>.wc_payment_method>input[type="radio"] {
-    display:none !important;
+    display: none !important;
 }
 
-#payment .payment_methods>.woocommerce-PaymentMethod>label::before, #payment .payment_methods>.wc_payment_method>label::before {
+#payment .payment_methods>.woocommerce-PaymentMethod>label::before, #payment .payment_methods>.wc_payment_method>label::before {   
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     display: inline-block;
-    content: "";
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    line-height: 1;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    line-height: inherit;
+    vertical-align: baseline;
+    content: "";
     margin-right: 0.5407911001em;
-    border: none;
-    background-image: url("icons/radio_unchecked.svg");
-    width: 20px;
-    height: 20px;
-    vertical-align: text-top;
-    background-size: contain;
+    transition: color,ease,.2s;
+    background:transparent !important;
+    background-image: none !important;
 }
 
 #payment .payment_methods li.woocommerce-PaymentMethod>input[type=radio]:first-child:checked+label::before, #payment .payment_methods li.wc_payment_method>input[type=radio]:first-child:checked+label::before {
-    background-image: url("icons/radio_checked.svg");
+    content: "";
 }
