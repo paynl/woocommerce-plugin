@@ -172,25 +172,31 @@ div p[class*="payment_method_pay_gateway"]>.payment_box .pay_radio_select>li>lab
     display: none !important;
 }
 
-#payment .payment_methods>.woocommerce-PaymentMethod>label::before, #payment .payment_methods>.wc_payment_method>label::before {   
+#payment .payment_methods>.woocommerce-PaymentMethod>label::before, #payment .payment_methods>.wc_payment_method>label::before {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    display: inline-block;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: normal;
+    display: inline-block !important;
+    width: auto !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    font-weight: normal !important;
     line-height: 1;
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
+    font-family: "Font Awesome 5 Free" !important;
+    font-weight: 900 !important;
     line-height: inherit;
     vertical-align: baseline;
-    content: "";
-    margin-right: 0.5407911001em;
-    transition: color,ease,.2s;
-    background:transparent !important;
+    content: "" !important;
+    margin-left: 0 !important;
+    margin-right: 0.5407911001em !important;
+    transition: color, ease, .2s;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
     background-image: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
 }
 
 #payment .payment_methods li.woocommerce-PaymentMethod>input[type=radio]:first-child:checked+label::before, #payment .payment_methods li.wc_payment_method>input[type=radio]:first-child:checked+label::before {
-    content: "";
+    content: "" !important;
 }
