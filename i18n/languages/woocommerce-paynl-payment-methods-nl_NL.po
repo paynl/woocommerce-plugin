@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
 "POT-Creation-Date: 2023-01-23 19:37+0100\n"
-"PO-Revision-Date: 2023-02-07 11:15+0100\n"
+"PO-Revision-Date: 2023-03-20 11:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -806,6 +806,18 @@ msgstr "Vul je KVK-nummer in"
 #, php-format
 msgid "PAY.: Performed auto-capture on transaction: %s"
 msgstr "PAY.: Succesvol auto-capture uitgevoerd voor transactie: %s"
+
+msgid "Pay safely via pin"
+msgstr "Betaal veilig via pin"
+
+msgid "Choose the pin terminal..."
+msgstr "Selecteer uw pin terminal..."
+
+msgid "Pay safely via your bank"
+msgstr "Betaal veilig via uw bank"
+
+msgid "Select your bank..."
+msgstr "Selecteer uw bank..."
 
 #~ msgid "API-token is invalid."
 #~ msgstr "API-token is ongeldig."

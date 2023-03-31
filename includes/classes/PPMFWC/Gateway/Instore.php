@@ -1,18 +1,33 @@
 <?php
 
+/**
+ * PPMFWC_Gateway_Ideal
+ *
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @phpcs:disable PSR1.Methods.CamelCapsMethodName
+ */
 class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
 {
-
+    /**
+     * @return string
+     */
     public static function getId()
     {
         return 'pay_gateway_instore';
     }
 
+    /**
+     * @return string
+     */
     public static function getName()
     {
         return 'Pinnen (Instore)';
     }
 
+    /**
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
     public function init_form_fields()
     {
         parent::loginSDK();
@@ -32,7 +47,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
                 }
             }
 
-            $this->form_fields['paynl_instore_terminal'] =array(
+            $this->form_fields['paynl_instore_terminal'] = array(
                 'title' => esc_html(__('Selected terminal', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'select',
                 'options' => $options,
@@ -40,6 +55,9 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
         }
     }
 
+    /**
+     * @return array
+     */
     private function get_terminals()
     {
         try {
@@ -57,11 +75,17 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
         }
     }
 
+    /**
+     * @return integer
+     */
     public static function getOptionId()
     {
         return 1729;
     }
 
+    /**
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
     public function payment_fields()
     {
         parent::payment_fields();
@@ -81,21 +105,25 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
 
         if (!empty($terminals)) {
             ?>
-            <p>
+            <fieldset>
+                <legend><?php echo esc_html(__('Pay safely via pin', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)); ?></legend>
                 <select name="terminal_id">
-                    <option value=""><?php echo esc_html(__('Choose the pin terminal', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) ?></option>
+                    <option value=""><?php echo esc_html(__('Choose the pin terminal...', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) ?></option>
                     <?php
                     foreach ($terminals as $terminal) {
                         echo '<option value="' . esc_attr($terminal['id']) . '">' . esc_html($terminal['name']) . '</option>';
                     }
                     ?>
                 </select>
-            </p>
+            </fieldset> 
             <?php
-
         }
     }
 
+    /**
+     * @param string $order_id
+     * @return array|void
+     */
     public function process_payment($order_id)
     {
         /** @var $wpdb wpdb The database */
@@ -116,7 +144,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             return;
         }
 
-        $order->add_order_note(sprintf( esc_html(__('PAY.: Transaction started: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $result->getTransactionId()));
+        $order->add_order_note(sprintf(esc_html(__('PAY.: Transaction started: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $result->getTransactionId()));
 
         PPMFWC_Helper_Transaction::newTransaction($result->getTransactionId(), $paymentOptionId, $order->get_total(), $order->get_id(), '');
 
@@ -163,5 +191,4 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
 
         return array('result' => 'expired');
     }
-
 }

@@ -1,15 +1,24 @@
 <?php
 
+/**
+ * PPMFWC_Gateways
+ *
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @phpcs:disable PSR1.Methods.CamelCapsMethodName
+ */
 class PPMFWC_Helper_Data
 {
     private static $paylog = null;
     private static $_payment_methods = null;
 
     /**
-     * @param $message
-     * @param null $payTransactionId
+     * @param string $message
+     * @param string|null $payTransactionId
      * @param array $infoFields
      * @param string $type
+     * @phpcs:disable Squiz.Commenting.FunctionComment.MissingReturn     
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
      */
     public static function ppmfwc_payLogger($message, $payTransactionId = null, $infoFields = array(), $type = 'info')
     {
@@ -41,8 +50,8 @@ class PPMFWC_Helper_Data
     /**
      * Check for existing textfield and returns it sanitized
      *
-     * @param $fieldName
-     * @param false $bForceString
+     * @param string $fieldName
+     * @param boolean $bForceString
      * @return false|string
      */
     public static function getPostTextField($fieldName, $bForceString = false)
@@ -55,8 +64,8 @@ class PPMFWC_Helper_Data
     }
 
     /**
-     * @param $fieldName
-     * @param $bForceString
+     * @param string $fieldName
+     * @param boolean $bForceString
      * @return false|string
      */
     public static function getRequestArg($fieldName, $bForceString = false)
@@ -74,6 +83,9 @@ class PPMFWC_Helper_Data
         return $result;
     }
 
+    /**
+     * @return string
+     */
     public static function getIp()
     {
         # Just get the headers if we can or else use the SERVER global
@@ -103,6 +115,9 @@ class PPMFWC_Helper_Data
         return filter_var(trim($the_ip), FILTER_VALIDATE_IP);
     }
 
+    /**
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
     public static function loadPaymentMethods()
     {
         global $wpdb;
@@ -114,12 +129,12 @@ class PPMFWC_Helper_Data
 
         $wpdb->query('DELETE FROM `' . $table_name_option_subs . '`');
         $wpdb->query('DELETE FROM `' . $table_name_options . '`');
-        
+
         foreach ($paymentOptions as $paymentOption) {
             $image = '';
             if (isset($paymentOption['brand']['id'])) {
                 $image = PPMFWC_PLUGIN_URL . 'assets/logos/' . $paymentOption['brand']['id'] . '.png';
-            } else if (isset($paymentOption['id'])) {
+            } elseif (isset($paymentOption['id'])) {
                 $image = 'https://static.pay.nl/payment_profiles/25x25/' . $paymentOption['id'] . '.png';
             }
 
@@ -138,6 +153,9 @@ class PPMFWC_Helper_Data
         }
     }
 
+    /**
+     * @return array
+     */
     public static function getOptions()
     {
         global $wpdb;
@@ -148,6 +166,10 @@ class PPMFWC_Helper_Data
         return $wpdb->get_results($query, ARRAY_A);
     }
 
+    /**
+     * @param integer $optionId
+     * @return array
+     */
     public static function getOptionSubs($optionId)
     {
         global $wpdb;
@@ -155,15 +177,14 @@ class PPMFWC_Helper_Data
         $table_name_option_subs = $wpdb->prefix . "pay_option_subs";
         $query = $wpdb->prepare("SELECT option_id, option_sub_id, name, image "
             . "FROM $table_name_option_subs "
-            . "WHERE active = 1 AND option_id = %d", $optionId
-        );
+            . "WHERE active = 1 AND option_id = %d", $optionId);
 
         return $wpdb->get_results($query, ARRAY_A);
     }
 
     /**
-     * @param $optionId
-     * @return bool
+     * @param integer $optionId
+     * @return boolean
      */
     public static function isOptionAvailable($optionId)
     {
@@ -177,6 +198,9 @@ class PPMFWC_Helper_Data
         return !empty($result);
     }
 
+    /**
+     * @return array
+     */
     public static function getAllOptions()
     {
         global $wpdb;
@@ -194,6 +218,9 @@ class PPMFWC_Helper_Data
         return $methods;
     }
 
+    /**
+     * @return array
+     */
     public static function getPaymentOptionsList()
     {
         if (empty(self::$_payment_methods)) {
@@ -205,32 +232,20 @@ class PPMFWC_Helper_Data
         return self::$_payment_methods;
     }
 
-    public static function ppmfwc_getLogoSizes()
-    {
-        return array(
-            'Auto' => 'Auto',
-            0       => esc_html(__('Don\'t show logos', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-            '50x32' => '50x32',
-            '40x26' => '40x26',
-            '20x20' => '20x20',
-            '25x25' => '25x25',
-            '50x50' => '50x50',
-            '75x75' => '75x75',
-            '100x100' => '100x100'
-        );
-    }
-
+    /**
+     * @return string
+     */
     public static function getBrowserLanguage()
     {
         if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
             return self::parseDefaultLanguage($_SERVER["HTTP_ACCEPT_LANGUAGE"]);
         } else {
-            return self::parseDefaultLanguage(NULL);
+            return self::parseDefaultLanguage(null);
         }
     }
 
     /**
-     * @param $http_accept
+     * @param string $http_accept
      * @param string $deflang
      * @return string
      */
@@ -241,8 +256,13 @@ class PPMFWC_Helper_Data
             $x = explode(",", $http_accept);
             foreach ($x as $val) {
                 #check for q-value and create associative array. No q-value means 1 by rule
-                if (preg_match("/(.*);q=([0-1]{0,1}.[0-9]{0,4})/i", $val,
-                    $matches)) {
+                if (
+                    preg_match(
+                        "/(.*);q=([0-1]{0,1}.[0-9]{0,4})/i",
+                        $val,
+                        $matches
+                    )
+                ) {
                     $lang[$matches[1]] = (float)$matches[2] . '';
                 } else {
                     $lang[$val] = 1.0;
@@ -256,7 +276,7 @@ class PPMFWC_Helper_Data
 
             # Return default language (highest q-value)
             $qval = 0.0;
-            if(isset($lang) && is_array($lang)) {
+            if (isset($lang) && is_array($lang)) {
                 foreach ($lang as $key => $value) {
                     $languagecode = strtolower(substr($key, 0, 2));
 
