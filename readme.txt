@@ -68,7 +68,7 @@ For any further questions please send an email to support@pay.nl
 == Installation ==
 
 This section describes in short how to install the plugin and get it working.
-If you need more help, you can download the manual [here](http://www.pay.nl/plugin/woocommerce/pdf) or send an email to [support@pay.nl](mailto:support@pay.nl)
+If you need more help, you can find our documentation [here](https://docs.pay.nl/plugins?language=en#woocommerce) or send an email to [support@pay.nl](mailto:support@pay.nl)
 
 1. Install the plugin via Plugins -> new plugin
 2. Activate the plugin through the 'Plugins' menu in WordPress, the name of this plugin is: PAY. Payment Methods for WooCommerce
@@ -79,16 +79,16 @@ If you need more help, you can download the manual [here](http://www.pay.nl/plug
 
 = How can i get an account for PAY.? =
 
-You can register [here](http://pay.nl/registreren) (dutch and belgian companies only)
+You can register [here](http://pay.nl/registreren) (Dutch and Belgian companies only)
 
-= Is there a manual available for this plugin? =
+= Is there a documentation available for this plugin? =
 
 Yes there is!
-You can download it [here](https://www.pay.nl/plugin/woocommerce/pdf)
+You can find it [here](https://docs.pay.nl/plugins?language=en#woocommerce)
 
 = How can i get support for this plugin? =
 
-Please don't use wordpress forums to get support from us, we don't receive notifications for questions posted there.
+Please don't use WordPress forums to get support from us, we don't receive notifications for questions posted there.
 If you need our help, please email us at: support[at]pay.nl
 
 = What payment methods are available through this plugin?  =
@@ -436,13 +436,13 @@ Fixed a small typo in Pay_Helper_Transaction
 * Fixed a problem with ipv6 addresses
 = 2.3.4 =
 * Updated the way the ip address is fetched, in case a loadbalancer or proxy is used
-= 2.3.3 = 
+= 2.3.3 =
 * Added instructions to that can be shown on the thank you page
-= 2.3.2 = 
+= 2.3.2 =
 * Fixed the amounts being sent when using discount codes
-= 2.3.1 = 
+= 2.3.1 =
 * Updated the translations
-* Tested with wordpress 4.2
+* Tested with WordPress 4.2
 = 2.3 =
 * Added new payment methods (Gezondheidsbon, Fashioncheque and podiumkadokaart)
 * Added a notice, in case CURL is not installed
@@ -466,4 +466,4 @@ Fixed a small typo in Pay_Helper_Transaction
 = 2.2.2 =
 * Fixed a bug where the plugin would not detect woocommerce when using sitewide plugins
 = 2.2.1 =
-* Compatible with wordpress 2.2
+* Compatible with WordPress 2.2
