@@ -6,11 +6,10 @@
  * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
  * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  * @phpcs:disable PSR1.Methods.CamelCapsMethodName
+ * @phpcs:disable PSR12.Properties.ConstantVisibility
  */
 class PPMFWC_Gateways
 {
-
-    // @codingStandardsIgnoreStart
     const STATUS_PENDING = 'PENDING';
     const STATUS_CANCELED = 'CANCELED';
     const STATUS_DENIED = 'DENIED';
@@ -29,7 +28,6 @@ class PPMFWC_Gateways
     const ACTION_CAPTURE = 'capture';
 
     const TAB_ID = 'pay_settings';
-    // @codingStandardsIgnoreEnd
 
     /**
      * @param string $default Adds text 'default' for the selected option
