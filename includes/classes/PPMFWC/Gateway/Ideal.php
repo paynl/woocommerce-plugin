@@ -83,7 +83,7 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
         if (PPMFWC_Helper_Data::isOptionAvailable($optionId)) {
             $default = get_option('paynl_bankselection');
             if (empty($default)) {
-                $default = 'none';
+                $default = 'select';
             }
             $this->form_fields['paynl_bankselection'] = array(
                     'title' => esc_html(__('Bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
