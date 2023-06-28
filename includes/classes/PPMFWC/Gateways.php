@@ -368,7 +368,8 @@ class PPMFWC_Gateways
                 $addedSettings[] = array(
                     'title' => esc_html(__('Pay. Payment Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'title',
-                    'desc' => esc_html(__('Complete connecting your Pay. account on the ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="' . admin_url('/admin.php?page=wc-settings&tab=pay_settings') . '">' . esc_html(__('setup page', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
+                    'desc' => esc_html(__('Complete connecting your Pay. account on the ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+                        . '<a href="' . admin_url('/admin.php?page=wc-settings&tab=pay_settings') . '">' . esc_html(__('setup page', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
                     'id' => 'paynl_payment_methods',
                 );
             }
