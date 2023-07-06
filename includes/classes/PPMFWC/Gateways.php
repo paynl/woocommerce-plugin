@@ -6,6 +6,7 @@
  * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
  * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  * @phpcs:disable PSR1.Methods.CamelCapsMethodName
+ * @phpcs:disable PSR12.Properties.ConstantVisibility
  */
 class PPMFWC_Gateways
 {
@@ -553,7 +554,7 @@ class PPMFWC_Gateways
                         'The AT-code belonging to your token, you can find this ',
                         PPMFWC_WOOCOMMERCE_TEXTDOMAIN
                     )
-                ) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
+                ) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">' . esc_html(__('here', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
                 'id' => 'paynl_tokencode',
             );
             $addedSettings[] = array(
@@ -564,7 +565,7 @@ class PPMFWC_Gateways
                         'The API-token used to communicate with the Pay. API, you can find your API-token ',
                         PPMFWC_WOOCOMMERCE_TEXTDOMAIN
                     )
-                ) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">here</a>',
+                ) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">' . esc_html(__('here', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
                 'id' => 'paynl_apitoken',
             );
             $addedSettings[] = array(
@@ -573,10 +574,10 @@ class PPMFWC_Gateways
                 'type' => 'text',
                 'desc' => esc_html(
                     __(
-                        'The serviceid to identify your website, you can find your serviceid here ',
+                        'The serviceid to identify your website, you can find your serviceid ',
                         PPMFWC_WOOCOMMERCE_TEXTDOMAIN
                     )
-                ) . '<a href="https://admin.pay.nl/programs/programs" target="serviceid">here</a>',
+                ) . '<a href="https://admin.pay.nl/programs/programs" target="serviceid">' . esc_html(__('here', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
                 'id' => 'paynl_serviceid',
                 'desc_tip' => __('The serviceid should be in the following format: SL-xxxx-xxxx', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             );
