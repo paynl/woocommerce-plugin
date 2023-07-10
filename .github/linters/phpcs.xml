@@ -19,5 +19,19 @@
         <exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamName" />
         <exclude name="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing" />
         <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
+        <exclude name="Squiz.Commenting.FileComment.Missing" />
     </rule>
+    <rule ref="WordPress">
+        <exclude name="WordPress.PHP.YodaConditions.NotYoda" />
+        <exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
+        <exclude name="WordPress.WP.EnqueuedResourceParameters.MissingVersion" />
+        <exclude name="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase" />
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+        <exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
+        <exclude name="WordPress.NamingConventions.ValidVariableName.PropertyNotSnakeCase" />
+        <exclude name="WordPress.WP.I18n.NonSingularStringLiteralDomain" />
+        <exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
+    </rule>
+    <rule ref="WordPress-Docs"/>
 </ruleset>
