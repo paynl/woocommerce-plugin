@@ -1,10 +1,19 @@
 <?php
 
+/**
+ * PPMFWC_Helper_Transaction
+ *
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @phpcs:disable PSR1.Methods.CamelCapsMethodName
+ * @phpcs:disable PSR12.Properties.ConstantVisibility
+ * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
+ */
+
 class PPMFWC_Helper_Transaction
 {
-
     /**
-     * @param $payStatus
+     * @param mixed $payStatus
      * @return false|mixed|null
      */
     public static function getCustomWooComOrderStatus($payStatus)
@@ -18,6 +27,15 @@ class PPMFWC_Helper_Transaction
         return $arrStatus[$payStatus] === false ? $payStatus : $arrStatus[$payStatus];
     }
 
+    /**
+     * @param string $transactionId
+     * @param string $opionId
+     * @param string $amount
+     * @param string $orderId
+     * @param string $startData
+     * @param string|null $optionSubId
+     * @return string
+     */
     public static function newTransaction($transactionId, $opionId, $amount, $orderId, $startData, $optionSubId = null)
     {
         global $wpdb;
@@ -25,7 +43,8 @@ class PPMFWC_Helper_Transaction
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
 
         $wpdb->insert(
-            $table_name_transactions, array(
+            $table_name_transactions,
+            array(
             'transaction_id' => $transactionId,
             'option_id' => $opionId,
             'option_sub_id' => $optionSubId,
@@ -33,7 +52,8 @@ class PPMFWC_Helper_Transaction
             'order_id' => $orderId,
             'status' => PPMFWC_Gateways::STATUS_PENDING,
             'start_data' => $startData,
-        ), array(
+            ),
+            array(
                 '%s', '%d', '%d', '%d', '%d', '%s', '%s'
             )
         );
@@ -41,21 +61,30 @@ class PPMFWC_Helper_Transaction
         return $insertId;
     }
 
+    /**
+     * @param string $orderId
+     * @return string|boolean
+     */
     public static function getPaidTransactionIdForOrderId($orderId)
     {
         global $wpdb;
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
         $result = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE order_id = %s  AND status IN ('SUCCESS', 'REFUND', 'AUTHORIZE') ", $orderId), ARRAY_A
+            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE order_id = %s  AND status IN ('SUCCESS', 'REFUND', 'AUTHORIZE') ", $orderId),
+            ARRAY_A
         );
-        if (!empty($result))
-        {
+        if (!empty($result)) {
             return $result[0];
         } else {
             return false;
         }
     }
 
+    /**
+     * @param string $transactionId
+     * @param string $status
+     * @return void
+     */
     public static function updateStatus($transactionId, $status)
     {
         global $wpdb;
@@ -68,7 +97,7 @@ class PPMFWC_Helper_Transaction
     }
 
     /**
-     * @param $transactionId
+     * @param string $transactionId
      * @return false|mixed
      */
     public static function getTransaction($transactionId)
@@ -77,14 +106,15 @@ class PPMFWC_Helper_Transaction
 
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
         $result = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE transaction_id = %s", $transactionId), ARRAY_A
+            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE transaction_id = %s", $transactionId),
+            ARRAY_A
         );
 
         return isset($result[0]) ? $result[0] : false;
     }
 
     /**
-     * @param $transactionId TransactionID from PAY
+     * @param string $transactionId TransactionID from PAY
      * @param null $status
      * @param null $methodid PAY's payment profile id
      * @return mixed|string|void
@@ -112,10 +142,10 @@ class PPMFWC_Helper_Transaction
         $orderId = $transactionLocalDB['order_id'];
 
         try {
-          $order = new WC_Order($orderId);
+            $order = new WC_Order($orderId);
         } catch (Exception $e) {
           # Could not retrieve order from WooCommerce (this is a notice so exchange wont repeat)
-          throw new PPMFWC_Exception_Notice('Woocommerce could not find internal order ' . $orderId);
+            throw new PPMFWC_Exception_Notice('Woocommerce could not find internal order ' . $orderId);
         }
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
@@ -167,10 +197,9 @@ class PPMFWC_Helper_Transaction
         switch ($payApiStatus) {
             case PPMFWC_Gateways::STATUS_AUTHORIZE:
             case PPMFWC_Gateways::STATUS_SUCCESS:
-
                 # Check the amount
                 if (!in_array($order->get_total(), $transactionPaid)) {
-                    $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), implode(' / ', $transactionPaid), $order->get_total()));
+                    $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), implode(' / ', $transactionPaid), $order->get_total())); // phpcs:ignore
                 } else {
                     if ($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE) {
                         $method = $order->get_payment_method();
@@ -195,7 +224,7 @@ class PPMFWC_Helper_Transaction
                             if ($wcOrderStatus != $auth_status) {
                                 $order->update_status($auth_status);
                                 $newStatus = $auth_status . ' as configured in settings of ' . $method;
-                                $order->add_order_note(sprintf(esc_html(__('PAY.: Authorised order set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber()));
+                                $order->add_order_note(sprintf(esc_html(__('PAY.: Authorised order set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber())); // phpcs:ignore
                             }
 
                             if ($auth_status == PPMFWC_Gateway_Abstract::STATUS_PROCESSING) {
@@ -228,7 +257,7 @@ class PPMFWC_Helper_Transaction
                     }
 
                     $customStatus = self::getCustomWooComOrderStatus($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE ? 'authorised' : 'processing');
-                    if(!in_array($customStatus, array('processing', 'authorised'))) {
+                    if (!in_array($customStatus, array('processing', 'authorised'))) {
                         $order->add_order_note(sprintf(esc_html(__('PAY.: Orderstatus set to custom-status: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $customStatus));
                         $order->update_status($customStatus, 'According to Pay. plugin settings');
                         $order->save();
@@ -249,7 +278,7 @@ class PPMFWC_Helper_Transaction
                 break;
 
             case PPMFWC_Gateways::STATUS_REFUND:
-                if(get_option('paynl_externalrefund') == "yes") {
+                if (get_option('paynl_externalrefund') == "yes") {
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `refunded`', $transactionId);
 
                     $order->set_status('refunded');
@@ -260,7 +289,6 @@ class PPMFWC_Helper_Transaction
                 break;
 
             case PPMFWC_Gateways::STATUS_CANCELED:
-
                 $method = $order->get_payment_method();
 
                 if (substr($method, 0, 11) != 'pay_gateway') {
@@ -289,7 +317,7 @@ class PPMFWC_Helper_Transaction
     }
 
     /**
-     * @param $transactionId
+     * @param string $transactionId
      * @return array|object|stdClass[]
      */
     public static function checkProcessing($transactionId)
@@ -298,8 +326,11 @@ class PPMFWC_Helper_Transaction
 
         $table_name_processing = $wpdb->prefix . "pay_processing";
         try {
-            $result = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name_processing WHERE transaction_id = %s AND created > date_sub('%s', interval 1 minute)",
-              $transactionId, date('Y-m-d H:i:s')), ARRAY_A);
+            $result = $wpdb->get_results($wpdb->prepare(
+                "SELECT * FROM $table_name_processing WHERE transaction_id = %s AND created > date_sub('%s', interval 1 minute)",
+                $transactionId,
+                date('Y-m-d H:i:s')
+            ), ARRAY_A);
             $processing = !empty($result[0]);
 
             if (!$processing) {
@@ -312,10 +343,14 @@ class PPMFWC_Helper_Transaction
         return $processing;
     }
 
+    /**
+     * @param string $transactionId
+     * @return void
+     */
     public static function removeProcessing($transactionId)
     {
         global $wpdb;
         $table_name_processing = $wpdb->prefix . "pay_processing";
         $wpdb->delete($table_name_processing, array('transaction_id' => $transactionId), array('%s'));
-    } 
+    }
 }
