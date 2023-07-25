@@ -1,11 +1,13 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: jorn
- * Date: 15-11-17
- * Time: 16:10
+ * PPMFWC_Exception
+ *
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @phpcs:disable PSR1.Methods.CamelCapsMethodName
  */
-class PPMFWC_Exception_Notice extends PPMFWC_Exception {
 
+class PPMFWC_Exception_Notice extends PPMFWC_Exception
+{
 }

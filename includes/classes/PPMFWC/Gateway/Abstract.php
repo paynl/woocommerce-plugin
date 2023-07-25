@@ -6,7 +6,10 @@
  * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
  * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  * @phpcs:disable PSR1.Methods.CamelCapsMethodName
+ * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
+ * @phpcs:disable PSR12.Properties.ConstantVisibility
  */
+
 abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 {
     const STATUS_PENDING = 'pending';

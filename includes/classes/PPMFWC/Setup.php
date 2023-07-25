@@ -1,10 +1,22 @@
 <?php
 
+/**
+ * PPMFWC_Setup
+ *
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @phpcs:disable PSR1.Methods.CamelCapsMethodName
+ * @phpcs:disable PSR12.Properties.ConstantVisibility
+ * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
+ */
+
 class PPMFWC_Setup
 {
+    const DB_VERSION = 1.2;
 
-    const db_version = 1.2;
-
+    /**
+     * @return void
+     */
     public static function ppmfwc_installBlog()
     {
         global $wpdb;
@@ -13,7 +25,7 @@ class PPMFWC_Setup
 
         $pay_db_version = get_option("pay_db_version");
 
-        if ($pay_db_version != self::db_version) {
+        if ($pay_db_version != self::DB_VERSION) {
             self::checkRequirements();
 
             $table_name_transactions = $wpdb->prefix . "pay_transactions";
@@ -73,10 +85,13 @@ class PPMFWC_Setup
                 update_option('paynl_order_description_prefix', 'Order:');
             }
 
-            update_option("pay_db_version", self::db_version);
+            update_option("pay_db_version", self::DB_VERSION);
         }
     }
 
+    /**
+     * @return void
+     */
     public static function ppmfwc_install()
     {
         if (is_multisite() && is_plugin_active('woocommerce-paynl-payment-methods/woocommerce-payment-paynl.php')) {
@@ -94,18 +109,22 @@ class PPMFWC_Setup
     }
 
 
+    /**
+     * @return void
+     */
     public static function ppmfwc_install_init()
     {
         self::ppmfwc_installBlog();
     }
 
     /**
-     * @param $blog_id
+     * @param string $blog_id
      * @param null $user_id
      * @param null $domain
      * @param null $path
      * @param null $site_id
      * @param null $meta
+     * @return void
      */
     public static function ppmfwc_newBlog($blog_id, $user_id = null, $domain = null, $path = null, $site_id = null, $meta = null)
     {
@@ -119,7 +138,7 @@ class PPMFWC_Setup
 
     /**
      * Delete PAY. tables when a (multi)site gets deleted
-     * @param $tables
+     * @param array $tables
      * @return mixed
      */
     public static function ppmfwc_delBlog($tables)
@@ -135,6 +154,9 @@ class PPMFWC_Setup
         return $tables;
     }
 
+    /**
+     * @return void
+     */
     private static function checkRequirements()
     {
         if (!is_plugin_active('woocommerce/woocommerce.php') && !is_plugin_active_for_network('woocommerce/woocommerce.php')) {
@@ -145,6 +167,9 @@ class PPMFWC_Setup
         }
     }
 
+    /**
+     * @return void|boolean
+     */
     public static function ppmfwc_testConnection()
     {
         # Only run this if the setting is not saved
