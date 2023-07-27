@@ -188,6 +188,8 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 3.14.4 =
+Added brand icons for iDEAL banks N26 and Your Safe
 = 3.14.3 =
 Updated translations
 = 3.14.2 =
