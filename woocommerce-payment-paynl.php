@@ -17,7 +17,7 @@
 require_once dirname(__FILE__) . '/includes/classes/Autoload.php';
 require_once dirname(__FILE__) . '/vendor/autoload.php';
 
-# Load plugin functionality§
+# Load plugin functionality
 require_once(ABSPATH . '/wp-admin/includes/plugin.php');
 
 define('PPMFWC_WOOCOMMERCE_TEXTDOMAIN', 'woocommerce-paynl-payment-methods');
@@ -60,6 +60,27 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
   # Add PAY settings tab in WooCcommerce
     PPMFWC_Gateways::ppmfwc_settingsTab();
 
+    if (class_exists('\Automattic\WooCommerce\Blocks\Package')) {
+        #  $gateways = get_blocks_payment_methods();
+        add_action('wp_enqueue_scripts', function () {
+            $blocks_js_route = PPMFWC_PLUGIN_URL . 'assets/js/paynl-blockss.js';
+            $gateways = WC()->payment_gateways()->get_available_payment_gateways();
+            $payGateways = [];
+            foreach ($gateways as $gateway_id => $gateway) {
+                if (substr($gateway_id, 0, 11) != 'pay_gateway') {
+                    continue;
+                }
+                $payGateways[] = array(
+                  'paymentMethodId' => $gateway_id,
+                  'title' => $gateway->method_title,
+                  'description' => $gateway->description,
+                );
+            }
+            wp_enqueue_script('paynl-blocks-js', $blocks_js_route, array('wc-blocks-registry'), (string)time(), true);
+            wp_localize_script('paynl-blocks-js', 'paynl_gateways', $payGateways);
+        });
+    }
+
     # Add settings link on the plugin-page
     add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'ppmfwc_plugin_add_settings_link');
 
@@ -86,7 +107,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     }
 } else {
     # WooCommerce seems to be inactive, show eror message
-    add_action('admin_notices', 'ppmfwc_error_woocommerce_not_active');
+    add_action('admin_notices', 'ppmfwc_error_woocommerce_not_active',6);
 }
 
 /**
