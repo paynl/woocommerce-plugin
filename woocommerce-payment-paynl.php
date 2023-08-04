@@ -109,7 +109,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     }
 } else {
     # WooCommerce seems to be inactive, show eror message
-    add_action('admin_notices', 'ppmfwc_error_woocommerce_not_active',6);
+    add_action('admin_notices', 'ppmfwc_error_woocommerce_not_active');
 }
 
 /**
