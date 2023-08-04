@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Name: PAY. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
