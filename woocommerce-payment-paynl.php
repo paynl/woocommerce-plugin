@@ -17,7 +17,7 @@
 require_once dirname(__FILE__) . '/includes/classes/Autoload.php';
 require_once dirname(__FILE__) . '/vendor/autoload.php';
 
-# Load plugin functionality§
+# Load plugin functionality
 require_once(ABSPATH . '/wp-admin/includes/plugin.php');
 
 define('PPMFWC_WOOCOMMERCE_TEXTDOMAIN', 'woocommerce-paynl-payment-methods');
@@ -45,20 +45,44 @@ if (is_plugin_active_for_network('woocommerce-paynl-payment-methods/woocommerce-
 }
 
 if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_network('woocommerce/woocommerce.php')) {
-    # Register PAY gateway in WooCcommerce
+    # Register PAY gateway in WooCommerce
     PPMFWC_Gateways::ppmfwc_register();
 
     # Test if PAY. can be reached
     PPMFWC_Setup::ppmfwc_testConnection();
 
-  # Register checkoutFlash
+    # Register checkoutFlash
     PPMFWC_Gateways::ppmfwc_registerCheckoutFlash();
 
     # Register function calls to WooCommerce API
     PPMFWC_Gateways::ppmfwc_registerApi();
 
-  # Add PAY settings tab in WooCcommerce
+    # Add PAY settings tab in WooCommerce
     PPMFWC_Gateways::ppmfwc_settingsTab();
+
+    if (class_exists('\Automattic\WooCommerce\Blocks\Package')) {
+        add_action('wp_enqueue_scripts', function () {
+            $blocks_js_route = PPMFWC_PLUGIN_URL . 'assets/js/paynl-blocks.js';
+            $gateways = WC()->payment_gateways()->get_available_payment_gateways();
+            $payGateways = [];
+            foreach ($gateways as $gateway_id => $gateway) {
+                /** @var PPMFWC_Gateway_Abstract $gateway */
+                if (substr($gateway_id, 0, 11) != 'pay_gateway') {
+                    continue;
+                }
+                $payGateways[] = array(
+                  'paymentMethodId' => $gateway_id,
+                  'title' => $gateway->get_title(),
+                  'description' => $gateway->description,
+                  'image_path' => $gateway->getIcon()
+                );
+            }
+            wp_enqueue_script('paynl-blocks-js', $blocks_js_route, array('wc-blocks-registry'), (string)time(), true);
+            wp_localize_script('paynl-blocks-js', 'paynl_gateways', $payGateways);
+            wp_register_style('paynl-blocks-style', PPMFWC_PLUGIN_URL . 'assets/css/paynl_blocks.css');
+            wp_enqueue_style('paynl-blocks-style');
+        });
+    }
 
     # Add settings link on the plugin-page
     add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'ppmfwc_plugin_add_settings_link');

@@ -1,0 +1,15 @@
+.PPMFWC_method {
+    width: 94%;
+}
+
+.PPMFWC_desc img {
+    max-height: 50px;
+    float: left;
+}
+
+.PPMFWC_desc span {
+    min-height: 48px;
+    display: inline-block;
+    width: 80%;
+    margin-left: 16px;
+}
