@@ -444,14 +444,7 @@ class PPMFWC_Gateways
                 'desc' => esc_html(__('Enable auto-capture for authorize-transactions. Capture will be initiated when an order gets the status: `Completed`.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_auto_capture',
                 'default' => 'no',
-            );
-            $addedSettings[] = array(
-                'name' => esc_html(__('Send Order Data', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'type' => 'checkbox',
-                'desc' => esc_html(__('Check this box if you want to send the order data to Pay., this is required if you want use \'Pay after delivery\' paymentmethods ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
-                'id' => 'paynl_send_order_data',
-                'default' => 'yes',
-            );
+            );            
             $addedSettings[] = array(
                 'name' => esc_html(__('Show VAT Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',

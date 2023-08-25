@@ -550,62 +550,62 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             'object'        => PPMFWC_Helper_Data::getObject(),
         );
 
-        if (get_option('paynl_send_order_data') == 'yes') {
-            $enduser = array(
-                'initials'     => $order->get_shipping_first_name(),
-                'lastName'     => substr($order->get_shipping_last_name(), 0, 32),
-                'phoneNumber'  => $order->get_billing_phone(),
-                'emailAddress' => $order->get_billing_email()
-            );
+        
+        $enduser = array(
+            'initials'     => $order->get_shipping_first_name(),
+            'lastName'     => substr($order->get_shipping_last_name(), 0, 32),
+            'phoneNumber'  => $order->get_billing_phone(),
+            'emailAddress' => $order->get_billing_email()
+        );
 
-            $enduser['birthDate'] = $this->getCustomBirthdate();
-            $enduser['company'] = array(
-              'name' => $order->get_billing_company(),
-              'countryCode' => $billing_country
-            );
-            $enduser['company']['vatNumber'] = PPMFWC_Helper_Data::getPostTextField('vat_number', true);
-            $enduser['company']['cocNumber'] = PPMFWC_Helper_Data::getPostTextField('coc_number', true);
+        $enduser['birthDate'] = $this->getCustomBirthdate();
+        $enduser['company'] = array(
+            'name' => $order->get_billing_company(),
+            'countryCode' => $billing_country
+        );
+        $enduser['company']['vatNumber'] = PPMFWC_Helper_Data::getPostTextField('vat_number', true);
+        $enduser['company']['cocNumber'] = PPMFWC_Helper_Data::getPostTextField('coc_number', true);
 
-            $startData['enduser'] = $enduser;
+        $startData['enduser'] = $enduser;
 
-            # Retrieve order data
-            $shippingAddress = $order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2();
-            $billingAddress  = $order->get_billing_address_1() . ' ' . $order->get_billing_address_2();
-            $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
+        # Retrieve order data
+        $shippingAddress = $order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2();
+        $billingAddress  = $order->get_billing_address_1() . ' ' . $order->get_billing_address_2();
+        $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
 
-            $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
+        $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
+        $address = array(
+            'streetName' => $aShippingAddress[0],
+            'houseNumber' => $aShippingAddress[1],
+            'zipCode' => $order->get_shipping_postcode(),
+            'city' => $order->get_shipping_city(),
+            'country' => $order->get_shipping_country()
+        );
+
+        if ($this->get_option('use_invoice_address') == 'yes') {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Use_invoice_address=yes. Updating shipping address');
             $address = array(
-                'streetName' => $aShippingAddress[0],
-                'houseNumber' => $aShippingAddress[1],
-                'zipCode' => $order->get_shipping_postcode(),
-                'city' => $order->get_shipping_city(),
-                'country' => $order->get_shipping_country()
-            );
-
-            if ($this->get_option('use_invoice_address') == 'yes') {
-                PPMFWC_Helper_Data::ppmfwc_payLogger('Use_invoice_address=yes. Updating shipping address');
-                $address = array(
-                    'streetName'  => $aBillingAddress[0],
-                    'houseNumber' => $aBillingAddress[1],
-                    'zipCode'     => $order->get_billing_postcode(),
-                    'city'        => $order->get_billing_city(),
-                    'country'     => $billing_country
-                 );
-            }
-
-            $startData['address'] = $address;
-            $startData['invoiceAddress'] = array(
-                'initials'    => $order->get_billing_first_name(),
-                'lastName'    => substr($order->get_billing_last_name(), 0, 32),
                 'streetName'  => $aBillingAddress[0],
                 'houseNumber' => $aBillingAddress[1],
                 'zipCode'     => $order->get_billing_postcode(),
                 'city'        => $order->get_billing_city(),
-                'country'     => $billing_country,
-            );
-
-            $startData['products'] = $this->getProductLines($order);
+                'country'     => $billing_country
+                );
         }
+
+        $startData['address'] = $address;
+        $startData['invoiceAddress'] = array(
+            'initials'    => $order->get_billing_first_name(),
+            'lastName'    => substr($order->get_billing_last_name(), 0, 32),
+            'streetName'  => $aBillingAddress[0],
+            'houseNumber' => $aBillingAddress[1],
+            'zipCode'     => $order->get_billing_postcode(),
+            'city'        => $order->get_billing_city(),
+            'country'     => $billing_country,
+        );
+
+        $startData['products'] = $this->getProductLines($order);
+        
 
         $optionSubId = PPMFWC_Helper_Data::getPostTextField('option_sub_id');
         if (!empty($optionSubId)) {
