@@ -550,7 +550,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             'object'        => PPMFWC_Helper_Data::getObject(),
         );
 
-        
+
         $enduser = array(
             'initials'     => $order->get_shipping_first_name(),
             'lastName'     => substr($order->get_shipping_last_name(), 0, 32),
@@ -605,7 +605,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         );
 
         $startData['products'] = $this->getProductLines($order);
-        
+
 
         $optionSubId = PPMFWC_Helper_Data::getPostTextField('option_sub_id');
         if (!empty($optionSubId)) {
