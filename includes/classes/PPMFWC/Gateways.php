@@ -444,7 +444,7 @@ class PPMFWC_Gateways
                 'desc' => esc_html(__('Enable auto-capture for authorize-transactions. Capture will be initiated when an order gets the status: `Completed`.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_auto_capture',
                 'default' => 'no',
-            );            
+            );
             $addedSettings[] = array(
                 'name' => esc_html(__('Show VAT Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
