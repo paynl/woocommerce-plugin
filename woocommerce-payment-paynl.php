@@ -289,7 +289,7 @@ function ppmfwc_auto_functions($order_id, $old_status, $new_status)
             } catch (Exception $e) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Auto-capture failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
             }
-        } elseif ($new_status == "cancelled" && get_option('paynl_auto_void') == "yes" && !empty($transactionLocalDB['status']) && ($transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE || $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_VERIFY)) {
+        } elseif ($new_status == "cancelled" && get_option('paynl_auto_void') == "yes" && !empty($transactionLocalDB['status']) && ($transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE || $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_VERIFY)) { // phpcs:ignore
             try {
                 PPMFWC_Gateway_Abstract::loginSDK();
                 $bResult = \Paynl\Transaction::void($transactionId);
