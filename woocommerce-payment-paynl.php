@@ -277,27 +277,29 @@ function ppmfwc_auto_functions($order_id, $old_status, $new_status)
         $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($transactionId);
 
         # Get transaction and make sure its status is Authorized
-        if (!empty($transactionLocalDB['status']) && $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE) {
+        if ($new_status == "completed" && get_option('paynl_auto_capture') == "yes" && !empty($transactionLocalDB['status']) && $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE) {
             try {
                 PPMFWC_Gateway_Abstract::loginSDK();
-
-                if ($new_status == "completed" && get_option('paynl_auto_capture') == "yes") {
-                    $bResult = \Paynl\Transaction::capture($transactionId);
-                    if ($bResult) {
-                        $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-capture on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
-                    } else {
-                        throw new Exception('Could not capture');
-                    }
-                } elseif ($new_status == "cancelled" && get_option('paynl_auto_void') == "yes") {
-                    $bResult = \Paynl\Transaction::void($transactionId);
-                    if ($bResult) {
-                        $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-void on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
-                    } else {
-                        throw new Exception('Could not void');
-                    }
+                $bResult = \Paynl\Transaction::capture($transactionId);
+                if ($bResult) {
+                    $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-capture on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
+                } else {
+                    throw new Exception('Could not capture');
                 }
             } catch (Exception $e) {
-                PPMFWC_Helper_Data::ppmfwc_payLogger('Auto-capture/void failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Auto-capture failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
+            }
+        } elseif ($new_status == "cancelled" && get_option('paynl_auto_void') == "yes" && !empty($transactionLocalDB['status']) && ($transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE || $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_VERIFY)) {
+            try {
+                PPMFWC_Gateway_Abstract::loginSDK();
+                $bResult = \Paynl\Transaction::void($transactionId);
+                if ($bResult) {
+                    $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-void on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
+                } else {
+                    throw new Exception('Could not void');
+                }
+            } catch (Exception $e) {
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Auto-void failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
             }
         }
     }
