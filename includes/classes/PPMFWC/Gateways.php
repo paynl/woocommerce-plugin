@@ -521,7 +521,7 @@ class PPMFWC_Gateways
             $addedSettings[] = array(
                 'name' => esc_html(__('Test Ip address', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'text',
-                'desc' => esc_html(__('Forces testmode on these Ip addresses, separate Ip\'s by comma\'s for multiple Ip\'s.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br/>' . esc_html(__('Current Ip address:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . PPMFWC_Helper_Data::getIp(),
+                'desc' => esc_html(__('Forces testmode on these Ip addresses, separate Ip\'s by comma\'s for multiple Ip\'s.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br/>' . esc_html(__('Current Ip address:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . PPMFWC_Helper_Data::getIp(), // phpcs:ignore
                 'id' => 'paynl_test_ipadress',
             );
 

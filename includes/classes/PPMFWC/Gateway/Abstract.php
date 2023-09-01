@@ -611,9 +611,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         if (!empty($optionSubId)) {
             $startData['bank'] = $optionSubId;
         }
-        if(PPMFWC_Helper_Data::isTestMode()){
+        if (PPMFWC_Helper_Data::isTestMode()) {
             $startData['testmode'] = true;
-        }   
+        }
         $language = get_option('paynl_language');
 
         if ($language == 'browser') {
