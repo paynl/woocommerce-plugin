@@ -360,11 +360,11 @@ class PPMFWC_Gateways
 
         $form .= '<table class="form-table" id="pay_feature_request_form">';
         $form .= '<tbody><tr valign="top">';
-        $form .= '<th scope="row" class="titledesc"><span id="email_error" class="FR_Error">' . esc_html(__('Please fill in a valid email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span><label>' . esc_html(__('Email', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</label></th>';
+        $form .= '<th scope="row" class="titledesc"><span id="email_error" class="FR_Error">' . esc_html(__('Please fill in a valid email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span><label>' . esc_html(__('Email', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</label></th>'; // phpcs:ignore
         $form .= '<td class="forminp forminp-text"><textarea id="FR_Email" name="FR_Email"></textarea></td>';
         $form .= '</tr>';
         $form .= '<tr valign="top">';
-        $form .= '<th scope="row" class="titledesc"><span id="message_error" class="FR_Error">' . esc_html(__('Please fill in a message.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span><label>' . esc_html(__('Message', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '*</label></th>';
+        $form .= '<th scope="row" class="titledesc"><span id="message_error" class="FR_Error">' . esc_html(__('Please fill in a message.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span><label>' . esc_html(__('Message', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '*</label></th>'; // phpcs:ignore
         $form .= '<td class="forminp forminp-text"><textarea id="FR_Message" name="FR_Message"></textarea></td>';
         $form .= '</tr>';
         $form .= '</tbody></table>';
@@ -659,7 +659,7 @@ class PPMFWC_Gateways
     {
         wp_register_script('paynl_wp_admin_js', PPMFWC_PLUGIN_URL . 'assets/js/pay.js', array('jquery'), '1.0', true);
         wp_enqueue_script('paynl_wp_admin_js');
-    }   
+    }
 
     /**
      * This function adds the Pay Settings Tab
