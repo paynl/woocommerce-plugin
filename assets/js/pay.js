@@ -45,13 +45,13 @@ function submitFeatureRequestForm() {
             if (data.success) {
                 jQuery('#FR_Email').val("");
                 jQuery('#FR_Message').val("");
-                alert('Sent! Thank you for your contribution.');
+                alert(jQuery('#FR_Notice_Success').text());
             } else {
-                alert('Couldn\'t send email.');
+                alert(jQuery('#FR_Notice_Fail').text());
             }
         },
         error: function () {                        
-            alert('Couldn\'t send email....');
+            alert(jQuery('#FR_Notice_Fail').text());
         }
     });   
 };

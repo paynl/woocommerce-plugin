@@ -360,16 +360,19 @@ class PPMFWC_Gateways
 
         $form .= '<table class="form-table" id="pay_feature_request_form">';
         $form .= '<tbody><tr valign="top">';
-        $form .= '<th scope="row" class="titledesc"><span id="email_error" class="FR_Error">' . esc_html(__('Please fill in a valid email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span><label>' . esc_html(__('Email', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</label></th>'; // phpcs:ignore
+        $form .= '<th scope="row" class="titledesc"><label>' . esc_html(__('Email (optional)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</label><span id="email_error" class="FR_Error">' . esc_html(__('Please fill in a valid email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></th>'; // phpcs:ignore
         $form .= '<td class="forminp forminp-text"><textarea id="FR_Email" name="FR_Email"></textarea></td>';
         $form .= '</tr>';
         $form .= '<tr valign="top">';
-        $form .= '<th scope="row" class="titledesc"><span id="message_error" class="FR_Error">' . esc_html(__('Please fill in a message.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span><label>' . esc_html(__('Message', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '*</label></th>'; // phpcs:ignore
+        $form .= '<th scope="row" class="titledesc"><label>' . esc_html(__('Message', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '*</label><span id="message_error" class="FR_Error">' . esc_html(__('Please fill in a message.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></th>'; // phpcs:ignore
         $form .= '<td class="forminp forminp-text"><textarea id="FR_Message" name="FR_Message"></textarea></td>';
         $form .= '</tr>';
         $form .= '</tbody></table>';
         $form .= '<button id="FR_Submit" class="button-primary">' . esc_html(__('Send', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</button>';
-
+        $form .= '<span id="FR_Notices">';
+        $form .= '<span id="FR_Notice_Success">' . esc_html(__('Sent! Thank you for your contribution.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span>';
+        $form .= '<span id="FR_Notice_Fail">' . esc_html(__('Email could not be sent, please try again later.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span>';
+        $form .= '</span>';
         $form .= '<div class="clear"></div>';
         return $form;
     }
@@ -648,7 +651,7 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_addPayStyleSheet()
     {
-        wp_register_style('paynl_wp_admin_css', PPMFWC_PLUGIN_URL . 'assets/css/pay.css', false, '1.0.0');
+        wp_register_style('paynl_wp_admin_css', PPMFWC_PLUGIN_URL . 'assets/css/pay.css', false, PPMFWC_Helper_Data::getVersion());
         wp_enqueue_style('paynl_wp_admin_css');
     }
 
@@ -657,7 +660,7 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_addPayJavascript()
     {
-        wp_register_script('paynl_wp_admin_js', PPMFWC_PLUGIN_URL . 'assets/js/pay.js', array('jquery'), '1.0', true);
+        wp_register_script('paynl_wp_admin_js', PPMFWC_PLUGIN_URL . 'assets/js/pay.js', array('jquery'), PPMFWC_Helper_Data::getVersion(), true);
         wp_enqueue_script('paynl_wp_admin_js');
     }
 

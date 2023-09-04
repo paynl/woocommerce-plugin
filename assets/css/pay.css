@@ -35,3 +35,25 @@
 .woocommerce table.form-table select.multiselect.countryLimit {
     height: 190px;
 }
+
+#FR_Email {
+    resize: none;
+    height: 42px;
+    padding: 10px;
+}
+
+#FR_Message {
+    resize: none;
+    padding: 10px;
+    height: 250px;
+}
+
+.FR_Error {
+    color: red;
+    font-size: 12px;
+    display: none;
+}
+
+#FR_Notices {
+    display: none;
+}

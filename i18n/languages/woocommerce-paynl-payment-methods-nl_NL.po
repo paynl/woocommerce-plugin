@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/woocommerce-paynl-payment-methods\n"
 "POT-Creation-Date: 2023-06-28 11:26+0200\n"
-"PO-Revision-Date: 2023-09-01 17:08+0200\n"
+"PO-Revision-Date: 2023-09-04 14:23+0200\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -831,8 +831,8 @@ msgstr ""
 msgid "Please fill in a valid email."
 msgstr "Vul een valide email in."
 
-msgid "Email"
-msgstr "E-mail"
+msgid "Email (optional)"
+msgstr "E-mail (optioneel)"
 
 msgid "Please fill in a message."
 msgstr "Vul een bericht in."
@@ -851,6 +851,12 @@ msgstr "Pay. Suggesties?"
 
 msgid "Suggestions?"
 msgstr "Suggesties?"
+
+msgid "Sent! Thank you for your contribution."
+msgstr "Verstuurd! Bedankt voor het delen van jouw input."
+
+msgid "Email could not be sent, please try again later."
+msgstr "E-mail kon niet worden verzonden. Probeer het later opnieuw."
 
 #~ msgid "Choose your bank"
 #~ msgstr "Kies uw bank"
