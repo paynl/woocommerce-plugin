@@ -518,6 +518,12 @@ class PPMFWC_Gateways
                 'id' => 'paynl_payment_method_display',
                 'default' => 1,
             );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Test IP address', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'text',
+                'desc' => esc_html(__('Forces testmode on these IP addresses, separate IP\'s by comma\'s for multiple IP\'s.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br/>' . esc_html(__('Current IP address:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . PPMFWC_Helper_Data::getIp(), // phpcs:ignore
+                'id' => 'paynl_test_ipadress',
+            );
 
             $addedSettings[] = array(
                 'type' => 'sectionend',
