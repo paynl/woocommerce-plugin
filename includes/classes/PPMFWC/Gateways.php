@@ -446,6 +446,13 @@ class PPMFWC_Gateways
                 'default' => 'no',
             );
             $addedSettings[] = array(
+                'name' => esc_html(__('Auto-void', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'checkbox',
+                'desc' => esc_html(__('Enable auto-void for authorize-transactions. Void will be initiated when an order gets the status: `Cancelled`.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_auto_void',
+                'default' => 'no',
+            );
+            $addedSettings[] = array(
                 'name' => esc_html(__('Send Order Data', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
                 'desc' => esc_html(__('Check this box if you want to send the order data to Pay., this is required if you want use \'Pay after delivery\' paymentmethods ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
