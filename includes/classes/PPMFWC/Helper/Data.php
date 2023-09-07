@@ -116,6 +116,30 @@ class PPMFWC_Helper_Data
     }
 
     /**
+     * @return boolean
+     */
+    public static function isTestMode()
+    {
+        if (get_option('paynl_test_mode') == 'yes') {
+            return true;
+        }
+        $ip = self::getIp();
+        $ipconfig = get_option('paynl_test_ipadress');
+        if (!empty($ipconfig)) {
+            $allowed_ips = explode(',', $ipconfig);
+            if (
+                in_array($ip, $allowed_ips) &&
+                filter_var($ip, FILTER_VALIDATE_IP) &&
+                strlen($ip) > 0 &&
+                count($allowed_ips) > 0
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public static function loadPaymentMethods()
@@ -297,7 +321,7 @@ class PPMFWC_Helper_Data
      */
     public static function getVersion()
     {
-        return '3.14.5';
+        return '3.15.0';
     }
 
     /**

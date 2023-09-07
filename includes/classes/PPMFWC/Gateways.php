@@ -446,6 +446,13 @@ class PPMFWC_Gateways
                 'default' => 'no',
             );
             $addedSettings[] = array(
+                'name' => esc_html(__('Auto-void', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'checkbox',
+                'desc' => esc_html(__('Enable auto-void for authorize-transactions. Void will be initiated when an order gets the status: `Cancelled`.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_auto_void',
+                'default' => 'no',
+            );
+            $addedSettings[] = array(
                 'name' => esc_html(__('Show VAT Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
                 'desc' => esc_html(__('Check this box if you want to show VAT number in checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -510,6 +517,12 @@ class PPMFWC_Gateways
                 'desc' => esc_html(__('When `Yes`, the order will be updated with the actual used payment method in case this method differs from the initial method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_payment_method_display',
                 'default' => 1,
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Test IP address', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'text',
+                'desc' => esc_html(__('Forces testmode on these IP addresses, separate IP\'s by comma\'s for multiple IP\'s.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br/>' . esc_html(__('Current IP address:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . PPMFWC_Helper_Data::getIp(), // phpcs:ignore
+                'id' => 'paynl_test_ipadress',
             );
 
             $addedSettings[] = array(
