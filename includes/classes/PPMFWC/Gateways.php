@@ -155,9 +155,7 @@ class PPMFWC_Gateways
             $paymentOptionsAvailable = $paymentOptions;
         }
 
-        $arrDefault = array_merge($arrDefault, $paymentOptionsAvailable);
-
-        return $arrDefault;
+        return array_merge($arrDefault, $paymentOptionsAvailable);
     }
 
     /**
