@@ -369,11 +369,9 @@ class PPMFWC_Gateways
         $form .= '</tr>';
         $form .= '</tbody></table>';
         $form .= '<button id="FR_Submit" class="button-primary">' . esc_html(__('Send', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</button>';
-        $form .= '<span id="FR_Notices">';
-        $form .= '<span id="FR_Notice_Success">' . esc_html(__('Sent! Thank you for your contribution.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span>';
-        $form .= '<span id="FR_Notice_Fail">' . esc_html(__('Email could not be sent, please try again later.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span>';
-        $form .= '</span>';
         $form .= '<div class="clear"></div>';
+        $form .= '<div class="FR_Alertbox" id="FR_Alert_Success"><div class="FR_Alert"><p>' . esc_html(__('Sent! Thank you for your contribution.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', 'woocommerce')) . '</span></div></div>';
+        $form .= '<div class="FR_Alertbox" id="FR_Alert_Fail"><div class="FR_Alert"><p>' . esc_html(__('Couldn\'t send email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', 'woocommerce')) . '</span></div></div>';
         return $form;
     }
 
