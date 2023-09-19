@@ -181,7 +181,8 @@ class PPMFWC_Gateways
             '' => __('Setup', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'payment_methods' => __('Payment Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'settings' => __('Settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            'order_state_automation' => __('Order State Automation', 'woocommerce')
+            'order_state_automation' => __('Order State Automation', 'woocommerce'),
+            'suggestions' => __('Suggestions?', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)
         );
         echo '<ul class="subsubsub">';
         $array_keys = array_keys($sections);
@@ -344,6 +345,34 @@ class PPMFWC_Gateways
         return $loadedPaymentMethods;
     }
 
+     /**
+     * @return string
+     */
+    public static function ppmfwc_loadSuggestionForm()
+    {
+        $form = '';
+        $form .= '<br /><br />' . esc_html(__('If you have a feature request or other ideas, let us know!', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+        $form .= '<br />' . esc_html(__('Your submission will be reviewed by our development team.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+        $form .= '<br />' . esc_html(__('If needed, we will contact you for further information via the e-mail address provided.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+        $form .= '<br />' . esc_html(__('Please note: this form is not for Support requests, please contact support@pay.nl for this.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+
+        $form .= '<table class="form-table" id="pay_feature_request_form">';
+        $form .= '<tbody><tr valign="top">';
+        $form .= '<th scope="row" class="titledesc"><label>' . esc_html(__('Email (optional)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</label><span id="email_error" class="FR_Error">' . esc_html(__('Please fill in a valid email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></th>'; // phpcs:ignore
+        $form .= '<td class="forminp forminp-text"><textarea id="FR_Email" name="FR_Email"></textarea></td>';
+        $form .= '</tr>';
+        $form .= '<tr valign="top">';
+        $form .= '<th scope="row" class="titledesc"><label>' . esc_html(__('Message', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '*</label><span id="message_error" class="FR_Error">' . esc_html(__('Please fill in a message.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></th>'; // phpcs:ignore
+        $form .= '<td class="forminp forminp-text"><textarea id="FR_Message" name="FR_Message"></textarea></td>';
+        $form .= '</tr>';
+        $form .= '</tbody></table>';
+        $form .= '<button id="FR_Submit" class="button-primary">' . esc_html(__('Send', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</button>';
+        $form .= '<div class="clear"></div>';
+        $form .= '<div class="FR_Alertbox" id="FR_Alert_Success"><div class="FR_Alert"><p>' . esc_html(__('Sent! Thank you for your contribution.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', 'woocommerce')) . '</span></div></div>'; // phpcs:ignore
+        $form .= '<div class="FR_Alertbox" id="FR_Alert_Fail"><div class="FR_Alert"><p>' . esc_html(__('Couldn\'t send email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', 'woocommerce')) . '</span></div></div>'; // phpcs:ignore
+        return $form;
+    }
+
     /**
      * @return array
      */
@@ -353,7 +382,15 @@ class PPMFWC_Gateways
 
         $addedSettings = array();
 
-        if ($current_section == 'payment_methods') {
+        if ($current_section == 'suggestions') {
+            $suggestionForm = self::ppmfwc_loadSuggestionForm();
+            $addedSettings[] = array(
+                'title' => esc_html(__('Pay. Suggestion?', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'title',
+                'desc' => '<p>' . $suggestionForm . '</p>',
+                'id' => 'paynl_payment_suggestions',
+            );
+        } elseif ($current_section == 'payment_methods') {
             $loadedPaymentMethods = self::ppmfwc_loadPaymentMethods();
             if ($loadedPaymentMethods) {
                 $addedSettings[] = array(
@@ -616,8 +653,17 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_addPayStyleSheet()
     {
-        wp_register_style('paynl_wp_admin_css', PPMFWC_PLUGIN_URL . 'assets/css/pay.css', false, '1.0.0');
+        wp_register_style('paynl_wp_admin_css', PPMFWC_PLUGIN_URL . 'assets/css/pay.css', false, PPMFWC_Helper_Data::getVersion());
         wp_enqueue_style('paynl_wp_admin_css');
+    }
+
+    /**
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
+    public static function ppmfwc_addPayJavascript()
+    {
+        wp_register_script('paynl_wp_admin_js', PPMFWC_PLUGIN_URL . 'assets/js/pay.js', array('jquery'), PPMFWC_Helper_Data::getVersion(), true);
+        wp_enqueue_script('paynl_wp_admin_js');
     }
 
     /**
@@ -627,6 +673,7 @@ class PPMFWC_Gateways
     public static function ppmfwc_settingsTab()
     {
         add_action('admin_enqueue_scripts', array(__CLASS__, 'ppmfwc_addPayStyleSheet'));
+        add_action('admin_enqueue_scripts', array(__CLASS__, 'ppmfwc_addPayJavascript'));
         add_filter('woocommerce_settings_tabs_array', array(__CLASS__, 'ppmfwc_addSettingsTab'), 50);
         add_action('woocommerce_sections_' . self::TAB_ID, array(__CLASS__, 'ppmfwc_addSettingsSections'));
         add_action('woocommerce_settings_' . self::TAB_ID, array(__CLASS__, 'ppmfwc_addGlobalSettingsTab'), 10);
@@ -641,6 +688,7 @@ class PPMFWC_Gateways
     {
         add_action('woocommerce_api_wc_pay_gateway_return', array(__CLASS__, 'ppmfwc_onReturn'));
         add_action('woocommerce_api_wc_pay_gateway_exchange', array(__CLASS__, 'ppmfwc_onExchange'));
+        add_action('woocommerce_api_wc_pay_gateway_featurerequest', array(__CLASS__, 'ppmfwc_onFeatureRequest'));
     }
 
     /**
@@ -846,6 +894,81 @@ class PPMFWC_Gateways
             PPMFWC_Helper_Transaction::removeProcessing($order_id);
         }
         die($message);
+    }
+
+    /**
+     * Handles the PAY. feature requests
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
+    public static function ppmfwc_onFeatureRequest()
+    {
+        try {
+            global $wp_version;
+            global $woocommerce;
+            $email = isset($_POST['email']) ? strtolower($_POST['email']) : null;
+            $message = isset($_POST['message']) ? nl2br($_POST['message']) : null;
+            if (empty($message)) {
+                throw new Exception('Empty message');
+            }
+            $to = 'webshop@pay.nl';
+            $subject = 'Feature Request Woocommerce';
+            $body = '
+
+                <table role="presentation" style="margin-top:50px; margin-bottom:50px; width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
+                    <tr>
+                        <td align="center" style="padding:0;">
+                            <table role="presentation" style="width:600px;border-collapse:collapse;border:1px solid #cccccc;border-spacing:0;text-align:left;">
+                                <tr>
+                                    <td style="padding:25px;">
+                                        <h1 style="font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;">Pay. Feature Request</h1>
+                                        <p style="margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;">
+                                            A client has sent a feature request via Woocommerce.
+            ';
+            if ($email) {
+                $body .= '
+                                            <br>
+                                            <br>
+                                            <b>Client Email:</b>
+                                            <br>
+                                            <span style="width: 100%;box-sizing: border-box; display:inline-block; padding: 10px; border:1px solid #cccccc;">' . $email . '</span>
+                ';
+            }
+            $body .= '
+                                            <br>
+                                            <br>
+                                            <b>Message:</b>
+                                            <br>
+                                            <span style="width: 100%;box-sizing: border-box; display:inline-block; padding: 10px; border:1px solid #cccccc;">' . $message . '</span>
+                                            <br>
+                                            <br>
+                                            Pay. plugin version: ' . PPMFWC_Helper_Data::getVersion() . '.
+                                            <br>
+                                            Wordpress version: ' . $wp_version . '.
+                                            <br>
+                                            Woocommerce version: ' . $woocommerce->version . '.
+                                            <br>
+                                            PHP version: ' . substr(phpversion(), 0, 3) . '.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+            ';
+            $headers = array('Content-Type: text/html; charset=UTF-8');
+            wp_mail($to, $subject, $body, $headers);
+            $result = true;
+        } catch (Exception $e) {
+            $result = false;
+        }
+        header('Content-Type: application/json;charset=UTF-8');
+        $returnarray = array(
+            'success' => $result,
+            'message' => $message,
+        );
+        die(json_encode($returnarray));
     }
 
     /**
