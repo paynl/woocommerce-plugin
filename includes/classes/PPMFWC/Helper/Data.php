@@ -11,6 +11,7 @@ class PPMFWC_Helper_Data
 {
     private static $paylog = null;
     private static $_payment_methods = null;
+    private static $_options = [];
 
     /**
      * @param string $message
@@ -212,14 +213,8 @@ class PPMFWC_Helper_Data
      */
     public static function isOptionAvailable($optionId)
     {
-        global $wpdb;
-
-        $table_name_options = $wpdb->prefix . "pay_options";
-        $query = $wpdb->prepare("SELECT id, name, image, update_date FROM $table_name_options WHERE id = %d", $optionId);
-
-        $result = $wpdb->get_results($query, ARRAY_A);
-
-        return !empty($result);
+        $options = self::getAllOptions();
+        return isset($options[$optionId]);
     }
 
     /**
@@ -229,17 +224,20 @@ class PPMFWC_Helper_Data
     {
         global $wpdb;
 
-        $table_name_options = $wpdb->prefix . "pay_options";
+        if (empty(self::$_options)) {
+            $table_name_options = $wpdb->prefix . "pay_options";
 
-        $query = $wpdb->prepare("SELECT id, name, image, update_date FROM $table_name_options");
-        $result = $wpdb->get_results($query, ARRAY_A);
+            $query = $wpdb->prepare("SELECT id, name, image, update_date FROM $table_name_options");
+            $result = $wpdb->get_results($query, ARRAY_A);
 
-        $methods = array();
-        foreach ($result as $paymentmethod) {
-            $methods[$paymentmethod['id']] = $paymentmethod;
+            $methods = array();
+            foreach ($result as $paymentMethod) {
+                $methods[$paymentMethod['id']] = $paymentMethod;
+            }
+            self::$_options = $methods;
         }
 
-        return $methods;
+        return self::$_options;
     }
 
     /**
@@ -321,7 +319,7 @@ class PPMFWC_Helper_Data
      */
     public static function getVersion()
     {
-        return '3.14.5';
+        return '3.15.1';
     }
 
     /**

@@ -4,7 +4,7 @@
  * Plugin Name: PAY. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
  * Description: PAY. Payment Methods for WooCommerce
- * Version: 3.14.5
+ * Version: 3.15.1
  * Author: PAY.
  * Author URI: https://www.pay.nl
  * Requires at least: 3.5.1
@@ -105,8 +105,8 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
 
     add_action('wp_enqueue_scripts', 'ppmfwc_payScript');
 
-    if (get_option('paynl_auto_capture') == "yes") {
-        add_action('woocommerce_order_status_changed', 'ppmfwc_auto_capture', 10, 3);
+    if (get_option('paynl_auto_capture') == "yes" || get_option('paynl_auto_void') == "yes") {
+        add_action('woocommerce_order_status_changed', 'ppmfwc_auto_functions', 10, 3);
     }
 } else {
     # WooCommerce seems to be inactive, show eror message
@@ -266,20 +266,21 @@ function ppmfwc_coc_number_display_admin_order_meta($order)
  * @param string $new_status
  * @return void
  */
-function ppmfwc_auto_capture($order_id, $old_status, $new_status)
+function ppmfwc_auto_functions($order_id, $old_status, $new_status)
 {
-    if ($new_status == "completed") {
+    if (
+        ($new_status == "completed" && get_option('paynl_auto_capture') == "yes") ||
+        ($new_status == "cancelled" && get_option('paynl_auto_void') == "yes")
+    ) {
         $order = new WC_Order($order_id);
         $transactionId = $order->get_transaction_id();
         $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($transactionId);
 
         # Get transaction and make sure its status is Authorized
-        if (!empty($transactionLocalDB['status']) && $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE) {
+        if ($new_status == "completed" && get_option('paynl_auto_capture') == "yes" && !empty($transactionLocalDB['status']) && $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE) {
             try {
                 PPMFWC_Gateway_Abstract::loginSDK();
-
                 $bResult = \Paynl\Transaction::capture($transactionId);
-
                 if ($bResult) {
                     $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-capture on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
                 } else {
@@ -287,6 +288,18 @@ function ppmfwc_auto_capture($order_id, $old_status, $new_status)
                 }
             } catch (Exception $e) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Auto-capture failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
+            }
+        } elseif ($new_status == "cancelled" && get_option('paynl_auto_void') == "yes" && !empty($transactionLocalDB['status']) && $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE) { // phpcs:ignore
+            try {
+                PPMFWC_Gateway_Abstract::loginSDK();
+                $bResult = \Paynl\Transaction::void($transactionId);
+                if ($bResult) {
+                    $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-void on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
+                } else {
+                    throw new Exception('Could not void');
+                }
+            } catch (Exception $e) {
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Auto-void failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
             }
         }
     }
