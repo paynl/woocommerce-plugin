@@ -601,7 +601,7 @@ class PPMFWC_Gateways
             );
             $addedSettings[] = array(
                 'name' => esc_html(__('API-token *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'type' => 'text',
+                'type' => 'password',
                 'desc' => esc_html(
                     __(
                         'The API-token used to communicate with the Pay. API, you can find your API-token ',
