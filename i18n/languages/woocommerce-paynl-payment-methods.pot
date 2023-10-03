@@ -363,10 +363,6 @@ msgstr ""
 msgid "Pay. not connected."
 msgstr ""
 
-#: includes/classes/PPMFWC/Gateways.php:247
-msgid "API token and Sales Location are required."
-msgstr ""
-
 #: includes/classes/PPMFWC/Gateways.php:249
 msgid "API token is required."
 msgstr ""
@@ -437,7 +433,7 @@ msgid "Pay. Settings"
 msgstr ""
 
 #: includes/classes/PPMFWC/Gateways.php:418
-msgid ""Pay. checkout style"
+msgid "Pay. checkout style"
 msgstr ""
 
 #: includes/classes/PPMFWC/Gateways.php:420

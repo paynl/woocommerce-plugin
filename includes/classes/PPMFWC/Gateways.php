@@ -452,7 +452,7 @@ class PPMFWC_Gateways
                 'id' => 'paynl_global_settings',
             );
             $addedSettings[] = array(
-                'name' => __('"Pay. checkout style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'name' => __('Pay. checkout style', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                 'type' => 'checkbox',
                 'desc' => esc_html(__('Select this box to apply a style preset to the checkout with names to the left and logo\'s to the right.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_standard_style',

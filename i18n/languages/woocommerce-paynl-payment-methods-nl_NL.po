@@ -96,7 +96,7 @@ msgid ""
 "the setting %s is used."
 msgstr ""
 "Bij sommige betaalmethoden duurt het langer dan een paar uur voordat de "
-"betaling bevestigd is. De initiele orderstatus wordt dan op '%s' gezet. Dit "
+"betaling bevestigd is. De initiele orderstatus wordt dan op 'On Hold' gezet. Dit "
 "zorgt er voor dat de order niet automatisch wordt geannuleerd wanneer de "
 "instelling %s wordt gebruikt."
 
@@ -387,10 +387,6 @@ msgstr "API-token and Service ID zijn verplicht."
 msgid "Pay. not connected."
 msgstr "Geen connectie met Pay."
 
-#: includes/classes/PPMFWC/Gateways.php:248
-msgid "API token and Sales Location are required."
-msgstr "API-token en Service ID zijn verplicht."
-
 #: includes/classes/PPMFWC/Gateways.php:250
 msgid "API token is required."
 msgstr "API-token is verplicht."
@@ -532,8 +528,8 @@ msgid "Pay. Settings"
 msgstr "Pay. instellingen"
 
 #: includes/classes/PPMFWC/Gateways.php:455
-msgid ""Pay. checkout style"
-msgstr ""Pay. checkout style"
+msgid "Pay. checkout style"
+msgstr "Pay. checkout style"
 
 #: includes/classes/PPMFWC/Gateways.php:457
 msgid ""
