@@ -549,7 +549,7 @@ class PPMFWC_Gateways
                 'name' => esc_html(__('Follow payment method', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'select',
                 'options' => array(0 => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 1 => esc_html(__('Yes', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))),
-                'desc' => esc_html(__('Default set to Yes. This will ensure the order is updated with the actual payment method used to complete the order. This can differ from the payment method initially selected', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'desc' => esc_html(__('Default set to Yes. This will ensure the order is updated with the actual payment method used to complete the order. This can differ from the payment method initially selected', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
                 'id' => 'paynl_payment_method_display',
                 'default' => 1,
             );

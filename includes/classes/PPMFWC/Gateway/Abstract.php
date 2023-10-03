@@ -214,7 +214,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 $this->form_fields['ask_birthdate'] = array(
                     'title' => esc_html(__('Show date of birth field', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'checkbox',
-                    'description' => esc_html(__('A date of birth is mandatory for most Buy Now Pay Later payment methods. Show this field in the checkout, to improve your customer\'s payment flow.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'description' => esc_html(__('A date of birth is mandatory for most Buy Now Pay Later payment methods. Show this field in the checkout, to improve your customer\'s payment flow.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
                     'default' => 'yes'
                 );
 
