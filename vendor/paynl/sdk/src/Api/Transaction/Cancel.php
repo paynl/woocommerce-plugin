@@ -8,7 +8,7 @@ use Paynl\Helper;
 /**
  * Api class to refund a transaction
  *
- * @author Pay. <support@pay.nl>
+ * @author PAY. <support@pay.nl>
  */
 class Cancel extends Transaction
 {

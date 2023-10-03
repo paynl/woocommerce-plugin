@@ -8,7 +8,7 @@ use Paynl\Helper;
 /**
  * Api class to get the details of a transaction
  *
- * @author Pay. <support@pay.nl>
+ * @author PAY. <support@pay.nl>
  */
 class Details extends Transaction
 {

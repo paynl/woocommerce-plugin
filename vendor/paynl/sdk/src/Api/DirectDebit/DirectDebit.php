@@ -5,7 +5,7 @@ namespace Paynl\Api\DirectDebit;
 use Paynl\Api\Api;
 
 /**
- * @author Pay. <support@pay.nl>
+ * @author PAY. <support@pay.nl>
  */
 class DirectDebit extends Api
 {
