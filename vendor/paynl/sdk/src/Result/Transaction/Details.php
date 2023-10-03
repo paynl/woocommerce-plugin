@@ -7,7 +7,7 @@ use Paynl\Result\Result;
 /**
  * Result class for a Details
  *
- * @author PAY. <support@pay.nl>
+ * @author Pay. <support@pay.nl>
  */
 class Details extends Result
 {   

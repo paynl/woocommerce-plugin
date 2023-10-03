@@ -36,7 +36,7 @@ class Transaction
     const PRODUCT_TYPE_INVOICE = 'INVOICE';
     /** @var string Payment fees */
     const PRODUCT_TYPE_PAYMENT = 'PAYMENT';
-    /** @var string An extra order line added by PAY. if the total amount does not match the total of the product lines */
+    /** @var string An extra order line added by Pay. if the total amount does not match the total of the product lines */
     const PRODUCT_TYPE_ROUNDING = 'ROUNDING';
     /** @var string Costs for shipment */
     const PRODUCT_TYPE_SHIPPING = 'SHIPPING';

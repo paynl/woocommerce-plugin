@@ -37,7 +37,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $this->optionId = $this->getOptionId();
 
         $this->has_fields         = true;
-        $this->method_title       = esc_html('PAY. - ' . $this->getName());
+        $this->method_title       = esc_html('Pay. - ' . $this->getName());
         $this->method_description = esc_html(sprintf(__('Activate this module to accept %s transactions', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $this->getName()));
 
         $this->supports = array('products', 'refunds');
@@ -93,13 +93,13 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $this->form_fields = array(
                     'enabled' => array('title' => esc_html(__('Enable/Disable', 'woocommerce')),
                     'type'    => 'checkbox',
-                    'label'   => esc_html(sprintf(__('Enable PAY. %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $this->getName())),
+                    'label'   => esc_html(sprintf(__('Enable Pay. %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $this->getName())),
                     'default' => 'no',
                 ),
                 'title'        => array(
                     'title'       => esc_html(__('Title', 'woocommerce')),
                     'type'        => 'text',
-                    'description' => esc_html(__('This controls the title which the user sees during checkout.', 'woocommerce')),
+                    'description' => esc_html(__('The name of the payment method as shown in checkout.', 'woocommerce')),
                     'default'     => esc_html($this->getName()),
                     'desc_tip'    => true,
                 ),
@@ -118,14 +118,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'min_amount'   => array(
                     'title'       => esc_html(__('Minimum amount', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'price',
-                    'description' => esc_html(__('Minimum amount valid for this payment method, leave blank for no limit', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'description' => esc_html(__('Minimum order amount for this payment method, leave blank for no limit.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default' => '',
                     'desc_tip'    => true,
                 ),
                 'max_amount'   => array(
                     'title'       => esc_html(__('Maximum amount', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'price',
-                    'description' => esc_html(__('Maximum amount valid for this payment method, leave blank for no limit', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'description' => esc_html(__('Maximum order amount for this payment method, leave blank for no limit.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default'     => '',
                     'desc_tip'    => true,
                 ),
@@ -144,7 +144,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     'description' => sprintf(
                         esc_html(
                             __(
-                                'Some payment methods take longer than a few hours to complete. The initial order state is then set to \'%s\'. This ensures the order is not cancelled when the setting %s is used.', // phpcs:ignore
+                                'Some payment methods, like bank transfers, take longer to complete. By default we will set the initial order status to On Hold. This ensures the order is not cancelled when the setting %s is used.', // phpcs:ignore
                                 PPMFWC_WOOCOMMERCE_TEXTDOMAIN
                             )
                         ),
@@ -161,13 +161,13 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'title'       => esc_html(__('Customer type', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type'        => 'select',
                 'options'     => array(
-                    'both' => esc_html(__('Show for both', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'private' => esc_html(__('Private only', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'business' => esc_html(__('Businesses only', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'both' => esc_html(__('Both', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'private' => esc_html(__('Private', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'business' => esc_html(__('Business', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 ),
                 'default'     => $showForCompanyDefault,
                 /* translators: Placeholder 1: Default order status, placeholder 2: Link to 'Hold Stock' setting */
-                'description' => esc_html(__('Allow payment method to be used for companies, private or both.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+                'description' => esc_html(__('Allow payment method to be used for business customers, private customers or both.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
             );
 
             $this->form_fields['country_limit'] = array(
@@ -175,7 +175,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'type'        => 'multiselect',
                 'options'     => array_merge(array('all' => esc_html(__('Available for all countries', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))), WC()->countries->get_countries()),
                 'default'     => 'all',
-                'description' => sprintf(esc_html(__('Select one or more billing-countries for which %s should be available', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
+                'description' => sprintf(esc_html(__('Select one or more billing countries for which %s should be available.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
                 'desc_tip'    => esc_html(__('Select in which (billing) country this method should be available.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'class'       => 'countryLimit'
             );
@@ -195,7 +195,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                   'description' => sprintf(
                       esc_html(
                           __(
-                              'Select which status authorized transactions initially should have. Select `Use default` to use the global setting. ',
+                              'Select which status authorized transactions initially should have.',
                               PPMFWC_WOOCOMMERCE_TEXTDOMAIN
                           )
                       )
@@ -206,22 +206,22 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 $this->form_fields['external_logo'] = array(
                     'title' => esc_html(__('External logo', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'text',
-                    'description' => esc_html(__('URL to a different logo to be used in the checkout.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'description' => esc_html(__('URL to your own logo as used in the checkout.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default' => esc_html('')
                 );
             }
             if ($this->showDOB()) {
                 $this->form_fields['ask_birthdate'] = array(
-                    'title' => esc_html(__('Ask birthdate', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'title' => esc_html(__('Show date of birth field', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'checkbox',
-                    'description' => esc_html(__('Ask the customer for his birthdate, this will fasten the checkout process', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'description' => esc_html(__('A date of birth is mandatory for most Buy Now Pay Later payment methods. Show this field in the checkout, to improve your customer\'s payment flow.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default' => 'yes'
                 );
 
                 $this->form_fields['birthdate_required'] = array(
-                    'title' => esc_html(__('Birthdate required', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'title' => esc_html(__('Date of birth required', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'checkbox',
-                    'description' => esc_html(__('Make the birthdate required in the checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'description' => esc_html(__('Make this field a required field in the checkout.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default' => 'no'
                 );
             }
@@ -245,7 +245,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     'type' => 'checkbox',
                     'description' => esc_html(
                         __(
-                            'Enable this option when the required shipping address for post-payments is empty or is not being forwarded to PAY. correctly. ',
+                            'Enable this option only when the shipping address is not forwarded to Pay. correctly when using Buy Now Pay Later payment methods.',
                             PPMFWC_WOOCOMMERCE_TEXTDOMAIN
                         )
                     ),
@@ -255,10 +255,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             if ($this->alternativeReturnURL()) {
                 $this->form_fields['alternative_return_url'] = array(
-                    'title' => esc_html(__('Alternative Return URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'title' => esc_html(__('Alternative return URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'text',
                     'placeholder' => 'Enter a valid return URL for pending payments.',
-                    'description' => esc_html(__('Use this URL for when the paymentstatus is (still) pending/ payment after payment finish.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'description' => esc_html(__('Use this URL when the payment status is (still) pending after the order has been placed.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default' => esc_html('')
                 );
             }
@@ -288,8 +288,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'message' => array(
                     'title'       => esc_html(__('Disabled', 'woocommerce')),
                     'type'        => 'hidden',
-                    'description' => esc_html(__('This payment method is not available, please enable this in the PAY. admin.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'label'       => sprintf(esc_html(__('Enable PAY. %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
+                    'description' => esc_html(__('Payment method not activated, please activate on My.pay.nl first.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'label'       => sprintf(esc_html(__('Enable Pay. %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
                 )
             );
         }
@@ -471,7 +471,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 throw new Exception('Could not start payment');
             }
 
-            $order->add_order_note(sprintf(esc_html(__('PAY.: Transaction started: %s (%s)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payTransaction->getTransactionId(), $order->get_payment_method_title()));
+            $order->add_order_note(sprintf(esc_html(__('Pay.: Transaction started: %s (%s)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payTransaction->getTransactionId(), $order->get_payment_method_title()));
 
             if ($this->slowConfirmation()) {
                 $initial_status = $this->get_option('initial_order_status');
@@ -800,7 +800,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         if (empty($order) || empty($transactionLocalDB) || empty($transactionLocalDB['transaction_id'])) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Refund canceled, order empty', $order_id, array('orderid' => $order_id, 'amunt' => $amount, 'transactionId' => $transactionLocalDB['transaction_id'])); // phpcs:ignore
-            return new WP_Error(1, esc_html(__('The transaction seems to be already refunded or may be not captured yet. Please check admin.pay.nl.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+            return new WP_Error(1, esc_html(__('This transaction seems to have already been refunded or may not be captured yet. Please check the status on My.pay.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
         }
 
         $transactionId = $transactionLocalDB['transaction_id'];
@@ -818,11 +818,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 throw new Exception($result['errorMessage']);
             }
 
-            $order->add_order_note(sprintf(__('PAY.: Refunded: %s %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $order->get_currency(), $amount));
+            $order->add_order_note(sprintf(__('Pay.: Refunded: %s %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $order->get_currency(), $amount));
         } catch (Exception $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Refund exception:' . $e->getMessage(), $order_id, array('orderid' => $order_id, 'amunt' => $amount));
 
-            $message = esc_html(__('PAY. could not refund the transaction.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+            $message = esc_html(__('Pay. could not refund the transaction.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
             $message = strpos($e->getMessage(), 'PAY-14') !== false ? esc_html(__('A (partial) refund has just been made on this transaction, please wait a moment, and try again.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) : $message; // phpcs:ignore
 
             PPMFWC_Helper_Transaction::updateStatus($transactionId, $transactionLocalDB['status']);

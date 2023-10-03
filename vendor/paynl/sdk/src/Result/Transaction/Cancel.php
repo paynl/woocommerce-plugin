@@ -7,7 +7,7 @@ use Paynl\Result\Result;
 /**
  * Result class for a Cancel
  *
- * @author PAY. <support@pay.nl>
+ * @author Pay. <support@pay.nl>
  */
 class Cancel extends Result
 {
