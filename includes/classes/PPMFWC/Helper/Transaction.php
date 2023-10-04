@@ -24,7 +24,13 @@ class PPMFWC_Helper_Transaction
         $arrStatus['authorised'] = get_option('paynl_status_authorized');
         $arrStatus['verify'] = get_option('paynl_status_verify');
 
-        return $arrStatus[$payStatus] === false ? $payStatus : $arrStatus[$payStatus];
+        $arrDefaultStatus['processing'] = 'processing';
+        $arrDefaultStatus['cancel'] = 'cancelled';
+        $arrDefaultStatus['failed'] = 'failed';
+        $arrDefaultStatus['authorised'] = 'processing';
+        $arrDefaultStatus['verify'] = 'on-hold';
+
+        return $arrStatus[$payStatus] === false ? $arrDefaultStatus[$payStatus] : $arrStatus[$payStatus];
     }
 
     /**
