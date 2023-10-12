@@ -159,7 +159,7 @@ class PPMFWC_Helper_Transaction
             return $status;
         }
 
-        # Retrieve PAY. transaction paymentstate
+        # Retrieve Pay. transaction paymentstate
         PPMFWC_Gateway_Abstract::loginSDK();
 
         $transaction = \Paynl\Transaction::status($transactionId);
@@ -224,7 +224,7 @@ class PPMFWC_Helper_Transaction
                             if ($wcOrderStatus != $auth_status) {
                                 $order->update_status($auth_status);
                                 $newStatus = $auth_status . ' as configured in settings of ' . $method;
-                                $order->add_order_note(sprintf(esc_html(__('PAY.: Authorised order set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber())); // phpcs:ignore
+                                $order->add_order_note(sprintf(esc_html(__('Pay.: Authorised order set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber())); // phpcs:ignore
                             }
 
                             if ($auth_status == PPMFWC_Gateway_Abstract::STATUS_PROCESSING) {
@@ -247,7 +247,7 @@ class PPMFWC_Helper_Transaction
                             try {
                                 $order->set_payment_method($usedMethod->getId());
                                 $order->set_payment_method_title($usedMethod->getName());
-                                $order->add_order_note(sprintf(esc_html(__('PAY.: Changed method to %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $usedMethod->getName()));
+                                $order->add_order_note(sprintf(esc_html(__('Pay.: Changed method to %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $usedMethod->getName()));
                             } catch (Exception $e) {
                                 PPMFWC_Helper_Data::ppmfwc_payLogger('Could not update new method names: ' . $e->getMessage(), $transactionId);
                             }
@@ -258,12 +258,12 @@ class PPMFWC_Helper_Transaction
 
                     $customStatus = self::getCustomWooComOrderStatus($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE ? 'authorised' : 'processing');
                     if (!in_array($customStatus, array('processing', 'authorised'))) {
-                        $order->add_order_note(sprintf(esc_html(__('PAY.: Orderstatus set to custom-status: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $customStatus));
+                        $order->add_order_note(sprintf(esc_html(__('Pay.: Order status set to custom-status: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $customStatus));
                         $order->update_status($customStatus, 'According to Pay. plugin settings');
                         $order->save();
                     } else {
                         $order->payment_complete($transactionId);
-                        $order->add_order_note(sprintf(esc_html(__('PAY.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
+                        $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
                     }
                 }
 
@@ -273,7 +273,7 @@ class PPMFWC_Helper_Transaction
                 break;
 
             case PPMFWC_Gateways::STATUS_DENIED:
-                $order->add_order_note(esc_html(__('PAY.: Payment denied. ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+                $order->add_order_note(esc_html(__('Pay.: Payment denied. ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
                 $order->update_status(self::getCustomWooComOrderStatus('failed'));
                 break;
 
@@ -292,7 +292,7 @@ class PPMFWC_Helper_Transaction
                 $method = $order->get_payment_method();
 
                 if (substr($method, 0, 11) != 'pay_gateway') {
-                    throw new PPMFWC_Exception_Notice('Not cancelling, last used method is not a PAY. method');
+                    throw new PPMFWC_Exception_Notice('Not cancelling, last used method is not a Pay. method');
                 }
                 if ($order->is_paid()) {
                     throw new PPMFWC_Exception_Notice('Not cancelling, order is already paid');
@@ -304,11 +304,11 @@ class PPMFWC_Helper_Transaction
                 $order->set_status(self::getCustomWooComOrderStatus('cancel'));
                 $order->save();
 
-                $order->add_order_note(esc_html(__('PAY.: Payment canceled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+                $order->add_order_note(esc_html(__('Pay.: Payment cancelled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
                 break;
 
             case PPMFWC_Gateways::STATUS_VERIFY:
-                $order->set_status(self::getCustomWooComOrderStatus('verify'), 'PAY.: ' . esc_html(__("To be verified. ", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+                $order->set_status(self::getCustomWooComOrderStatus('verify'), 'Pay.: ' . esc_html(__("To be verified. ", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
                 $order->save();
                 break;
         }

@@ -1,4 +1,4 @@
-=== PAY. Payment Methods for WooCommerce ===
+=== Pay. Payment Methods for WooCommerce ===
 Contributors: andypay
 Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
@@ -11,7 +11,7 @@ WC requires at least: 3.0
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin adds the PAY. Payment Methods to your WooCommerce installation.
+This plugin adds the Pay. Payment Methods to your WooCommerce installation.
 
 == Description ==
 **Receive payments quickly, easily and securely via Pay.**
@@ -71,13 +71,13 @@ This section describes in short how to install the plugin and get it working.
 If you need more help, you can find our documentation [here](https://docs.pay.nl/plugins?language=en#woocommerce) or send an email to [support@pay.nl](mailto:support@pay.nl)
 
 1. Install the plugin via Plugins -> new plugin
-2. Activate the plugin through the 'Plugins' menu in WordPress, the name of this plugin is: PAY. Payment Methods for WooCommerce
+2. Activate the plugin through the 'Plugins' menu in WordPress, the name of this plugin is: Pay. Payment Methods for WooCommerce
 3. Under WooCommerce -> Settings -> Payment, configure the apitoken and serviceid and activate the desired payment methods.
-4. You can now accept payments using PAY.
+4. You can now accept payments using Pay.
 
 == Frequently Asked Questions ==
 
-= How can i get an account for PAY.? =
+= How can i get an account for Pay.? =
 
 You can register [here](http://pay.nl/registreren) (Dutch and Belgian companies only)
 
@@ -197,7 +197,7 @@ Updated some translations
 Added logo for iDEAL bank Nationale-Nederlanden
 = 3.15.0 =
 Test mode expanded with IP check
-Auto-void added for AUTHORIZE transaction when order is cancelled
+Auto void added for AUTHORIZE transaction when order is cancelled
 = 3.14.5 =
 Added support for WooCommerce Blocks
 = 3.14.4 =
@@ -265,7 +265,7 @@ Updated internal functionality
 Fixed a refund issue which occured with authorized payments
 Added a security failover option
 = 3.6.1 =
-Added option to disable refund processing for refunds initiated from PAY. admin
+Added option to disable refund processing for refunds initiated from Pay. admin
 Added option to enable auto-capture for completed orders
 Added payment method Google Pay
 And some minor updates
@@ -278,7 +278,7 @@ Fixed problem in the payment return url
 = 3.5.8 =
 Added authorise setting for After Pay, Billink, IN3, Klarna and SprayPay.
 Now showing the correct payment method used in the order, when the initial payment method is skipped.
-Refunds made in PAY. Admin will now update the orderstatus in your WooCommerce
+Refunds made in Pay. Admin will now update the orderstatus in your WooCommerce
 = 3.5.7 =
 Added payment methods Good4fun and Trustly. Fixed some minor issues.
 = 3.5.6 =
@@ -309,7 +309,7 @@ Updated layout and Added settings to add VAT-number and COC-number to checkout.
 Add payment methods Payconiq and Multibanco
 = 3.4.1 =
 Update plugin with object info
-Change Pay.nl name to PAY. everywhere
+Change Pay.nl name to Pay. everywhere
 = 3.4 =
 Added setting alternative exchange url
 = 3.3.11 =
@@ -345,7 +345,7 @@ Authorized transactions now use the transaction amount to check if the amount co
 Added paymentmethods Dankort and CartaSi
 = 3.2.1 =
 Added some extra checks before setting order status to failed.
-The plugin will not set the order status to failed if the order is already paid or if the last used method is not a PAY. method.
+The plugin will not set the order status to failed if the order is already paid or if the last used method is not a Pay. method.
 = 3.2.0 =
 Changed the order_id field to bigint because the post it refers to is also bigint
 Canceled transactions now change the order status to failed
@@ -366,7 +366,7 @@ Authorize transactions handled as paid
 = 3.1.0 =
 Added code for supporting older (< v3) versions of Woocommerce
 = 3.0.2 =
-Language was not sent to PAY.
+Language was not sent to Pay.
 Added message if woocommerce version < 3.0.0
 = 3.0.1 =
 Added payment method Yehhpay
@@ -452,7 +452,7 @@ Fixed a small typo in Pay_Helper_Transaction
 * Handling of DENIED status fixed
 = 2.3.5 =
 * Added payment method 'Pay by phone'
-* Fixed a problem where a payment method could not be disabled, when first disabled in the PAY. admin
+* Fixed a problem where a payment method could not be disabled, when first disabled in the Pay. admin
 * Fixed a problem with ipv6 addresses
 = 2.3.4 =
 * Updated the way the ip address is fetched, in case a loadbalancer or proxy is used
@@ -466,8 +466,8 @@ Fixed a small typo in Pay_Helper_Transaction
 = 2.3 =
 * Added new payment methods (Gezondheidsbon, Fashioncheque and podiumkadokaart)
 * Added a notice, in case CURL is not installed
-* Payment methods, that are not enabled in PAY. cannot be activated in woocommerce
-* Vat was not sent to PAY. correctly in the product lines
+* Payment methods, that are not enabled in Pay. cannot be activated in woocommerce
+* Vat was not sent to Pay. correctly in the product lines
 = 2.2.9 =
 * Removed cancel from the plugin to fix bugs refilling the cart
 = 2.2.8 =
