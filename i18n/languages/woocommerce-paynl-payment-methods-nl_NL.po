@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Pay. Payment Methods for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
-"POT-Creation-Date: 2023-10-12 16:24+0200\n"
-"PO-Revision-Date: 2023-10-12 16:26+0200\n"
+"POT-Creation-Date: 2023-10-12 17:13+0200\n"
+"PO-Revision-Date: 2023-10-12 17:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -898,10 +898,9 @@ msgid "Pay.: Performed auto capture on transaction: %s"
 msgstr "Pay.: Succesvol auto-capture uitgevoerd voor transactie: %s"
 
 #: woocommerce-payment-paynl.php:297
-#, fuzzy, php-format
-#| msgid "Pay.: Performed auto capture on transaction: %s"
+#, php-format
 msgid "Pay.: Performed auto void on transaction: %s"
-msgstr "Pay.: Succesvol auto-capture uitgevoerd voor transactie: %s"
+msgstr "Pay.: Succesvol auto-void uitgevoerd voor transactie: %s"
 
 #~ msgid "Leave your suggestions here..."
 #~ msgstr "Laat hier jouw wens of idee achter..."
