@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Pay. Payment Methods for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
-"POT-Creation-Date: 2023-09-20 11:36+0200\n"
-"PO-Revision-Date: 2023-09-20 11:36+0200\n"
+"POT-Creation-Date: 2023-10-12 16:24+0200\n"
+"PO-Revision-Date: 2023-10-12 16:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Loco-Source-Locale: nl_NL\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4\n"
 "X-Poedit-Basepath: ../..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -56,7 +56,7 @@ msgstr "Instructies"
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:114
 msgid "Instructions that will be added to the thank you page."
-msgstr "De instructies worden op de bedankt pagina weergegeven."
+msgstr "De instructies worden op de bedankpagina weergegeven."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:119
 msgid "Minimum amount"
@@ -66,7 +66,7 @@ msgstr "Minimum bedrag"
 msgid "Minimum order amount for this payment method, leave blank for no limit."
 msgstr ""
 "Minimale bedrag dat met deze betaalmethode afgerekend kan worden, laat leeg "
-"voor geen limiet"
+"voor geen limiet."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:126
 msgid "Maximum amount"
@@ -90,14 +90,13 @@ msgstr "standaard"
 #: includes/classes/PPMFWC/Gateway/Abstract.php:147
 #, php-format
 msgid ""
-"Some payment methods, like bank transfers, take longer to complete. "
-"By default we will set the initial order status to On Hold. "
-"This ensures the order is not cancelled when "
-"the setting %s is used."
+"Some payment methods, like bank transfers, take longer to complete. By "
+"default we will set the initial order status to On Hold. This ensures the "
+"order is not cancelled when the setting %s is used."
 msgstr ""
 "Bij sommige betaalmethoden duurt het langer dan een paar uur voordat de "
-"betaling bevestigd is. De initiele orderstatus wordt dan op 'On Hold' gezet. Dit "
-"zorgt er voor dat de order niet automatisch wordt geannuleerd wanneer de "
+"betaling bevestigd is. De initiele orderstatus wordt dan op 'On Hold' gezet. "
+"Dit zorgt er voor dat de order niet automatisch wordt geannuleerd wanneer de "
 "instelling %s wordt gebruikt."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:152
@@ -121,7 +120,9 @@ msgid "Business"
 msgstr "Zakelijk"
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:170
-msgid "Allow payment method to be used for business customers, private customers or both."
+msgid ""
+"Allow payment method to be used for business customers, private customers or "
+"both."
 msgstr "Toon de betaalmethode in de checkout voor zakelijk, privé of beide."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:174
@@ -172,7 +173,8 @@ msgstr "Vraag geboortedatum"
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:217
 msgid ""
-"A date of birth is mandatory for most Buy Now Pay Later payment methods. Show this field in the checkout, to improve your customer's payment flow."
+"A date of birth is mandatory for most Buy Now Pay Later payment methods. "
+"Show this field in the checkout, to improve your customer's payment flow."
 msgstr "Vraag de klant naar zijn geboortedatum, dit versnelt het afrekenproces"
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:222
@@ -219,8 +221,8 @@ msgstr "Alternatieve Exchange URL"
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:261
 msgid ""
-"Use this URL when the payment status is (still) pending after "
-"the order has been placed."
+"Use this URL when the payment status is (still) pending after the order has "
+"been placed."
 msgstr ""
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:283
@@ -233,8 +235,7 @@ msgid "Disabled"
 msgstr "Uitgeschakeld"
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:291
-msgid ""
-"Payment method not activated, please activate on My.pay.nl first."
+msgid "Payment method not activated, please activate on My.pay.nl first."
 msgstr ""
 "Deze betaalmethode is niet beschikbaar, schakel deze in op admin.pay.nl."
 
@@ -273,8 +274,8 @@ msgstr "Korting"
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:803
 msgid ""
-"This transaction seems to have already been refunded or may not be captured yet. "
-"Please check the status on My.pay."
+"This transaction seems to have already been refunded or may not be captured "
+"yet. Please check the status on My.pay."
 msgstr "The betaling is al reeds terugbetaald. Controleer dit op admin.pay.nl."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:821
@@ -380,6 +381,7 @@ msgid "Suggestions?"
 msgstr "Suggesties?"
 
 #: includes/classes/PPMFWC/Gateways.php:242
+#: includes/classes/PPMFWC/Gateways.php:248
 msgid "API token and Sales Location are required."
 msgstr "API-token and Service ID zijn verplicht."
 
@@ -533,7 +535,8 @@ msgstr "Pay. checkout style"
 
 #: includes/classes/PPMFWC/Gateways.php:457
 msgid ""
-"Select this box to apply a style preset to the checkout with names to the left and logo's to the right."
+"Select this box to apply a style preset to the checkout with names to the "
+"left and logo's to the right."
 msgstr "Schakel in om gebruik te maken van de Pay. style tweaks in de checkout"
 
 #: includes/classes/PPMFWC/Gateways.php:462
@@ -560,8 +563,8 @@ msgstr "Auto capture"
 
 #: includes/classes/PPMFWC/Gateways.php:479
 msgid ""
-"Enable auto capture for authorized transactions. "
-"Captures will be initiated when an order is set to Completed."
+"Enable auto capture for authorized transactions. Captures will be initiated "
+"when an order is set to Completed."
 msgstr ""
 "Schakel auto-capture in voor authorize-transacties. De Capture wordt gestart "
 "wanneer een order de status `Completed` krijgt."
@@ -572,8 +575,8 @@ msgstr "Auto void"
 
 #: includes/classes/PPMFWC/Gateways.php:486
 msgid ""
-"Enable auto void for authorized transactions. Voids will be initiated when an "
-"order is set to Cancelled."
+"Enable auto void for authorized transactions. Voids will be initiated when "
+"an order is set to Cancelled."
 msgstr ""
 "Schakel auto-void in voor authorize-transacties. De Void wordt gestart "
 "wanneer een order de status `Cancelled` krijgt."
@@ -583,7 +586,9 @@ msgid "Show VAT number"
 msgstr "Toon BTW-nummer"
 
 #: includes/classes/PPMFWC/Gateways.php:493
-msgid "Enable to add an extra field to the checkout for customers to enter their VAT number"
+msgid ""
+"Enable to add an extra field to the checkout for customers to enter their "
+"VAT number"
 msgstr "Vink aan om het BTW-nummer veld te tonen in de checkout"
 
 #: includes/classes/PPMFWC/Gateways.php:498
@@ -591,7 +596,9 @@ msgid "Show COC number"
 msgstr "Toon KVK-nummer"
 
 #: includes/classes/PPMFWC/Gateways.php:500
-msgid "Enable to add an extra field to the checkout for customers to enter their COC number"
+msgid ""
+"Enable to add an extra field to the checkout for customers to enter their "
+"COC number"
 msgstr "Vink aan om het KVK-nummer veld te tonen in de checkout"
 
 #: includes/classes/PPMFWC/Gateways.php:505
@@ -663,8 +670,8 @@ msgstr "Volg Betaalmethode"
 #: includes/classes/PPMFWC/Gateways.php:552
 msgid ""
 "Default set to Yes. This will ensure the order is updated with the actual "
-"payment method used to complete the order. This can differ from the "
-"payment method initially selected"
+"payment method used to complete the order. This can differ from the payment "
+"method initially selected"
 msgstr ""
 "Indien `Ja`, dan wordt de order bijgewerkt met de uiteindelijke gebruikte "
 "betaalmethode indien deze tijdens het proces is gewijzigd."
@@ -675,8 +682,8 @@ msgstr ""
 
 #: includes/classes/PPMFWC/Gateways.php:559
 msgid ""
-"Transactions started from these IP addresses will use testmode. "
-"Comma separate IPs for multiple inputs"
+"Transactions started from these IP addresses will use testmode. Comma "
+"separate IPs for multiple inputs"
 msgstr ""
 
 #: includes/classes/PPMFWC/Gateways.php:559
@@ -958,8 +965,8 @@ msgstr "Pay.: Succesvol auto-capture uitgevoerd voor transactie: %s"
 #~ msgstr "Betalingsfout:"
 
 #~ msgid ""
-#~ "The AT-code belonging to your API token, you can find this <a href=\"https://"
-#~ "admin.pay.nl/company/tokens\" target=\"api_token\">here</a>"
+#~ "The AT-code belonging to your API token, you can find this <a "
+#~ "href=\"https://admin.pay.nl/company/tokens\" target=\"api_token\">here</a>"
 #~ msgstr ""
 #~ "De AT-code die bij het token hoort, je kunt deze <a href=\"https://admin."
 #~ "pay.nl/company/tokens\" target=\"api_token\">hier</a> vinden"
