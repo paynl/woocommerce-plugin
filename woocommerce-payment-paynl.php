@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Plugin Name: PAY. Payment Methods for WooCommerce
+ * Plugin Name: Pay. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
- * Description: PAY. Payment Methods for WooCommerce
+ * Description: Pay. Payment Methods for WooCommerce
  * Version: 3.16.0
- * Author: PAY.
+ * Author: Pay.
  * Author URI: https://www.pay.nl
  * Requires at least: 3.5.1
  * WC requires at least: 3.0
@@ -48,7 +48,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     # Register PAY gateway in WooCommerce
     PPMFWC_Gateways::ppmfwc_register();
 
-    # Test if PAY. can be reached
+    # Test if Pay. can be reached
     PPMFWC_Setup::ppmfwc_testConnection();
 
     # Register checkoutFlash
@@ -119,7 +119,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
  */
 function ppmfwc_error_woocommerce_not_active()
 {
-    echo '<div class="error"><p>' . esc_html(__('The PAY. Payment Methods for WooCommerce plugin requires WooCommerce to be active', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p></div>';
+    echo '<div class="error"><p>' . esc_html(__('The Pay. Payment Methods for WooCommerce plugin requires WooCommerce to be active', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p></div>';
 }
 
 /**
@@ -128,7 +128,7 @@ function ppmfwc_error_woocommerce_not_active()
  */
 function ppmfwc_error_curl_not_installed()
 {
-    echo '<div class="error"><p>' . esc_html(__('Curl is not installed. In order to use the PAY. payment methods, you must install install CURL. Ask your system administrator to install php_curl.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p></div>'; // phpcs:ignore
+    echo '<div class="error"><p>' . esc_html(__('Curl is not installed. In order to use the Pay. payment methods, you must install install CURL. Ask your system administrator to install php_curl.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p></div>'; // phpcs:ignore
 }
 
 /**
@@ -153,7 +153,7 @@ function ppmfwc_vatField($checkout)
     woocommerce_form_field('vat_number', array(
     'type' => 'text',
     'class' => array('vat-number-field form-row-wide'),
-    'label' => esc_html(__('VAT Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+    'label' => esc_html(__('VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
     'placeholder' => esc_html(__('Enter your VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
     ), $checkout->get_value('vat_number'));
 }
@@ -208,7 +208,7 @@ function ppmfwc_cocField($checkout)
     woocommerce_form_field('coc_number', array(
     'type' => 'text',
     'class' => array('coc-number-field form-row-wide'),
-    'label' => esc_html(__('COC Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+    'label' => esc_html(__('COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
     'placeholder' => esc_html(__('Enter your COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
     ), $checkout->get_value('coc_number'));
 }
@@ -233,7 +233,7 @@ function ppmfwc_checkout_vat_number_update_order_meta($order_id)
  */
 function ppmfwc_vat_number_display_admin_order_meta($order)
 {
-    echo '<p><strong>' . esc_html(__('VAT Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . ':</strong> ' . esc_html(get_post_meta($order->get_id(), '_vat_number', true)) . '</p>';
+    echo '<p><strong>' . esc_html(__('VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . ':</strong> ' . esc_html(get_post_meta($order->get_id(), '_vat_number', true)) . '</p>';
 }
 
 /**
@@ -256,7 +256,7 @@ function ppmfwc_checkout_coc_number_update_order_meta(string $order_id)
  */
 function ppmfwc_coc_number_display_admin_order_meta($order)
 {
-    echo '<p><strong>' . esc_html(__('COC Number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . ':</strong> ' . esc_html(get_post_meta($order->get_id(), '_coc_number', true)) . '</p>';
+    echo '<p><strong>' . esc_html(__('COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . ':</strong> ' . esc_html(get_post_meta($order->get_id(), '_coc_number', true)) . '</p>';
 }
 
 
@@ -282,24 +282,24 @@ function ppmfwc_auto_functions($order_id, $old_status, $new_status)
                 PPMFWC_Gateway_Abstract::loginSDK();
                 $bResult = \Paynl\Transaction::capture($transactionId);
                 if ($bResult) {
-                    $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-capture on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
+                    $order->add_order_note(sprintf(esc_html(__('Pay.: Performed auto capture on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
                 } else {
                     throw new Exception('Could not capture');
                 }
             } catch (Exception $e) {
-                PPMFWC_Helper_Data::ppmfwc_payLogger('Auto-capture failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Auto capture failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
             }
         } elseif ($new_status == "cancelled" && get_option('paynl_auto_void') == "yes" && !empty($transactionLocalDB['status']) && $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE) { // phpcs:ignore
             try {
                 PPMFWC_Gateway_Abstract::loginSDK();
                 $bResult = \Paynl\Transaction::void($transactionId);
                 if ($bResult) {
-                    $order->add_order_note(sprintf(esc_html(__('PAY.: Performed auto-void on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
+                    $order->add_order_note(sprintf(esc_html(__('Pay.: Performed auto void on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
                 } else {
                     throw new Exception('Could not void');
                 }
             } catch (Exception $e) {
-                PPMFWC_Helper_Data::ppmfwc_payLogger('Auto-void failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Auto void failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
             }
         }
     }
