@@ -37,7 +37,7 @@ class PPMFWC_Gateways
      */
     private static function getAvailableWoocomStatus($default, $excludeStates = array())
     {
-        $txt = esc_html(' (' . __('default', 'woocommerce') . ')');
+        $txt = esc_html(' (' . __('default', PPMFWC_WOOCOMMERCE_TEXTDOMAIN) . ')');
 
         $arrStates['processing'] = PPMFWC_Gateway_Abstract::STATUS_PROCESSING;
         $arrStates['pending'] = PPMFWC_Gateway_Abstract::STATUS_PENDING;
@@ -166,7 +166,7 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_addSettingsTab($settings_tabs)
     {
-        $settings_tabs[self::TAB_ID] = __('Pay.', 'woocommerce');
+        $settings_tabs[self::TAB_ID] = __('Pay.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
         return $settings_tabs;
     }
 
@@ -368,8 +368,8 @@ class PPMFWC_Gateways
         $form .= '</tbody></table>';
         $form .= '<button id="FR_Submit" class="button-primary">' . esc_html(__('Send', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</button>';
         $form .= '<div class="clear"></div>';
-        $form .= '<div class="FR_Alertbox" id="FR_Alert_Success"><div class="FR_Alert"><p>' . esc_html(__('Sent! Thank you for your contribution.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', 'woocommerce')) . '</span></div></div>'; // phpcs:ignore
-        $form .= '<div class="FR_Alertbox" id="FR_Alert_Fail"><div class="FR_Alert"><p>' . esc_html(__('Couldn\'t send email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', 'woocommerce')) . '</span></div></div>'; // phpcs:ignore
+        $form .= '<div class="FR_Alertbox" id="FR_Alert_Success"><div class="FR_Alert"><p>' . esc_html(__('Sent! Thank you for your contribution.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></div></div>'; // phpcs:ignore
+        $form .= '<div class="FR_Alertbox" id="FR_Alert_Fail"><div class="FR_Alert"><p>' . esc_html(__('Couldn\'t send email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></div></div>'; // phpcs:ignore
         return $form;
     }
 
