@@ -181,7 +181,7 @@ class PPMFWC_Gateways
             '' => __('Setup', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'payment_methods' => __('Payment Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'settings' => __('Settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            'order_state_automation' => __('Order State Automation', 'woocommerce'),
+            'order_state_automation' => __('Order State Automation', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'suggestions' => __('Suggestions?', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)
         );
         echo '<ul class="subsubsub">';
