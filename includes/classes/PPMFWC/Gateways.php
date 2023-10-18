@@ -437,7 +437,7 @@ class PPMFWC_Gateways
                     'type' => 'select',
                     'options' => self::getAvailableWoocomStatus($statusValues[0], isset($statusValues[2]) ? $statusValues[2] : array()),
                     'default' => $statusValues[1],
-                    'desc' => esc_html(sprintf(__("Select which status an order should have when Pay's transaction status is %s", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), strtoupper($statusname)))
+                    'desc' => sprintf(esc_html(__('Select which status an order should have when Pay\'s transaction status is %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), strtoupper($statusname))
                 );
             }
             $addedSettings[] = array(
@@ -522,15 +522,17 @@ class PPMFWC_Gateways
                 'id' => 'paynl_verify_peer',
                 'default' => 'yes',
             );
+
             $addedSettings[] = array(
                 'name' => __('Alternative exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                 'type' => 'text',
                 'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
-                'desc' => '<br>Use your own exchange-handler. Requests will be send as GET. <br> ' .
-                    'Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#' .
-                    '<Br>For more info see: <a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
-                'id' => 'paynl_exchange_url',
+                'desc' => esc_html(__('Use your own exchange-handler. Requests will be send as GET.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)). '<br>'.
+                          esc_html(__('Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)). '<br>'.
+                          esc_html(__('For more info see: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
+                'id' => 'paynl_exchange_url'
             );
+
             $addedSettings[] = array(
                 'name' => esc_html(__('Failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'text',
