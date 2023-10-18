@@ -437,7 +437,7 @@ class PPMFWC_Gateways
                     'type' => 'select',
                     'options' => self::getAvailableWoocomStatus($statusValues[0], isset($statusValues[2]) ? $statusValues[2] : array()),
                     'default' => $statusValues[1],
-                    'desc' => sprintf(esc_html(__('Select which status an order should have when Pay\'s transaction status is ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
+                    'desc' => esc_html(sprintf(__("Select which status an order should have when Pay's transaction status is %s", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), strtoupper($statusname)))
                 );
             }
             $addedSettings[] = array(
