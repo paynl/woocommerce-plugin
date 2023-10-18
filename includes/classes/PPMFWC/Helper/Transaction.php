@@ -24,7 +24,13 @@ class PPMFWC_Helper_Transaction
         $arrStatus['authorised'] = get_option('paynl_status_authorized');
         $arrStatus['verify'] = get_option('paynl_status_verify');
 
-        return $arrStatus[$payStatus] === false ? $payStatus : $arrStatus[$payStatus];
+        $arrDefaultStatus['processing'] = 'processing';
+        $arrDefaultStatus['cancel'] = 'cancelled';
+        $arrDefaultStatus['failed'] = 'failed';
+        $arrDefaultStatus['authorised'] = 'processing';
+        $arrDefaultStatus['verify'] = 'on-hold';
+
+        return $arrStatus[$payStatus] === false ? $arrDefaultStatus[$payStatus] : $arrStatus[$payStatus];
     }
 
     /**
@@ -297,7 +303,7 @@ class PPMFWC_Helper_Transaction
                 if ($order->is_paid()) {
                     throw new PPMFWC_Exception_Notice('Not cancelling, order is already paid');
                 }
-                if (!$order->has_status('pending')) {
+                if (!$order->has_status('pending') && !$order->has_status('on-hold')) {
                     throw new PPMFWC_Exception_Notice('Cancel ignored, order is ' . $order->get_status());
                 }
 
