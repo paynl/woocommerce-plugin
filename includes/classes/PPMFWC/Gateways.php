@@ -527,8 +527,8 @@ class PPMFWC_Gateways
                 'name' => __('Alternative exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                 'type' => 'text',
                 'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
-                'desc' => esc_html(__('Use your own exchange-handler. Requests will be send as GET.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)). '<br>'.
-                          esc_html(__('Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)). '<br>'.
+                'desc' => esc_html(__('Use your own exchange-handler. Requests will be send as GET.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
+                          esc_html(__('Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
                           esc_html(__('For more info see: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
                 'id' => 'paynl_exchange_url'
             );
