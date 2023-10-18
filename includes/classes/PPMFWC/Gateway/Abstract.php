@@ -149,7 +149,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                             )
                         ),
                         wc_get_order_status_name(self::STATUS_ON_HOLD),
-                        '<a href="' . admin_url('admin.php?page=wc-settings&tab=products&section=inventory') . '" target="_blank">' . esc_html(__('Hold Stock (minutes)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>'
+                        '<a href="' . admin_url('admin.php?page=wc-settings&tab=products&section=inventory') .
+                        '" target="_blank">' . esc_html(__('Hold Stock (minutes)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>'
                     ),
                 );
             }
