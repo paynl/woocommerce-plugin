@@ -37,7 +37,7 @@ class PPMFWC_Gateways
      */
     private static function getAvailableWoocomStatus($default, $excludeStates = array())
     {
-        $txt = esc_html(' (' . __('default', 'woocommerce') . ')');
+        $txt = esc_html(' (' . __('default', PPMFWC_WOOCOMMERCE_TEXTDOMAIN) . ')');
 
         $arrStates['processing'] = PPMFWC_Gateway_Abstract::STATUS_PROCESSING;
         $arrStates['pending'] = PPMFWC_Gateway_Abstract::STATUS_PENDING;
@@ -166,7 +166,7 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_addSettingsTab($settings_tabs)
     {
-        $settings_tabs[self::TAB_ID] = __('Pay.', 'woocommerce');
+        $settings_tabs[self::TAB_ID] = __('Pay.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
         return $settings_tabs;
     }
 
@@ -181,7 +181,7 @@ class PPMFWC_Gateways
             '' => __('Setup', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'payment_methods' => __('Payment Methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'settings' => __('Settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-            'order_state_automation' => __('Order State Automation', 'woocommerce'),
+            'order_state_automation' => __('Order State Automation', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             'suggestions' => __('Suggestions?', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)
         );
         echo '<ul class="subsubsub">';
@@ -368,8 +368,8 @@ class PPMFWC_Gateways
         $form .= '</tbody></table>';
         $form .= '<button id="FR_Submit" class="button-primary">' . esc_html(__('Send', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</button>';
         $form .= '<div class="clear"></div>';
-        $form .= '<div class="FR_Alertbox" id="FR_Alert_Success"><div class="FR_Alert"><p>' . esc_html(__('Sent! Thank you for your contribution.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', 'woocommerce')) . '</span></div></div>'; // phpcs:ignore
-        $form .= '<div class="FR_Alertbox" id="FR_Alert_Fail"><div class="FR_Alert"><p>' . esc_html(__('Couldn\'t send email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', 'woocommerce')) . '</span></div></div>'; // phpcs:ignore
+        $form .= '<div class="FR_Alertbox" id="FR_Alert_Success"><div class="FR_Alert"><p>' . esc_html(__('Sent! Thank you for your contribution.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></div></div>'; // phpcs:ignore
+        $form .= '<div class="FR_Alertbox" id="FR_Alert_Fail"><div class="FR_Alert"><p>' . esc_html(__('Couldn\'t send email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</p><span class="FR_close_alert">' . esc_html(__('Close', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></div></div>'; // phpcs:ignore
         return $form;
     }
 
@@ -437,7 +437,7 @@ class PPMFWC_Gateways
                     'type' => 'select',
                     'options' => self::getAvailableWoocomStatus($statusValues[0], isset($statusValues[2]) ? $statusValues[2] : array()),
                     'default' => $statusValues[1],
-                    'desc' => sprintf(esc_html(__('Select which status an order should have when Pay\'s transaction status is ' . strtoupper($statusname), PPMFWC_WOOCOMMERCE_TEXTDOMAIN)))
+                    'desc' => sprintf(esc_html(__('Select which status an order should have when Pay\'s transaction status is %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), strtoupper($statusname))
                 );
             }
             $addedSettings[] = array(
@@ -522,15 +522,17 @@ class PPMFWC_Gateways
                 'id' => 'paynl_verify_peer',
                 'default' => 'yes',
             );
+
             $addedSettings[] = array(
                 'name' => __('Alternative exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                 'type' => 'text',
                 'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
-                'desc' => '<br>Use your own exchange-handler. Requests will be send as GET. <br> ' .
-                    'Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#' .
-                    '<Br>For more info see: <a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
-                'id' => 'paynl_exchange_url',
+                'desc' => esc_html(__('Use your own exchange-handler. Requests will be send as GET.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
+                          esc_html(__('Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
+                          esc_html(__('For more info see: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
+                'id' => 'paynl_exchange_url'
             );
+
             $addedSettings[] = array(
                 'name' => esc_html(__('Failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'text',

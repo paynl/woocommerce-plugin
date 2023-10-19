@@ -91,27 +91,27 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         if (PPMFWC_Helper_Data::isOptionAvailable($optionId)) {
             $this->form_fields = array(
-                    'enabled' => array('title' => esc_html(__('Enable/Disable', 'woocommerce')),
+                    'enabled' => array('title' => esc_html(__('Enable/Disable', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'    => 'checkbox',
                     'label'   => esc_html(sprintf(__('Enable Pay. %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $this->getName())),
                     'default' => 'no',
                 ),
                 'title'        => array(
-                    'title'       => esc_html(__('Title', 'woocommerce')),
+                    'title'       => esc_html(__('Title', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'text',
-                    'description' => esc_html(__('The name of the payment method as shown in checkout.', 'woocommerce')),
+                    'description' => esc_html(__('The name of the payment method as shown in checkout.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default'     => esc_html($this->getName()),
                     'desc_tip'    => true,
                 ),
                 'description'  => array(
-                    'title'   => esc_html(__('Customer Message', 'woocommerce')),
+                    'title'   => esc_html(__('Customer Message', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'    => 'textarea',
                     'default' => 'pay_init',
                 ),
                 'instructions' => array(
-                    'title'       => esc_html(__('Instructions', 'woocommerce')),
+                    'title'       => esc_html(__('Instructions', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'textarea',
-                    'description' => esc_html(__('Instructions that will be added to the thank you page.', 'woocommerce')),
+                    'description' => esc_html(__('Instructions that will be added to the thank you page.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'default'     => '',
                     'desc_tip'    => true,
                 ),
@@ -136,7 +136,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     'title'       => esc_html(__('Initial order status', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'select',
                     'options'     => array(
-                        self::STATUS_ON_HOLD => wc_get_order_status_name(self::STATUS_ON_HOLD) . esc_html(' (' . __('default', 'woocommerce') . ')'),
+                        self::STATUS_ON_HOLD => wc_get_order_status_name(self::STATUS_ON_HOLD) . esc_html(' (' . __('default', PPMFWC_WOOCOMMERCE_TEXTDOMAIN) . ')'),
                         self::STATUS_PENDING => wc_get_order_status_name(self::STATUS_PENDING),
                     ),
                     'default'     => self::STATUS_ON_HOLD,
@@ -149,7 +149,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                             )
                         ),
                         wc_get_order_status_name(self::STATUS_ON_HOLD),
-                        '<a href="' . admin_url('admin.php?page=wc-settings&tab=products&section=inventory') . '" target="_blank">' . esc_html(__('Hold Stock (minutes)', 'woocommerce')) . '</a>'
+                        '<a href="' . admin_url('admin.php?page=wc-settings&tab=products&section=inventory') .
+                        '" target="_blank">' . esc_html(__('Hold Stock (minutes)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>'
                     ),
                 );
             }
@@ -286,7 +287,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         } else {
             $this->form_fields = array(
                 'message' => array(
-                    'title'       => esc_html(__('Disabled', 'woocommerce')),
+                    'title'       => esc_html(__('Disabled', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type'        => 'hidden',
                     'description' => esc_html(__('Payment method not activated, please activate on My.pay.nl first.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'label'       => sprintf(esc_html(__('Enable Pay. %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
