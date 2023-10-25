@@ -2,23 +2,39 @@
     width: 94%;
 }
 
-.PPMFWC_desc img {
+.PPMFWC_container img {
     max-height: 50px;
     float: left;
 }
 
-.PPMFWC_desc span {
-    min-height: 48px;
+.PPMFWC_container span.description {
+    min-height: 60px;
     display: inline-block;
     width: 80%;
     margin-left: 16px;
 }
 
-.PPMFWC_desc select {
-    margin-left: 16px;
-    width: 80%;
+.PPMFWC_container select {
     padding: 3px 8px;
     background-color: transparent;
     border: 1px solid #CCC;
     margin-top: 16px;
+}
+
+.PPMFWC_extraData, .PPMFWC_extraData span {
+    margin-left: 0px;
+    min-height: auto;
+    width: auto;
+}
+
+.PPMFWC_container div.field {
+    margin-top: 15px;
+}
+
+.PPMFWC_container input[type=text] {
+    padding: 0 10px;
+}
+
+.PPMFWC_extraData input[type=date] {
+    margin-left: 10px;
 }

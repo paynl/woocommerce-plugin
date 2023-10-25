@@ -65,6 +65,12 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
             $blocks_js_route = PPMFWC_PLUGIN_URL . 'assets/js/paynl-blocks.js';
             $gateways = WC()->payment_gateways()->get_available_payment_gateways();
             $payGateways = [];
+
+            $texts['selectissuer'] = __('Select an issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+            $texts['enterbirthdate'] = __('Enter date of birth', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+            $texts['enterCocNumber'] = __('Enter COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+            $texts['enterVatNumber'] = __('Enter VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+
             foreach ($gateways as $gateway_id => $gateway) {
                 /** @var PPMFWC_Gateway_Abstract $gateway */
                 if (substr($gateway_id, 0, 11) != 'pay_gateway') {
@@ -76,7 +82,10 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
                   'description' => $gateway->description,
                   'image_path' => $gateway->getIcon(),
                   'issuers' => $gateway->getIssuers(),
-                  'text_selectissuer' => __('Select an issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)
+                  'texts' => $texts,
+                  'showbirthdate' => $gateway->showDOB(),
+                  'showVatField' => get_option('paynl_show_vat_number') == "yes",
+                  'showCocField' => get_option('paynl_show_coc_number') == "yes"
                 );
             }
             wp_enqueue_script('paynl-blocks-js', $blocks_js_route, array('wc-blocks-registry'), (string)time(), true);
