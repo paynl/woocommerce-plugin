@@ -425,6 +425,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
+     * @return array
+     */
+    public function getIssuers()
+    {
+        return [];
+    }
+
+    /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public function payment_fields()
@@ -607,8 +615,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         $startData['products'] = $this->getProductLines($order);
 
+        $optionSubId = PPMFWC_Helper_Data::getPostTextField('selectedissuer');
+        if (empty($optionSubId)) {
+            $optionSubId = PPMFWC_Helper_Data::getPostTextField('option_sub_id');
+        }
 
-        $optionSubId = PPMFWC_Helper_Data::getPostTextField('option_sub_id');
         if (!empty($optionSubId)) {
             $startData['bank'] = $optionSubId;
         }

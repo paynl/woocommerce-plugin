@@ -34,6 +34,14 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
     }
 
     /**
+     * @return array
+     */
+    public function getIssuers()
+    {
+        return PPMFWC_Helper_Data::getOptionSubs(self::getOptionId());
+    }
+
+    /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public function payment_fields()
