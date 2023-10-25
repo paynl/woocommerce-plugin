@@ -7,14 +7,14 @@
  * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
  */
 
-class PPMFWC_Gateway_Nexi extends PPMFWC_Gateway_Abstract
+class PPMFWC_Gateway_SofortbankingHighRisk extends PPMFWC_Gateway_Abstract
 {
     /**
      * @return string
      */
     public static function getId()
     {
-        return 'pay_gateway_nexi';
+        return 'pay_gateway_sofortbankinghighrisk';
     }
 
     /**
@@ -22,7 +22,7 @@ class PPMFWC_Gateway_Nexi extends PPMFWC_Gateway_Abstract
      */
     public static function getName()
     {
-        return 'Nexi';
+        return 'Sofortbanking';
     }
 
     /**
@@ -30,6 +30,14 @@ class PPMFWC_Gateway_Nexi extends PPMFWC_Gateway_Abstract
      */
     public static function getOptionId()
     {
-        return 1945;
+        return 595;
+    }
+
+    /**
+     * @return boolean
+     */
+    public static function slowConfirmation()
+    {
+        return true;
     }
 }
