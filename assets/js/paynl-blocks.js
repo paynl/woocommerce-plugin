@@ -33,26 +33,29 @@ const PaynlComponent = (props) =>{
                 React.createElement('span', {className: 'description'}, gateway.description),
                 React.createElement('div', {},
                     (gateway.paymentMethodId == 'pay_gateway_ideal' ?
-                        React.createElement('select',  {onChange: (e)=>{
+                        React.createElement('div', {className: 'field'},
+                            React.createElement('span', {className: 'payLabel'}, gateway.texts.issuer),
+                            React.createElement('select',  {onChange: (e)=>{
                                     selectIssuer(e.target.value)
                                 }},
                             React.createElement("option", {}, gateway.texts.selectissuer),
                             ...payIssuers.map(issuer => React.createElement("option", {value: issuer.option_sub_id}, issuer.name))
+                            )
                         ) : ''),
                     (gateway.showbirthdate == true ?
                         React.createElement('div', {className: 'field'},
-                                 React.createElement('span', {}, gateway.texts.enterbirthdate + ': '),
-                                 React.createElement('input', {type: 'date', onChange: (e)=>{ selectDate(e.target.value) }})
+                                 React.createElement('span', {className: 'payLabel'}, gateway.texts.enterbirthdate),
+                                 React.createElement('input', {type: 'date', onChange: (e)=>{ selectDate(e.target.value)}})
                         ) : '' ),
                     (gateway.showCocField == true ?
-                    React.createElement('div', {className: 'field'},
-                        React.createElement('span', {}, gateway.texts.enterCocNumber + ': '),
-                        React.createElement('input', {type: 'text', onChange: (e)=>{ setCocNumber(e.target.value) }})
-                        ) : '' ),
-                    ( gateway.showVatField == true ?
                         React.createElement('div', {className: 'field'},
-                            React.createElement('span', {}, gateway.texts.enterVatNumber + ': '),
-                            React.createElement('input', {type: 'text', onChange: (e)=>{ setVatNumber(e.target.value) }})
+                            React.createElement('span', {className: 'payLabel'}, gateway.texts.enterCocNumber),
+                            React.createElement('input', {type: 'text', onChange: (e)=>{ setCocNumber(e.target.value)}})
+                        ) : '' ),
+                    (gateway.showVatField == true ?
+                        React.createElement('div', {className: 'field'},
+                            React.createElement('span', {className: 'payLabel'}, gateway.texts.enterVatNumber),
+                            React.createElement('input', {type: 'text', onChange: (e)=>{ setVatNumber(e.target.value)}})
                         ) : '' )
         ))
 

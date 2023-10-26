@@ -2,6 +2,10 @@
     width: 94%;
 }
 
+.PPMFWC_container {
+    margin-top: 10px;
+}
+
 .PPMFWC_container img {
     max-height: 50px;
     float: left;
@@ -19,6 +23,7 @@
     background-color: transparent;
     border: 1px solid #CCC;
     margin-top: 16px;
+    min-width: 200px;
 }
 
 .PPMFWC_extraData, .PPMFWC_extraData span {
@@ -31,8 +36,18 @@
     margin-top: 15px;
 }
 
+.PPMFWC_container .payLabel {
+    min-width: 145px;
+    display: inline-block;
+}
+
 .PPMFWC_container input[type=text] {
     padding: 0 10px;
+    background-color: transparent;
+    border: 1px solid #CCC !important;
+    box-shadow: none;
+    min-width: 200px;
+    outline: none;
 }
 
 .PPMFWC_extraData input[type=date] {
