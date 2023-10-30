@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Pay. Payment Methods for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
-"POT-Creation-Date: 2023-10-25 11:51+0200\n"
-"PO-Revision-Date: 2023-10-25 11:53+0200\n"
+"POT-Creation-Date: 2023-10-18 14:09+0200\n"
+"PO-Revision-Date: 2023-10-18 14:24+0200\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: fr\n"
@@ -32,7 +32,7 @@ msgid "Enable/Disable"
 msgstr "Activer/Désactiver"
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:96
-#: includes/classes/PPMFWC/Gateway/Abstract.php:293
+#: includes/classes/PPMFWC/Gateway/Abstract.php:292
 #, php-format
 msgid "Enable Pay. %s"
 msgstr "Activez Pay. %s"
@@ -98,27 +98,27 @@ msgstr ""
 "attente. Cela permet de s’assurer que la commande n’est pas annulée lorsque "
 "le %s de réglage est utilisé."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:153
+#: includes/classes/PPMFWC/Gateway/Abstract.php:152
 msgid "Hold Stock (minutes)"
 msgstr "Maintenir le stock (minutes)"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:162
+#: includes/classes/PPMFWC/Gateway/Abstract.php:161
 msgid "Customer type"
 msgstr "Type de client"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:165
+#: includes/classes/PPMFWC/Gateway/Abstract.php:164
 msgid "Both"
 msgstr "Les deux"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:166
+#: includes/classes/PPMFWC/Gateway/Abstract.php:165
 msgid "Private"
 msgstr "Privé"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:167
+#: includes/classes/PPMFWC/Gateway/Abstract.php:166
 msgid "Business"
 msgstr "Professionnel (B2B)"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:171
+#: includes/classes/PPMFWC/Gateway/Abstract.php:170
 msgid ""
 "Allow payment method to be used for business customers, private customers or "
 "both."
@@ -126,54 +126,54 @@ msgstr ""
 "Autorisez l’utilisation du mode de paiement pour les clients professionnels, "
 "les clients privés ou les deux."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:175
+#: includes/classes/PPMFWC/Gateway/Abstract.php:174
 msgid "Country"
 msgstr "Pays"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:177
+#: includes/classes/PPMFWC/Gateway/Abstract.php:176
 msgid "Available for all countries"
 msgstr "Disponible pour tous les pays"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:179
+#: includes/classes/PPMFWC/Gateway/Abstract.php:178
 #, php-format
 msgid "Select one or more billing countries for which %s should be available."
 msgstr ""
 "Sélectionnez un ou plusieurs pays de facturation pour lesquels %s doivent "
 "être disponibles."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:180
+#: includes/classes/PPMFWC/Gateway/Abstract.php:179
 msgid "Select in which (billing) country this method should be available."
 msgstr ""
 "Sélectionnez dans quel pays (facturation) cette méthode doit être disponible."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:186
+#: includes/classes/PPMFWC/Gateway/Abstract.php:185
 msgid "Authorize status"
 msgstr "Statut d’autorisation"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:193
+#: includes/classes/PPMFWC/Gateway/Abstract.php:192
 msgid "Use default (parent) setting "
 msgstr "Utiliser le paramètre par défaut (parent) "
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:199
+#: includes/classes/PPMFWC/Gateway/Abstract.php:198
 msgid "Select which status authorized transactions initially should have."
 msgstr ""
 "Sélectionnez le statut que les transactions autorisées doivent initialement "
 "avoir."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:208
+#: includes/classes/PPMFWC/Gateway/Abstract.php:207
 msgid "External logo"
 msgstr "Logo externe"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:210
+#: includes/classes/PPMFWC/Gateway/Abstract.php:209
 msgid "URL to your own logo as used in the checkout."
 msgstr ""
 "URL vers votre propre logo tel qu’il est utilisé lors dans le checkout."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:216
+#: includes/classes/PPMFWC/Gateway/Abstract.php:215
 msgid "Show date of birth field"
 msgstr "Demander la date de naissance"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:218
+#: includes/classes/PPMFWC/Gateway/Abstract.php:217
 msgid ""
 "A date of birth is mandatory for most Buy Now Pay Later payment methods. "
 "Show this field in the checkout, to improve your customer's payment flow."
@@ -182,37 +182,37 @@ msgstr ""
 "Demander la date de naissance, afin d’améliorer le flux de paiement de votre "
 "client."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:223
+#: includes/classes/PPMFWC/Gateway/Abstract.php:222
 msgid "Date of birth required"
 msgstr "Date de naissance obligatoire"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:225
+#: includes/classes/PPMFWC/Gateway/Abstract.php:224
 msgid "Make this field a required field in the checkout."
 msgstr "Rendre obligatoire le champs date de naissance dans le checkout."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:232
+#: includes/classes/PPMFWC/Gateway/Abstract.php:231
 msgid "Apple Detection"
 msgstr "Détection Apple"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:235
-#: includes/classes/PPMFWC/Gateways.php:561
+#: includes/classes/PPMFWC/Gateway/Abstract.php:234
+#: includes/classes/PPMFWC/Gateways.php:553
 msgid "No"
 msgstr "Non"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:236
-#: includes/classes/PPMFWC/Gateways.php:561
+#: includes/classes/PPMFWC/Gateway/Abstract.php:235
+#: includes/classes/PPMFWC/Gateways.php:553
 msgid "Yes"
 msgstr "Oui"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:239
+#: includes/classes/PPMFWC/Gateway/Abstract.php:238
 msgid "Only show Apple Pay on Apple devices."
 msgstr "Afficher Apple Pay uniquement sur les appareils Apple."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:245
+#: includes/classes/PPMFWC/Gateway/Abstract.php:244
 msgid "Use invoice address for shipping"
 msgstr "Utiliser l’adresse de facturation pour l’adresse de livraison"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:249
+#: includes/classes/PPMFWC/Gateway/Abstract.php:248
 msgid ""
 "Enable this option only when the shipping address is not forwarded to Pay. "
 "correctly when using Buy Now Pay Later payment methods."
@@ -221,11 +221,11 @@ msgstr ""
 "transférée à Pay. correctement lors de l’utilisation des modes de post-"
 "paiement."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:259
+#: includes/classes/PPMFWC/Gateway/Abstract.php:258
 msgid "Alternative return URL"
 msgstr "URL de retour alternative"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:262
+#: includes/classes/PPMFWC/Gateway/Abstract.php:261
 msgid ""
 "Use this URL when the payment status is (still) pending after the order has "
 "been placed."
@@ -233,53 +233,53 @@ msgstr ""
 "Utilisez cette URL lorsque le statut du paiement est (encore) en attente "
 "après que la commande a été passée."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:284
+#: includes/classes/PPMFWC/Gateway/Abstract.php:283
 #, php-format
 msgid "Pay with %s"
 msgstr "Payer avec %s"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:290
+#: includes/classes/PPMFWC/Gateway/Abstract.php:289
 msgid "Disabled"
 msgstr "Désactivé"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:292
+#: includes/classes/PPMFWC/Gateway/Abstract.php:291
 msgid "Payment method not activated, please activate on My.pay.nl first."
 msgstr "Le mode de paiement n’est pas activé, d’abord l’activer sur My.pay.nl."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:439
+#: includes/classes/PPMFWC/Gateway/Abstract.php:438
 msgid "Date of birth: "
 msgstr "Date de naissance: "
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:460
+#: includes/classes/PPMFWC/Gateway/Abstract.php:459
 msgid "Please enter your date of birth, this field is required."
 msgstr "Veuillez entrer votre date de naissance, ce champ est obligatoire."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:475
+#: includes/classes/PPMFWC/Gateway/Abstract.php:474
 #, php-format
 msgid "Pay.: Transaction started: %s (%s)"
 msgstr "Pay.: Transaction commencée: %s (%s)"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:479
+#: includes/classes/PPMFWC/Gateway/Abstract.php:478
 #, php-format
 msgid "Initial status set to %s "
 msgstr "L’état initial est défini sur %s "
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:497
+#: includes/classes/PPMFWC/Gateway/Abstract.php:496
 msgid ""
 "Could not initiate payment. Please try again or use another payment method."
 msgstr ""
 "Impossible d’initier le paiement. Veuillez réessayer ou utiliser un autre "
 "mode de paiement."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:741
+#: includes/classes/PPMFWC/Gateway/Abstract.php:740
 msgid "Shipping"
 msgstr "Livraison"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:757
+#: includes/classes/PPMFWC/Gateway/Abstract.php:756
 msgid "Discount"
 msgstr "Remise"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:804
+#: includes/classes/PPMFWC/Gateway/Abstract.php:803
 msgid ""
 "This transaction seems to have already been refunded or may not be captured "
 "yet. Please check the status on My.pay."
@@ -287,16 +287,16 @@ msgstr ""
 "Cette transaction semble avoir déjà été remboursée ou captured. Veuillez "
 "vérifier l’état sur My.pay."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:822
+#: includes/classes/PPMFWC/Gateway/Abstract.php:821
 #, php-format
 msgid "Pay.: Refunded: %s %s"
 msgstr "Payer.: Remboursé: %s %s"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:826
+#: includes/classes/PPMFWC/Gateway/Abstract.php:825
 msgid "Pay. could not refund the transaction."
 msgstr "Pay. n’a pas pu rembourser la transaction."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:827
+#: includes/classes/PPMFWC/Gateway/Abstract.php:826
 msgid ""
 "A (partial) refund has just been made on this transaction, please wait a "
 "moment, and try again."
@@ -365,73 +365,73 @@ msgstr "Impossible d’initier le paiement en boutique."
 msgid "Pay.: Transaction started: %s"
 msgstr "Pay.: Transaction commencée: %s"
 
-#: includes/classes/PPMFWC/Gateways.php:177
+#: includes/classes/PPMFWC/Gateways.php:169
 msgid "Pay."
 msgstr "Pay."
 
-#: includes/classes/PPMFWC/Gateways.php:189
+#: includes/classes/PPMFWC/Gateways.php:181
 msgid "Setup"
 msgstr "Configuration"
 
-#: includes/classes/PPMFWC/Gateways.php:190
+#: includes/classes/PPMFWC/Gateways.php:182
 msgid "Payment Methods"
 msgstr "﻿Moyens de paiement"
 
-#: includes/classes/PPMFWC/Gateways.php:191 woocommerce-payment-paynl.php:141
+#: includes/classes/PPMFWC/Gateways.php:183 woocommerce-payment-paynl.php:141
 msgid "Settings"
 msgstr "Paramètres"
 
-#: includes/classes/PPMFWC/Gateways.php:192
+#: includes/classes/PPMFWC/Gateways.php:184
 msgid "Order State Automation"
 msgstr "Automatisation de l’état des commandes"
 
-#: includes/classes/PPMFWC/Gateways.php:193
+#: includes/classes/PPMFWC/Gateways.php:185
 msgid "Suggestions?"
 msgstr "Suggestions?"
 
-#: includes/classes/PPMFWC/Gateways.php:250
-#: includes/classes/PPMFWC/Gateways.php:256
+#: includes/classes/PPMFWC/Gateways.php:242
+#: includes/classes/PPMFWC/Gateways.php:248
 msgid "API token and Sales Location are required."
 msgstr "Le jeton API et sales location sont requis."
 
-#: includes/classes/PPMFWC/Gateways.php:252
+#: includes/classes/PPMFWC/Gateways.php:244
 msgid "Pay. not connected."
 msgstr "Pay. n’est pas connecté."
 
-#: includes/classes/PPMFWC/Gateways.php:258
+#: includes/classes/PPMFWC/Gateways.php:250
 msgid "API token is required."
 msgstr "Le jeton d’API est requis."
 
-#: includes/classes/PPMFWC/Gateways.php:260
+#: includes/classes/PPMFWC/Gateways.php:252
 msgid "Sales Location (SL-code) is required."
 msgstr "Sales location (code SL) est requis."
 
-#: includes/classes/PPMFWC/Gateways.php:265
+#: includes/classes/PPMFWC/Gateways.php:257
 msgid "Token Code, API token or Sales Location invalid."
 msgstr "Token code, le jeton d’API ou sales location ne sont pas valides."
 
-#: includes/classes/PPMFWC/Gateways.php:268
+#: includes/classes/PPMFWC/Gateways.php:260
 msgid "Sales Location is invalid."
 msgstr "Sales location n’est pas valide."
 
-#: includes/classes/PPMFWC/Gateways.php:271
+#: includes/classes/PPMFWC/Gateways.php:263
 msgid "Invalid Sales Location / API token combination."
 msgstr "Combinaison sales location / jeton d’API non valide."
 
-#: includes/classes/PPMFWC/Gateways.php:278
-#: includes/classes/PPMFWC/Gateways.php:281
+#: includes/classes/PPMFWC/Gateways.php:270
+#: includes/classes/PPMFWC/Gateways.php:273
 msgid "Not registered with Pay. yet? Sign up "
 msgstr "Vous n’êtes pas encore abonné à Pay? S’enregistrer "
 
-#: includes/classes/PPMFWC/Gateways.php:280
+#: includes/classes/PPMFWC/Gateways.php:272
 msgid "Pay. connection failed."
 msgstr "Pay. echec de la connexion."
 
-#: includes/classes/PPMFWC/Gateways.php:283
+#: includes/classes/PPMFWC/Gateways.php:275
 msgid "Pay. successfully connected."
 msgstr "Pay. connexion réussie."
 
-#: includes/classes/PPMFWC/Gateways.php:336
+#: includes/classes/PPMFWC/Gateways.php:328
 msgid ""
 "The following payment methods can be enabled, please select a payment method "
 "to open the settings:"
@@ -439,17 +439,17 @@ msgstr ""
 "Les modes de paiement suivants peuvent être activés, veuillez sélectionner "
 "un mode de paiement pour ouvrir les paramètres:"
 
-#: includes/classes/PPMFWC/Gateways.php:362
+#: includes/classes/PPMFWC/Gateways.php:354
 msgid "If you have a feature request or other ideas, let us know!"
 msgstr ""
 "Si vous avez une demande de fonctionnalité ou d’autres idées, faites-le nous "
 "savoir!"
 
-#: includes/classes/PPMFWC/Gateways.php:363
+#: includes/classes/PPMFWC/Gateways.php:355
 msgid "Your submission will be reviewed by our development team."
 msgstr "Votre soumission sera examinée par notre équipe de développement."
 
-#: includes/classes/PPMFWC/Gateways.php:364
+#: includes/classes/PPMFWC/Gateways.php:356
 msgid ""
 "If needed, we will contact you for further information via the e-mail "
 "address provided."
@@ -457,7 +457,7 @@ msgstr ""
 "Si nécessaire, nous vous contacterons pour plus d’informations via l’adresse "
 "e-mail fournie."
 
-#: includes/classes/PPMFWC/Gateways.php:365
+#: includes/classes/PPMFWC/Gateways.php:357
 msgid ""
 "Please note: this form is not for Support requests, please contact "
 "support@pay.nl for this."
@@ -465,65 +465,65 @@ msgstr ""
 "Veuillez noter que ce formulaire n’est pas destiné aux demandes "
 "d’assistance, veuillez support@pay.nl contacter pour cela."
 
-#: includes/classes/PPMFWC/Gateways.php:369
+#: includes/classes/PPMFWC/Gateways.php:361
 msgid "Email (optional)"
 msgstr "E-mail (optionnel)"
 
-#: includes/classes/PPMFWC/Gateways.php:369
+#: includes/classes/PPMFWC/Gateways.php:361
 msgid "Please fill in a valid email."
 msgstr "Veuillez remplir un e-mail valide."
 
-#: includes/classes/PPMFWC/Gateways.php:373
+#: includes/classes/PPMFWC/Gateways.php:365
 msgid "Message"
 msgstr "Message"
 
-#: includes/classes/PPMFWC/Gateways.php:373
+#: includes/classes/PPMFWC/Gateways.php:365
 msgid "Please fill in a message."
 msgstr "Veuillez remplir un message."
 
-#: includes/classes/PPMFWC/Gateways.php:377
+#: includes/classes/PPMFWC/Gateways.php:369
 msgid "Send"
 msgstr "Envoyer"
 
-#: includes/classes/PPMFWC/Gateways.php:379
+#: includes/classes/PPMFWC/Gateways.php:371
 msgid "Sent! Thank you for your contribution."
 msgstr "Envoyèrent! Merci de votre contribution."
 
-#: includes/classes/PPMFWC/Gateways.php:379
-#: includes/classes/PPMFWC/Gateways.php:380
+#: includes/classes/PPMFWC/Gateways.php:371
+#: includes/classes/PPMFWC/Gateways.php:372
 msgid "Close"
 msgstr "Fermer"
 
-#: includes/classes/PPMFWC/Gateways.php:380
+#: includes/classes/PPMFWC/Gateways.php:372
 msgid "Couldn't send email."
 msgstr "Impossible d’envoyer un e-mail."
 
-#: includes/classes/PPMFWC/Gateways.php:396
+#: includes/classes/PPMFWC/Gateways.php:388
 msgid "Pay. Suggestion?"
 msgstr "Pay. Suggestion?"
 
-#: includes/classes/PPMFWC/Gateways.php:405
-#: includes/classes/PPMFWC/Gateways.php:412
+#: includes/classes/PPMFWC/Gateways.php:397
+#: includes/classes/PPMFWC/Gateways.php:404
 msgid "Pay. Payment Methods"
 msgstr "Pay. Modes de paiement"
 
-#: includes/classes/PPMFWC/Gateways.php:414
+#: includes/classes/PPMFWC/Gateways.php:406
 msgid "Complete connecting your Pay. account on the "
 msgstr "Compléter la connexion de votre Pay. sur le "
 
-#: includes/classes/PPMFWC/Gateways.php:415
+#: includes/classes/PPMFWC/Gateways.php:407
 msgid "setup page"
 msgstr "page de configuration"
 
-#: includes/classes/PPMFWC/Gateways.php:425
+#: includes/classes/PPMFWC/Gateways.php:417
 msgid "Pay. Order State Automation"
 msgstr "Pay. Automatisation de l’état des commandes"
 
-#: includes/classes/PPMFWC/Gateways.php:444
+#: includes/classes/PPMFWC/Gateways.php:436
 msgid "Pay. status "
 msgstr "Pay. statut "
 
-#: includes/classes/PPMFWC/Gateways.php:448
+#: includes/classes/PPMFWC/Gateways.php:440
 #, php-format
 msgid ""
 "Select which status an order should have when Pay's transaction status is %s"
@@ -531,15 +531,15 @@ msgstr ""
 "Sélectionnez le statut d’une commande lorsque le statut de transaction de "
 "Pay. est %s"
 
-#: includes/classes/PPMFWC/Gateways.php:457
+#: includes/classes/PPMFWC/Gateways.php:449
 msgid "Pay. Settings"
 msgstr "Pay. Paramètres"
 
-#: includes/classes/PPMFWC/Gateways.php:463
+#: includes/classes/PPMFWC/Gateways.php:455
 msgid "Pay. checkout style"
 msgstr "Pay. Style de paiement"
 
-#: includes/classes/PPMFWC/Gateways.php:465
+#: includes/classes/PPMFWC/Gateways.php:457
 msgid ""
 "Select this box to apply a style preset to the checkout with names to the "
 "left and logo's to the right."
@@ -547,29 +547,29 @@ msgstr ""
 "Cochez cette case pour appliquer un style prédéfini à la caisse avec les "
 "noms à gauche et les logos à droite"
 
-#: includes/classes/PPMFWC/Gateways.php:470
+#: includes/classes/PPMFWC/Gateways.php:462
 msgid "Payment screen language"
 msgstr "Langue de l’écran de paiement"
 
-#: includes/classes/PPMFWC/Gateways.php:473
+#: includes/classes/PPMFWC/Gateways.php:465
 msgid "Select the language in which payment screens should open"
 msgstr ""
 "Sélectionnez la langue dans laquelle les écrans de paiement doivent s’ouvrir"
 
-#: includes/classes/PPMFWC/Gateways.php:478
+#: includes/classes/PPMFWC/Gateways.php:470
 msgid "Refund processing"
 msgstr "Traitement des remboursements"
 
-#: includes/classes/PPMFWC/Gateways.php:480
+#: includes/classes/PPMFWC/Gateways.php:472
 msgid "Process refunds in WooCommerce that are initiated in My.pay"
 msgstr ""
 "Traiter les remboursements dans WooCommerce qui sont initiés dans My.pay"
 
-#: includes/classes/PPMFWC/Gateways.php:485
+#: includes/classes/PPMFWC/Gateways.php:477
 msgid "Auto capture"
 msgstr "Capture automatique"
 
-#: includes/classes/PPMFWC/Gateways.php:487
+#: includes/classes/PPMFWC/Gateways.php:479
 msgid ""
 "Enable auto capture for authorized transactions. Captures will be initiated "
 "when an order is set to Completed."
@@ -577,11 +577,11 @@ msgstr ""
 "Activez la capture automatique pour les transactions autorisées. Les "
 "captures seront lancées lorsqu’une commande est définie sur Complétée"
 
-#: includes/classes/PPMFWC/Gateways.php:492
+#: includes/classes/PPMFWC/Gateways.php:484
 msgid "Auto void"
 msgstr "Annulation automatique"
 
-#: includes/classes/PPMFWC/Gateways.php:494
+#: includes/classes/PPMFWC/Gateways.php:486
 msgid ""
 "Enable auto void for authorized transactions. Voids will be initiated when "
 "an order is set to Cancelled."
@@ -589,11 +589,11 @@ msgstr ""
 "Activez l’annulation automatique pour les transactions autorisées. Les "
 "annulations seront initiées lorsqu’une commande est définie sur Annulée"
 
-#: includes/classes/PPMFWC/Gateways.php:499
+#: includes/classes/PPMFWC/Gateways.php:491
 msgid "Show VAT number"
 msgstr "Afficher le numéro de TVA"
 
-#: includes/classes/PPMFWC/Gateways.php:501
+#: includes/classes/PPMFWC/Gateways.php:493
 msgid ""
 "Enable to add an extra field to the checkout for customers to enter their "
 "VAT number"
@@ -601,11 +601,11 @@ msgstr ""
 "Activez cette option pour ajouter un champ supplémentaire dans le checkout "
 "pour que les clients puissent saisir leur numéro de TVA"
 
-#: includes/classes/PPMFWC/Gateways.php:506
+#: includes/classes/PPMFWC/Gateways.php:498
 msgid "Show COC number"
 msgstr "Afficher le numéro SIREN"
 
-#: includes/classes/PPMFWC/Gateways.php:508
+#: includes/classes/PPMFWC/Gateways.php:500
 msgid ""
 "Enable to add an extra field to the checkout for customers to enter their "
 "COC number"
@@ -613,19 +613,19 @@ msgstr ""
 "Activez cette option pour ajouter un champ supplémentaire dans le checkout "
 "afin que les clients puissent saisir leur numéro SIREN"
 
-#: includes/classes/PPMFWC/Gateways.php:513
+#: includes/classes/PPMFWC/Gateways.php:505
 msgid "Use high risk methods"
 msgstr "Utiliser des méthodes à haut risque"
 
-#: includes/classes/PPMFWC/Gateways.php:515
+#: includes/classes/PPMFWC/Gateways.php:507
 msgid "Enable when you are using high risk payment methods"
 msgstr "Activer lorsque vous utilisez des moyens de paiement à haut risque"
 
-#: includes/classes/PPMFWC/Gateways.php:520
+#: includes/classes/PPMFWC/Gateways.php:512
 msgid "Extended logging"
 msgstr "Journalisation étendue"
 
-#: includes/classes/PPMFWC/Gateways.php:522
+#: includes/classes/PPMFWC/Gateways.php:514
 msgid ""
 "Log payment information. Logfiles can be found at: WooCommerce > Status > "
 "Logs"
@@ -633,26 +633,29 @@ msgstr ""
 "Consigner les informations de paiement. Les fichiers journaux peuvent être "
 "trouvés à: WooCommerce > Status > Logs"
 
-#: includes/classes/PPMFWC/Gateways.php:527
-msgid "Use SSL"
-msgstr "Utiliser SSL"
+#: includes/classes/PPMFWC/Gateways.php:519
+msgid "SSL verify peer"
+msgstr "SSL verify peer"
 
-#: includes/classes/PPMFWC/Gateways.php:529
-msgid "Enable or disable SSL for secure communications"
+#: includes/classes/PPMFWC/Gateways.php:521
+msgid ""
+"Uncheck this box if you have SSL certificate errors that you don't know how "
+"to fix"
 msgstr ""
-"Activer ou désactiver le protocole SSL pour les communications sécurisées"
+"Décochez cette case si vous avez des erreurs de certificat SSL que vous ne "
+"savez pas comment corriger"
 
-#: includes/classes/PPMFWC/Gateways.php:535
+#: includes/classes/PPMFWC/Gateways.php:527
 msgid "Alternative exchange URL"
 msgstr "URL d’échange alternative"
 
-#: includes/classes/PPMFWC/Gateways.php:538
+#: includes/classes/PPMFWC/Gateways.php:530
 msgid "Use your own exchange-handler. Requests will be send as GET."
 msgstr ""
 "Utilisez votre propre d’éxchange-handler. Requests seront envoyées en tant "
 "que GET."
 
-#: includes/classes/PPMFWC/Gateways.php:539
+#: includes/classes/PPMFWC/Gateways.php:531
 msgid ""
 "Example: https://www.yourdomain.nl/exchange_handler?"
 "action=#action#&order_id=#order_id#"
@@ -660,25 +663,25 @@ msgstr ""
 "Exemple: https://www.yourdomain.nl/exchange_handler?"
 "action=#action#&order_id=#order_id#"
 
-#: includes/classes/PPMFWC/Gateways.php:540
+#: includes/classes/PPMFWC/Gateways.php:532
 msgid "For more info see: "
 msgstr "Pour plus d’informations, voir: "
 
-#: includes/classes/PPMFWC/Gateways.php:545
+#: includes/classes/PPMFWC/Gateways.php:537
 msgid "Failover gateway"
 msgstr "Failover gateway"
 
-#: includes/classes/PPMFWC/Gateways.php:548
+#: includes/classes/PPMFWC/Gateways.php:540
 msgid "Leave this empty unless advised otherwise by Pay. Support"
 msgstr ""
 "Laissez cette option vide, sauf indication contraire de la part de Pay. "
 "Support"
 
-#: includes/classes/PPMFWC/Gateways.php:552
+#: includes/classes/PPMFWC/Gateways.php:544
 msgid "Order description prefix"
 msgstr "Préfixe de description de la commande"
 
-#: includes/classes/PPMFWC/Gateways.php:555
+#: includes/classes/PPMFWC/Gateways.php:547
 msgid ""
 "Optionally add a custom order description prefix. Use a double underscore to "
 "add an extra space"
@@ -686,11 +689,11 @@ msgstr ""
 "Préfixe de description de commande personnalisé. Utilisez un double trait de "
 "soulignement pour ajouter un espace supplémentaire"
 
-#: includes/classes/PPMFWC/Gateways.php:559
+#: includes/classes/PPMFWC/Gateways.php:551
 msgid "Follow payment method"
 msgstr "Suivre le mode de paiement"
 
-#: includes/classes/PPMFWC/Gateways.php:562
+#: includes/classes/PPMFWC/Gateways.php:554
 msgid ""
 "Default set to Yes. This will ensure the order is updated with the actual "
 "payment method used to complete the order. This can differ from the payment "
@@ -700,11 +703,11 @@ msgstr ""
 "avec le mode de paiement réel utilisé pour terminer la commande. Celui-ci "
 "peut différer du mode de paiement initialement sélectionné"
 
-#: includes/classes/PPMFWC/Gateways.php:567
+#: includes/classes/PPMFWC/Gateways.php:559
 msgid "Test IP address"
 msgstr "Tester l’adresse IP"
 
-#: includes/classes/PPMFWC/Gateways.php:569
+#: includes/classes/PPMFWC/Gateways.php:561
 msgid ""
 "Transactions started from these IP addresses will use testmode. Comma "
 "separate IPs for multiple inputs"
@@ -712,60 +715,60 @@ msgstr ""
 "Les transactions démarrées à partir de ces adresses IP utiliseront le mode "
 "test. Adresses IP séparées par des virgules pour plusieurs entrées"
 
-#: includes/classes/PPMFWC/Gateways.php:569
+#: includes/classes/PPMFWC/Gateways.php:561
 msgid "Current IP address:"
 msgstr "Adresse IP actuelle :"
 
-#: includes/classes/PPMFWC/Gateways.php:595
+#: includes/classes/PPMFWC/Gateways.php:587
 msgid "Pay. Setup"
 msgstr "Pay. Setup"
 
-#: includes/classes/PPMFWC/Gateways.php:601
+#: includes/classes/PPMFWC/Gateways.php:593
 msgid "Token Code *"
 msgstr "Token code *"
 
-#: includes/classes/PPMFWC/Gateways.php:606
+#: includes/classes/PPMFWC/Gateways.php:598
 msgid "The AT-code belonging to your API token, you can find this "
 msgstr "Le code AT appartenant à votre jeton API, vous pouvez le trouver "
 
-#: includes/classes/PPMFWC/Gateways.php:609
-#: includes/classes/PPMFWC/Gateways.php:620
-#: includes/classes/PPMFWC/Gateways.php:632
+#: includes/classes/PPMFWC/Gateways.php:601
+#: includes/classes/PPMFWC/Gateways.php:612
+#: includes/classes/PPMFWC/Gateways.php:624
 msgid "here"
 msgstr "ici"
 
-#: includes/classes/PPMFWC/Gateways.php:613
+#: includes/classes/PPMFWC/Gateways.php:605
 msgid "API token"
 msgstr "API Token"
 
-#: includes/classes/PPMFWC/Gateways.php:617
+#: includes/classes/PPMFWC/Gateways.php:609
 msgid ""
 "The API token used to communicate with the Pay. API, you can find your API "
 "token "
 msgstr ""
 "Le jeton API utilisé pour communiquer avec l’API Pay, vous pouvez le trouver "
 
-#: includes/classes/PPMFWC/Gateways.php:624
+#: includes/classes/PPMFWC/Gateways.php:616
 msgid "Sales Location *"
 msgstr "Sales location *"
 
-#: includes/classes/PPMFWC/Gateways.php:629
+#: includes/classes/PPMFWC/Gateways.php:621
 msgid "The SL-code of your Sales Location, you can find your SL-code "
 msgstr "Le code SL de votre sales location, vous pouvez le trouver "
 
-#: includes/classes/PPMFWC/Gateways.php:634
+#: includes/classes/PPMFWC/Gateways.php:626
 msgid "The Sales Location should be in the following format: SL-xxxx-xxxx"
 msgstr "Sales location doit se présenter sous la forme suivante: SL-xxxx-xxxx"
 
-#: includes/classes/PPMFWC/Gateways.php:637
+#: includes/classes/PPMFWC/Gateways.php:629
 msgid "Test mode"
 msgstr "Mode test"
 
-#: includes/classes/PPMFWC/Gateways.php:639
+#: includes/classes/PPMFWC/Gateways.php:631
 msgid "Enable to start transactions in test mode"
 msgstr "Activer pour démarrer les transactions en mode test"
 
-#: includes/classes/PPMFWC/Gateways.php:759
+#: includes/classes/PPMFWC/Gateways.php:751
 #, php-format
 msgid ""
 "Unfortunately the payment has been denied by %s. Please try again or use "
@@ -774,7 +777,7 @@ msgstr ""
 "Malheureusement, le paiement a été refusé par %s. Veuillez réessayer ou "
 "utiliser un autre mode de paiement."
 
-#: includes/classes/PPMFWC/Gateways.php:768
+#: includes/classes/PPMFWC/Gateways.php:760
 msgid ""
 "Unfortunately the payment has been denied by the payment method. Please try "
 "again or use another payment method."
@@ -782,11 +785,11 @@ msgstr ""
 "Malheureusement, le paiement a été refusé par le mode de paiement. Veuillez "
 "réessayer ou utiliser un autre mode de paiement."
 
-#: includes/classes/PPMFWC/Gateways.php:1003
+#: includes/classes/PPMFWC/Gateways.php:995
 msgid "The payment has been cancelled, please try again"
 msgstr "Le paiement a été annulé, veuillez réessayer"
 
-#: includes/classes/PPMFWC/Gateways.php:1011
+#: includes/classes/PPMFWC/Gateways.php:1003
 msgid "The payment is pending or not completed"
 msgstr "Le paiement est en attente ou incomplet"
 
@@ -924,13 +927,3 @@ msgstr "Pay.: Capture automatique transaction: %s"
 #, php-format
 msgid "Pay.: Performed auto void on transaction: %s"
 msgstr "Pay.: Annulé automatique transaction: %s"
-
-#~ msgid "SSL verify peer"
-#~ msgstr "SSL verify peer"
-
-#~ msgid ""
-#~ "Uncheck this box if you have SSL certificate errors that you don't know "
-#~ "how to fix"
-#~ msgstr ""
-#~ "Décochez cette case si vous avez des erreurs de certificat SSL que vous "
-#~ "ne savez pas comment corriger"

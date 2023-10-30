@@ -524,9 +524,9 @@ class PPMFWC_Gateways
                 'default' => 'yes',
             );
             $addedSettings[] = array(
-                'name' => esc_html(__('Use SSL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'name' => esc_html(__('SSL verification', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
-                'desc' => esc_html(__('Enable or disable SSL for secure communications', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'desc' => esc_html(__('Enabled by default for secure communications. Strongly recommended to leave this enabled, unless otherwise advised by Pay. Support.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_verify_peer',
                 'default' => 'yes',
             );
