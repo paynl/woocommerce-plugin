@@ -449,7 +449,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @param $message
+     * @param string $message
      * @return array
      * @throws Exception
      */
