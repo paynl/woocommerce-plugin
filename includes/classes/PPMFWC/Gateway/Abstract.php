@@ -497,27 +497,20 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
               'result'   => 'success',
               'redirect' => $payTransaction->getRedirectUrl()
             );
-        } catch (PPMFWC_Exception_Notice $e)
-        {
+        } catch (PPMFWC_Exception_Notice $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Process payment start notice: ' . $e->getMessage());
             $message = $e->getMessage();
             wc_add_notice($message, 'error');
-
         } catch (Exception $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error: ' . esc_html($e->getMessage()), null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
             wc_add_notice(esc_html(__('Could not initiate payment. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
             $message = 'Could not initiate payment. Please try again or use another payment method.';
-
         }
 
-//        $isBlocks = PPMFWC_Helper_Data::getPostTextField('isblocks');
-//        $message = esc_html(__($message, PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
-//        if ($isBlocks !== false) {
-            return array(
-              'result' => 'failed',
-              'errorMessage' => $message
-            );
-        //}
+        return array(
+          'result' => 'failed',
+          'errorMessage' => $message
+        );
     }
 
     /**
@@ -559,7 +552,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $prefix = empty(get_option('paynl_order_description_prefix')) ? '' : get_option('paynl_order_description_prefix');
 
         $startData = array(
-            'amount'        => 6000000, $order->get_total(),
+            'amount'        => $order->get_total(),
             'returnUrl'     => $returnUrl,
             'exchangeUrl'   => $exchangeUrl,
             'orderNumber'   => $order->get_order_number(),
