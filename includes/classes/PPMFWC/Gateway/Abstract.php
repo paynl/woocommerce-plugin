@@ -449,24 +449,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @param string $message
-     * @return array
-     * @throws Exception
-     */
-    private function processError($message)
-    {
-        $isBlocks = PPMFWC_Helper_Data::getPostTextField('isblocks');
-        $message = esc_html(__($message, PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
-        if ($isBlocks !== false) {
-            return array(
-              'result' => 'failed',
-              'errorMessage' => $message
-            );
-        }
-        throw new Exception($message);
-    }
-
-    /**
      * @param integer $order_id
      * @return array
      */
@@ -476,14 +458,15 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         try {
             if (PPMFWC_Helper_Data::getPostTextField('updatecustomer')) {
-                return $this->processError('Updated customer date');
+                throw new PPMFWC_Exception_Notice('Updated customer data');
             }
 
             $dobRequired = $this->get_option('birthdate_required');
             if ($dobRequired == 'yes') {
                 $birthdate = PPMFWC_Helper_Data::getPostTextField($this->getId() . '_birthdate');
                 if (empty($birthdate) || strlen(trim($birthdate)) != 10) {
-                    return $this->processError('Please enter your date of birth, this field is required.');
+                    $message = esc_html(__('Please enter your date of birth, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+                    throw new PPMFWC_Exception_Notice($message);
                 }
             }
 
@@ -494,7 +477,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             if (empty($payTransaction)) {
                 # We want to know when no exception was thrown and startTransaction returned empty
                 PPMFWC_Helper_Data::ppmfwc_payLogger('startTransaction returned false or empty', null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
-                return $this->processError('Could not start payment');
+                throw new Exception('Could not start payment');
             }
 
             $order->add_order_note(sprintf(esc_html(__('Pay.: Transaction started: %s (%s)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payTransaction->getTransactionId(), $order->get_payment_method_title()));
@@ -509,18 +492,32 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             PPMFWC_Helper_Transaction::newTransaction($payTransaction->getTransactionId(), $paymentOption, $order->get_total(), $order_id, '');
 
-            # Return succes redirect
+            # Return success redirect
             return array(
               'result'   => 'success',
               'redirect' => $payTransaction->getRedirectUrl()
             );
-        } catch (PPMFWC_Exception_Notice $e) {
+        } catch (PPMFWC_Exception_Notice $e)
+        {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Process payment start notice: ' . $e->getMessage());
-            wc_add_notice($e->getMessage(), 'error');
+            $message = $e->getMessage();
+            wc_add_notice($message, 'error');
+
         } catch (Exception $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error: ' . esc_html($e->getMessage()), null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
             wc_add_notice(esc_html(__('Could not initiate payment. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
+            $message = 'Could not initiate payment. Please try again or use another payment method.';
+
         }
+
+//        $isBlocks = PPMFWC_Helper_Data::getPostTextField('isblocks');
+//        $message = esc_html(__($message, PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+//        if ($isBlocks !== false) {
+            return array(
+              'result' => 'failed',
+              'errorMessage' => $message
+            );
+        //}
     }
 
     /**
@@ -562,7 +559,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $prefix = empty(get_option('paynl_order_description_prefix')) ? '' : get_option('paynl_order_description_prefix');
 
         $startData = array(
-            'amount'        => $order->get_total(),
+            'amount'        => 6000000, $order->get_total(),
             'returnUrl'     => $returnUrl,
             'exchangeUrl'   => $exchangeUrl,
             'orderNumber'   => $order->get_order_number(),
