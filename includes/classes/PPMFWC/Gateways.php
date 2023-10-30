@@ -526,7 +526,7 @@ class PPMFWC_Gateways
             $addedSettings[] = array(
                 'name' => esc_html(__('SSL verification', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
-                'desc' => esc_html(__('Enabled by default for secure communications. Strongly recommended to leave this enabled, unless otherwise advised by Pay. Support.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'desc' => esc_html(__('Enabled by default for secure communications. Strongly recommended to leave this enabled, unless otherwise advised by Pay. Support.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
                 'id' => 'paynl_verify_peer',
                 'default' => 'yes',
             );
