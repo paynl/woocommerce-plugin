@@ -53,3 +53,15 @@
 .PPMFWC_extraData input[type=date] {
     margin-left: 10px;
 }
+
+.descriptionError {
+    color: #ff2525;
+    padding: 0px 15px;
+    width: 100%;
+    display: block;
+    margin: 13px 0px;
+    background-color: #ffd5d5;
+    border-radius: 4px;
+    line-height: 39px;
+    font-size: 14px;
+}

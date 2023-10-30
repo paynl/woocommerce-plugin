@@ -1,12 +1,45 @@
+
 const PaynlComponent = (props) =>{
     let {image_path, useEffect, gateway} = props
     const [ selectedIssuer, selectIssuer ] = wp.element.useState('');
+    const [ processingErrorMessage, setErrorMessage ] = wp.element.useState('');
     const [ cocNumber, setCocNumber ] = wp.element.useState('');
     const [ vatNumber, setVatNumber ] = wp.element.useState('');
     const [ dob, selectDate ] = wp.element.useState('');
     const { eventRegistration, emitResponse } = props;
-    const { onPaymentSetup } = eventRegistration;
+    const {onPaymentSetup, onCheckoutValidation, onCheckoutFail} = eventRegistration;
     let payIssuers = gateway.issuers;
+
+    useEffect(() => {
+        const unsubscribddeProcessing = onCheckoutFail(
+            (props) => {
+                setErrorMessage(props.processingResponse.paymentDetails.errorMessage);
+                return {
+                    type: emitResponse.responseTypes.FAIL,
+                    errorMessage: 'Error',
+                    message: 'Error occurred, please try again',
+                };
+            }
+        );
+        return () => {
+            unsubscribddeProcessing()
+        };
+    }, [onCheckoutFail]);
+
+    // useEffect(() => {
+    //     const unsubscribeCheckoutValidation = onCheckoutValidation(
+    //         () => {
+    //             console.log('onCheckoutValidation');
+    //             return {
+    //                 type: emitResponse.responseTypes.SUCCESS,
+    //                 errorMessage: 'Error'
+    //             };
+    //         }
+    //     );
+    //     return () => {
+    //         unsubscribeCheckoutValidation()
+    //     };
+    // }, [onCheckoutValidation]);
 
     useEffect(() => {
         const unsubscribe = onPaymentSetup(() => {
@@ -14,8 +47,8 @@ const PaynlComponent = (props) =>{
                 type: emitResponse.responseTypes.SUCCESS,
                 meta: {},
             };
-
             let paymentMethodData = {};
+            paymentMethodData['isblocks'] = '1',
             paymentMethodData['selectedIssuer'] = selectedIssuer;
             paymentMethodData['vat_number'] = vatNumber;
             paymentMethodData['coc_number'] = cocNumber;
@@ -31,6 +64,7 @@ const PaynlComponent = (props) =>{
         return React.createElement('div', {className: 'PPMFWC_container'},
                 React.createElement('img', {src: image_path}, null),
                 React.createElement('span', {className: 'description'}, gateway.description),
+                React.createElement('span', {className: 'descriptionError'}, processingErrorMessage),
                 React.createElement('div', {},
                     (gateway.paymentMethodId == 'pay_gateway_ideal' ?
                         React.createElement('div', {className: 'field'},
