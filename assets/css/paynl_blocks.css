@@ -13,3 +13,12 @@
     width: 80%;
     margin-left: 16px;
 }
+
+.PPMFWC_desc select {
+    margin-left: 16px;
+    width: 80%;
+    padding: 3px 8px;
+    background-color: transparent;
+    border: 1px solid #CCC;
+    margin-top: 16px;
+}

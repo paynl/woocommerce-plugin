@@ -74,7 +74,9 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
                   'paymentMethodId' => $gateway_id,
                   'title' => $gateway->get_title(),
                   'description' => $gateway->description,
-                  'image_path' => $gateway->getIcon()
+                  'image_path' => $gateway->getIcon(),
+                  'issuers' => $gateway->getIssuers(),
+                  'text_selectissuer' => __('Select an issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)
                 );
             }
             wp_enqueue_script('paynl-blocks-js', $blocks_js_route, array('wc-blocks-registry'), (string)time(), true);
