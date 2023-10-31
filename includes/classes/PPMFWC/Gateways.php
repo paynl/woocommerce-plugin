@@ -520,13 +520,6 @@ class PPMFWC_Gateways
                 'default' => 'no',
             );
             $addedSettings[] = array(
-                'name' => __('Use high risk methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                'type' => 'checkbox',
-                'desc' => esc_html(__("Enable when you are using high risk payment methods", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'id' => 'paynl_high_risk',
-                'default' => 'no',
-            );
-            $addedSettings[] = array(
                 'name' => __('Extended logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                 'type' => 'checkbox',
                 'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
