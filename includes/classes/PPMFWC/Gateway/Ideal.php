@@ -38,7 +38,19 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
      */
     public function getIssuers()
     {
-        return PPMFWC_Helper_Data::getOptionSubs(self::getOptionId());
+        $issuers = PPMFWC_Helper_Data::getOptionSubs(self::getOptionId());
+        foreach ($issuers as $key => $issuer) {
+            $issuers[$key]['image_path'] = PPMFWC_PLUGIN_URL . 'assets/logos_issuers/qr-' . esc_attr($issuer['option_sub_id']) . '.svg';
+        }
+        return $issuers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSelectionType()
+    {         
+        return $this->get_option('paynl_bankselection');
     }
 
     /**

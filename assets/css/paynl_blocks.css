@@ -65,3 +65,29 @@
     line-height: 39px;
     font-size: 14px;
 }
+
+.PPMFWC_container .issuerradio {
+    margin-top: 0rem;
+    margin-bottom: 0.95rem;
+}
+
+.PPMFWC_container .issuerradio label {
+    width: 100%;
+    display: block;
+}
+
+.PPMFWC_container .issuerradio input {
+    margin-right: 10px;
+}
+
+.PPMFWC_container .issuerlogo {
+    float: none;
+    display: inline-block;
+    width: 50px;
+    height: 35px;
+    vertical-align: middle;
+    max-width: 50px;
+    max-height: 35px;
+    margin: 0;
+    object-fit: unset;
+}
