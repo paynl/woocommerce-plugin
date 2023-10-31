@@ -33,7 +33,7 @@ class PPMFWC_Gateways
      * @param string $default Adds text 'default' for the selected option
      * @param array $excludeStates List of statusus that should not return
      * @return array
-     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
     private static function getAvailableWoocomStatus($default, $excludeStates = array())
     {
@@ -58,88 +58,88 @@ class PPMFWC_Gateways
     }
 
     private static $arrGateways = array(
-      'PPMFWC_Gateway_Alipay',
-      'PPMFWC_Gateway_Amazonpay',
-      'PPMFWC_Gateway_Amex',
-      'PPMFWC_Gateway_Applepay',
-      'PPMFWC_Gateway_Afterpay',
-      'PPMFWC_Gateway_AfterpayInternational',
-      'PPMFWC_Gateway_BataviastadCadeaukaart',
-      'PPMFWC_Gateway_Biercheque',
-      'PPMFWC_Gateway_Biller',
-      'PPMFWC_Gateway_Billink',
-      'PPMFWC_Gateway_Bioscoopbon',
-      'PPMFWC_Gateway_Blik',
-      'PPMFWC_Gateway_BloemenCadeaukaart',
-      'PPMFWC_Gateway_Boekenbon',
-      'PPMFWC_Gateway_Cartasi',
-      'PPMFWC_Gateway_CartasiHighRisk',
-      'PPMFWC_Gateway_Capayable',
-      'PPMFWC_Gateway_CapayableGespreid',
-      'PPMFWC_Gateway_Cartebleue',
-      'PPMFWC_Gateway_CartebleueHighRisk',
-      'PPMFWC_Gateway_Clickandbuy',
-      'PPMFWC_Gateway_CreditClick',
-      'PPMFWC_Gateway_Cashly',
-      'PPMFWC_Gateway_Good4fun',
-      'PPMFWC_Gateway_Dankort',
-      'PPMFWC_Gateway_DankortHighRisk',
-      'PPMFWC_Gateway_DeCadeaukaart',
-      'PPMFWC_Gateway_Dinerbon',
-      'PPMFWC_Gateway_Eps',
-      'PPMFWC_Gateway_Fashioncheque',
-      'PPMFWC_Gateway_Fashiongiftcard',
-      'PPMFWC_Gateway_FestivalCadeaukaart',
-      'PPMFWC_Gateway_Focum',
-      'PPMFWC_Gateway_Gezondheidsbon',
-      'PPMFWC_Gateway_Giropay',
-      'PPMFWC_Gateway_Givacard',
-      'PPMFWC_Gateway_Googlepay',
-      'PPMFWC_Gateway_HuisenTuinCadeau',
-      'PPMFWC_Gateway_Ideal',
-      'PPMFWC_Gateway_Incasso',
-      'PPMFWC_Gateway_Instore',
-      'PPMFWC_Gateway_Klarna',
-      'PPMFWC_Gateway_Klarnakp',
-      'PPMFWC_Gateway_Maestro',
-      'PPMFWC_Gateway_MaestroHighRisk',
-      'PPMFWC_Gateway_Minitixsms',
-      'PPMFWC_Gateway_Mistercash',
-      'PPMFWC_Gateway_Monizze',
-      'PPMFWC_Gateway_Multibanco',
-      'PPMFWC_Gateway_Mybank',
-      'PPMFWC_Gateway_Nexi',
-      'PPMFWC_Gateway_NexiHighRisk',
-      'PPMFWC_Gateway_OkPayments',
-      'PPMFWC_Gateway_Overboeking',
-      'PPMFWC_Gateway_ParfumCadeaukaart',
-      'PPMFWC_Gateway_OnlineBankbetaling',
-      'PPMFWC_Gateway_P24',
-      'PPMFWC_Gateway_Payconiq',
-      'PPMFWC_Gateway_Paypal',
-      'PPMFWC_Gateway_Paysafecard',
-      'PPMFWC_Gateway_Phone',
-      'PPMFWC_Gateway_Podiumcadeaukaart',
-      'PPMFWC_Gateway_Postepay',
-      'PPMFWC_Gateway_PostepayHighRisk',
-      'PPMFWC_Gateway_ShoesAndSneakers',
-      'PPMFWC_Gateway_Sodexo',
-      'PPMFWC_Gateway_Sofortbanking',
-      'PPMFWC_Gateway_SofortbankingDigitalServices',
-      'PPMFWC_Gateway_SofortbankingHighRisk',
-      'PPMFWC_Gateway_Spraypay',
-      'PPMFWC_Gateway_Tikkie',
-      'PPMFWC_Gateway_Trustly',
-      'PPMFWC_Gateway_Visamastercard',
-      'PPMFWC_Gateway_VisamastercardHighRisk',
-      'PPMFWC_Gateway_Vvvgiftcard',
-      'PPMFWC_Gateway_Webshopgiftcard',
-      'PPMFWC_Gateway_Wijncadeau',
-      'PPMFWC_Gateway_Winkelcheque',
-      'PPMFWC_Gateway_Wechatpay',
-      'PPMFWC_Gateway_Yourgift',
-      'PPMFWC_Gateway_YourGreenGiftCard',
-      'PPMFWC_Gateway_Yehhpay',
+        'PPMFWC_Gateway_Alipay',
+        'PPMFWC_Gateway_Amazonpay',
+        'PPMFWC_Gateway_Amex',
+        'PPMFWC_Gateway_Applepay',
+        'PPMFWC_Gateway_Afterpay',
+        'PPMFWC_Gateway_AfterpayInternational',
+        'PPMFWC_Gateway_BataviastadCadeaukaart',
+        'PPMFWC_Gateway_Biercheque',
+        'PPMFWC_Gateway_Biller',
+        'PPMFWC_Gateway_Billink',
+        'PPMFWC_Gateway_Bioscoopbon',
+        'PPMFWC_Gateway_Blik',
+        'PPMFWC_Gateway_BloemenCadeaukaart',
+        'PPMFWC_Gateway_Boekenbon',
+        'PPMFWC_Gateway_Cartasi',
+        'PPMFWC_Gateway_CartasiHighRisk',
+        'PPMFWC_Gateway_Capayable',
+        'PPMFWC_Gateway_CapayableGespreid',
+        'PPMFWC_Gateway_Cartebleue',
+        'PPMFWC_Gateway_CartebleueHighRisk',
+        'PPMFWC_Gateway_Clickandbuy',
+        'PPMFWC_Gateway_CreditClick',
+        'PPMFWC_Gateway_Cashly',
+        'PPMFWC_Gateway_Good4fun',
+        'PPMFWC_Gateway_Dankort',
+        'PPMFWC_Gateway_DankortHighRisk',
+        'PPMFWC_Gateway_DeCadeaukaart',
+        'PPMFWC_Gateway_Dinerbon',
+        'PPMFWC_Gateway_Eps',
+        'PPMFWC_Gateway_Fashioncheque',
+        'PPMFWC_Gateway_Fashiongiftcard',
+        'PPMFWC_Gateway_FestivalCadeaukaart',
+        'PPMFWC_Gateway_Focum',
+        'PPMFWC_Gateway_Gezondheidsbon',
+        'PPMFWC_Gateway_Giropay',
+        'PPMFWC_Gateway_Givacard',
+        'PPMFWC_Gateway_Googlepay',
+        'PPMFWC_Gateway_HuisenTuinCadeau',
+        'PPMFWC_Gateway_Ideal',
+        'PPMFWC_Gateway_Incasso',
+        'PPMFWC_Gateway_Instore',
+        'PPMFWC_Gateway_Klarna',
+        'PPMFWC_Gateway_Klarnakp',
+        'PPMFWC_Gateway_Maestro',
+        'PPMFWC_Gateway_MaestroHighRisk',
+        'PPMFWC_Gateway_Minitixsms',
+        'PPMFWC_Gateway_Mistercash',
+        'PPMFWC_Gateway_Monizze',
+        'PPMFWC_Gateway_Multibanco',
+        'PPMFWC_Gateway_Mybank',
+        'PPMFWC_Gateway_Nexi',
+        'PPMFWC_Gateway_NexiHighRisk',
+        'PPMFWC_Gateway_OkPayments',
+        'PPMFWC_Gateway_Overboeking',
+        'PPMFWC_Gateway_ParfumCadeaukaart',
+        'PPMFWC_Gateway_OnlineBankbetaling',
+        'PPMFWC_Gateway_P24',
+        'PPMFWC_Gateway_Payconiq',
+        'PPMFWC_Gateway_Paypal',
+        'PPMFWC_Gateway_Paysafecard',
+        'PPMFWC_Gateway_Phone',
+        'PPMFWC_Gateway_Podiumcadeaukaart',
+        'PPMFWC_Gateway_Postepay',
+        'PPMFWC_Gateway_PostepayHighRisk',
+        'PPMFWC_Gateway_ShoesAndSneakers',
+        'PPMFWC_Gateway_Sodexo',
+        'PPMFWC_Gateway_Sofortbanking',
+        'PPMFWC_Gateway_SofortbankingDigitalServices',
+        'PPMFWC_Gateway_SofortbankingHighRisk',
+        'PPMFWC_Gateway_Spraypay',
+        'PPMFWC_Gateway_Tikkie',
+        'PPMFWC_Gateway_Trustly',
+        'PPMFWC_Gateway_Visamastercard',
+        'PPMFWC_Gateway_VisamastercardHighRisk',
+        'PPMFWC_Gateway_Vvvgiftcard',
+        'PPMFWC_Gateway_Webshopgiftcard',
+        'PPMFWC_Gateway_Wijncadeau',
+        'PPMFWC_Gateway_Winkelcheque',
+        'PPMFWC_Gateway_Wechatpay',
+        'PPMFWC_Gateway_Yourgift',
+        'PPMFWC_Gateway_YourGreenGiftCard',
+        'PPMFWC_Gateway_Yehhpay',
     );
 
     /**
@@ -382,6 +382,16 @@ class PPMFWC_Gateways
     }
 
     /**
+     * @return string
+     */
+    public static function ppmfwc_loadAdvancedSettings()
+    {
+        $button = '';
+        $button .= '<a id="paynl_show_advanced_settings" class="button-secondary">' . esc_html(__('Advanced settings [+]', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>';
+        return $button;
+    }
+
+    /**
      * @return array
      */
     public static function ppmfwc_addGlobalSettings()
@@ -523,13 +533,6 @@ class PPMFWC_Gateways
                 'id' => 'paynl_paylogger',
                 'default' => 'yes',
             );
-            $addedSettings[] = array(
-                'name' => esc_html(__('SSL verification', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'type' => 'checkbox',
-                'desc' => esc_html(__('Enabled by default for secure communications. Strongly recommended to leave this enabled, unless otherwise advised by Pay. Support.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
-                'id' => 'paynl_verify_peer',
-                'default' => 'yes',
-            );
 
             $addedSettings[] = array(
                 'name' => __('Alternative exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
@@ -568,6 +571,20 @@ class PPMFWC_Gateways
                 'type' => 'text',
                 'desc' => esc_html(__('Transactions started from these IP addresses will use testmode. Comma separate IPs for multiple inputs', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br/>' . esc_html(__('Current IP address:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . PPMFWC_Helper_Data::getIp(), // phpcs:ignore
                 'id' => 'paynl_test_ipadress',
+            );
+
+            $advancedSettings = self::ppmfwc_loadAdvancedSettings();
+            $addedSettings[] = array(
+                'type' => 'checkbox',
+                'desc' => $advancedSettings,
+                'id' => 'paynl_advanced_settings',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('SSL verification', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'checkbox',
+                'desc' => esc_html(__('Enabled by default for secure communications. Strongly recommended to leave this enabled, unless otherwise advised by Pay. Support.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
+                'id' => 'paynl_verify_peer',
+                'default' => 'yes',
             );
 
             $addedSettings[] = array(
