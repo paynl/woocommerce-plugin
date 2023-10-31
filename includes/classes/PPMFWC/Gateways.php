@@ -311,7 +311,6 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_loadPaymentMethods()
     {
-
         $paymentOptions = self::$arrGateways;
 
         $enabledGateways = WC()->payment_gateways->get_available_payment_gateways();
@@ -358,18 +357,17 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_loadSuggestionForm()
     {
-        $form = '';
-        $form .= '<br /><br />' . esc_html(__('If you have a feature request or other ideas, let us know!', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+        $form = '<br /><br />' . esc_html(__('If you have a feature request or other ideas, let us know!', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
         $form .= '<br />' . esc_html(__('Your submission will be reviewed by our development team.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
         $form .= '<br />' . esc_html(__('If needed, we will contact you for further information via the e-mail address provided.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
         $form .= '<br />' . esc_html(__('Please note: this form is not for Support requests, please contact support@pay.nl for this.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
 
         $form .= '<table class="form-table" id="pay_feature_request_form">';
-        $form .= '<tbody><tr valign="top">';
+        $form .= '<tbody><tr>';
         $form .= '<th scope="row" class="titledesc"><label>' . esc_html(__('Email (optional)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</label><span id="email_error" class="FR_Error">' . esc_html(__('Please fill in a valid email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></th>'; // phpcs:ignore
         $form .= '<td class="forminp forminp-text"><textarea id="FR_Email" name="FR_Email"></textarea></td>';
         $form .= '</tr>';
-        $form .= '<tr valign="top">';
+        $form .= '<tr>';
         $form .= '<th scope="row" class="titledesc"><label>' . esc_html(__('Message', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '*</label><span id="message_error" class="FR_Error">' . esc_html(__('Please fill in a message.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></th>'; // phpcs:ignore
         $form .= '<td class="forminp forminp-text"><textarea id="FR_Message" name="FR_Message"></textarea></td>';
         $form .= '</tr>';
@@ -386,9 +384,7 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_loadAdvancedSettings()
     {
-        $button = '';
-        $button .= '<a id="paynl_show_advanced_settings" class="button-secondary">' . esc_html(__('Advanced settings [+]', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>';
-        return $button;
+        return '<a id="paynl_show_advanced_settings" class="button-secondary">' . esc_html(__('Advanced settings [+]', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>';
     }
 
     /**
