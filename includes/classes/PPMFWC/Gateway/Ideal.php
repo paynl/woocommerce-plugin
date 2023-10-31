@@ -49,7 +49,7 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
      * @return string
      */
     public function getSelectionType()
-    {         
+    {
         return $this->get_option('paynl_bankselection');
     }
 

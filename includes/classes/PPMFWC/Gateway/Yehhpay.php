@@ -61,7 +61,7 @@ class PPMFWC_Gateway_Yehhpay extends PPMFWC_Gateway_Abstract
      * @return boolean
      */
     public function askBirthdate()
-    {         
+    {
         return $this->get_option('ask_birthdate') == 'yes';
     }
 }

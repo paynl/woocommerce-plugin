@@ -348,7 +348,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      * @return boolean
      */
     public function askBirthdate()
-    {         
+    {
         return false;
     }
 
@@ -444,7 +444,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      * @return string
      */
     public function getSelectionType()
-    {         
+    {
         return 'none';
     }
 
