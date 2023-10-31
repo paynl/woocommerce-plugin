@@ -100,11 +100,11 @@
     border-radius: 5px;
 }
 
-input#paynl_advanced_settings{
+input#paynl_advanced_settings {
     display: none;
 }
 
-#paynl_show_advanced_settings{
+#paynl_show_advanced_settings {
     margin-left: -235px;
     position: absolute;
     z-index: 1;
