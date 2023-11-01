@@ -71,13 +71,21 @@
     margin-bottom: 0.95rem;
 }
 
+
 .PPMFWC_container .issuerradio label {
     width: 100%;
     display: block;
+    cursor: pointer;
+}
+
+.PPMFWC_container .issuerradio label:hover {
+    color: black;
 }
 
 .PPMFWC_container .issuerradio input {
     margin-right: 10px;
+    cursor: pointer;
+    outline: none !important;
 }
 
 .PPMFWC_container .issuerlogo {
