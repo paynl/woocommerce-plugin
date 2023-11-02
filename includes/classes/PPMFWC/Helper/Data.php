@@ -225,7 +225,7 @@ class PPMFWC_Helper_Data
         global $wpdb;
 
         if (empty(self::$_options)) {
-            $query = 'SELECT id, name, image, update_date FROM' . $wpdb->prefix . 'pay_options';
+            $query = 'SELECT id, name, image, update_date FROM ' . $wpdb->prefix . 'pay_options';
             $result = $wpdb->get_results($query, ARRAY_A);
             $methods = array();
             foreach ($result as $paymentMethod) {
