@@ -347,6 +347,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     /**
      * @return boolean
      */
+    public function askBirthdate()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
     public static function showApplePayDetection()
     {
         return false;
@@ -433,6 +441,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
+     * @return string
+     */
+    public function getSelectionType()
+    {
+        return 'none';
+    }
+
+    /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public function payment_fields()
@@ -492,18 +508,25 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             PPMFWC_Helper_Transaction::newTransaction($payTransaction->getTransactionId(), $paymentOption, $order->get_total(), $order_id, '');
 
-            # Return succes redirect
+            # Return success redirect
             return array(
               'result'   => 'success',
               'redirect' => $payTransaction->getRedirectUrl()
             );
         } catch (PPMFWC_Exception_Notice $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Process payment start notice: ' . $e->getMessage());
-            wc_add_notice($e->getMessage(), 'error');
+            $message = $e->getMessage();
+            wc_add_notice($message, 'error');
         } catch (Exception $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error: ' . esc_html($e->getMessage()), null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
-            wc_add_notice(esc_html(__('Could not initiate payment. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
+            $message = 'Could not initiate payment. Please try again or use another payment method.';
+            wc_add_notice(esc_html(__($message, PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
         }
+
+        return array(
+          'result' => 'failed',
+          'errorMessage' => $message
+        );
     }
 
     /**

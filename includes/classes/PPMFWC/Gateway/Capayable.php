@@ -63,4 +63,12 @@ class PPMFWC_Gateway_Capayable extends PPMFWC_Gateway_Abstract
     {
         return true;
     }
+
+    /**
+     * @return boolean
+     */
+    public function askBirthdate()
+    {
+        return $this->get_option('ask_birthdate') == 'yes';
+    }
 }
