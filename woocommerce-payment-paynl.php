@@ -83,8 +83,9 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
                   'description' => $gateway->description,
                   'image_path' => $gateway->getIcon(),
                   'issuers' => $gateway->getIssuers(),
+                  'issuersSelectionType' => $gateway->getSelectionType(),
                   'texts' => $texts,
-                  'showbirthdate' => $gateway->showDOB(),
+                  'showbirthdate' => $gateway->askBirthdate(),
                   'showVatField' => get_option('paynl_show_vat_number') == "yes",
                   'showCocField' => get_option('paynl_show_coc_number') == "yes"
                 );

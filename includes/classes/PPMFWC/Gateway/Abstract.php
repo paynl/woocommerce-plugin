@@ -347,6 +347,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     /**
      * @return boolean
      */
+    public function askBirthdate()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
     public static function showApplePayDetection()
     {
         return false;
@@ -430,6 +438,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     public function getIssuers()
     {
         return [];
+    }
+
+    /**
+     * @return string
+     */
+    public function getSelectionType()
+    {
+        return 'none';
     }
 
     /**

@@ -66,7 +66,7 @@ const PaynlComponent = (props) =>{
                 React.createElement('span', {className: 'description'}, gateway.description),
                 React.createElement('span', {className: 'descriptionError'}, processingErrorMessage),
                 React.createElement('div', {},
-                    (gateway.paymentMethodId == 'pay_gateway_ideal' ?
+                    (gateway.paymentMethodId == 'pay_gateway_ideal' && gateway.issuersSelectionType == 'select' ?
                         React.createElement('div', {className: 'field'},
                             React.createElement('span', {className: 'payLabel'}, gateway.texts.issuer),
                             React.createElement('select',  {onChange: (e)=>{
@@ -75,6 +75,21 @@ const PaynlComponent = (props) =>{
                             React.createElement("option", {}, gateway.texts.selectissuer),
                             ...payIssuers.map(issuer => React.createElement("option", {value: issuer.option_sub_id}, issuer.name))
                             )
+                        ) : ''),
+                    (gateway.paymentMethodId == 'pay_gateway_ideal' && gateway.issuersSelectionType == 'radio' ?
+                        React.createElement('div', {className: 'field'},              
+                            React.createElement('div', {className: 'issuerlist'},
+                                ...payIssuers.map(
+                                    issuer => 
+                                        React.createElement('div', {className: 'issuerradio'},  
+                                            React.createElement("label", {},
+                                                React.createElement('input', {type: 'radio', value: issuer.option_sub_id, id: 'ideal_'+issuer.option_sub_id, name: 'ideal_issuer_list', onChange: (e)=>{ selectIssuer(e.target.value)}}),                                                                                           
+                                                React.createElement('img', {src: issuer.image_path, className: 'issuerlogo'}, null),  
+                                                issuer.name
+                                            ),                                                                                  
+                                        ),                                                                          
+                                ),                                
+                            ),                                                   
                         ) : ''),
                     (gateway.showbirthdate == true ?
                         React.createElement('div', {className: 'field'},
