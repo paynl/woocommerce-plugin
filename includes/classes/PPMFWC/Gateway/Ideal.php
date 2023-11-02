@@ -34,6 +34,26 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
     }
 
     /**
+     * @return array
+     */
+    public function getIssuers()
+    {
+        $issuers = PPMFWC_Helper_Data::getOptionSubs(self::getOptionId());
+        foreach ($issuers as $key => $issuer) {
+            $issuers[$key]['image_path'] = PPMFWC_PLUGIN_URL . 'assets/logos_issuers/qr-' . esc_attr($issuer['option_sub_id']) . '.svg';
+        }
+        return $issuers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSelectionType()
+    {
+        return $this->get_option('paynl_bankselection');
+    }
+
+    /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public function payment_fields()
@@ -86,14 +106,14 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                 $default = 'select';
             }
             $this->form_fields['paynl_bankselection'] = array(
-                    'title' => esc_html(__('Bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'title' => esc_html(__('Bank selection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                     'type' => 'select',
-                    'options' => array('none' => esc_html(__('No bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                          'select' => esc_html(__('Selectbox', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                          'radio' => esc_html(__('Radiobuttons', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
+                    'options' => array('none' => esc_html(__('No bank selection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                          'select' => esc_html(__('Select box', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                          'radio' => esc_html(__('Radio buttons', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
                         ),
 
-             'description' => esc_html(__('Pick the type of bankselection', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+             'description' => esc_html(__('Select the type of bank selection.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
              'default' => $default,);
         }
     }

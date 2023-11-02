@@ -2,14 +2,99 @@
     width: 94%;
 }
 
-.PPMFWC_desc img {
+.PPMFWC_container {
+    margin-top: 10px;
+}
+
+.PPMFWC_container img {
     max-height: 50px;
     float: left;
 }
 
-.PPMFWC_desc span {
-    min-height: 48px;
+.PPMFWC_container span.description {
+    min-height: 60px;
     display: inline-block;
     width: 80%;
     margin-left: 16px;
+}
+
+.PPMFWC_container select {
+    padding: 3px 8px;
+    background-color: transparent;
+    border: 1px solid #CCC;
+    margin-top: 16px;
+    min-width: 200px;
+}
+
+.PPMFWC_extraData, .PPMFWC_extraData span {
+    margin-left: 0px;
+    min-height: auto;
+    width: auto;
+}
+
+.PPMFWC_container div.field {
+    margin-top: 15px;
+}
+
+.PPMFWC_container .payLabel {
+    min-width: 145px;
+    display: inline-block;
+}
+
+.PPMFWC_container input[type=text] {
+    padding: 0 10px;
+    background-color: transparent;
+    border: 1px solid #CCC !important;
+    box-shadow: none;
+    min-width: 200px;
+    outline: none;
+}
+
+.PPMFWC_extraData input[type=date] {
+    margin-left: 10px;
+}
+
+.descriptionError {
+    color: #ff2525;
+    padding: 0px 15px;
+    width: 100%;
+    display: block;
+    margin: 13px 0px;
+    background-color: #ffd5d5;
+    border-radius: 4px;
+    line-height: 39px;
+    font-size: 14px;
+}
+
+.PPMFWC_container .issuerradio {
+    margin-top: 0rem;
+    margin-bottom: 0.95rem;
+}
+
+.PPMFWC_container .issuerradio label {
+    width: 100%;
+    display: block;
+    cursor: pointer;
+}
+
+.PPMFWC_container .issuerradio label:hover {
+    color: black;
+}
+
+.PPMFWC_container .issuerradio input {
+    margin-right: 10px;
+    cursor: pointer;
+    outline: none !important;
+}
+
+.PPMFWC_container .issuerlogo {
+    float: none;
+    display: inline-block;
+    width: 50px;
+    height: 35px;
+    vertical-align: middle;
+    max-width: 50px;
+    max-height: 35px;
+    margin: 0;
+    object-fit: unset;
 }
