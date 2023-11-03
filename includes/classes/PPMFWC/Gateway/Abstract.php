@@ -212,19 +212,19 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 );
             }
             if ($this->showDOB()) {
-                $this->form_fields['ask_birthdate'] = array(
-                    'title' => esc_html(__('Show date of birth field', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'type' => 'checkbox',
-                    'description' => esc_html(__('A date of birth is mandatory for most Buy Now Pay Later payment methods. Show this field in the checkout, to improve your customer\'s payment flow.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
-                    'default' => 'yes'
-                );
-
-                $this->form_fields['birthdate_required'] = array(
-                    'title' => esc_html(__('Date of birth required', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'type' => 'checkbox',
-                    'description' => esc_html(__('Make this field a required field in the checkout.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'default' => 'no'
-                );
+                if ($this->showDOB()) {
+                    $this->form_fields['ask_birthdate'] = array(
+                        'title' => esc_html(__('Show date of birth field', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                        'type' => 'select',
+                        'options' => array(
+                            'no' => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                            'yes_optional' => esc_html(__('Yes, as optional', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                            'yes_required' => esc_html(__('Yes, as required', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                        ),
+                        'default' => 'yes',
+                        'description' => esc_html(__('A date of birth is mandatory for most Buy Now Pay Later payment methods. Show this field in the checkout, to improve your customer\'s payment flow.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
+                    );
+                }
             }
 
             if ($this->showApplePayDetection()) {
@@ -458,7 +458,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         }
 
         $ask_birthdate = $this->get_option('ask_birthdate');
-        if ($ask_birthdate == 'yes') {
+        if ($ask_birthdate != 'no') {
             $fieldName = $this->getId() . '_birthdate';
             echo '<fieldset><legend>' . esc_html(__('Date of birth: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</legend><input type="date" class="paydate" placeholder="dd-mm-yyyy" name="' . $fieldName . '" id="' . $fieldName . '"></fieldset> '; // phpcs:ignore
         }
@@ -477,8 +477,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 throw new PPMFWC_Exception_Notice('Updated customer data');
             }
 
+            $dobShow = $this->get_option('ask_birthdate');
             $dobRequired = $this->get_option('birthdate_required');
-            if ($dobRequired == 'yes') {
+
+            if ($dobShow == 'yes_required' || ($dobShow == 'yes' && $dobRequired == 'yes')) {
                 $birthdate = PPMFWC_Helper_Data::getPostTextField($this->getId() . '_birthdate');
                 if (empty($birthdate) || strlen(trim($birthdate)) != 10) {
                     $message = esc_html(__('Please enter your date of birth, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
