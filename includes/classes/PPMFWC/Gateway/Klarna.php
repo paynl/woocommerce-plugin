@@ -78,7 +78,7 @@ class PPMFWC_Gateway_Klarna extends PPMFWC_Gateway_Abstract
      */
     public function showVat()
     {
-        return get_option('paynl_show_vat_number') == "yes";    
+        return get_option('paynl_show_vat_number') == "yes";
     }
 
     /**
@@ -86,6 +86,6 @@ class PPMFWC_Gateway_Klarna extends PPMFWC_Gateway_Abstract
      */
     public function showCoc()
     {
-        return get_option('paynl_show_coc_number') == "yes";    
+        return get_option('paynl_show_coc_number') == "yes";
     }
 }
