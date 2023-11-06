@@ -89,8 +89,8 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
                   'issuersSelectionType' => $gateway->getSelectionType(),
                   'texts' => $texts,
                   'showbirthdate' => $gateway->askBirthdate(),
-                  'showVatField' => get_option('paynl_show_vat_number') == "yes",
-                  'showCocField' => get_option('paynl_show_coc_number') == "yes"
+                  'showVatField' => $gateway->showVat(),
+                  'showCocField' => $gateway->showCoc()
                 );
             }
             wp_enqueue_script('paynl-blocks-js', $blocks_js_route, array('wc-blocks-registry'), (string)time(), true);

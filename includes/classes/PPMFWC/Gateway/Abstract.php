@@ -355,6 +355,22 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     /**
      * @return boolean
      */
+    public function showVat()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showCoc()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
     public static function showApplePayDetection()
     {
         return false;
