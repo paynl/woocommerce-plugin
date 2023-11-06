@@ -765,3 +765,9 @@ msgstr ""
 #, php-format
 msgid "Pay.: Performed auto void on transaction: %s"
 msgstr ""
+
+msgid "Yes, as optional"
+msgstr ""
+
+msgid "Yes, as required"
+msgstr ""
