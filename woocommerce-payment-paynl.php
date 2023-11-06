@@ -63,7 +63,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     if (class_exists('\Automattic\WooCommerce\Blocks\Package')) {
         add_action('wp_enqueue_scripts', function () {
             $blocks_js_route = PPMFWC_PLUGIN_URL . 'assets/js/paynl-blocks.js';
-            $gateways = WC()->payment_gateways()->get_available_payment_gateways();
+            $gateways = WC()->payment_gateways()->payment_gateways();
             $payGateways = [];
 
             $texts['issuer'] = __('Issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
@@ -75,6 +75,9 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
             foreach ($gateways as $gateway_id => $gateway) {
                 /** @var PPMFWC_Gateway_Abstract $gateway */
                 if (substr($gateway_id, 0, 11) != 'pay_gateway') {
+                    continue;
+                }
+                if ($gateway->enabled != 'yes') {
                     continue;
                 }
                 $payGateways[] = array(
