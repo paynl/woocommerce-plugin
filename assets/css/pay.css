@@ -104,8 +104,6 @@ input#paynl_advanced_settings {
     display: none;
 }
 
-#paynl_show_advanced_settings {
+.paynl_advanced_settings_title {
     margin-left: -235px;
-    position: absolute;
-    z-index: 1;
 }

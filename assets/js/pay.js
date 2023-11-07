@@ -20,12 +20,6 @@ jQuery(document).ready(function () {
     if (jQuery('#paynl_payment_methods-description').length) {
         jQuery('.woocommerce-save-button').hide();
     }
-
-    jQuery('#paynl_verify_peer').closest('tr').hide();
-    jQuery('#paynl_show_advanced_settings').click(function (e) {
-        e.preventDefault();
-        jQuery('#paynl_verify_peer').closest('tr').toggle();
-    })
 })
 
 function submitFeatureRequestForm () {

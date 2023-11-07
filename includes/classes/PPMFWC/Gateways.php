@@ -384,7 +384,7 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_loadAdvancedSettings()
     {
-        return '<a id="paynl_show_advanced_settings" class="button-secondary">' . esc_html(__('Advanced settings [+]', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>';
+        return '<h2 class="paynl_advanced_settings_title">' . esc_html(__('Pay. advanced settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</h2>';
     }
 
     /**
@@ -516,31 +516,6 @@ class PPMFWC_Gateways
                 'default' => 'no',
             );
             $addedSettings[] = array(
-                'name' => __('Extended logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                'type' => 'checkbox',
-                'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'id' => 'paynl_paylogger',
-                'default' => 'yes',
-            );
-
-            $addedSettings[] = array(
-                'name' => __('Alternative exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                'type' => 'text',
-                'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
-                'desc' => esc_html(__('Use your own exchange-handler. Requests will be send as GET.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
-                          esc_html(__('Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
-                          esc_html(__('For more info see: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
-                'id' => 'paynl_exchange_url'
-            );
-
-            $addedSettings[] = array(
-                'name' => esc_html(__('Failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'type' => 'text',
-                'placeholder' => '',
-                'desc' => esc_html(__('Leave this empty unless advised otherwise by Pay. Support', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'id' => 'paynl_failover_gateway',
-            );
-            $addedSettings[] = array(
                 'name' => esc_html(__('Order description prefix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'text',
                 'placeholder' => '',
@@ -555,24 +530,47 @@ class PPMFWC_Gateways
                 'id' => 'paynl_payment_method_display',
                 'default' => 1,
             );
+
+            $advancedSettings = self::ppmfwc_loadAdvancedSettings();
+            $addedSettings[] = array(
+                'desc' => $advancedSettings,
+                'type' => 'checkbox',
+                'id' => 'paynl_advanced_settings',
+            );
             $addedSettings[] = array(
                 'name' => esc_html(__('Test IP address', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'text',
                 'desc' => esc_html(__('Transactions started from these IP addresses will use testmode. Comma separate IPs for multiple inputs', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br/>' . esc_html(__('Current IP address:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . PPMFWC_Helper_Data::getIp(), // phpcs:ignore
                 'id' => 'paynl_test_ipadress',
             );
-
-            $advancedSettings = self::ppmfwc_loadAdvancedSettings();
             $addedSettings[] = array(
-                'type' => 'checkbox',
-                'desc' => $advancedSettings,
-                'id' => 'paynl_advanced_settings',
+                'name' => __('Alternative exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'text',
+                'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
+                'desc' => esc_html(__('Use your own exchange-handler. Requests will be send as GET.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
+                    esc_html(__('Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
+                    esc_html(__('For more info see: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
+                'id' => 'paynl_exchange_url'
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'text',
+                'placeholder' => '',
+                'desc' => esc_html(__('Leave this empty unless advised otherwise by Pay. Support', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_failover_gateway',
             );
             $addedSettings[] = array(
                 'name' => esc_html(__('SSL verification', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
                 'desc' => esc_html(__('Enabled by default for secure communications. Strongly recommended to leave this enabled, unless otherwise advised by Pay. Support.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
                 'id' => 'paynl_verify_peer',
+                'default' => 'yes',
+            );
+            $addedSettings[] = array(
+                'name' => __('Extended logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'checkbox',
+                'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_paylogger',
                 'default' => 'yes',
             );
 
