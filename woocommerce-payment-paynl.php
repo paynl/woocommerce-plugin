@@ -89,7 +89,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
                   'issuers' => $gateway->getIssuers(),
                   'issuersSelectionType' => $gateway->getSelectionType(),
                   'texts' => $texts,
-                  'showbirthdate' => $gateway->askBirthdate(),                            
+                  'showbirthdate' => $gateway->askBirthdate(),
                   'birthdateRequired' => $gateway->birthdateRequired(),
                   'showVatField' => $gateway->showVat(),
                   'showCocField' => $gateway->showCoc()
