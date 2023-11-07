@@ -1,29 +1,29 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "ef33a503dfe9b5b3b338602a644ca59b",
     "packages": [
         {
             "name": "paynl/sdk",
-            "version": "v1.5.16",
+            "version": "v1.6.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paynl/sdk.git",
-                "reference": "da650911f57e406ce71da6cf530bdb1402b3808a"
+                "reference": "7b35dc4e579280d34f12ba519fa6aaaca7d8b543"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paynl/sdk/zipball/da650911f57e406ce71da6cf530bdb1402b3808a",
-                "reference": "da650911f57e406ce71da6cf530bdb1402b3808a",
+                "url": "https://api.github.com/repos/paynl/sdk/zipball/7b35dc4e579280d34f12ba519fa6aaaca7d8b543",
+                "reference": "7b35dc4e579280d34f12ba519fa6aaaca7d8b543",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
-                "php-curl-class/php-curl-class": "^8.3"
+                "php-curl-class/php-curl-class": "^8.3||^9.0"
             },
             "require-dev": {
                 "php-coveralls/php-coveralls": "^1.0",
@@ -48,30 +48,35 @@
                     "email": "andy@pay.nl"
                 }
             ],
-            "time": "2020-07-13T17:53:29+00:00"
+            "time": "2021-10-22T14:40:13+00:00"
         },
         {
             "name": "php-curl-class/php-curl-class",
-            "version": "8.8.0",
+            "version": "9.18.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-curl-class/php-curl-class.git",
-                "reference": "180273b577148090a62bb7333201d17e0b6efb75"
+                "reference": "2b8a93b37d0525b4585820397ab8af7f4c317bcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-curl-class/php-curl-class/zipball/180273b577148090a62bb7333201d17e0b6efb75",
-                "reference": "180273b577148090a62bb7333201d17e0b6efb75",
+                "url": "https://api.github.com/repos/php-curl-class/php-curl-class/zipball/2b8a93b37d0525b4585820397ab8af7f4c317bcb",
+                "reference": "2b8a93b37d0525b4585820397ab8af7f4c317bcb",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "php": ">=5.3"
+                "php": ">=7.0"
             },
             "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "*",
                 "ext-gd": "*",
+                "friendsofphp/php-cs-fixer": "*",
+                "phpcompatibility/php-compatibility": "dev-develop",
+                "phpcsstandards/phpcsutils": "@alpha",
                 "phpunit/phpunit": "*",
-                "squizlabs/php_codesniffer": "*"
+                "squizlabs/php_codesniffer": "*",
+                "vimeo/psalm": "*"
             },
             "suggest": {
                 "ext-mbstring": "*"
@@ -89,6 +94,10 @@
             "authors": [
                 {
                     "name": "Zach Borboa"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/php-curl-class/php-curl-class/graphs/contributors"
                 }
             ],
             "description": "PHP Curl Class makes it easy to send HTTP requests and integrate with web APIs.",
@@ -115,7 +124,7 @@
                 "web-service",
                 "xml"
             ],
-            "time": "2020-04-20T03:39:57+00:00"
+            "time": "2023-09-11T18:08:28+00:00"
         }
     ],
     "packages-dev": [],
@@ -125,5 +134,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

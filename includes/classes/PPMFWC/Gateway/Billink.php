@@ -69,7 +69,7 @@ class PPMFWC_Gateway_Billink extends PPMFWC_Gateway_Abstract
      */
     public function askBirthdate()
     {
-        return $this->get_option('ask_birthdate') == 'yes';
+        return $this->get_option('ask_birthdate') != 'no';
     }
 
     /**
