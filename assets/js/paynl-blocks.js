@@ -29,12 +29,12 @@ const PaynlComponent = (props) =>{
     useEffect(() => {
         const unsubscribeCheckoutValidation = onCheckoutValidation(
             () => {
-                if(gateway.showbirthdate == true && gateway.birthdateRequired == true && !dob.length){                 
+                if (gateway.showbirthdate == true && gateway.birthdateRequired == true && !dob.length) {
                     return {
                         type: emitResponse.responseTypes.SUCCESS,
                         errorMessage: gateway.texts.dobRequired
                     };
-                }               
+                }
             }
         );
         return () => {
