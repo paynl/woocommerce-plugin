@@ -70,7 +70,9 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
             $texts['selectissuer'] = __('Select an issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             $texts['enterbirthdate'] = __('Date of birth', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             $texts['enterCocNumber'] = __('COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+            $texts['requiredCocNumber'] = __('Please enter your COC number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             $texts['enterVatNumber'] = __('VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+            $texts['requiredVatNumber'] = __('Please enter your VAT number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
 
             foreach ($gateways as $gateway_id => $gateway) {
                 /** @var PPMFWC_Gateway_Abstract $gateway */
@@ -90,7 +92,9 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
                   'texts' => $texts,
                   'showbirthdate' => $gateway->askBirthdate(),
                   'showVatField' => $gateway->showVat(),
-                  'showCocField' => $gateway->showCoc()
+                  'vatRequired' => $gateway->vatRequired(),
+                  'showCocField' => $gateway->showCoc(),
+                  'cocRequired' => $gateway->cocRequired()
                 );
             }
             wp_enqueue_script('paynl-blocks-js', $blocks_js_route, array('wc-blocks-registry'), (string)time(), true);
@@ -103,13 +107,13 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     # Add settings link on the plugin-page
     add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'ppmfwc_plugin_add_settings_link');
 
-    if (get_option('paynl_show_vat_number') == "yes") {
+    if (!empty(get_option('paynl_show_vat_number')) && get_option('paynl_show_vat_number') != "no") {
         add_action('woocommerce_before_order_notes', 'ppmfwc_vatField');
         add_action('woocommerce_checkout_update_order_meta', 'ppmfwc_checkout_vat_number_update_order_meta');
         add_action('woocommerce_admin_order_data_after_billing_address', 'ppmfwc_vat_number_display_admin_order_meta', 10, 1);
     }
 
-    if (get_option('paynl_show_coc_number') == "yes") {
+    if (!empty(get_option('paynl_show_coc_number')) && get_option('paynl_show_coc_number') != "no") {
         add_action('woocommerce_before_order_notes', 'ppmfwc_cocField');
         add_action('woocommerce_checkout_update_order_meta', 'ppmfwc_checkout_coc_number_update_order_meta');
         add_action('woocommerce_admin_order_data_after_billing_address', 'ppmfwc_coc_number_display_admin_order_meta', 10, 1);
@@ -171,6 +175,7 @@ function ppmfwc_vatField($checkout)
     'class' => array('vat-number-field form-row-wide'),
     'label' => esc_html(__('VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
     'placeholder' => esc_html(__('Enter your VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+    'required' => (get_option('paynl_show_vat_number') == 'yes_required'),
     ), $checkout->get_value('vat_number'));
 }
 
@@ -226,6 +231,7 @@ function ppmfwc_cocField($checkout)
     'class' => array('coc-number-field form-row-wide'),
     'label' => esc_html(__('COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
     'placeholder' => esc_html(__('Enter your COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+    'required' => (get_option('paynl_show_coc_number') == 'yes_required'),
     ), $checkout->get_value('coc_number'));
 }
 

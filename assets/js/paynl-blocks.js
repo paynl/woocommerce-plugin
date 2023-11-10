@@ -26,20 +26,26 @@ const PaynlComponent = (props) =>{
         };
     }, [onCheckoutFail]);
 
-    // useEffect(() => {
-    //     const unsubscribeCheckoutValidation = onCheckoutValidation(
-    //         () => {
-    //             console.log('onCheckoutValidation');
-    //             return {
-    //                 type: emitResponse.responseTypes.SUCCESS,
-    //                 errorMessage: 'Error'
-    //             };
-    //         }
-    //     );
-    //     return () => {
-    //         unsubscribeCheckoutValidation()
-    //     };
-    // }, [onCheckoutValidation]);
+    useEffect(() => {
+        const unsubscribeCheckoutValidation = onCheckoutValidation(
+            () => {
+                if (gateway.showVatField == true && gateway.vatRequired == true && !vatNumber.length) {
+                    return {
+                        type: emitResponse.responseTypes.SUCCESS,
+                        errorMessage: gateway.texts.requiredVatNumber
+                    };
+                } else if (gateway.showCocField == true && gateway.cocRequired == true && !cocNumber.length) {
+                    return {
+                        type: emitResponse.responseTypes.SUCCESS,
+                        errorMessage: gateway.texts.requiredCocNumber
+                    };
+                }
+            }
+        );
+        return () => {
+            unsubscribeCheckoutValidation()
+        };
+    }, [onCheckoutValidation, vatNumber, cocNumber]);
 
     useEffect(() => {
         const unsubscribe = onPaymentSetup(() => {

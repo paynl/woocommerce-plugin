@@ -771,3 +771,9 @@ msgstr ""
 
 msgid "Yes, as required"
 msgstr ""
+
+msgid "Please enter your VAT number, this field is required."
+msgstr ""
+
+msgid "Please enter your COC number, this field is required."
+msgstr ""

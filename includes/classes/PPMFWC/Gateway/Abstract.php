@@ -363,7 +363,23 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     /**
      * @return boolean
      */
+    public function vatRequired()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
     public function showCoc()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function cocRequired()
     {
         return false;
     }
@@ -474,7 +490,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         }
 
         $ask_birthdate = $this->get_option('ask_birthdate');
-        if ($ask_birthdate != 'no') {
+        if ($this->showDOB() && $ask_birthdate != 'no') {
             $fieldName = $this->getId() . '_birthdate';
             echo '<fieldset><legend>' . esc_html(__('Date of birth: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</legend><input type="date" class="paydate" placeholder="dd-mm-yyyy" name="' . $fieldName . '" id="' . $fieldName . '"></fieldset> '; // phpcs:ignore
         }
@@ -500,6 +516,24 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 $birthdate = PPMFWC_Helper_Data::getPostTextField($this->getId() . '_birthdate');
                 if (empty($birthdate) || strlen(trim($birthdate)) != 10) {
                     $message = esc_html(__('Please enter your date of birth, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+                    throw new PPMFWC_Exception_Notice($message);
+                }
+            }
+
+            $vatRequired = get_option('paynl_show_vat_number');
+            if ($vatRequired == 'yes_required') {
+                $vat = PPMFWC_Helper_Data::getPostTextField('vat_number');
+                if (empty($vat) || strlen(trim($vat)) != 10) {
+                    $message = esc_html(__('Please enter your VAT number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+                    throw new PPMFWC_Exception_Notice($message);
+                }
+            }
+
+            $cocRequired = get_option('paynl_show_coc_number');
+            if ($cocRequired == 'yes_required') {
+                $coc = PPMFWC_Helper_Data::getPostTextField('coc_number');
+                if (empty($coc) || strlen(trim($coc)) != 10) {
+                    $message = esc_html(__('Please enter your COC number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
                     throw new PPMFWC_Exception_Notice($message);
                 }
             }
