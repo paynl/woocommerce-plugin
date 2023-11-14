@@ -534,11 +534,19 @@ class PPMFWC_Gateways
             );
 
             $addedSettings[] = array(
-                'name' => esc_html(__('Failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'name' => __('Failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'select',
+                'options' => PPMFWC_Helper_Data::ppmfwc_getGateways(),
+                'desc' => esc_html(__('Select the gateway which is use for processing payments', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_failover_gateway',
+                'default' => 'nl',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Custom failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'text',
                 'placeholder' => '',
                 'desc' => esc_html(__('Leave this empty unless advised otherwise by Pay. Support', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'id' => 'paynl_failover_gateway',
+                'id' => 'paynl_custom_failover_gateway',
             );
             $addedSettings[] = array(
                 'name' => esc_html(__('Order description prefix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),

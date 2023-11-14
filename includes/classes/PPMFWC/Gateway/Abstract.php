@@ -474,7 +474,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         }
 
         $ask_birthdate = $this->get_option('ask_birthdate');
-        if ($ask_birthdate != 'no') {
+        if (strpos($ask_birthdate, 'yes') !== false) {
             $fieldName = $this->getId() . '_birthdate';
             echo '<fieldset><legend>' . esc_html(__('Date of birth: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</legend><input type="date" class="paydate" placeholder="dd-mm-yyyy" name="' . $fieldName . '" id="' . $fieldName . '"></fieldset> '; // phpcs:ignore
         }
@@ -751,11 +751,15 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public static function getApiBase()
     {
-        return get_option('paynl_failover_gateway');
+        $gateway = get_option('paynl_failover_gateway');
+        if ($gateway == 'custom') {
+            $gateway = get_option('paynl_custom_failover_gateway');
+        }
+        return $gateway;
     }
 
     /**
