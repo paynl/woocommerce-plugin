@@ -395,16 +395,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @return string
-     */
-    protected static function is_high_risk()
-    {
-        $highrisk = get_option('paynl_high_risk');
-
-        return $highrisk == 'yes';
-    }
-
-    /**
      * @return boolean
      */
     public function is_available()
@@ -713,7 +703,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
     /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
-     * @param $useMulticore
+     * @param boolean $useMulticore
      * @return void
      */
     public static function loginSDK($useMulticore = false)

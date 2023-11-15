@@ -4,17 +4,16 @@
  * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
  * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  * @phpcs:disable PSR1.Methods.CamelCapsMethodName
- * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
  */
 
-class PPMFWC_Gateway_Nexi extends PPMFWC_Gateway_Abstract
+class PPMFWC_Gateway_DankortHighRisk extends PPMFWC_Gateway_Abstract
 {
     /**
      * @return string
      */
     public static function getId()
     {
-        return 'pay_gateway_nexi';
+        return 'pay_gateway_dankorthighrisk';
     }
 
     /**
@@ -22,7 +21,7 @@ class PPMFWC_Gateway_Nexi extends PPMFWC_Gateway_Abstract
      */
     public static function getName()
     {
-        return 'Nexi';
+        return 'Dankort';
     }
 
     /**
@@ -30,6 +29,6 @@ class PPMFWC_Gateway_Nexi extends PPMFWC_Gateway_Abstract
      */
     public static function getOptionId()
     {
-        return 1945;
+        return 1942;
     }
 }
