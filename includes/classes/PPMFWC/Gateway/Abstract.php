@@ -703,7 +703,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
     /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
-     * @param $useMulticore
+     * @param bool $useMulticore
      * @return void
      */
     public static function loginSDK($useMulticore = false)
