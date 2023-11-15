@@ -99,3 +99,8 @@
     font-size: 14px;
     border-radius: 5px;
 }
+
+.paynl_advanced_settings_title {
+    position: absolute;
+    left: 0;
+}
