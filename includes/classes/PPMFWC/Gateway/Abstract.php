@@ -473,8 +473,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             echo wpautop(wptexturize($description));
         }
 
-        $ask_birthdate = $this->get_option('ask_birthdate');
-        if ($ask_birthdate != 'no') {
+        if ($this->askBirthdate()) {
             $fieldName = $this->getId() . '_birthdate';
             echo '<fieldset><legend>' . esc_html(__('Date of birth: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</legend><input type="date" class="paydate" placeholder="dd-mm-yyyy" name="' . $fieldName . '" id="' . $fieldName . '"></fieldset> '; // phpcs:ignore
         }
@@ -557,7 +556,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     protected function startTransaction(WC_Order $order)
     {
-        $this->loginSDK();
+        $this->loginSDK(true);
 
         $returnUrl = add_query_arg(array('wc-api' => 'Wc_Pay_Gateway_Return'), home_url('/'));
         $exchangeUrl = add_query_arg('wc-api', 'Wc_Pay_Gateway_Exchange', home_url('/'));
@@ -714,15 +713,19 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
     /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     * @param $useMulticore
+     * @return void
      */
-    public static function loginSDK()
+    public static function loginSDK($useMulticore = false)
     {
         \Paynl\Config::setApiToken(self::getApiToken());
         \Paynl\Config::setServiceId(self::getServiceId());
 
-        $failOver = trim(self::getApiBase());
-        if (!empty($failOver) && strlen($failOver) > 12) {
-            \Paynl\Config::setApiBase($failOver);
+        if ($useMulticore) {
+            $failOver = trim(self::getApiBase());
+            if (!empty($failOver) && strlen($failOver) > 12) {
+                \Paynl\Config::setApiBase($failOver);
+            }
         }
 
         $tokenCode = self::getTokenCode();
@@ -751,11 +754,15 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public static function getApiBase()
     {
-        return get_option('paynl_failover_gateway');
+        $gateway = get_option('paynl_failover_gateway');
+        if ($gateway == 'custom') {
+            $gateway = get_option('paynl_custom_failover_gateway');
+        }
+        return $gateway;
     }
 
     /**
