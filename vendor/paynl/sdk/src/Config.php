@@ -11,6 +11,12 @@ use Curl\Curl;
  */
 class Config
 {
+    const CORE1 = 'https://rest-api.pay.nl';
+    const CORE1_TEXT = 'Pay.nl (Default)';
+    const CORE2 = 'https://rest.achterelkebetaling.nl';
+    const CORE2_TEXT = 'Achterelkebetaling.nl';
+    const CORE3 = 'https://rest.payments.nl';
+    const CORE3_TEXT = 'Payments.nl';
 
     /**
      * @var string The token code (AT-xxxx-xxxx)
@@ -64,6 +70,17 @@ class Config
      */
     private static $verifyPeer = true;
 
+    /**
+     * @return string[]
+     */
+    public static function getCores()
+    {
+        return [
+          self::CORE1 => self::CORE1_TEXT,
+          self::CORE2 => self::CORE2_TEXT,
+          self::CORE3 => self::CORE3_TEXT,
+        ];
+    }
 
     /**
      * @return string
@@ -119,6 +136,15 @@ class Config
     public static function setApiBase($apiBase)
     {
         self::$apiBase = $apiBase;
+    }
+
+    /**
+     * @param $core
+     * @return void
+     */
+    public static function setCore($core)
+    {
+        self::setApiBase($core);
     }
 
     /**

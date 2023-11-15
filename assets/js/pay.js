@@ -20,6 +20,20 @@ jQuery(document).ready(function () {
   if (jQuery('#paynl_payment_methods-description').length) {
     jQuery('.woocommerce-save-button').hide()
   }
+
+  var customFailoverGateway = jQuery("#paynl_custom_failover_gateway").parents(":eq(1)");
+
+  if (jQuery("#paynl_failover_gateway").val() !== 'custom') {
+    customFailoverGateway.css("display", "none");
+  }
+
+  jQuery("#paynl_failover_gateway").on('change', function () {
+    if (jQuery(this).val() == 'custom') {
+      customFailoverGateway.css("display", "inline-flex");
+    } else {
+      customFailoverGateway.css("display", "none");
+    }
+  });
 })
 
 function submitFeatureRequestForm () {

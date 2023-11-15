@@ -347,4 +347,14 @@ class PPMFWC_Helper_Data
             'browser' => esc_html(__('Use browser language', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
         );
     }
+
+    /**
+     * @return string[]
+     */
+    public static function ppmfwc_getGateways()
+    {
+        $cores = \Paynl\Config::getCores();
+
+        return array_merge($cores, ['custom' => esc_html(__('Custom', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))]);
+    }
 }
