@@ -380,14 +380,6 @@ class PPMFWC_Gateways
     }
 
     /**
-     * @return string
-     */
-    public static function ppmfwc_loadAdvancedSettings()
-    {
-        return '<h2 class="paynl_advanced_settings_title">' . esc_html(__('Pay. advanced settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</h2>';
-    }
-
-    /**
      * @return array
      */
     public static function ppmfwc_addGlobalSettings()
@@ -531,12 +523,12 @@ class PPMFWC_Gateways
                 'default' => 1,
             );
 
-            $advancedSettings = self::ppmfwc_loadAdvancedSettings();
             $addedSettings[] = array(
-                'desc' => $advancedSettings,
-                'type' => 'checkbox',
-                'id' => 'paynl_advanced_settings',
+              'css' => 'padding-bottom:40px;display:block',
+              'type' => 'info',
+              'text' => '<h2 class="paynl_advanced_settings_title">' . esc_html(__('Advanced settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</h2>'
             );
+
             $addedSettings[] = array(
                 'name' => esc_html(__('Test IP address', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'text',

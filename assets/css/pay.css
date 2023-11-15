@@ -100,10 +100,7 @@
     border-radius: 5px;
 }
 
-input#paynl_advanced_settings {
-    display: none;
-}
-
 .paynl_advanced_settings_title {
-    margin-left: -235px;
+    position: absolute;
+    left: 0;
 }
