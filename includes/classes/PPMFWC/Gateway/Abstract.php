@@ -212,19 +212,19 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 );
             }
             if ($this->showDOB()) {
-                $this->form_fields['ask_birthdate'] = array(
-                    'title' => esc_html(__('Show date of birth field', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'type' => 'checkbox',
-                    'description' => esc_html(__('A date of birth is mandatory for most Buy Now Pay Later payment methods. Show this field in the checkout, to improve your customer\'s payment flow.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
-                    'default' => 'yes'
-                );
-
-                $this->form_fields['birthdate_required'] = array(
-                    'title' => esc_html(__('Date of birth required', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'type' => 'checkbox',
-                    'description' => esc_html(__('Make this field a required field in the checkout.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'default' => 'no'
-                );
+                if ($this->showDOB()) {
+                    $this->form_fields['ask_birthdate'] = array(
+                        'title' => esc_html(__('Show date of birth field', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                        'type' => 'select',
+                        'options' => array(
+                            'no' => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                            'yes_optional' => esc_html(__('Yes, as optional', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                            'yes_required' => esc_html(__('Yes, as required', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                        ),
+                        'default' => 'yes',
+                        'description' => esc_html(__('A date of birth is mandatory for most Buy Now Pay Later payment methods. Show this field in the checkout, to improve your customer\'s payment flow.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
+                    );
+                }
             }
 
             if ($this->showApplePayDetection()) {
@@ -347,6 +347,30 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     /**
      * @return boolean
      */
+    public function askBirthdate()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showVat()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showCoc()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
     public static function showApplePayDetection()
     {
         return false;
@@ -423,6 +447,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
+     * @return string
+     */
+    public function getSelectionType()
+    {
+        return 'none';
+    }
+
+    /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public function payment_fields()
@@ -431,8 +463,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             echo wpautop(wptexturize($description));
         }
 
-        $ask_birthdate = $this->get_option('ask_birthdate');
-        if ($ask_birthdate == 'yes') {
+        if ($this->askBirthdate()) {
             $fieldName = $this->getId() . '_birthdate';
             echo '<fieldset><legend>' . esc_html(__('Date of birth: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</legend><input type="date" class="paydate" placeholder="dd-mm-yyyy" name="' . $fieldName . '" id="' . $fieldName . '"></fieldset> '; // phpcs:ignore
         }
@@ -451,8 +482,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 throw new PPMFWC_Exception_Notice('Updated customer data');
             }
 
+            $dobShow = $this->get_option('ask_birthdate');
             $dobRequired = $this->get_option('birthdate_required');
-            if ($dobRequired == 'yes') {
+
+            if ($dobShow == 'yes_required' || ($dobShow == 'yes' && $dobRequired == 'yes')) {
                 $birthdate = PPMFWC_Helper_Data::getPostTextField($this->getId() . '_birthdate');
                 if (empty($birthdate) || strlen(trim($birthdate)) != 10) {
                     $message = esc_html(__('Please enter your date of birth, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
@@ -482,18 +515,25 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             PPMFWC_Helper_Transaction::newTransaction($payTransaction->getTransactionId(), $paymentOption, $order->get_total(), $order_id, '');
 
-            # Return succes redirect
+            # Return success redirect
             return array(
               'result'   => 'success',
               'redirect' => $payTransaction->getRedirectUrl()
             );
         } catch (PPMFWC_Exception_Notice $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Process payment start notice: ' . $e->getMessage());
-            wc_add_notice($e->getMessage(), 'error');
+            $message = $e->getMessage();
+            wc_add_notice($message, 'error');
         } catch (Exception $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error: ' . esc_html($e->getMessage()), null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
-            wc_add_notice(esc_html(__('Could not initiate payment. Please try again or use another payment method.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
+            $message = 'Could not initiate payment. Please try again or use another payment method.';
+            wc_add_notice(esc_html(__($message, PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
         }
+
+        return array(
+          'result' => 'failed',
+          'errorMessage' => $message
+        );
     }
 
     /**
@@ -506,7 +546,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     protected function startTransaction(WC_Order $order)
     {
-        $this->loginSDK();
+        $this->loginSDK(true);
 
         $returnUrl = add_query_arg(array('wc-api' => 'Wc_Pay_Gateway_Return'), home_url('/'));
         $exchangeUrl = add_query_arg('wc-api', 'Wc_Pay_Gateway_Exchange', home_url('/'));
@@ -663,15 +703,19 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
     /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     * @param $useMulticore
+     * @return void
      */
-    public static function loginSDK()
+    public static function loginSDK($useMulticore = false)
     {
         \Paynl\Config::setApiToken(self::getApiToken());
         \Paynl\Config::setServiceId(self::getServiceId());
 
-        $failOver = trim(self::getApiBase());
-        if (!empty($failOver) && strlen($failOver) > 12) {
-            \Paynl\Config::setApiBase($failOver);
+        if ($useMulticore) {
+            $failOver = trim(self::getApiBase());
+            if (!empty($failOver) && strlen($failOver) > 12) {
+                \Paynl\Config::setApiBase($failOver);
+            }
         }
 
         $tokenCode = self::getTokenCode();
@@ -700,11 +744,15 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public static function getApiBase()
     {
-        return get_option('paynl_failover_gateway');
+        $gateway = get_option('paynl_failover_gateway');
+        if ($gateway == 'custom') {
+            $gateway = get_option('paynl_custom_failover_gateway');
+        }
+        return $gateway;
     }
 
     /**

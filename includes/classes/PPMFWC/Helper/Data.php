@@ -316,7 +316,7 @@ class PPMFWC_Helper_Data
      */
     public static function getVersion()
     {
-        return '3.16.0';
+        return '3.17.0';
     }
 
     /**
@@ -346,5 +346,15 @@ class PPMFWC_Helper_Data
             'fr' => esc_html(__('French', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             'browser' => esc_html(__('Use browser language', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
         );
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function ppmfwc_getGateways()
+    {
+        $cores = \Paynl\Config::getCores();
+
+        return array_merge($cores, ['custom' => esc_html(__('Custom', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))]);
     }
 }

@@ -1,46 +1,113 @@
+
 const PaynlComponent = (props) =>{
     let {image_path, useEffect, gateway} = props
     const [ selectedIssuer, selectIssuer ] = wp.element.useState('');
+    const [ processingErrorMessage, setErrorMessage ] = wp.element.useState('');
+    const [ cocNumber, setCocNumber ] = wp.element.useState('');
+    const [ vatNumber, setVatNumber ] = wp.element.useState('');
+    const [ dob, selectDate ] = wp.element.useState('');
     const { eventRegistration, emitResponse } = props;
-    const { onPaymentSetup } = eventRegistration;
+    const {onPaymentSetup, onCheckoutValidation, onCheckoutFail} = eventRegistration;
+    let payIssuers = gateway.issuers;
+
+    useEffect(() => {
+        const unsubscribddeProcessing = onCheckoutFail(
+            (props) => {
+                setErrorMessage(props.processingResponse.paymentDetails.errorMessage);
+                return {
+                    type: emitResponse.responseTypes.FAIL,
+                    errorMessage: 'Error',
+                    message: 'Error occurred, please try again',
+                };
+            }
+        );
+        return () => {
+            unsubscribddeProcessing()
+        };
+    }, [onCheckoutFail]);
+
+    // useEffect(() => {
+    //     const unsubscribeCheckoutValidation = onCheckoutValidation(
+    //         () => {
+    //             console.log('onCheckoutValidation');
+    //             return {
+    //                 type: emitResponse.responseTypes.SUCCESS,
+    //                 errorMessage: 'Error'
+    //             };
+    //         }
+    //     );
+    //     return () => {
+    //         unsubscribeCheckoutValidation()
+    //     };
+    // }, [onCheckoutValidation]);
+
     useEffect(() => {
         const unsubscribe = onPaymentSetup(() => {
-            return {
+            let response = {
                 type: emitResponse.responseTypes.SUCCESS,
-                meta: {
-                    paymentMethodData: {
-                        selectedIssuer: selectedIssuer
-                    },
-                },
+                meta: {},
             };
+            let paymentMethodData = {};
+            paymentMethodData['isblocks'] = '1',
+            paymentMethodData['selectedIssuer'] = selectedIssuer;
+            paymentMethodData['vat_number'] = vatNumber;
+            paymentMethodData['coc_number'] = cocNumber;
+            paymentMethodData[gateway.paymentMethodId + '_birthdate'] = dob;
+            response.meta.paymentMethodData = paymentMethodData;
+            return response;
         });
         return () => {
             unsubscribe();
         };
-    }, [
-        onPaymentSetup, selectedIssuer
-    ]);
+    }, [onPaymentSetup, selectedIssuer, dob, cocNumber, vatNumber]);
 
-    let i = gateway.issuers;
-
-    if (gateway.paymentMethodId == 'pay_gateway_ideal') {
-        return React.createElement('div', {className: 'PPMFWC_desc'},
+        return React.createElement('div', {className: 'PPMFWC_container'},
                 React.createElement('img', {src: image_path}, null),
-                React.createElement('span', {}, gateway.description),
+                React.createElement('span', {className: 'description'}, gateway.description),
+                React.createElement('span', {className: 'descriptionError'}, processingErrorMessage),
                 React.createElement('div', {},
-                React.createElement('select',  {onChange: (e)=>{
-                        selectIssuer(e.target.value)
-                    }},
-                    React.createElement("option", {}, gateway.text_selectissuer),
-                    ...i.map(issuer => React.createElement("option", {value: issuer.option_sub_id}, issuer.name))
-            )
+                    (gateway.paymentMethodId == 'pay_gateway_ideal' && gateway.issuersSelectionType == 'select' ?
+                        React.createElement('div', {className: 'field'},
+                            React.createElement('span', {className: 'payLabel'}, gateway.texts.issuer),
+                            React.createElement('select',  {onChange: (e)=>{
+                                    selectIssuer(e.target.value)
+                                }},
+                            React.createElement("option", {}, gateway.texts.selectissuer),
+                            ...payIssuers.map(issuer => React.createElement("option", {value: issuer.option_sub_id}, issuer.name))
+                            )
+                        ) : ''),
+                    (gateway.paymentMethodId == 'pay_gateway_ideal' && gateway.issuersSelectionType == 'radio' ?
+                        React.createElement('div', {className: 'field'},              
+                            React.createElement('div', {className: 'issuerlist'},
+                                ...payIssuers.map(
+                                    issuer => 
+                                        React.createElement('div', {className: 'issuerradio'},  
+                                            React.createElement("label", {},
+                                                React.createElement('input', {type: 'radio', value: issuer.option_sub_id, id: 'ideal_'+issuer.option_sub_id, name: 'ideal_issuer_list', onChange: (e)=>{ selectIssuer(e.target.value)}}),                                                                                           
+                                                React.createElement('img', {src: issuer.image_path, className: 'issuerlogo'}, null),  
+                                                issuer.name
+                                            ),                                                                                  
+                                        ),                                                                          
+                                ),                                
+                            ),                                                   
+                        ) : ''),
+                    (gateway.showbirthdate == true ?
+                        React.createElement('div', {className: 'field'},
+                                 React.createElement('span', {className: 'payLabel'}, gateway.texts.enterbirthdate),
+                                 React.createElement('input', {type: 'date', onChange: (e)=>{ selectDate(e.target.value)}})
+                        ) : '' ),
+                    (gateway.showCocField == true ?
+                        React.createElement('div', {className: 'field'},
+                            React.createElement('span', {className: 'payLabel'}, gateway.texts.enterCocNumber),
+                            React.createElement('input', {type: 'text', onChange: (e)=>{ setCocNumber(e.target.value)}})
+                        ) : '' ),
+                    (gateway.showVatField == true ?
+                        React.createElement('div', {className: 'field'},
+                            React.createElement('span', {className: 'payLabel'}, gateway.texts.enterVatNumber),
+                            React.createElement('input', {type: 'text', onChange: (e)=>{ setVatNumber(e.target.value)}})
+                        ) : '' )
         ))
-    }
 
-    return  React.createElement('div', {className: 'PPMFWC_desc'},
-                React.createElement('img', {src: image_path}, null),
-                React.createElement('span', {}, gateway.description),
-    );
 }
 
 function PaynlLabel({image_path, title})

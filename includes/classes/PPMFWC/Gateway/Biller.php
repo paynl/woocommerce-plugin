@@ -31,4 +31,36 @@ class PPMFWC_Gateway_Biller extends PPMFWC_Gateway_Abstract
     {
         return 2931;
     }
+
+    /**
+     * @return boolean
+     */
+    public static function showDOB()
+    {
+        return true;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function askBirthdate()
+    {
+        return $this->get_option('ask_birthdate') != 'no';
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showVat()
+    {
+        return get_option('paynl_show_vat_number') == "yes";
+    }
+
+    /**
+     * @return boolean
+     */
+    public function showCoc()
+    {
+        return get_option('paynl_show_coc_number') == "yes";
+    }
 }
