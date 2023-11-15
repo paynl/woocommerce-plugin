@@ -166,7 +166,7 @@ class PPMFWC_Helper_Transaction
         }
 
         # Retrieve Pay. transaction paymentstate
-        PPMFWC_Gateway_Abstract::loginSDK();
+        PPMFWC_Gateway_Abstract::loginSDK(true);
 
         $transaction = \Paynl\Transaction::status($transactionId);
 

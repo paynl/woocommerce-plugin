@@ -556,7 +556,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     protected function startTransaction(WC_Order $order)
     {
-        $this->loginSDK();
+        $this->loginSDK(true);
 
         $returnUrl = add_query_arg(array('wc-api' => 'Wc_Pay_Gateway_Return'), home_url('/'));
         $exchangeUrl = add_query_arg('wc-api', 'Wc_Pay_Gateway_Exchange', home_url('/'));
@@ -713,15 +713,19 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
     /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     * @param $useMulticore
+     * @return void
      */
-    public static function loginSDK()
+    public static function loginSDK($useMulticore = false)
     {
         \Paynl\Config::setApiToken(self::getApiToken());
         \Paynl\Config::setServiceId(self::getServiceId());
 
-        $failOver = trim(self::getApiBase());
-        if (!empty($failOver) && strlen($failOver) > 12) {
-            \Paynl\Config::setApiBase($failOver);
+        if ($useMulticore) {
+            $failOver = trim(self::getApiBase());
+            if (!empty($failOver) && strlen($failOver) > 12) {
+                \Paynl\Config::setApiBase($failOver);
+            }
         }
 
         $tokenCode = self::getTokenCode();
