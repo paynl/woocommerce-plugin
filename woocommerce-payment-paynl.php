@@ -71,6 +71,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
             $texts['enterbirthdate'] = __('Date of birth', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             $texts['enterCocNumber'] = __('COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             $texts['enterVatNumber'] = __('VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+            $texts['dobRequired'] = __('Please enter your date of birth, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
 
             foreach ($gateways as $gateway_id => $gateway) {
                 /** @var PPMFWC_Gateway_Abstract $gateway */
@@ -89,6 +90,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
                   'issuersSelectionType' => $gateway->getSelectionType(),
                   'texts' => $texts,
                   'showbirthdate' => $gateway->askBirthdate(),
+                  'birthdateRequired' => $gateway->birthdateRequired(),
                   'showVatField' => $gateway->showVat(),
                   'showCocField' => $gateway->showCoc()
                 );

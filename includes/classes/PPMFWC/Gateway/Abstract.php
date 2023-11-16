@@ -355,6 +355,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     /**
      * @return boolean
      */
+    public function birthdateRequired()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
     public function showVat()
     {
         return false;

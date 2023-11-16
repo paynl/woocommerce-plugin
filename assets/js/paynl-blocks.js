@@ -26,20 +26,21 @@ const PaynlComponent = (props) =>{
         };
     }, [onCheckoutFail]);
 
-    // useEffect(() => {
-    //     const unsubscribeCheckoutValidation = onCheckoutValidation(
-    //         () => {
-    //             console.log('onCheckoutValidation');
-    //             return {
-    //                 type: emitResponse.responseTypes.SUCCESS,
-    //                 errorMessage: 'Error'
-    //             };
-    //         }
-    //     );
-    //     return () => {
-    //         unsubscribeCheckoutValidation()
-    //     };
-    // }, [onCheckoutValidation]);
+    useEffect(() => {
+        const unsubscribeCheckoutValidation = onCheckoutValidation(
+            () => {
+                if (gateway.showbirthdate == true && gateway.birthdateRequired == true && !dob.length) {
+                    return {
+                        type: emitResponse.responseTypes.SUCCESS,
+                        errorMessage: gateway.texts.dobRequired
+                    };
+                }
+            }
+        );
+        return () => {
+            unsubscribeCheckoutValidation()
+        };
+    }, [onCheckoutValidation, dob]);
 
     useEffect(() => {
         const unsubscribe = onPaymentSetup(() => {
