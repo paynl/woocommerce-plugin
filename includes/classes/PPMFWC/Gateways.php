@@ -516,7 +516,7 @@ class PPMFWC_Gateways
             );
 
             $addedSettings[] = array(
-              'css' => 'padding-bottom:40px;display:block',
+              'css' => 'padding-bottom:40px;display:block;color:#f0f0f1',
               'type' => 'info',
               'text' => '<h2 class="paynl_advanced_settings_title">' . esc_html(__('Advanced settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</h2>'
             );
