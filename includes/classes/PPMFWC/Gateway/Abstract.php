@@ -688,6 +688,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
+     * @return bool
+     */
+    protected static function is_high_risk()
+    {
+        return get_option('paynl_high_risk') == 'yes';
+    }
+
+    /**
      * @return mixed|string|void
      */
     public static function getAlternativeExchangeUrl()
