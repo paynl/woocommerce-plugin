@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
 "POT-Creation-Date: 2023-10-12 16:19+0200\n"
-"PO-Revision-Date: 2023-11-10 16:58+0100\n"
+"PO-Revision-Date: 2023-11-20 15:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -910,6 +910,12 @@ msgstr "Vul je BTW-nummer in. Dit veld is verplicht."
 
 msgid "Please enter your COC number, this field is required."
 msgstr "Vul je KVK-nummer in. Dit veld is verplicht."
+
+msgid "Optional for business customers"
+msgstr "Optioneel voor zakelijke klanten"
+
+msgid "Required for business customers"
+msgstr "Verplicht voor zakelijke klanten"
 
 #~ msgid "Use your own exchange-handler. Requests will be send as GET."
 #~ msgstr ""

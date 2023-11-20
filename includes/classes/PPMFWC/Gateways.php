@@ -492,8 +492,8 @@ class PPMFWC_Gateways
                 'type' => 'select',
                 'options' => array(
                     'no' => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'yes' => esc_html(__('Yes, as optional', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'yes_required' => esc_html(__('Yes, as required', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'yes' => esc_html(__('Optional for business customers', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'yes_required' => esc_html(__('Required for business customers', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 ),
                 'desc' => esc_html(__('Enable to add an extra field to the checkout for customers to enter their VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_show_vat_number',
@@ -504,8 +504,8 @@ class PPMFWC_Gateways
                 'type' => 'select',
                 'options' => array(
                     'no' => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'yes' => esc_html(__('Yes, as optional', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'yes_required' => esc_html(__('Yes, as required', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'yes' => esc_html(__('Optional for business customers', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'yes_required' => esc_html(__('Required for business customers', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 ),
                 'desc' => esc_html(__('Enable to add an extra field to the checkout for customers to enter their COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_show_coc_number',

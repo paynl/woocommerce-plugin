@@ -777,3 +777,9 @@ msgstr ""
 
 msgid "Please enter your COC number, this field is required."
 msgstr ""
+
+msgid "Optional for business customers"
+msgstr ""
+
+msgid "Required for business customers"
+msgstr ""
