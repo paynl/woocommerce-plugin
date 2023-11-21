@@ -6,14 +6,14 @@
  * @phpcs:disable PSR1.Methods.CamelCapsMethodName
  */
 
-class PPMFWC_Gateway_Cult extends PPMFWC_Gateway_Abstract
+class PPMFWC_Gateway_In3business extends PPMFWC_Gateway_Abstract
 {
     /**
      * @return string
      */
     public static function getId()
     {
-        return 'pay_gateway_cult';
+        return 'pay_gateway_in3business';
     }
 
     /**
@@ -21,7 +21,7 @@ class PPMFWC_Gateway_Cult extends PPMFWC_Gateway_Abstract
      */
     public static function getName()
     {
-        return 'Cult+';
+        return 'In3 Business';
     }
 
     /**
