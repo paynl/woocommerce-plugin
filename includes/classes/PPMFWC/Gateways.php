@@ -79,6 +79,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Clickandbuy',
         'PPMFWC_Gateway_CreditClick',
         'PPMFWC_Gateway_Cashly',
+        'PPMFWC_Gateway_Cult',
         'PPMFWC_Gateway_Good4fun',
         'PPMFWC_Gateway_Dankort',
         'PPMFWC_Gateway_DeCadeaukaart',
