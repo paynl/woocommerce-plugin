@@ -487,8 +487,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             echo wpautop(wptexturize($description));
         }
 
-        $ask_birthdate = $this->get_option('ask_birthdate');
-        if ($this->showDOB() && $ask_birthdate != 'no') {
+        if ($this->askBirthdate()) {
             $fieldName = $this->getId() . '_birthdate';
             echo '<fieldset><legend>' . esc_html(__('Date of birth: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</legend><input type="date" class="paydate" placeholder="dd-mm-yyyy" name="' . $fieldName . '" id="' . $fieldName . '"></fieldset> '; // phpcs:ignore
         }
