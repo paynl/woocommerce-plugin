@@ -733,7 +733,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     protected static function is_high_risk()
     {
