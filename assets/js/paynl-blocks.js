@@ -28,14 +28,13 @@ const PaynlComponent = (props) =>{
 
     useEffect(() => {
         const unsubscribeCheckoutValidation = onCheckoutValidation(
-            () => {
-                let company = props.billing.billingData.company;
-                if (gateway.showVatField == true && gateway.vatRequired == true && company.length && !vatNumber.length) {
+            () => {              
+                if (gateway.showVatField == true && gateway.vatRequired == true && !vatNumber.length) {
                     return {
                         type: emitResponse.responseTypes.SUCCESS,
                         errorMessage: gateway.texts.requiredVatNumber
                     };
-                } else if (gateway.showCocField == true && gateway.cocRequired == true && company.length && !cocNumber.length) {
+                } else if (gateway.showCocField == true && gateway.cocRequired == true && !cocNumber.length) {
                     return {
                         type: emitResponse.responseTypes.SUCCESS,
                         errorMessage: gateway.texts.requiredCocNumber
@@ -53,7 +52,7 @@ const PaynlComponent = (props) =>{
         return () => {
             unsubscribeCheckoutValidation()
         };
-    }, [onCheckoutValidation, dob, vatNumber, cocNumber, props]);
+    }, [onCheckoutValidation, dob, vatNumber, cocNumber]);
 
     useEffect(() => {
         const unsubscribe = onPaymentSetup(() => {
