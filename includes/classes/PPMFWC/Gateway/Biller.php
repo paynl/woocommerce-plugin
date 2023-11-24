@@ -45,7 +45,15 @@ class PPMFWC_Gateway_Biller extends PPMFWC_Gateway_Abstract
      */
     public function askBirthdate()
     {
-        return $this->get_option('ask_birthdate') == 'yes';
+        return $this->get_option('ask_birthdate') != 'no';
+    }
+
+    /**
+     * @return boolean
+     */
+    public function birthdateRequired()
+    {
+        return ($this->get_option('ask_birthdate') == 'yes_required' || ($this->get_option('ask_birthdate') == 'yes' && $this->get_option('birthdate_required') == 'yes')); // phpcs:ignore
     }
 
     /**

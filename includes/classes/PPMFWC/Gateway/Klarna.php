@@ -76,6 +76,14 @@ class PPMFWC_Gateway_Klarna extends PPMFWC_Gateway_Abstract
     /**
      * @return boolean
      */
+    public function birthdateRequired()
+    {
+        return ($this->get_option('ask_birthdate') == 'yes_required' || ($this->get_option('ask_birthdate') == 'yes' && $this->get_option('birthdate_required') == 'yes')); // phpcs:ignore
+    }
+
+    /**
+     * @return boolean
+     */
     public function showVat()
     {
         return (!empty(get_option('paynl_show_vat_number')) && get_option('paynl_show_vat_number') != "no");

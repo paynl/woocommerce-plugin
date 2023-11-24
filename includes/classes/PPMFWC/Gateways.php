@@ -33,7 +33,7 @@ class PPMFWC_Gateways
      * @param string $default Adds text 'default' for the selected option
      * @param array $excludeStates List of statusus that should not return
      * @return array
-     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
     private static function getAvailableWoocomStatus($default, $excludeStates = array())
     {
@@ -58,80 +58,80 @@ class PPMFWC_Gateways
     }
 
     private static $arrGateways = array(
-      'PPMFWC_Gateway_Alipay',
-      'PPMFWC_Gateway_Amazonpay',
-      'PPMFWC_Gateway_Amex',
-      'PPMFWC_Gateway_Applepay',
-      'PPMFWC_Gateway_Afterpay',
-      'PPMFWC_Gateway_AfterpayInternational',
-      'PPMFWC_Gateway_BataviastadCadeaukaart',
-      'PPMFWC_Gateway_Biercheque',
-      'PPMFWC_Gateway_Biller',
-      'PPMFWC_Gateway_Billink',
-      'PPMFWC_Gateway_Bioscoopbon',
-      'PPMFWC_Gateway_Blik',
-      'PPMFWC_Gateway_BloemenCadeaukaart',
-      'PPMFWC_Gateway_Boekenbon',
-      'PPMFWC_Gateway_Cartasi',
-      'PPMFWC_Gateway_Capayable',
-      'PPMFWC_Gateway_CapayableGespreid',
-      'PPMFWC_Gateway_Cartebleue',
-      'PPMFWC_Gateway_Clickandbuy',
-      'PPMFWC_Gateway_CreditClick',
-      'PPMFWC_Gateway_Cashly',
-      'PPMFWC_Gateway_Good4fun',
-      'PPMFWC_Gateway_Dankort',
-      'PPMFWC_Gateway_DeCadeaukaart',
-      'PPMFWC_Gateway_Dinerbon',
-      'PPMFWC_Gateway_Eps',
-      'PPMFWC_Gateway_Fashioncheque',
-      'PPMFWC_Gateway_Fashiongiftcard',
-      'PPMFWC_Gateway_FestivalCadeaukaart',
-      'PPMFWC_Gateway_Focum',
-      'PPMFWC_Gateway_Gezondheidsbon',
-      'PPMFWC_Gateway_Giropay',
-      'PPMFWC_Gateway_Givacard',
-      'PPMFWC_Gateway_Googlepay',
-      'PPMFWC_Gateway_HuisenTuinCadeau',
-      'PPMFWC_Gateway_Ideal',
-      'PPMFWC_Gateway_Incasso',
-      'PPMFWC_Gateway_Instore',
-      'PPMFWC_Gateway_Klarna',
-      'PPMFWC_Gateway_Klarnakp',
-      'PPMFWC_Gateway_Maestro',
-      'PPMFWC_Gateway_Minitixsms',
-      'PPMFWC_Gateway_Mistercash',
-      'PPMFWC_Gateway_Monizze',
-      'PPMFWC_Gateway_Multibanco',
-      'PPMFWC_Gateway_Mybank',
-      'PPMFWC_Gateway_Nexi',
-      'PPMFWC_Gateway_OkPayments',
-      'PPMFWC_Gateway_Overboeking',
-      'PPMFWC_Gateway_ParfumCadeaukaart',
-      'PPMFWC_Gateway_OnlineBankbetaling',
-      'PPMFWC_Gateway_P24',
-      'PPMFWC_Gateway_Payconiq',
-      'PPMFWC_Gateway_Paypal',
-      'PPMFWC_Gateway_Paysafecard',
-      'PPMFWC_Gateway_Phone',
-      'PPMFWC_Gateway_Podiumcadeaukaart',
-      'PPMFWC_Gateway_Postepay',
-      'PPMFWC_Gateway_ShoesAndSneakers',
-      'PPMFWC_Gateway_Sodexo',
-      'PPMFWC_Gateway_Sofortbanking',
-      'PPMFWC_Gateway_SofortbankingDigitalServices',
-      'PPMFWC_Gateway_Spraypay',
-      'PPMFWC_Gateway_Tikkie',
-      'PPMFWC_Gateway_Trustly',
-      'PPMFWC_Gateway_Visamastercard',
-      'PPMFWC_Gateway_Vvvgiftcard',
-      'PPMFWC_Gateway_Webshopgiftcard',
-      'PPMFWC_Gateway_Wijncadeau',
-      'PPMFWC_Gateway_Winkelcheque',
-      'PPMFWC_Gateway_Wechatpay',
-      'PPMFWC_Gateway_Yourgift',
-      'PPMFWC_Gateway_YourGreenGiftCard',
-      'PPMFWC_Gateway_Yehhpay',
+        'PPMFWC_Gateway_Alipay',
+        'PPMFWC_Gateway_Amazonpay',
+        'PPMFWC_Gateway_Amex',
+        'PPMFWC_Gateway_Applepay',
+        'PPMFWC_Gateway_Afterpay',
+        'PPMFWC_Gateway_AfterpayInternational',
+        'PPMFWC_Gateway_BataviastadCadeaukaart',
+        'PPMFWC_Gateway_Biercheque',
+        'PPMFWC_Gateway_Biller',
+        'PPMFWC_Gateway_Billink',
+        'PPMFWC_Gateway_Bioscoopbon',
+        'PPMFWC_Gateway_Blik',
+        'PPMFWC_Gateway_BloemenCadeaukaart',
+        'PPMFWC_Gateway_Boekenbon',
+        'PPMFWC_Gateway_Cartasi',
+        'PPMFWC_Gateway_Capayable',
+        'PPMFWC_Gateway_CapayableGespreid',
+        'PPMFWC_Gateway_Cartebleue',
+        'PPMFWC_Gateway_Clickandbuy',
+        'PPMFWC_Gateway_CreditClick',
+        'PPMFWC_Gateway_Cashly',
+        'PPMFWC_Gateway_Good4fun',
+        'PPMFWC_Gateway_Dankort',
+        'PPMFWC_Gateway_DeCadeaukaart',
+        'PPMFWC_Gateway_Dinerbon',
+        'PPMFWC_Gateway_Eps',
+        'PPMFWC_Gateway_Fashioncheque',
+        'PPMFWC_Gateway_Fashiongiftcard',
+        'PPMFWC_Gateway_FestivalCadeaukaart',
+        'PPMFWC_Gateway_Focum',
+        'PPMFWC_Gateway_Gezondheidsbon',
+        'PPMFWC_Gateway_Giropay',
+        'PPMFWC_Gateway_Givacard',
+        'PPMFWC_Gateway_Googlepay',
+        'PPMFWC_Gateway_HuisenTuinCadeau',
+        'PPMFWC_Gateway_Ideal',
+        'PPMFWC_Gateway_Incasso',
+        'PPMFWC_Gateway_Instore',
+        'PPMFWC_Gateway_Klarna',
+        'PPMFWC_Gateway_Klarnakp',
+        'PPMFWC_Gateway_Maestro',
+        'PPMFWC_Gateway_Minitixsms',
+        'PPMFWC_Gateway_Mistercash',
+        'PPMFWC_Gateway_Monizze',
+        'PPMFWC_Gateway_Multibanco',
+        'PPMFWC_Gateway_Mybank',
+        'PPMFWC_Gateway_Nexi',
+        'PPMFWC_Gateway_OkPayments',
+        'PPMFWC_Gateway_Overboeking',
+        'PPMFWC_Gateway_ParfumCadeaukaart',
+        'PPMFWC_Gateway_OnlineBankbetaling',
+        'PPMFWC_Gateway_P24',
+        'PPMFWC_Gateway_Payconiq',
+        'PPMFWC_Gateway_Paypal',
+        'PPMFWC_Gateway_Paysafecard',
+        'PPMFWC_Gateway_Phone',
+        'PPMFWC_Gateway_Podiumcadeaukaart',
+        'PPMFWC_Gateway_Postepay',
+        'PPMFWC_Gateway_ShoesAndSneakers',
+        'PPMFWC_Gateway_Sodexo',
+        'PPMFWC_Gateway_Sofortbanking',
+        'PPMFWC_Gateway_SofortbankingDigitalServices',
+        'PPMFWC_Gateway_Spraypay',
+        'PPMFWC_Gateway_Tikkie',
+        'PPMFWC_Gateway_Trustly',
+        'PPMFWC_Gateway_Visamastercard',
+        'PPMFWC_Gateway_Vvvgiftcard',
+        'PPMFWC_Gateway_Webshopgiftcard',
+        'PPMFWC_Gateway_Wijncadeau',
+        'PPMFWC_Gateway_Winkelcheque',
+        'PPMFWC_Gateway_Wechatpay',
+        'PPMFWC_Gateway_Yourgift',
+        'PPMFWC_Gateway_YourGreenGiftCard',
+        'PPMFWC_Gateway_Yehhpay',
     );
 
     /**
@@ -270,7 +270,7 @@ class PPMFWC_Gateways
             $message .= '<p class="description">' . esc_html(__('Not registered with Pay. yet? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register-now">here</a>!</p>'; // phpcs:ignore
         } elseif (strlen($error) > 0) {
             $message = '<span style="color:#ff0000; font-weight:bold;">' . esc_html(__('Pay. connection failed.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . ' (' . esc_html($error) . ')</span>';
-            $message .= '<p class="description">' . esc_html(__('Not registered with Pay. yet? Sign up ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://www.pay.nl/en/register-now">here</a>!</p>'; // phpcs:ignore
+            $message .= '<p class="description">' . esc_html(__('We are experiencing technical issues. Please check ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a target="_blank" href="https://status.pay.nl">status.pay.nl</a>' . esc_html(__('  for the latest update.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br/>' . esc_html(__('You can set your failover gateway under ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="' . admin_url('admin.php?page=wc-settings&tab=' . self::TAB_ID . '&section=settings') . '">' . esc_html(__('settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>.</p>'; // phpcs:ignore
         } else {
             $message = '<span style="color:#10723a; font-weight:bold;">' . esc_html(__('Pay. successfully connected.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span>';
         }
@@ -303,7 +303,6 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_loadPaymentMethods()
     {
-
         $paymentOptions = self::$arrGateways;
 
         $enabledGateways = WC()->payment_gateways->get_available_payment_gateways();
@@ -350,18 +349,17 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_loadSuggestionForm()
     {
-        $form = '';
-        $form .= '<br /><br />' . esc_html(__('If you have a feature request or other ideas, let us know!', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+        $form = '<br /><br />' . esc_html(__('If you have a feature request or other ideas, let us know!', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
         $form .= '<br />' . esc_html(__('Your submission will be reviewed by our development team.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
         $form .= '<br />' . esc_html(__('If needed, we will contact you for further information via the e-mail address provided.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
         $form .= '<br />' . esc_html(__('Please note: this form is not for Support requests, please contact support@pay.nl for this.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
 
         $form .= '<table class="form-table" id="pay_feature_request_form">';
-        $form .= '<tbody><tr valign="top">';
+        $form .= '<tbody><tr>';
         $form .= '<th scope="row" class="titledesc"><label>' . esc_html(__('Email (optional)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</label><span id="email_error" class="FR_Error">' . esc_html(__('Please fill in a valid email.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></th>'; // phpcs:ignore
         $form .= '<td class="forminp forminp-text"><textarea id="FR_Email" name="FR_Email"></textarea></td>';
         $form .= '</tr>';
-        $form .= '<tr valign="top">';
+        $form .= '<tr>';
         $form .= '<th scope="row" class="titledesc"><label>' . esc_html(__('Message', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '*</label><span id="message_error" class="FR_Error">' . esc_html(__('Please fill in a message.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</span></th>'; // phpcs:ignore
         $form .= '<td class="forminp forminp-text"><textarea id="FR_Message" name="FR_Message"></textarea></td>';
         $form .= '</tr>';
@@ -512,45 +510,6 @@ class PPMFWC_Gateways
                 'default' => 'no',
             );
             $addedSettings[] = array(
-                'name' => __('Use high risk methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                'type' => 'checkbox',
-                'desc' => esc_html(__("Enable when you are using high risk payment methods", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'id' => 'paynl_high_risk',
-                'default' => 'no',
-            );
-            $addedSettings[] = array(
-                'name' => __('Extended logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                'type' => 'checkbox',
-                'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'id' => 'paynl_paylogger',
-                'default' => 'yes',
-            );
-            $addedSettings[] = array(
-                'name' => esc_html(__('SSL verify peer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'type' => 'checkbox',
-                'desc' => esc_html(__('Uncheck this box if you have SSL certificate errors that you don\'t know how to fix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'id' => 'paynl_verify_peer',
-                'default' => 'yes',
-            );
-
-            $addedSettings[] = array(
-                'name' => __('Alternative exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                'type' => 'text',
-                'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
-                'desc' => esc_html(__('Use your own exchange-handler. Requests will be send as GET.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
-                          esc_html(__('Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
-                          esc_html(__('For more info see: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
-                'id' => 'paynl_exchange_url'
-            );
-
-            $addedSettings[] = array(
-                'name' => esc_html(__('Failover gateway', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'type' => 'text',
-                'placeholder' => '',
-                'desc' => esc_html(__('Leave this empty unless advised otherwise by Pay. Support', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'id' => 'paynl_failover_gateway',
-            );
-            $addedSettings[] = array(
                 'name' => esc_html(__('Order description prefix', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'text',
                 'placeholder' => '',
@@ -565,12 +524,67 @@ class PPMFWC_Gateways
                 'id' => 'paynl_payment_method_display',
                 'default' => 1,
             );
+
+            $addedSettings[] = array(
+              'css' => 'padding-bottom:40px;display:block;color:#f0f0f1',
+              'type' => 'info',
+              'text' => '<h2 class="paynl_advanced_settings_title">' . esc_html(__('Advanced settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</h2>'
+            );
+
             $addedSettings[] = array(
                 'name' => esc_html(__('Test IP address', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'text',
                 'desc' => esc_html(__('Transactions started from these IP addresses will use testmode. Comma separate IPs for multiple inputs', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br/>' . esc_html(__('Current IP address:', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . PPMFWC_Helper_Data::getIp(), // phpcs:ignore
                 'id' => 'paynl_test_ipadress',
             );
+            $addedSettings[] = array(
+                'name' => __('Alternative exchange URL', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'text',
+                'placeholder' => 'https://www.yourdomain.nl/exchange_handler',
+                'desc' => esc_html(__('Use your own exchange-handler. Requests will be send as GET.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
+                    esc_html(__('Example: https://www.yourdomain.nl/exchange_handler?action=#action#&order_id=#order_id#', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<br>' .
+                    esc_html(__('For more info see: ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://docs.pay.nl/developers#exchange-parameters">docs.pay.nl</a>',
+                'id' => 'paynl_exchange_url'
+            );
+            $addedSettings[] = array(
+                'name' => __('Multicore', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'select',
+                'options' => PPMFWC_Helper_Data::ppmfwc_getGateways(),
+                'desc' => esc_html(__('Select the core which will be used for processing payments', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_failover_gateway',
+                'default' => 'nl',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('Custom multicore', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'text',
+                'placeholder' => '',
+                'desc' => esc_html(__('Leave this empty unless advised otherwise by Pay. Support', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_custom_failover_gateway',
+            );
+            $addedSettings[] = array(
+                'name' => esc_html(__('SSL verification', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'checkbox',
+                'desc' => esc_html(__('Enabled by default for secure communications. Strongly recommended to leave this enabled, unless otherwise advised by Pay. Support.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
+                'id' => 'paynl_verify_peer',
+                'default' => 'yes',
+            );
+            $addedSettings[] = array(
+                'name' => __('Extended logging', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'checkbox',
+                'desc' => esc_html(__("Log payment information. Logfiles can be found at: WooCommerce > Status > Logs", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_paylogger',
+                'default' => 'yes',
+            );
+
+
+            $addedSettings[] = array(
+              'name' => __('Use high risk methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+              'type' => 'checkbox',
+              'desc' => esc_html(__("Enable when you are using high risk payment methods", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+              'id' => 'paynl_high_risk',
+              'default' => 'no',
+            );
+
 
             $addedSettings[] = array(
                 'type' => 'sectionend',

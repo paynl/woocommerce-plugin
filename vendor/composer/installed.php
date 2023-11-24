@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'name' => 'paynl/woocommerce-plugin',
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'reference' => '46b7fd08f5842ef61350f29ddd6f4d06feaa2644',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'dev' => true,
+    ),
+    'versions' => array(
+        'paynl/sdk' => array(
+            'pretty_version' => '1.6.7',
+            'version' => '1.6.7.0',
+            'reference' => '03c21abadb382676fdc0c1d488712ae1a50e4fde',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../paynl/sdk',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'paynl/woocommerce-plugin' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '46b7fd08f5842ef61350f29ddd6f4d06feaa2644',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'php-curl-class/php-curl-class' => array(
+            'pretty_version' => '9.18.2',
+            'version' => '9.18.2.0',
+            'reference' => '2b8a93b37d0525b4585820397ab8af7f4c317bcb',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-curl-class/php-curl-class',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+    ),
+);

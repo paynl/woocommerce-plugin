@@ -4,7 +4,7 @@
  * Plugin Name: Pay. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
  * Description: Pay. Payment Methods for WooCommerce
- * Version: 3.17.0
+ * Version: 3.18.0
  * Author: Pay.
  * Author URI: https://www.pay.nl
  * Requires at least: 3.5.1
@@ -73,6 +73,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
             $texts['requiredCocNumber'] = __('Please enter your COC number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             $texts['enterVatNumber'] = __('VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
             $texts['requiredVatNumber'] = __('Please enter your VAT number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+            $texts['dobRequired'] = __('Please enter your date of birth, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
 
             foreach ($gateways as $gateway_id => $gateway) {
                 /** @var PPMFWC_Gateway_Abstract $gateway */
@@ -91,6 +92,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
                   'issuersSelectionType' => $gateway->getSelectionType(),
                   'texts' => $texts,
                   'showbirthdate' => $gateway->askBirthdate(),
+                  'birthdateRequired' => $gateway->birthdateRequired(),
                   'showVatField' => $gateway->showVat(),
                   'vatRequired' => $gateway->vatRequired(),
                   'showCocField' => $gateway->showCoc(),

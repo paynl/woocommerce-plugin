@@ -355,6 +355,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     /**
      * @return boolean
      */
+    public function birthdateRequired()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
     public function showVat()
     {
         return false;
@@ -408,16 +416,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     public static function getTokenCode()
     {
         return get_option('paynl_tokencode');
-    }
-
-    /**
-     * @return string
-     */
-    protected static function is_high_risk()
-    {
-        $highrisk = get_option('paynl_high_risk');
-
-        return $highrisk == 'yes';
     }
 
     /**
@@ -593,7 +591,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     protected function startTransaction(WC_Order $order)
     {
-        $this->loginSDK();
+        $this->loginSDK(true);
 
         $returnUrl = add_query_arg(array('wc-api' => 'Wc_Pay_Gateway_Return'), home_url('/'));
         $exchangeUrl = add_query_arg('wc-api', 'Wc_Pay_Gateway_Exchange', home_url('/'));
@@ -735,6 +733,14 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
+     * @return bool
+     */
+    protected static function is_high_risk()
+    {
+        return get_option('paynl_high_risk') == 'yes';
+    }
+
+    /**
      * @return mixed|string|void
      */
     public static function getAlternativeExchangeUrl()
@@ -750,15 +756,19 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
     /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     * @param boolean $useMulticore
+     * @return void
      */
-    public static function loginSDK()
+    public static function loginSDK($useMulticore = false)
     {
         \Paynl\Config::setApiToken(self::getApiToken());
         \Paynl\Config::setServiceId(self::getServiceId());
 
-        $failOver = trim(self::getApiBase());
-        if (!empty($failOver) && strlen($failOver) > 12) {
-            \Paynl\Config::setApiBase($failOver);
+        if ($useMulticore) {
+            $failOver = trim(self::getApiBase());
+            if (!empty($failOver) && strlen($failOver) > 12) {
+                \Paynl\Config::setApiBase($failOver);
+            }
         }
 
         $tokenCode = self::getTokenCode();
@@ -787,11 +797,15 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public static function getApiBase()
     {
-        return get_option('paynl_failover_gateway');
+        $gateway = get_option('paynl_failover_gateway');
+        if ($gateway == 'custom') {
+            $gateway = get_option('paynl_custom_failover_gateway');
+        }
+        return $gateway;
     }
 
     /**

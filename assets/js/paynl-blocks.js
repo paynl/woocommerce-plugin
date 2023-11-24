@@ -41,12 +41,19 @@ const PaynlComponent = (props) =>{
                         errorMessage: gateway.texts.requiredCocNumber
                     };
                 }
+
+                if (gateway.showbirthdate == true && gateway.birthdateRequired == true && !dob.length) {
+                    return {
+                        type: emitResponse.responseTypes.SUCCESS,
+                        errorMessage: gateway.texts.dobRequired
+                    };
+                }
             }
         );
         return () => {
             unsubscribeCheckoutValidation()
         };
-    }, [onCheckoutValidation, vatNumber, cocNumber, props]);
+    }, [onCheckoutValidation, dob, vatNumber, cocNumber, props]);
 
     useEffect(() => {
         const unsubscribe = onPaymentSetup(() => {
