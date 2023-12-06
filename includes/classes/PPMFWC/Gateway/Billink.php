@@ -21,7 +21,7 @@ class PPMFWC_Gateway_Billink extends PPMFWC_Gateway_Abstract
      */
     public static function getName()
     {
-        return 'Achteraf betalen via Billink';
+        return 'NOTYD';
     }
 
     /**
