@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
 "POT-Creation-Date: 2023-10-12 16:19+0200\n"
-"PO-Revision-Date: 2023-11-03 11:07+0100\n"
+"PO-Revision-Date: 2023-11-20 15:37+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: fr\n"
@@ -918,6 +918,18 @@ msgstr "Oui, en optionnel"
 
 msgid "Yes, as required"
 msgstr "Oui, au requis"
+
+msgid "Please enter your VAT number, this field is required."
+msgstr "Veuillez saisir votre numéro de TVA, ce champ est obligatoire."
+
+msgid "Please enter your COC number, this field is required."
+msgstr "Veuillez saisir votre Numéro SIREN, ce champ est obligatoire."
+
+msgid "Optional for business customers"
+msgstr "Optionnel pour les clients professionnels"
+
+msgid "Required for business customers"
+msgstr "Requis pour les clients professionnels"
 
 #~ msgid "Use your own exchange-handler. Requests will be send as GET."
 #~ msgstr ""
