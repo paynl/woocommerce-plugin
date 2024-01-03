@@ -517,8 +517,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 }
             }
 
-            $vatRequired = get_option('paynl_show_vat_number');
-            if ($vatRequired == 'yes_required') {
+            if ($this->showVat() && $this->vatRequired()) {
                 $vat = PPMFWC_Helper_Data::getPostTextField('vat_number');
                 if (empty($vat)) {
                     $message = esc_html(__('Please enter your VAT number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
@@ -526,8 +525,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 }
             }
 
-            $cocRequired = get_option('paynl_show_coc_number');
-            if ($cocRequired == 'yes_required') {
+            if ($this->showCoc() && $this->cocRequired()) {
                 $coc = PPMFWC_Helper_Data::getPostTextField('coc_number');
                 if (empty($coc)) {
                     $message = esc_html(__('Please enter your COC number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
