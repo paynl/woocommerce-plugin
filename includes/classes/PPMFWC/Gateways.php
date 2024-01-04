@@ -65,6 +65,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Afterpay',
         'PPMFWC_Gateway_AfterpayInternational',
         'PPMFWC_Gateway_BataviastadCadeaukaart',
+        'PPMFWC_Gateway_Beautycadeau',
         'PPMFWC_Gateway_Biercheque',
         'PPMFWC_Gateway_Biller',
         'PPMFWC_Gateway_Billink',
@@ -79,7 +80,9 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Clickandbuy',
         'PPMFWC_Gateway_CreditClick',
         'PPMFWC_Gateway_Cashly',
+        'PPMFWC_Gateway_Cult',
         'PPMFWC_Gateway_Good4fun',
+        'PPMFWC_Gateway_HorsesandGifts',
         'PPMFWC_Gateway_Dankort',
         'PPMFWC_Gateway_DeCadeaukaart',
         'PPMFWC_Gateway_Dinerbon',
@@ -103,6 +106,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Minitixsms',
         'PPMFWC_Gateway_Mistercash',
         'PPMFWC_Gateway_Monizze',
+        'PPMFWC_Gateway_Mooigiftcard',
         'PPMFWC_Gateway_Multibanco',
         'PPMFWC_Gateway_Mybank',
         'PPMFWC_Gateway_Nexi',
@@ -488,14 +492,24 @@ class PPMFWC_Gateways
             );
             $addedSettings[] = array(
                 'name' => esc_html(__('Show VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'type' => 'checkbox',
+                'type' => 'select',
+                'options' => array(
+                    'no' => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'yes' => esc_html(__('Optional for business customers', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'yes_required' => esc_html(__('Required for business customers', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                ),
                 'desc' => esc_html(__('Enable to add an extra field to the checkout for customers to enter their VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_show_vat_number',
                 'default' => 'no',
             );
             $addedSettings[] = array(
                 'name' => esc_html(__('Show COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'type' => 'checkbox',
+                'type' => 'select',
+                'options' => array(
+                    'no' => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'yes' => esc_html(__('Optional for business customers', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'yes_required' => esc_html(__('Required for business customers', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                ),
                 'desc' => esc_html(__('Enable to add an extra field to the checkout for customers to enter their COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_show_coc_number',
                 'default' => 'no',

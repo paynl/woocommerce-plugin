@@ -85,7 +85,7 @@ class PPMFWC_Gateway_Capayable extends PPMFWC_Gateway_Abstract
      */
     public function showVat()
     {
-        return get_option('paynl_show_vat_number') == "yes";
+        return (!empty(get_option('paynl_show_vat_number')) && get_option('paynl_show_vat_number') != "no");
     }
 
     /**
@@ -93,6 +93,22 @@ class PPMFWC_Gateway_Capayable extends PPMFWC_Gateway_Abstract
      */
     public function showCoc()
     {
-        return get_option('paynl_show_coc_number') == "yes";
+        return (!empty(get_option('paynl_show_coc_number')) && get_option('paynl_show_coc_number') != "no");
+    }
+
+    /**
+     * @return boolean
+     */
+    public function vatRequired()
+    {
+        return get_option('paynl_show_vat_number') == "yes_required";
+    }
+
+    /**
+     * @return boolean
+     */
+    public function cocRequired()
+    {
+        return get_option('paynl_show_coc_number') == "yes_required";
     }
 }

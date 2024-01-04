@@ -371,7 +371,23 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     /**
      * @return boolean
      */
+    public function vatRequired()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
     public function showCoc()
+    {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function cocRequired()
     {
         return false;
     }
@@ -497,6 +513,22 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 $birthdate = PPMFWC_Helper_Data::getPostTextField($this->getId() . '_birthdate');
                 if (empty($birthdate) || strlen(trim($birthdate)) != 10) {
                     $message = esc_html(__('Please enter your date of birth, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+                    throw new PPMFWC_Exception_Notice($message);
+                }
+            }
+
+            if ($this->showVat() && $this->vatRequired()) {
+                $vat = PPMFWC_Helper_Data::getPostTextField('vat_number');
+                if (empty($vat)) {
+                    $message = esc_html(__('Please enter your VAT number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+                    throw new PPMFWC_Exception_Notice($message);
+                }
+            }
+
+            if ($this->showCoc() && $this->cocRequired()) {
+                $coc = PPMFWC_Helper_Data::getPostTextField('coc_number');
+                if (empty($coc)) {
+                    $message = esc_html(__('Please enter your COC number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
                     throw new PPMFWC_Exception_Notice($message);
                 }
             }
@@ -696,7 +728,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     protected static function is_high_risk()
     {

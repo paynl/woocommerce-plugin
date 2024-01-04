@@ -28,7 +28,19 @@ const PaynlComponent = (props) =>{
 
     useEffect(() => {
         const unsubscribeCheckoutValidation = onCheckoutValidation(
-            () => {
+            () => {              
+                if (gateway.showVatField == true && gateway.vatRequired == true && !vatNumber.length) {
+                    return {
+                        type: emitResponse.responseTypes.SUCCESS,
+                        errorMessage: gateway.texts.requiredVatNumber
+                    };
+                } else if (gateway.showCocField == true && gateway.cocRequired == true && !cocNumber.length) {
+                    return {
+                        type: emitResponse.responseTypes.SUCCESS,
+                        errorMessage: gateway.texts.requiredCocNumber
+                    };
+                }
+
                 if (gateway.showbirthdate == true && gateway.birthdateRequired == true && !dob.length) {
                     return {
                         type: emitResponse.responseTypes.SUCCESS,
@@ -40,7 +52,7 @@ const PaynlComponent = (props) =>{
         return () => {
             unsubscribeCheckoutValidation()
         };
-    }, [onCheckoutValidation, dob]);
+    }, [onCheckoutValidation, dob, vatNumber, cocNumber]);
 
     useEffect(() => {
         const unsubscribe = onPaymentSetup(() => {
