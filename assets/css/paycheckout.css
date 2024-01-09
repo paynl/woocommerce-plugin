@@ -89,7 +89,7 @@ div p[class*="payment_method_pay_gateway"] .payment_box select {
     font-size: 16px;
     position: absolute;
     top: -10px;
-    background: transparent;
+    -webkit-appearance: none;
     left: 0;
     border-radius: 10px;
     padding: 11px 10px 11px 15px !important;
@@ -99,6 +99,9 @@ div p[class*="payment_method_pay_gateway"] .payment_box select {
     text-rendering: optimizeLegibility;
     font-weight: 400;
     height: auto;
+    background-image: url(data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0Ljk1IDEwIj48ZGVmcz48c3R5bGU+LmNscy0ye2ZpbGw6IzQ0NDt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmFycm93czwvdGl0bGU+PHBvbHlnb24gY2xhc3M9ImNscy0yIiBwb2ludHM9IjEuNDEgNC42NyAyLjQ4IDMuMTggMy41NCA0LjY3IDEuNDEgNC42NyIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtMiIgcG9pbnRzPSIzLjU0IDUuMzMgMi40OCA2LjgyIDEuNDEgNS4zMyAzLjU0IDUuMzMiLz48L3N2Zz4=);
+    background-repeat: no-repeat;
+    background-position: right;
     background-color: transparent !important;
 }
 
