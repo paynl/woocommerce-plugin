@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
 "POT-Creation-Date: 2024-01-04 16:33+0100\n"
-"PO-Revision-Date: 2024-01-04 16:34+0100\n"
+"PO-Revision-Date: 2024-03-15 15:36+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -66,7 +66,7 @@ msgstr "Minimum bedrag"
 msgid "Minimum order amount for this payment method, leave blank for no limit."
 msgstr ""
 "Stel een minimum bestelwaarde in om deze betaalmethode in de checkout te "
-"tonen. Laat je dit veld leeg, dan wordt de betaalmethode altijd getoond."
+"tonen. Is dit veld leeg, wordt de betaalmethode altijd getoond."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:126
 msgid "Maximum amount"
@@ -76,7 +76,7 @@ msgstr "Maximum bedrag"
 msgid "Maximum order amount for this payment method, leave blank for no limit."
 msgstr ""
 "Stel een maximum bestelwaarde in om deze betaalmethode in de checkout te "
-"tonen. Laat je dit veld leeg, dan wordt de betaalmethode altijd getoond."
+"tonen. Is dit veld leeg, dan wordt de betaalmethode altijd getoond."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:136
 msgid "Initial order status"
@@ -253,17 +253,17 @@ msgstr "Geboortedatum: "
 #: includes/classes/PPMFWC/Gateway/Abstract.php:515
 #: woocommerce-payment-paynl.php:76
 msgid "Please enter your date of birth, this field is required."
-msgstr "Vul je geboortedatum in. Dit veld is verplicht."
+msgstr "Vul uw geboortedatum in. Dit veld is verplicht."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:523
 #: woocommerce-payment-paynl.php:75
 msgid "Please enter your VAT number, this field is required."
-msgstr "Vul je BTW-nummer in. Dit veld is verplicht."
+msgstr "Vul uw BTW-nummer in. Dit veld is verplicht."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:531
 #: woocommerce-payment-paynl.php:73
 msgid "Please enter your COC number, this field is required."
-msgstr "Vul je KVK-nummer in. Dit veld is verplicht."
+msgstr "Vul uw KVK-nummer in. Dit veld is verplicht."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:546
 #, php-format
@@ -461,8 +461,8 @@ msgstr "De volgende betaalmethoden kunnen worden ingeschakeld:"
 #: includes/classes/PPMFWC/Gateways.php:356
 msgid "If you have a feature request or other ideas, let us know!"
 msgstr ""
-"Als je een idee hebt voor een functie die je graag terugziet, laat het ons "
-"weten!"
+"Mocht u voor deze plugin een goed idee of suggestie hebben, dan horen we dat "
+"graag!"
 
 #: includes/classes/PPMFWC/Gateways.php:357
 msgid "Your submission will be reviewed by our development team."
@@ -506,7 +506,7 @@ msgstr "Versturen"
 
 #: includes/classes/PPMFWC/Gateways.php:373
 msgid "Sent! Thank you for your contribution."
-msgstr "Verstuurd! Bedankt voor het delen van jouw input."
+msgstr "Verstuurd! Bedankt voor het delen van uw input."
 
 #: includes/classes/PPMFWC/Gateways.php:373
 #: includes/classes/PPMFWC/Gateways.php:374
@@ -528,7 +528,7 @@ msgstr "Pay. Betaalmethoden"
 
 #: includes/classes/PPMFWC/Gateways.php:408
 msgid "Complete connecting your Pay. account on the "
-msgstr "Voltooi het koppelen van jouw Pay. account op de "
+msgstr "Voltooi het koppelen van uw Pay. account op de "
 
 #: includes/classes/PPMFWC/Gateways.php:409
 msgid "setup page"
@@ -680,7 +680,7 @@ msgid ""
 "separate IPs for multiple inputs"
 msgstr ""
 "Transacties gestart vanaf deze IP-adressen zullen automatisch testmodus "
-"gebruiken. Voor meerdere IP-adressen kun je deze scheiden m.b.v. komma’s"
+"gebruiken. Voor meerdere IP-adressen kunt u deze scheiden m.b.v. komma’s"
 
 #: includes/classes/PPMFWC/Gateways.php:541
 msgid "Current IP address:"
@@ -692,7 +692,7 @@ msgstr "Alternatieve exchange URL"
 
 #: includes/classes/PPMFWC/Gateways.php:548
 msgid "Use your own exchange-handler. Requests will be send as GET."
-msgstr "Gebruik je eigen exchange-handler. Requests worden verstuurd als GET."
+msgstr "Gebruik uw eigen exchange-handler."
 
 #: includes/classes/PPMFWC/Gateways.php:549
 msgid ""
@@ -743,7 +743,7 @@ msgid ""
 "Log payment information. Logfiles can be found at: WooCommerce > Status > "
 "Logs"
 msgstr ""
-"Log betaalproces informatie. Deze kun je ophalen via: WooCommerce > Status > "
+"Log betaalproces informatie. Deze kut u ophalen via: WooCommerce > Status > "
 "Logs"
 
 #: includes/classes/PPMFWC/Gateways.php:585
@@ -764,7 +764,7 @@ msgstr "Token code *"
 
 #: includes/classes/PPMFWC/Gateways.php:626
 msgid "The AT-code belonging to your API token, you can find this "
-msgstr "De AT-code behorende bij de API token, deze kun je vinden in "
+msgstr "De AT-code behorende bij de API token, deze kunt u vinden in "
 
 #: includes/classes/PPMFWC/Gateways.php:629
 #: includes/classes/PPMFWC/Gateways.php:640
@@ -781,7 +781,7 @@ msgid ""
 "The API token used to communicate with the Pay. API, you can find your API "
 "token "
 msgstr ""
-"Een API token wordt gebruikt om met de API van Pay. te communiceren, je kunt "
+"Een API token wordt gebruikt om met de API van Pay. te communiceren, u kunt "
 "de API token vinden in "
 
 #: includes/classes/PPMFWC/Gateways.php:644
@@ -790,7 +790,7 @@ msgstr "Verkooplocatie *"
 
 #: includes/classes/PPMFWC/Gateways.php:649
 msgid "The SL-code of your Sales Location, you can find your SL-code "
-msgstr "De SL-code van jouw verkooplocatie, deze kun je vinden in "
+msgstr "De SL-code van uw verkooplocatie, deze kunt u vinden in "
 
 #: includes/classes/PPMFWC/Gateways.php:654
 msgid "The Sales Location should be in the following format: SL-xxxx-xxxx"
@@ -960,16 +960,16 @@ msgid ""
 "install install CURL. Ask your system administrator to install php_curl."
 msgstr ""
 "Curl is niet geïnstalleerd. Om Pay. Betaalmethoden voor WooCommerce te "
-"kunnen gebruiken, moet CURL geïnstalleerd zijn. Vraag je systeembeheerder om "
-"php_curl te installeren."
+"kunnen gebruiken, moet CURL geïnstalleerd zijn. Vraag uw systeembeheerder om "
+"PHP CURL te installeren."
 
 #: woocommerce-payment-paynl.php:179
 msgid "Enter your VAT number"
-msgstr "Vul jouw BTW-nummer in"
+msgstr "Vul uw BTW-nummer in"
 
 #: woocommerce-payment-paynl.php:235
 msgid "Enter your COC number"
-msgstr "Vul jouw KVK-nummer in"
+msgstr "Vul uw KVK-nummer in"
 
 #: woocommerce-payment-paynl.php:309
 #, php-format
