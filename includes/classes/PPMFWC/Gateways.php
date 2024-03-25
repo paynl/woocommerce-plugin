@@ -467,7 +467,7 @@ class PPMFWC_Gateways
                 'options' => PPMFWC_Helper_Data::ppmfwc_getAvailableLanguages(),
                 'desc' => esc_html(__('Select the language in which payment screens should open', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_language',
-                'default' => 'nl',
+                'default' => 'browser',
             );
             $addedSettings[] = array(
                 'name' => __('Refund processing', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
