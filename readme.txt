@@ -191,6 +191,7 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 == Changelog ==
 = 3.18.3 =
 Updated translations
+Updated default value for payment screen language
 = 3.18.2 =
 Payment methods added
 Compatibility with WooCommerce 8.5
