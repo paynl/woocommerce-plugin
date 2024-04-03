@@ -657,8 +657,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $billingAddress .= ' ';
         $billingAddress .= (!empty($order->get_meta('_billing_house_number'))) ? $order->get_meta('_billing_house_number') : '';
         $billingAddress .= $order->get_billing_address_2();
-        
-        $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);$aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
+
+        $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
         $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
         $address = array(
             'streetName' => $aShippingAddress[0],
