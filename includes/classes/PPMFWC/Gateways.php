@@ -19,6 +19,7 @@ class PPMFWC_Gateways
     const STATUS_REFUND = 'REFUND';
     const STATUS_REFUND_PARTIALLY = 'PARTREF';
     const STATUS_CAPTURE = 'CAPTURE';
+    const STATUS_CHARGEBACK = 'CHARGEBACK';
 
     const ACTION_NEWPPT = 'new_ppt';
     const ACTION_PENDING = 'pending';
@@ -26,6 +27,7 @@ class PPMFWC_Gateways
     const ACTION_VERIFY = 'verify';
     const ACTION_REFUND = 'refund:received';
     const ACTION_CAPTURE = 'capture';
+    const ACTION_CHARGEBACK = 'chargeback:chargeback';
 
     const TAB_ID = 'pay_settings';
 
@@ -430,7 +432,8 @@ class PPMFWC_Gateways
                 ]],
                 'failed' => ['failed', PPMFWC_Gateway_Abstract::STATUS_FAILED],
                 'authorized' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
-                'verify' => ['on-hold', PPMFWC_Gateway_Abstract::STATUS_ON_HOLD]
+                'verify' => ['on-hold', PPMFWC_Gateway_Abstract::STATUS_ON_HOLD],
+                'chargeback' => ['cancelled', PPMFWC_Gateway_Abstract::STATUS_CANCELLED]
             ];
 
             foreach ($statusSettings as $statusname => $statusValues) {
@@ -855,6 +858,8 @@ class PPMFWC_Gateways
         $arrPayActions[self::ACTION_VERIFY] = self::STATUS_VERIFY;
         $arrPayActions[self::ACTION_REFUND] = self::STATUS_REFUND;
         $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
+        $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
+        $arrPayActions[self::ACTION_CHARGEBACK] = self::STATUS_CHARGEBACK;
         return $arrPayActions;
     }
 
