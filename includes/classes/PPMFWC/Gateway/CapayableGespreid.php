@@ -21,7 +21,7 @@ class PPMFWC_Gateway_CapayableGespreid extends PPMFWC_Gateway_Abstract
      */
     public static function getName()
     {
-        return 'IN3 – Betaal in 3 delen, 0% rente';
+        return 'iDEAL in3';
     }
 
     /**
