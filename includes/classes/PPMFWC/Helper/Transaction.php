@@ -30,7 +30,7 @@ class PPMFWC_Helper_Transaction
         $arrDefaultStatus['failed'] = 'failed';
         $arrDefaultStatus['authorised'] = 'processing';
         $arrDefaultStatus['verify'] = 'on-hold';
-        $arrDefaultStatus['chargeback'] = 'cancelled';
+        $arrDefaultStatus['chargeback'] = 'off';
 
         return $arrStatus[$payStatus] === false ? $arrDefaultStatus[$payStatus] : $arrStatus[$payStatus];
     }
@@ -299,8 +299,12 @@ class PPMFWC_Helper_Transaction
                 break;
 
             case PPMFWC_Gateways::STATUS_CHARGEBACK:
-                PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `refunded`', $transactionId);
-                $order->set_status(self::getCustomWooComOrderStatus('chargeback'), 'Pay. Chargeback. Reason: "' . PPMFWC_Helper_Data::getRequestArg('external_reason_description') . '".');
+                $status = self::getCustomWooComOrderStatus('chargeback');
+                if ($status == 'off') {
+                    throw new PPMFWC_Exception_Notice('Ignoring: chargeback');
+                }
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `chargeback`', $transactionId);
+                $order->set_status($status, 'Pay. Chargeback. Reason: "' . PPMFWC_Helper_Data::getRequestArg('external_reason_description') . '".');
                 wc_increase_stock_levels($orderId);
                 $order->save();
                 break;

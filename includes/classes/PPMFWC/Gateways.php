@@ -41,6 +41,9 @@ class PPMFWC_Gateways
     {
         $txt = esc_html(' (' . __('default', PPMFWC_WOOCOMMERCE_TEXTDOMAIN) . ')');
 
+        if ($default == 'off') {
+            $arrStates['off'] = 'off';
+        }
         $arrStates['processing'] = PPMFWC_Gateway_Abstract::STATUS_PROCESSING;
         $arrStates['pending'] = PPMFWC_Gateway_Abstract::STATUS_PENDING;
         $arrStates['cancel'] = PPMFWC_Gateway_Abstract::STATUS_CANCELLED;
@@ -52,7 +55,7 @@ class PPMFWC_Gateways
         $availableStatuses = array();
         foreach ($arrStates as $state) {
             if (!in_array($state, $excludeStates)) {
-                $availableStatuses[$state] = wc_get_order_status_name($state) . ($state == $default ? $txt : '');
+                $availableStatuses[$state] = ucfirst(wc_get_order_status_name($state)) . ($state == $default ? $txt : '');
             }
         }
 
@@ -433,7 +436,7 @@ class PPMFWC_Gateways
                 'failed' => ['failed', PPMFWC_Gateway_Abstract::STATUS_FAILED],
                 'authorized' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
                 'verify' => ['on-hold', PPMFWC_Gateway_Abstract::STATUS_ON_HOLD],
-                'chargeback' => ['cancelled', PPMFWC_Gateway_Abstract::STATUS_CANCELLED]
+                'chargeback' => ['off', PPMFWC_Gateway_Abstract::STATUS_CANCELLED]
             ];
 
             foreach ($statusSettings as $statusname => $statusValues) {
