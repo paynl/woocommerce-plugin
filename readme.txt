@@ -6,7 +6,7 @@ Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wech
 Requires at least: 3.5.1
 Stable tag: 3.18.3
 Tested up to: 6.5
-WC tested up to: 8.7.0
+WC tested up to: 8.9.0
 WC requires at least: 3.0
 Requires PHP: 7.0
 License: GPLv2
