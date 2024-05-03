@@ -7,7 +7,7 @@
  * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  * @phpcs:disable PSR1.Methods.CamelCapsMethodName
  * @phpcs:disable PSR12.Properties.ConstantVisibility
- * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
+ * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
  */
 
 class PPMFWC_Helper_Transaction
@@ -23,12 +23,14 @@ class PPMFWC_Helper_Transaction
         $arrStatus['failed'] = get_option('paynl_status_failed');
         $arrStatus['authorised'] = get_option('paynl_status_authorized');
         $arrStatus['verify'] = get_option('paynl_status_verify');
+        $arrStatus['chargeback'] = get_option('paynl_status_chargeback');
 
         $arrDefaultStatus['processing'] = 'processing';
         $arrDefaultStatus['cancel'] = 'cancelled';
         $arrDefaultStatus['failed'] = 'failed';
         $arrDefaultStatus['authorised'] = 'processing';
         $arrDefaultStatus['verify'] = 'on-hold';
+        $arrDefaultStatus['chargeback'] = 'off';
 
         return $arrStatus[$payStatus] === false ? $arrDefaultStatus[$payStatus] : $arrStatus[$payStatus];
     }
@@ -51,16 +53,16 @@ class PPMFWC_Helper_Transaction
         $wpdb->insert(
             $table_name_transactions,
             array(
-            'transaction_id' => $transactionId,
-            'option_id' => $opionId,
-            'option_sub_id' => $optionSubId,
-            'amount' => $amount,
-            'order_id' => $orderId,
-            'status' => PPMFWC_Gateways::STATUS_PENDING,
-            'start_data' => $startData,
+                'transaction_id' => $transactionId,
+                'option_id' => $opionId,
+                'option_sub_id' => $optionSubId,
+                'amount' => $amount,
+                'order_id' => $orderId,
+                'status' => PPMFWC_Gateways::STATUS_PENDING,
+                'start_data' => $startData,
             ),
             array(
-                '%s', '%d', '%d', '%d', '%d', '%s', '%s'
+                '%s', '%d', '%d', '%d', '%d', '%s', '%s',
             )
         );
         $insertId = $wpdb->insert_id;
@@ -150,7 +152,7 @@ class PPMFWC_Helper_Transaction
         try {
             $order = new WC_Order($orderId);
         } catch (Exception $e) {
-          # Could not retrieve order from WooCommerce (this is a notice so exchange wont repeat)
+            # Could not retrieve order from WooCommerce (this is a notice so exchange wont repeat)
             throw new PPMFWC_Exception_Notice('Woocommerce could not find internal order ' . $orderId);
         }
 
@@ -191,6 +193,8 @@ class PPMFWC_Helper_Transaction
         if (in_array($wcOrderStatus, array('complete', 'processing'))) {
             if ($payApiStatus == PPMFWC_Gateways::STATUS_REFUND) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process refund', $transactionId);
+            } elseif ($payApiStatus == PPMFWC_Gateways::STATUS_CHARGEBACK) {
+                PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process chargeback', $transactionId);
             } else {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Done', $transactionId);
                 throw new PPMFWC_Exception_Notice('Order is already completed or processed');
@@ -292,6 +296,17 @@ class PPMFWC_Helper_Transaction
                     wc_increase_stock_levels($orderId);
                     $order->save();
                 }
+                break;
+
+            case PPMFWC_Gateways::STATUS_CHARGEBACK:
+                $status = self::getCustomWooComOrderStatus('chargeback');
+                if ($status == 'off') {
+                    throw new PPMFWC_Exception_Notice('Ignoring: chargeback');
+                }
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `chargeback`', $transactionId);
+                $order->set_status($status, 'Pay. Chargeback. Reason: "' . PPMFWC_Helper_Data::getRequestArg('external_reason_description') . '".');
+                wc_increase_stock_levels($orderId);
+                $order->save();
                 break;
 
             case PPMFWC_Gateways::STATUS_CANCELED:
