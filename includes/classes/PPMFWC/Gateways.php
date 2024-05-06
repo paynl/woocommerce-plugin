@@ -19,6 +19,7 @@ class PPMFWC_Gateways
     const STATUS_REFUND = 'REFUND';
     const STATUS_REFUND_PARTIALLY = 'PARTREF';
     const STATUS_CAPTURE = 'CAPTURE';
+    const STATUS_CHARGEBACK = 'CHARGEBACK';
 
     const ACTION_NEWPPT = 'new_ppt';
     const ACTION_PENDING = 'pending';
@@ -26,6 +27,7 @@ class PPMFWC_Gateways
     const ACTION_VERIFY = 'verify';
     const ACTION_REFUND = 'refund:received';
     const ACTION_CAPTURE = 'capture';
+    const ACTION_CHARGEBACK = 'chargeback:chargeback';
 
     const TAB_ID = 'pay_settings';
 
@@ -39,6 +41,9 @@ class PPMFWC_Gateways
     {
         $txt = esc_html(' (' . __('default', PPMFWC_WOOCOMMERCE_TEXTDOMAIN) . ')');
 
+        if ($default == 'off') {
+            $arrStates['off'] = 'off';
+        }
         $arrStates['processing'] = PPMFWC_Gateway_Abstract::STATUS_PROCESSING;
         $arrStates['pending'] = PPMFWC_Gateway_Abstract::STATUS_PENDING;
         $arrStates['cancel'] = PPMFWC_Gateway_Abstract::STATUS_CANCELLED;
@@ -50,7 +55,7 @@ class PPMFWC_Gateways
         $availableStatuses = array();
         foreach ($arrStates as $state) {
             if (!in_array($state, $excludeStates)) {
-                $availableStatuses[$state] = wc_get_order_status_name($state) . ($state == $default ? $txt : '');
+                $availableStatuses[$state] = ucfirst(wc_get_order_status_name($state)) . ($state == $default ? $txt : '');
             }
         }
 
@@ -430,7 +435,8 @@ class PPMFWC_Gateways
                 ]],
                 'failed' => ['failed', PPMFWC_Gateway_Abstract::STATUS_FAILED],
                 'authorized' => ['processing', PPMFWC_Gateway_Abstract::STATUS_PROCESSING],
-                'verify' => ['on-hold', PPMFWC_Gateway_Abstract::STATUS_ON_HOLD]
+                'verify' => ['on-hold', PPMFWC_Gateway_Abstract::STATUS_ON_HOLD],
+                'chargeback' => ['off', 'off']
             ];
 
             foreach ($statusSettings as $statusname => $statusValues) {
@@ -855,6 +861,8 @@ class PPMFWC_Gateways
         $arrPayActions[self::ACTION_VERIFY] = self::STATUS_VERIFY;
         $arrPayActions[self::ACTION_REFUND] = self::STATUS_REFUND;
         $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
+        $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
+        $arrPayActions[self::ACTION_CHARGEBACK] = self::STATUS_CHARGEBACK;
         return $arrPayActions;
     }
 

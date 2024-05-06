@@ -22,7 +22,7 @@
   Bancontact + QR | Mastercard | Webshop Giftcard | Achteraf betalen via Billink | Wechat Pay
   Giropay | American Express | Fashioncheque | Focum AchterafBetalen.nl | Amazon Pay
   Mybank | Postepay | Podiumcadeaukaart | Capayable Achteraf Betalen | Cashly
-  SOFORT | Dankort | Gezondheidsbon | IN3 – Betaal in 3 delen, 0% rente | Instore payments (PIN)
+  SOFORT | Dankort | Gezondheidsbon | iDEAL in3 | Instore payments (PIN)
   Maestro | CartaSi | Fashion Giftcard | Klarna | Przelewy24
   Tikkie | Cartebleue | Givacard | SprayPay | Apple Pay
   Multibanco | Wijncadeau | Yourgift | Creditclick | Payconiq

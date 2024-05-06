@@ -6,7 +6,7 @@ Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wech
 Requires at least: 3.5.1
 Stable tag: 3.18.3
 Tested up to: 6.5
-WC tested up to: 8.7.0
+WC tested up to: 8.9.0
 WC requires at least: 3.0
 Requires PHP: 7.0
 License: GPLv2
@@ -45,7 +45,7 @@ The full list of payment methods implemented in the WooCommerce omnichannel paym
 A brief overview of some of the options:
 **Internetbanking** : iDEAL, Bancontact, Giropay, EPS, Sofort....
 **Creditcards** : Visa, Mastercard, AMEX...
-**Buy Now Pay Later / Instalments** : IN3, Riverty, Klarna, Billink, SprayPay...
+**Buy Now Pay Later / Instalments** : iDEAL in3, Riverty, Klarna, Billink, SprayPay...
 **Wallets** : PayPal, Amazon Pay, WeChat Pay, AliPay, ApplePay...
 **Vouchers & prepaid** : Paysafecard, VVV Giftcard, Fashion Cheque, YourGift, Givacard...
 **Instore** payments: can be enabled when you have a card terminal via Pay.
@@ -128,7 +128,7 @@ At the moment the plugin supports the following payment methods:
 * Google Pay
 * Huis & Tuin Cadeau
 * iDEAL
-* IN3 – Betaal in 3 delen, 0% rente
+* iDEAL in3
 * Incasso
 * Instore payments (PIN)
 * Klarna KP
