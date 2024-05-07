@@ -647,16 +647,16 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
         $startData['enduser'] = $enduser;
 
-        # Retrieve order data
-        $shippingAddress = $order->get_shipping_address_1();
-        $shippingAddress .= ' ';
-        $shippingAddress .= (!empty($order->get_meta('_shipping_house_number'))) ? $order->get_meta('_shipping_house_number') : '';
-        $shippingAddress .= $order->get_shipping_address_2();
+        # Retrieve order data      
+        $shippingAddress = $order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2();
+        $billingAddress  = $order->get_billing_address_1() . ' ' . $order->get_billing_address_2();
 
-        $billingAddress = $order->get_billing_address_1();
-        $billingAddress .= ' ';
-        $billingAddress .= (!empty($order->get_meta('_billing_house_number'))) ? $order->get_meta('_billing_house_number') : '';
-        $billingAddress .= $order->get_billing_address_2();
+        if (!empty($order->get_meta('_shipping_house_number'))) {
+            $shippingAddress = $order->get_shipping_address_1() . ' ' . $order->get_meta('_shipping_house_number') . $order->get_shipping_address_2();
+        }
+        if (!empty($order->get_meta('_billing_house_number'))) {
+            $billingAddress = $order->get_billing_address_1() . ' ' . $order->get_meta('_billing_house_number') . $order->get_billing_address_2();
+        }
 
         $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
         $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
