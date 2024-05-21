@@ -4,13 +4,13 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wechatpay, paypal, creditcard, mybank, sofortbanking, riverty, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
-Stable tag: 3.18.3
-Tested up to: 6.5
+Stable tag: 3.18.4
+Tested up to: 6.5.3
 WC tested up to: 8.9.0
 WC requires at least: 3.0
 Requires PHP: 7.0
 License: GPLv2
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 This plugin adds the Pay. Payment Methods to your WooCommerce installation.
 
@@ -80,7 +80,7 @@ If you need more help, you can find our documentation [here](https://docs.pay.nl
 
 = How can i get an account for Pay.? =
 
-You can register [here](http://pay.nl/registreren) (Dutch and Belgian companies only)
+You can register [here](https://pay.nl/registreren) (Dutch and Belgian companies only)
 
 = Is there a documentation available for this plugin? =
 
@@ -170,12 +170,12 @@ At the moment the plugin supports the following payment methods:
 
 The easiest way to get started is bij using a free pioneer account.
 With this account there are no monthly fees, you'll only pay transaction costs for the transactions you make.
-Check the pioneer tariffs [here](http://pay.nl/tarieven-pioneer)
+Check the pioneer tariffs [here](https://pay.nl/tarieven-pioneer)
 
 If you want to be able to use creditcards, you'll need to have at least a professional account.
-For more information check: [pakketten](http://pay.nl/pakketten)
+For more information check: [pakketten](https://pay.nl/pakketten)
 
-Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
+Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 
 == Screenshots ==
 
@@ -189,6 +189,10 @@ Paid accounts have better tariffs! see: [tariffs](http://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 3.18.4 =
+Updated iDEAL in3 logo
+Added support for chargebacks
+Fixed an address issue with PostNL
 = 3.18.3 =
 Updated translations
 Updated default value for payment screen language
