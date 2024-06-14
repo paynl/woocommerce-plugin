@@ -195,6 +195,11 @@ class PPMFWC_Helper_Transaction
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process refund', $transactionId);
             } elseif ($payApiStatus == PPMFWC_Gateways::STATUS_CHARGEBACK) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process chargeback', $transactionId);
+            } elseif ($status == PPMFWC_Gateways::STATUS_PINREFUND && $payApiStatus == PPMFWC_Gateways::STATUS_SUCCESS) {
+                PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process pinrefund', $transactionId);
+                $order->add_order_note(sprintf(esc_html(__('Pay.: Refunded: EUR %s via Pin', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), PPMFWC_Helper_Data::getRequestArg('amount')));
+                self::processRefund($order, PPMFWC_Helper_Data::getRequestArg('amount'));
+                return PPMFWC_Gateways::STATUS_REFUND;             
             } else {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Done', $transactionId);
                 throw new PPMFWC_Exception_Notice('Order is already completed or processed');
@@ -335,6 +340,26 @@ class PPMFWC_Helper_Transaction
         }
 
         return $newStatus;
+    }
+
+    public static function processRefund($order, $amount){
+        $orderId = $order->get_id();
+        $refund = wc_create_refund( array(
+            'amount'         => $amount,
+            'reason'         => null,
+            'order_id'       => $orderId,
+            'line_items'     => array(),
+            'refund_payment' => true,
+            'restock_items'  => false,
+        ));   
+        if($refund instanceof WP_Error && $refund->has_errors()){
+            throw new PPMFWC_Exception($refund->get_error_message());
+        }                                    
+        if(PPMFWC_Helper_Data::getRequestArg('amount') == $order->get_remaining_refund_amount()){
+            $order->set_status('refunded');
+            wc_increase_stock_levels($orderId);
+        }                
+        $order->save();    
     }
 
     /**
