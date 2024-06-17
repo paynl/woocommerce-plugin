@@ -335,7 +335,7 @@ function ppmfwc_auto_functions($order_id, $old_status, $new_status)
  * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
  */
 function ppmfwc_add_order_js( $order ) {
-    $transactionId = $order->get_transaction_id();
+    $transactionId = $order->get_meta('transactionId');
     $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($transactionId);
     if(!empty($transactionLocalDB)){
         if($order->get_payment_method() == 'pay_gateway_instore'){        
