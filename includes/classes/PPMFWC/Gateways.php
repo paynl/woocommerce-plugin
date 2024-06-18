@@ -898,7 +898,7 @@ class PPMFWC_Gateways
         $wc_order_id = PPMFWC_Helper_Data::getRequestArg('extra1');
         $methodId = PPMFWC_Helper_Data::getRequestArg('payment_profile_id');
 
-        if($methodId == PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND && $action == self::ACTION_NEWPPT){
+        if ($methodId == PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND && $action == self::ACTION_NEWPPT) {
             $action = self::ACTION_PINREFUND;
         }
 
@@ -1065,15 +1065,15 @@ class PPMFWC_Gateways
                 'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
                 'ipaddress'     => $ipAddress,
                 'object'        => PPMFWC_Helper_Data::getObject(),
-            );        
-            
+            );
+
             $payTransaction = \Paynl\Transaction::start($startData);
 
             $order->update_meta_data('pinRefundTransactionId', $payTransaction->getTransactionId());
             $order->save();
 
             PPMFWC_Helper_Transaction::newTransaction($payTransaction->getTransactionId(), PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND, $amount, $order_id, '');
-            
+
             $returnarray = array(
                 'success' => true,
                 'url' => $payTransaction->getRedirectUrl(),
@@ -1084,7 +1084,7 @@ class PPMFWC_Gateways
                 'message' => $e->getMessage(),
             );
         }
-        
+
         header('Content-Type: application/json;charset=UTF-8');
         die(json_encode($returnarray));
     }

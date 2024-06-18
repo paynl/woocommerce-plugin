@@ -342,6 +342,11 @@ class PPMFWC_Helper_Transaction
         return $newStatus;
     }
 
+    /**
+     * @param order $order
+     * @param int $amount
+     * @return void
+     */
     public static function processRefund($order, $amount)
     {
         $orderId = $order->get_id();
