@@ -344,7 +344,7 @@ class PPMFWC_Helper_Transaction
 
     /**
      * @param order $order
-     * @param int $amount
+     * @param integer $amount
      * @return void
      */
     public static function processRefund($order, $amount)
