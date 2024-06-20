@@ -197,7 +197,7 @@ class PPMFWC_Helper_Transaction
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process chargeback', $transactionId);
             } elseif ($status == PPMFWC_Gateways::STATUS_PINREFUND && $payApiStatus == PPMFWC_Gateways::STATUS_SUCCESS) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process pinrefund', $transactionId);
-                $order->add_order_note(sprintf(esc_html(__('Pay.: Refunded: EUR %s via Pin', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), PPMFWC_Helper_Data::getRequestArg('amount')));
+                $order->add_order_note(sprintf(esc_html(__('Pay.: Refunded: EUR %s via Retourpinnen', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), PPMFWC_Helper_Data::getRequestArg('amount')));
                 self::processRefund($order, PPMFWC_Helper_Data::getRequestArg('amount'));
                 return PPMFWC_Gateways::STATUS_REFUND;
             } else {

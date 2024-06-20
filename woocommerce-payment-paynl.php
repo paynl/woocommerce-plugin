@@ -354,7 +354,7 @@ function ppmfwc_add_order_js($order)
                 $texts['i18n_refund_invalid'] = __('Invalid refund amount', 'woocommerce');
                 $texts['i18n_refund_error'] = __('Error processing refund. Please try again.', 'woocommerce');
                 $texts['i18n_refund_title'] = __('Refund', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-                $texts['i18n_retourpin_title'] = __('via Retourpin', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['i18n_retourpin_title'] = __('via Retourpinnen', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
                 $texts['i18n_api_title'] = __('via Pay.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
                 $payData = array(
                     'texts' => $texts,
