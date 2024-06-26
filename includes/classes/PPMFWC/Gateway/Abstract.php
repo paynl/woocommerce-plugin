@@ -97,9 +97,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $shippingMethods = array();
 
         foreach ($zones as $zone) {
+            $zoneName = $zone->get_zone_name();
             $zone_shipping_methods = $zone->get_shipping_methods();
-            foreach ($zone_shipping_methods as $index => $method) {
-                $shippingMethods[$method->get_rate_id()] = $method->get_title();
+            foreach ($zone_shipping_methods as $method) {
+                $shippingMethods[$method->get_rate_id()] = '[' . $zoneName . '] ' . $method->get_title();
             }
         }
 
