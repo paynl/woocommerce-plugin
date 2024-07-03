@@ -20,6 +20,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     const STATUS_REFUNDED = 'refunded';
     const STATUS_FAILED = 'failed';
 
+    const PAYMENT_METHOD_PINREFUND = 2351;
+
     /**
      * Payment Profile ID
      *

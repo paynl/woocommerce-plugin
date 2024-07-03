@@ -128,6 +128,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     if (get_option('paynl_auto_capture') == "yes" || get_option('paynl_auto_void') == "yes") {
         add_action('woocommerce_order_status_changed', 'ppmfwc_auto_functions', 10, 3);
     }
+    add_action('woocommerce_order_item_add_action_buttons', 'ppmfwc_add_order_js', 10, 1);
 } else {
     # WooCommerce seems to be inactive, show eror message
     add_action('admin_notices', 'ppmfwc_error_woocommerce_not_active');
@@ -322,6 +323,49 @@ function ppmfwc_auto_functions($order_id, $old_status, $new_status)
                 }
             } catch (Exception $e) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Auto void failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
+            }
+        }
+    }
+}
+
+/**
+ * Show Pin Refund on order page
+ * @param order $order
+ * @return void
+ * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+ */
+function ppmfwc_add_order_js($order)
+{
+    $transactionId = $order->get_meta('transactionId');
+    $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($transactionId);
+    if (!empty($transactionLocalDB)) {
+        if ($order->get_payment_method() == 'pay_gateway_instore') {
+            $cache_key = 'paynl_instore_terminals_' . PPMFWC_Gateway_Abstract::getServiceId();
+            $terminals = get_transient($cache_key);
+            if ($terminals === false) {
+                PPMFWC_Gateway_Abstract::loginSDK();
+                $terminals = \Paynl\Instore::getAllTerminals()->getList();
+                set_transient($cache_key, $terminals, HOUR_IN_SECONDS);
+            }
+            if (!empty($terminals)) {
+                $payment_gateways = WC_Payment_Gateways::instance();
+                $instoreGateway = $payment_gateways->payment_gateways()['pay_gateway_instore'];
+                $texts['i18n_refund_error_zero'] = __("Refund amount must be greater than €0.00", PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['i18n_refund_invalid'] = __('Invalid refund amount', 'woocommerce');
+                $texts['i18n_refund_error'] = __('Error processing refund. Please try again.', 'woocommerce');
+                $texts['i18n_refund_title'] = __('Refund', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['i18n_retourpin_title'] = __('via Retourpinnen', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['i18n_api_title'] = __('via Pay.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $payData = array(
+                    'texts' => $texts,
+                    'terminals' => $terminals,
+                    'order_id' => $order->get_id(),
+                    'max_amount' => $order->get_remaining_refund_amount(),
+                    'default_terminal' => $instoreGateway->get_option('paynl_instore_terminal'),
+                );
+                wp_register_script('paynl_wp_admin_order_js', PPMFWC_PLUGIN_URL . 'assets/js/payorder.js', array('jquery'), PPMFWC_Helper_Data::getVersion(), true);
+                wp_enqueue_script('paynl_wp_admin_order_js');
+                wp_localize_script('paynl_wp_admin_order_js', 'paynl_order', $payData);
             }
         }
     }

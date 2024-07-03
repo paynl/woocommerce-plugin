@@ -20,6 +20,7 @@ class PPMFWC_Gateways
     const STATUS_REFUND_PARTIALLY = 'PARTREF';
     const STATUS_CAPTURE = 'CAPTURE';
     const STATUS_CHARGEBACK = 'CHARGEBACK';
+    const STATUS_PINREFUND = 'PINREFUND';
 
     const ACTION_NEWPPT = 'new_ppt';
     const ACTION_PENDING = 'pending';
@@ -28,6 +29,7 @@ class PPMFWC_Gateways
     const ACTION_REFUND = 'refund:received';
     const ACTION_CAPTURE = 'capture';
     const ACTION_CHARGEBACK = 'chargeback:chargeback';
+    const ACTION_PINREFUND = 'pinrefund';
 
     const TAB_ID = 'pay_settings';
 
@@ -726,6 +728,7 @@ class PPMFWC_Gateways
         add_action('woocommerce_api_wc_pay_gateway_return', array(__CLASS__, 'ppmfwc_onReturn'));
         add_action('woocommerce_api_wc_pay_gateway_exchange', array(__CLASS__, 'ppmfwc_onExchange'));
         add_action('woocommerce_api_wc_pay_gateway_featurerequest', array(__CLASS__, 'ppmfwc_onFeatureRequest'));
+        add_action('woocommerce_api_wc_pay_gateway_pinrefund', array(__CLASS__, 'ppmfwc_onPinRefund'));
     }
 
     /**
@@ -863,6 +866,7 @@ class PPMFWC_Gateways
         $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
         $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
         $arrPayActions[self::ACTION_CHARGEBACK] = self::STATUS_CHARGEBACK;
+        $arrPayActions[self::ACTION_PINREFUND] = self::STATUS_PINREFUND;
         return $arrPayActions;
     }
 
@@ -893,6 +897,10 @@ class PPMFWC_Gateways
         $order_id = PPMFWC_Helper_Data::getRequestArg('order_id');
         $wc_order_id = PPMFWC_Helper_Data::getRequestArg('extra1');
         $methodId = PPMFWC_Helper_Data::getRequestArg('payment_profile_id');
+
+        if ($methodId == PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND && $action == self::ACTION_NEWPPT) {
+            $action = self::ACTION_PINREFUND;
+        }
 
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
@@ -1007,6 +1015,77 @@ class PPMFWC_Gateways
             'success' => $result,
             'message' => $message,
         );
+        die(json_encode($returnarray));
+    }
+
+    /**
+     * Handles the Pay. feature requests
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
+    public static function ppmfwc_onPinRefund()
+    {
+        try {
+            PPMFWC_Gateway_Abstract::loginSDK();
+
+            $amount = isset($_POST['amount']) ? $_POST['amount'] : null;
+            $terminal = isset($_POST['terminal']) ? $_POST['terminal'] : null;
+            $returnUrl = isset($_POST['returnUrl']) ? $_POST['returnUrl'] : null;
+            $order_id = isset($_POST['order_id']) ? $_POST['order_id'] : null;
+
+            $order = new WC_Order($order_id);
+
+            $exchangeUrl = add_query_arg('wc-api', 'Wc_Pay_Gateway_Exchange', home_url('/'));
+
+            $strAlternativeExchangeUrl = PPMFWC_Gateway_Abstract::getAlternativeExchangeUrl();
+            if (!empty(trim($strAlternativeExchangeUrl))) {
+                $exchangeUrl = $strAlternativeExchangeUrl;
+            }
+
+            $ipAddress = $order->get_customer_ip_address();
+            if (empty($ipAddress)) {
+                $ipAddress = Paynl\Helper::getIp();
+            }
+
+            $currency = $order->get_currency();
+            $order_id = $order->get_id();
+
+            $prefix = empty(get_option('paynl_order_description_prefix')) ? '' : get_option('paynl_order_description_prefix');
+
+            $startData = array(
+                'amount'        => $amount,
+                'returnUrl'     => $returnUrl,
+                'exchangeUrl'   => $exchangeUrl,
+                'orderNumber'   => $order->get_order_number(),
+                'paymentMethod' => PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND,
+                'bank'          => $terminal,
+                'currency'      => $currency,
+                'description'   => str_replace('__', ' ', $prefix) . $order->get_order_number(),
+                'extra1'        => apply_filters('paynl-extra1', $order->get_order_number(), $order),
+                'extra2'        => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
+                'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
+                'ipaddress'     => $ipAddress,
+                'object'        => PPMFWC_Helper_Data::getObject(),
+            );
+
+            $payTransaction = \Paynl\Transaction::start($startData);
+
+            $order->update_meta_data('pinRefundTransactionId', $payTransaction->getTransactionId());
+            $order->save();
+
+            PPMFWC_Helper_Transaction::newTransaction($payTransaction->getTransactionId(), PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND, $amount, $order_id, '');
+
+            $returnarray = array(
+                'success' => true,
+                'url' => $payTransaction->getRedirectUrl(),
+            );
+        } catch (\Exception $e) {
+            $returnarray = array(
+                'success' => false,
+                'message' => $e->getMessage(),
+            );
+        }
+
+        header('Content-Type: application/json;charset=UTF-8');
         die(json_encode($returnarray));
     }
 
