@@ -32,7 +32,8 @@
     margin-right: 10px;
 }
 
-.woocommerce table.form-table select.multiselect.countryLimit {
+.woocommerce table.form-table select.multiselect.countryLimit,
+.woocommerce table.form-table select.multiselect.shippingLimit {
     height: 190px;
 }
 
