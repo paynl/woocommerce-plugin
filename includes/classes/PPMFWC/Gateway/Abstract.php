@@ -20,6 +20,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     const STATUS_REFUNDED = 'refunded';
     const STATUS_FAILED = 'failed';
 
+    const PAYMENT_METHOD_PINREFUND = 2351;
+
     /**
      * Payment Profile ID
      *
@@ -79,6 +81,32 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         if ((!$this->get_option($key)) || (strlen($this->get_option($key)) == 0) || ($update && $this->get_option($key) != $value)) {
             $this->update_option($key, $value);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function get_all_shipping_methods()
+    {
+        $zones = array();
+        $data_store = WC_Data_Store::load('shipping-zone');
+        $raw_zones = $data_store->get_zones();
+        foreach ($raw_zones as $raw_zone) {
+            $zones[] = new WC_Shipping_Zone($raw_zone);
+        }
+        $zones[] = new WC_Shipping_Zone(0);
+
+        $shippingMethods = array();
+
+        foreach ($zones as $zone) {
+            $zoneName = $zone->get_zone_name();
+            $zone_shipping_methods = $zone->get_shipping_methods();
+            foreach ($zone_shipping_methods as $method) {
+                $shippingMethods[$method->get_rate_id()] = '[' . $zoneName . '] ' . $method->get_title();
+            }
+        }
+
+        return $shippingMethods;
     }
 
     /**
@@ -179,6 +207,16 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 'description' => sprintf(esc_html(__('Select one or more billing countries for which %s should be available.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
                 'desc_tip'    => esc_html(__('Select in which (billing) country this method should be available.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'class'       => 'countryLimit'
+            );
+
+            $this->form_fields['shipping_limit'] = array(
+                'title'       => esc_html(__('Shipping methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type'        => 'multiselect',
+                'options'     => array_merge(array('all' => esc_html(__('Available for all shipping methods', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))), $this->get_all_shipping_methods()),
+                'default'     => 'all',
+                'description' => sprintf(esc_html(__('Select one or more shipping methods for which %s should be available.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
+                'desc_tip'    => esc_html(__('Select which shipping methods this method should be available for.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'class'       => 'shippingLimit'
             );
 
             if ($this->showAuthorizeSetting()) {
@@ -434,11 +472,21 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             $orderTotal = $this->get_order_total();
             $billingCountry = WC()->customer->get_billing_country();
+            $shippingMethods = WC()->session->get('chosen_shipping_methods');
             $arrCountriesAllowed = $this->get_option('country_limit');
+            $arrShippingAllowed = $this->get_option('shipping_limit');
 
             if (is_array($arrCountriesAllowed) && !in_array('all', $arrCountriesAllowed)) {
                 if (!in_array(strtoupper($billingCountry), $arrCountriesAllowed)) {
                     return false;
+                }
+            }
+
+            if (is_array($arrShippingAllowed) && !in_array('all', $arrShippingAllowed)) {
+                foreach ($shippingMethods as $shippingMethod) {
+                    if (!in_array($shippingMethod, $arrShippingAllowed)) {
+                        return false;
+                    }
                 }
             }
 
