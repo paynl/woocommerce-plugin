@@ -4,9 +4,9 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, woocommerce, ideal, Alipay, Good4fun, Trustly, Wechatpay, paypal, creditcard, mybank, sofortbanking, riverty, bancontact, paysafecard, clickandbuy, giropay, incasso, betaalmethoden, billink, wijncadeau, givacard, cashly, wechatpay, spraypay, tikkie, przelewy24, creditclick
 Requires at least: 3.5.1
-Stable tag: 3.19.0
+Stable tag: 3.19.1
 Tested up to: 6.5.5
-WC tested up to: 9.0.2
+WC tested up to: 9.1.2
 WC requires at least: 3.0
 Requires PHP: 7.0
 License: GPLv2
@@ -189,6 +189,8 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 3.19.1 =
+Updated language options to start payment with
 = 3.19.0 =
 Added retourpin functionality
 Added filter on shipping method option
