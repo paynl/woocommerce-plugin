@@ -66,6 +66,8 @@ class PPMFWC_Gateways
 
     private static $arrGateways = array(
         'PPMFWC_Gateway_Alipay',
+        'PPMFWC_Gateway_AlipayPlus',
+        'PPMFWC_Gateway_Alma',
         'PPMFWC_Gateway_Amazonpay',
         'PPMFWC_Gateway_Amex',
         'PPMFWC_Gateway_Applepay',
