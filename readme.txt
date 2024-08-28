@@ -4,9 +4,9 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 3.5.1
-Stable tag: 3.19.1
+Stable tag: 3.19.2
 Tested up to: 6.6.1
-WC tested up to: 9.2.0
+WC tested up to: 9.2.3
 WC requires at least: 3.0
 Requires PHP: 7.0
 License: GPLv2
@@ -189,6 +189,10 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 3.19.2 =
+Added payment method AliPay PLus
+Added payment method Alma
+Fixed address issue
 = 3.19.1 =
 Updated language options to start payment with
 = 3.19.0 =
