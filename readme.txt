@@ -4,7 +4,7 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 3.5.1
-Stable tag: 3.19.2
+Stable tag: 3.19.3
 Tested up to: 6.6.2
 WC tested up to: 9.3.1
 WC requires at least: 3.0
@@ -189,6 +189,8 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 3.19.3 =
+Updated Riverty name and logo
 = 3.19.2 =
 Added payment method AliPay PLus
 Added payment method Alma
