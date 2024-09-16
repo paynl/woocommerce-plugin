@@ -149,7 +149,7 @@ At the moment the plugin supports the following payment methods:
 * Postepay
 * Przelewy24
 * Riverty
-* Riverty (was AfterPay)
+* Riverty
 * Shoes & Sneakers
 * Sodexo
 * Sofortbanking
