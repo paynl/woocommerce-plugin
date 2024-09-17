@@ -130,6 +130,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Phone',
         'PPMFWC_Gateway_Podiumcadeaukaart',
         'PPMFWC_Gateway_Postepay',
+        'PPMFWC_Gateway_RotterdamCitycard',
         'PPMFWC_Gateway_ShoesAndSneakers',
         'PPMFWC_Gateway_Sodexo',
         'PPMFWC_Gateway_Sofortbanking',
