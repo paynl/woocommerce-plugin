@@ -99,6 +99,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Fashioncheque',
         'PPMFWC_Gateway_Fashiongiftcard',
         'PPMFWC_Gateway_FestivalCadeaukaart',
+        'PPMFWC_Gateway_Flyingblueplus',
         'PPMFWC_Gateway_Focum',
         'PPMFWC_Gateway_Gezondheidsbon',
         'PPMFWC_Gateway_Giropay',
