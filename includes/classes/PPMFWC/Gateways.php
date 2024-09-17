@@ -111,6 +111,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Instore',
         'PPMFWC_Gateway_Klarna',
         'PPMFWC_Gateway_Klarnakp',
+        'PPMFWC_Gateway_Kunstencultuurkaart',
         'PPMFWC_Gateway_Maestro',
         'PPMFWC_Gateway_Minitixsms',
         'PPMFWC_Gateway_Mistercash',
