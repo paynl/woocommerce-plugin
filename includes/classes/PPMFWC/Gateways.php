@@ -135,6 +135,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Sofortbanking',
         'PPMFWC_Gateway_SofortbankingDigitalServices',
         'PPMFWC_Gateway_Spraypay',
+        'PPMFWC_Gateway_StadspasAmsterdam',
         'PPMFWC_Gateway_Tikkie',
         'PPMFWC_Gateway_Trustly',
         'PPMFWC_Gateway_Visamastercard',
