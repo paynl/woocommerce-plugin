@@ -731,7 +731,187 @@ class PPMFWC_Gateways
         add_action('woocommerce_api_wc_pay_gateway_exchange', array(__CLASS__, 'ppmfwc_onExchange'));
         add_action('woocommerce_api_wc_pay_gateway_featurerequest', array(__CLASS__, 'ppmfwc_onFeatureRequest'));
         add_action('woocommerce_api_wc_pay_gateway_pinrefund', array(__CLASS__, 'ppmfwc_onPinRefund'));
+        add_action('woocommerce_api_wc_pay_gateway_fccreate', array(__CLASS__, 'ppmfwc_onFastCheckoutOrderCreate'));
+        add_action('woocommerce_api_wc_pay_gateway_fcfinish', array(__CLASS__, 'ppmfwc_onFastCheckoutOrderFinish'));
     }
+
+    public static function ppmfwc_onFastCheckoutOrderCreate()
+    {
+        global $wpdb;
+
+        $products = [];
+        $tax = new WC_Tax();
+
+        WC()->session->set('chosen_shipping_methods', array('flat_rate:2'));
+        WC()->session->set('chosen_payment_method', 'pay_gateway_ideal');
+        WC()->cart->calculate_totals();
+
+        $cart = WC()->cart;
+
+        foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+            $product = $cart_item['data'];
+            $product_id = $cart_item['product_id'];
+            $variation_id = $cart_item['variation_id'];
+            $name = $product->get_title();
+            $quantity = $cart_item['quantity'];
+            $price = $product->get_price();
+            $tax_percentage = 0;
+            $taxes = $tax->get_rates($product->get_tax_class());
+            if (!empty($taxes)) {
+                $rates = array_shift($taxes);
+                $tax_percentage = round(array_shift($rates));
+            }
+            $products[] = [
+                'id' => $product_id,
+                'variation_id' => $variation_id,
+                'name' => $name,
+                'qty' => $quantity,
+                'amount' => $price,
+                'taxPercentage' => $tax_percentage,
+                'type' => 'ARTICLE',
+            ];
+        }
+
+        $packages = WC()->shipping()->get_packages();
+        $package = $packages[0];
+        $available_methods = $package['rates'];
+        $shippingMethod = null;
+
+        foreach ($available_methods as $key => $method) {
+            if ('flat_rate:2' == $method->id) {
+                $shippingMethod = $method;
+            }
+        }
+
+        $products[] = [
+            'id' => 'flat_rate:2',
+            'name' => $shippingMethod->label,
+            'qty' => 1,
+            'amount' => WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()),
+            'amountExclTax' => WC()->cart->get_shipping_total(),
+            'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage(WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()), array_shift($shippingMethod->get_taxes()))),
+            'type' => 'SHIPPING',
+        ];
+
+        $transaction = new PPMFWC_Helper_TransactionFastCheckout();
+        $result = $transaction->create();
+        
+        $transactionId = $result['transactionId'];
+        $redirectUrl = $result['redirectURL'];
+
+        $table_name_fast_checkout = $wpdb->prefix . "pay_fast_checkout";
+        $wpdb->replace($table_name_fast_checkout, array('transaction_id' => $transactionId, 'products' => json_encode($products), 'created' => date('Y-m-d H:i:s')), array('%s', '%s', '%s'));
+
+        $data = [
+            'transactionId' => $transactionId,
+            'amount' => WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax,
+            'products' => $products,
+            'currency' => get_woocommerce_currency(),
+        ];
+
+        header("Location: " . $redirectUrl);
+        exit();
+    }
+
+    public static function ppmfwc_onFastCheckoutOrderFinish()
+    {
+        // Add customer data and set order to paid.
+        global $wpdb;
+
+        $data = json_decode('{"id":"6693a2f4-5223-8992-1a5f-526160012372","uuid":"a1bf5261-6001-2372-5200-1705096a2372","links":{"void":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/void","abort":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/abort","debug":"https:\/\/checkout.payments.nl\/to\/checkout\/6693a2f4-5223-8992-1a5f-526160012372\/with\/debugging\/6693a2f4522389921a5f526160012372","status":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/status","approve":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/approve","capture":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/capture","decline":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/decline","checkout":"https:\/\/checkout.payments.nl\/to\/return\/6693a2f4-5223-8992-1a5f-526160012372","redirect":"https:\/\/checkout.payments.nl\/to\/return\/6693a2f4-5223-8992-1a5f-526160012372","captureAmount":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/capture\/amount","captureProducts":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/capture\/products"},"amount":{"value":"10","currency":"EUR"},"status":{"code":"100","action":"PAID"},"orderId":"52001705096X2372","receipt":"","payments":[{"id":"6693a310-5223-88e3-2b77-052001705096","amount":{"value":"10","currency":"EUR"},"status":{"code":"100","action":"PAID"},"ipAddress":"","customerId":"NL93INGB0006700949","customerKey":"fd36c8fb62a554e1bd7be3a7fd7485a6","customerName":"Hr W M Jonker","customerType":"","secureStatus":"1","supplierData":{"contactDetails":{"email":"wouterjonker@hotmail.com","lastName":"Jonker","firstName":"Wouter","phoneNumber":" 31652457521"},"invoiceAddress":{"city":"Sommelsdijk","street":"Kortewegje","addition":"","lastName":"Jonker","firstName":"Wouter","postalCode":"3245XM","companyName":"","countryName":"Netherlands","houseNumber":"19"},"shippingAddress":{"city":"Sommelsdijk","street":"Kortewegje","addition":"","lastName":"Jonker","firstName":"Wouter","postalCode":"3245XM","companyName":"","countryName":"Netherlands","houseNumber":"19"}},"paymentMethod":{"id":"10","input":{"issuerId":""}},"capturedAmount":{"value":"10","currency":"EUR"},"currencyAmount":{"value":"10","currency":"EUR"},"authorizedAmount":{"value":"0","currency":"EUR"},"paymentVerificationMethod":"21"}],"createdAt":"2024-07-14T10:05:40 00:00","createdBy":"AT-0045-3283","expiresAt":"2024-07-21T10:05:40 00:00","reference":"","serviceId":"SL-5261-6001","modifiedAt":"2024-07-14T12:07:18 02:00","modifiedBy":"","completedAt":"2024-07-14T12:07:18 02:00","customerKey":"fd36c8fb62a554e1bd7be3a7fd7485a6","description":"","integration":{"test":""},"checkoutData":{"customer":{"email":"wouterjonker@hotmail.com","phone":" 31652457521","gender":"","locale":"","company":"","lastname":"Jonker","firstname":"Wouter","ipAddress":"","reference":"NL93INGB0006700949","dateOfBirth":""},"billingAddress":{"city":"Sommelsdijk","zipCode":"3245XM","lastName":"Jonker","firstName":"Wouter","regionCode":"","streetName":"Kortewegje","countryCode":"NL","streetNumber":"19","streetNumberAddition":""},"shippingAddress":{"city":"Sommelsdijk","zipCode":"3245XM","lastName":"Jonker","firstName":"Wouter","regionCode":"","streetName":"Kortewegje","countryCode":"NL","streetNumber":"19","streetNumberAddition":""}},"capturedAmount":{"value":"10","currency":"EUR"},"authorizedAmount":{"value":"0","currency":"EUR"},"manualTransferCode":"1000 0520 0170 5096"}');
+
+        $customerData = $data->checkoutData->customer;
+        $billingAddressData = $data->checkoutData->billingAddress;
+        $shippingAddressData = $data->checkoutData->shippingAddress;
+
+        $transactionId = '66a8d18274b78';
+
+        $table_name_fast_checkout = $wpdb->prefix . "pay_fast_checkout";
+        $result = $wpdb->get_results($wpdb->prepare(
+            "SELECT * FROM $table_name_fast_checkout WHERE transaction_id = %s",
+            $transactionId,
+            date('Y-m-d H:i:s')
+        ), ARRAY_A);
+
+        $dbData = $result[0];
+        $products = json_decode($dbData['products']);
+
+        $order = new WC_Order();
+        $order->set_created_via('fast checkout');
+        $shippingProduct = null;
+
+        foreach ($products as $product) {
+            if ($product->type == 'SHIPPING') {
+                $shippingProduct = $product;
+                continue;
+            }
+            if (!empty($product->variation_id) && $product->variation_id > 0) {
+                $product_variation = new WC_Product_Variation($product->variation_id);
+                $args = array();
+                foreach ($product_variation->get_variation_attributes() as $attribute => $attribute_value) {
+                    $args['variation'][$attribute] = $attribute_value;
+                }
+                $order->add_product($product_variation, $product->qty, $args);
+            } else {
+                $order->add_product(
+                    wc_get_product($product->id),
+                    $product->qty
+                );
+            }
+        }
+
+        $shipping = new WC_Order_Item_Shipping();
+        $shipping->set_method_title('Flat rate');
+        $shipping->set_method_id('flat_rate:2');
+        $shipping->set_total($shippingProduct->amountExclTax);
+
+        $order->add_item($shipping);
+        $order->calculate_totals();
+
+        $order->set_payment_method('pay_gateway_ideal');
+        $order->set_payment_method_title('iDEAL Fast Checkout');
+
+        $order->save();
+
+        $billingAddress = array(
+            'first_name' => $customerData->firstname,
+            'last_name' => $customerData->lastname,
+            'company' => $customerData->company,
+            'email' => $customerData->email,
+            'phone' => $customerData->phone,
+            'address_1' => $billingAddressData->streetName . ' ' . $shippingAddressData->streetNumber . $shippingAddressData->streetNumberAddition,
+            'address_2' => '',
+            'city' => $billingAddressData->city,
+            'state' => '',
+            'postcode' => $billingAddressData->zipCode,
+            'country' => $billingAddressData->countryCode,
+        );
+
+        $shippingAddress = array(
+            'first_name' => $customerData->firstname,
+            'last_name' => $customerData->lastname,
+            'company' => $customerData->company,
+            'email' => $customerData->email,
+            'phone' => $customerData->phone,
+            'address_1' => $shippingAddressData->streetName . ' ' . $shippingAddressData->streetNumber . $shippingAddressData->streetNumberAddition,
+            'address_2' => '',
+            'city' => $shippingAddressData->city,
+            'state' => '',
+            'postcode' => $shippingAddressData->zipCode,
+            'country' => $shippingAddressData->countryCode,
+        );
+
+        $order->set_address($billingAddress, 'billing');
+        $order->set_address($shippingAddress, 'shipping');
+
+        if ($data->status->code == 100) {
+            $order->set_status('wc-completed');
+        }
+
+        $order->save();
+        exit('OK');
+    }
+    
 
     /**
      * After a (successfull, failed, cancelled etc.) PAY payment the user wil end up here
