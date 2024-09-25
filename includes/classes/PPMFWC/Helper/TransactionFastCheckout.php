@@ -1,27 +1,34 @@
 <?php
 
 class PPMFWC_Helper_TransactionFastCheckout
-{ 
-    
+{   
     /**
      * @return array
      */
-    public function getData()
+    public function getData($data, $order)
     {
         $parameters = [
             'serviceId' => get_option('paynl_serviceid'),
             'amount' => [
-                'value' => 10,
-                'currency' => "EUR",
+                'value' => $data['amount'] * 100,
+                'currency' => $data['currency'],
             ],
         ];
 
-        $parameters['paymentMethod'] = ['id' => 10];
+        $parameters['paymentMethod'] = ['id' =>  $data['paymentMethod']];
 
-        $this->_add($parameters, 'returnUrl', 'test');
+        $returnUrl = add_query_arg(array('wc-api' => 'Wc_Pay_Gateway_Return'), home_url('/'));
+        $exchangeUrl = add_query_arg('wc-api', 'Wc_Pay_Gateway_Exchange', home_url('/'));
+
+        $strAlternativeExchangeUrl = self::getAlternativeExchangeUrl();
+        if (!empty(trim($strAlternativeExchangeUrl))) {
+            $exchangeUrl = $strAlternativeExchangeUrl;
+        }
+
+        $this->_add($parameters, 'returnUrl', $returnUrl);
         $this->_add($parameters, 'description', '');
-        $this->_add($parameters, 'reference', "123456");
-        $this->_add($parameters, 'exchangeUrl', 'test');
+        $this->_add($parameters, 'reference', 'fastcheckout');
+        $this->_add($parameters, 'exchangeUrl', $exchangeUrl);
 
         $parameters['integration']['test'] = true;
 
@@ -34,18 +41,18 @@ class PPMFWC_Helper_TransactionFastCheckout
 
         $orderParameters = array();
         $invoiceAddress = array();
-        $productData = array();
+        $productData = $this->getProductData($data['products']);
 
-        $this->_add($orderParameters, 'products', array());
+        $this->_add($orderParameters, 'products', $productData);
         $this->_add($parameters, 'order', $orderParameters);
 
         $stats = array();
         $this->_add($stats, 'info', '');
         $this->_add($stats, 'tool', '');
-        $this->_add($stats, 'object', 'fc');
-        $this->_add($stats, 'extra1', '');
-        $this->_add($stats, 'extra2', '');
-        $this->_add($stats, 'extra3', "123456");
+        $this->_add($stats, 'object', PPMFWC_Helper_Data::getObject() . ' | fc');
+        $this->_add($stats, 'extra1', apply_filters('paynl-extra1', $order->get_order_number(), $order));
+        $this->_add($stats, 'extra2', apply_filters('paynl-extra2', $order->get_billing_email(), $order));
+        $this->_add($stats, 'extra3', apply_filters('paynl-extra3', $order_id, $order));
         $this->_add($parameters, 'stats', $stats);
 
         return $parameters;
@@ -68,21 +75,21 @@ class PPMFWC_Helper_TransactionFastCheckout
     /**
      * @return array
      */
-    private function getProductData()
+    private function getProductData($products)
     {
         $arrProducts = array();
 
-        foreach ($this->products as $i => $arrProduct) {
+        foreach ($products as $i => $arrProduct) {
             $product = array();
             $product['id'] = $arrProduct['id'] ?? 'p' . $i;
-            $product['description'] = $arrProduct['description'] ?? '';
+            $product['description'] = $arrProduct['name'] ?? '';
             $product['type'] = $arrProduct['type'] ?? '';
             $product['price'] = [
-                'value' => $arrProduct['price'],
-                'currency' => $arrProduct['currecny'],
+                'value' => $arrProduct['amount'] * 100,
+                'currency' => $arrProduct['currency'],
             ];
-            $product['quantity'] = $arrProduct['quantity'] ?? 0;
-            $product['vatPercentage'] = $arrProduct['vatPercentage'] ?? '';
+            $product['quantity'] = $arrProduct['qty'] ?? 0;
+            $product['vatPercentage'] = $arrProduct['taxPercentage'] ?? '';
             $arrProducts[] = $product;
         }
 
@@ -96,11 +103,12 @@ class PPMFWC_Helper_TransactionFastCheckout
      * @throws \Paynl\Error\Required\ApiToken
      * @throws \Paynl\Error\Required\ServiceId
      */
-    public function create()
+    public function create($data, $order)
     {
-        $payload = $this->getData();
+        $payload = $this->getData($data, $order);
 
-        $payload = json_encode($payload);
+        $payload = json_encode($payload); 
+
         $url = 'https://connect.payments.nl/v1/orders';
 
         $rawResponse = (array) $this->sendCurlRequest($url, $payload, get_option('paynl_tokencode'), get_option('paynl_apitoken'));      
@@ -162,6 +170,20 @@ class PPMFWC_Helper_TransactionFastCheckout
         }
 
         return (array) $response;
+    }
+
+    /**
+     * @return mixed|string|void
+     */
+    public static function getAlternativeExchangeUrl()
+    {
+        $strAltUrl = get_option('paynl_exchange_url');
+
+        if (!empty($strAltUrl)) {
+            return $strAltUrl;
+        }
+
+        return '';
     }
 
 }

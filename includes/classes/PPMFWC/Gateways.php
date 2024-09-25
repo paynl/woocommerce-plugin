@@ -737,80 +737,172 @@ class PPMFWC_Gateways
 
     public static function ppmfwc_onFastCheckoutOrderCreate()
     {
-        global $wpdb;
+        global $wpdb;        
 
-        $products = [];
-        $tax = new WC_Tax();
+        try {
+            $products = [];
+            $tax = new WC_Tax();
 
-        WC()->session->set('chosen_shipping_methods', array('flat_rate:2'));
-        WC()->session->set('chosen_payment_method', 'pay_gateway_ideal');
-        WC()->cart->calculate_totals();
+            $source = isset($_GET['source']) ? sanitize_text_field($_GET['source']) : false;
+            
+            WC()->session->set('chosen_payment_method', 'pay_gateway_ideal');
+            WC()->cart->calculate_totals();
 
-        $cart = WC()->cart;
+            if($source == 'product'){
+                $product_id = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
+                $quantity = isset($_GET['quantity']) ? $_GET['quantity'] : 0;
+                $variation_id = isset($_GET['variation_id']) ? $_GET['variation_id'] : 0;
 
-        foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
-            $product = $cart_item['data'];
-            $product_id = $cart_item['product_id'];
-            $variation_id = $cart_item['variation_id'];
-            $name = $product->get_title();
-            $quantity = $cart_item['quantity'];
-            $price = $product->get_price();
-            $tax_percentage = 0;
-            $taxes = $tax->get_rates($product->get_tax_class());
-            if (!empty($taxes)) {
-                $rates = array_shift($taxes);
-                $tax_percentage = round(array_shift($rates));
+                WC()->cart->add_to_cart( $product_id , $quantity, $variation_id );             
+                WC()->cart->calculate_totals();    
             }
-            $products[] = [
-                'id' => $product_id,
-                'variation_id' => $variation_id,
-                'name' => $name,
-                'qty' => $quantity,
-                'amount' => $price,
-                'taxPercentage' => $tax_percentage,
-                'type' => 'ARTICLE',
+
+            $packages = WC()->shipping()->get_packages();
+            $package = $packages[0];
+            $available_methods = $package['rates'];
+
+            if($source == 'cart'){
+                $shippingMethodId = WC()->session->get('chosen_shipping_methods')[0];
+                $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
+            } else {
+                WC()->session->set('chosen_shipping_methods', array('flat_rate:2'));
+                WC()->cart->calculate_totals();      
+                $shippingMethodId = 'flat_rate:2';
+                $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
+            }
+
+            if(!$shippingMethod){
+                // use backup
+            }
+
+            if(!$shippingMethod){
+                throw new \Exception("Selected shipping method is not available.", 1);                
+            }
+
+            foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+                $product = $cart_item['data'];
+                $product_id = $cart_item['product_id'];
+                $variation_id = $cart_item['variation_id'];
+                $name = $product->get_title();
+                $quantity = $cart_item['quantity'];
+                $price = $product->get_price();
+                $tax_percentage = 0;
+                $taxes = $tax->get_rates($product->get_tax_class());
+                if (!empty($taxes)) {
+                    $rates = array_shift($taxes);
+                    $tax_percentage = round(array_shift($rates));
+                }
+                $products[] = [
+                    'id' => $product_id,
+                    'variation_id' => $variation_id,
+                    'name' => $name,
+                    'qty' => $quantity,
+                    'amount' => $price,
+                    'taxPercentage' => $tax_percentage,
+                    'type' => 'ARTICLE',
+                    'currency' => get_woocommerce_currency()
+                ];
+            }              
+            
+            $shippingAmount = WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes());
+
+            if($shippingAmount > 0){
+                $products[] = [
+                    'id' => $shippingMethodId,
+                    'name' => $shippingMethod->label,
+                    'qty' => 1,
+                    'amount' => WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()),
+                    'amountExclTax' => WC()->cart->get_shipping_total(),
+                    'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage(WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()), array_shift($shippingMethod->get_taxes()))),
+                    'type' => 'SHIPPING',
+                    'currency' => get_woocommerce_currency()
+                ];
+            }
+
+            $amount = WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax;       
+            
+            $data = [
+                'amount' => WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax,
+                'products' => $products,
+                'currency' => get_woocommerce_currency(),
+                'paymentMethod' => 10
             ];
+
+            $order = self::createFastCheckoutOrder($data);
+
+            $transaction = new PPMFWC_Helper_TransactionFastCheckout();
+            $result = $transaction->create($data, $order);
+            
+            $transactionId = $result['transactionId'];
+            $redirectUrl = $result['redirectURL'];
+
+            $table_name_fast_checkout = $wpdb->prefix . "pay_fast_checkout";
+            $wpdb->replace($table_name_fast_checkout, array('transaction_id' => $transactionId, 'products' => json_encode($products), 'created' => date('Y-m-d H:i:s')), array('%s', '%s', '%s'));      
+
+            PPMFWC_Helper_Transaction::newTransaction($transactionId, $data['paymentMethod'], $order->get_total(), $order->get_id(), '');
+
+            wp_redirect($redirectUrl);
+        } catch (\Exception $e) {
+            wc_add_notice($e->getMessage(), 'error');
+            wp_redirect(wc_get_cart_url());
+        }       
+    }
+
+    public static function createFastCheckoutOrder($data){
+        $order = new WC_Order();
+        $order->set_created_via('fast checkout');
+        $shippingProduct = null;
+
+        foreach ($data['products'] as $product) {
+            if ($product['type'] == 'SHIPPING') {
+                $shippingProduct = $product;
+                continue;
+            }
+            if (!empty($product['variation_id']) && $product['variation_id'] > 0) {
+                $product_variation = new WC_Product_Variation($product['variation_id']);
+                $args = array();
+                foreach ($product_variation->get_variation_attributes() as $attribute => $attribute_value) {
+                    $args['variation'][$attribute] = $attribute_value;
+                }
+                $order->add_product($product_variation, $product['qty'], $args);
+            } else {
+                $order->add_product(
+                    wc_get_product($product['id']),
+                    $product['qty']
+                );
+            }
         }
 
-        $packages = WC()->shipping()->get_packages();
-        $package = $packages[0];
-        $available_methods = $package['rates'];
-        $shippingMethod = null;
+        $shipping = new WC_Order_Item_Shipping();
+        $shipping->set_method_title($shippingProduct['name']);
+        $shipping->set_method_id($shippingProduct['id']);
+        $shipping->set_total($shippingProduct['amountExclTax']);
 
+        $order->add_item($shipping);
+        $order->calculate_totals();
+
+        $order->set_payment_method('pay_gateway_ideal');
+        $order->set_payment_method_title('iDEAL Fast Checkout');
+
+        $order->add_meta_data( '_wc_order_attribution_source_type', 'utm' );
+        $order->add_meta_data( '_wc_order_attribution_utm_source', 'iDEAL Fast Checkout' );
+
+        $order->add_order_note(sprintf(esc_html(__('Pay.: Created iDEAL Fast Checkout order', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))));
+
+        $order->save(); 
+        
+        return $order;
+    }
+
+    public static function getShippingMethod($available_methods, $id)
+    {
+        $shippingMethod = false;
         foreach ($available_methods as $key => $method) {
-            if ('flat_rate:2' == $method->id) {
+            if ($id == $method->id) {
                 $shippingMethod = $method;
             }
-        }
-
-        $products[] = [
-            'id' => 'flat_rate:2',
-            'name' => $shippingMethod->label,
-            'qty' => 1,
-            'amount' => WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()),
-            'amountExclTax' => WC()->cart->get_shipping_total(),
-            'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage(WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()), array_shift($shippingMethod->get_taxes()))),
-            'type' => 'SHIPPING',
-        ];
-
-        $transaction = new PPMFWC_Helper_TransactionFastCheckout();
-        $result = $transaction->create();
-        
-        $transactionId = $result['transactionId'];
-        $redirectUrl = $result['redirectURL'];
-
-        $table_name_fast_checkout = $wpdb->prefix . "pay_fast_checkout";
-        $wpdb->replace($table_name_fast_checkout, array('transaction_id' => $transactionId, 'products' => json_encode($products), 'created' => date('Y-m-d H:i:s')), array('%s', '%s', '%s'));
-
-        $data = [
-            'transactionId' => $transactionId,
-            'amount' => WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax,
-            'products' => $products,
-            'currency' => get_woocommerce_currency(),
-        ];
-
-        header("Location: " . $redirectUrl);
-        exit();
+        }           
+        return $shippingMethod;
     }
 
     public static function ppmfwc_onFastCheckoutOrderFinish()
@@ -834,44 +926,7 @@ class PPMFWC_Gateways
         ), ARRAY_A);
 
         $dbData = $result[0];
-        $products = json_decode($dbData['products']);
-
-        $order = new WC_Order();
-        $order->set_created_via('fast checkout');
-        $shippingProduct = null;
-
-        foreach ($products as $product) {
-            if ($product->type == 'SHIPPING') {
-                $shippingProduct = $product;
-                continue;
-            }
-            if (!empty($product->variation_id) && $product->variation_id > 0) {
-                $product_variation = new WC_Product_Variation($product->variation_id);
-                $args = array();
-                foreach ($product_variation->get_variation_attributes() as $attribute => $attribute_value) {
-                    $args['variation'][$attribute] = $attribute_value;
-                }
-                $order->add_product($product_variation, $product->qty, $args);
-            } else {
-                $order->add_product(
-                    wc_get_product($product->id),
-                    $product->qty
-                );
-            }
-        }
-
-        $shipping = new WC_Order_Item_Shipping();
-        $shipping->set_method_title('Flat rate');
-        $shipping->set_method_id('flat_rate:2');
-        $shipping->set_total($shippingProduct->amountExclTax);
-
-        $order->add_item($shipping);
-        $order->calculate_totals();
-
-        $order->set_payment_method('pay_gateway_ideal');
-        $order->set_payment_method_title('iDEAL Fast Checkout');
-
-        $order->save();
+        $products = json_decode($dbData['products']);        
 
         $billingAddress = array(
             'first_name' => $customerData->firstname,
@@ -923,7 +978,9 @@ class PPMFWC_Gateways
         $orderId = isset($_GET['orderId']) ? sanitize_text_field($_GET['orderId']) : false;
         $url = wc_get_checkout_url();
 
-        $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);
+        $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);        
+
+        $reference = isset($_GET['reference']) ? sanitize_text_field($_GET['reference']) : false;      
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('FINISH, back from PAY payment', $orderId, array('orderStatusId' => $orderStatusId, 'status' => $status));
 
@@ -941,6 +998,19 @@ class PPMFWC_Gateways
                     $url = self::getOrderReturnUrl($order, $newStatus);
                 } catch (Exception $e) {
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Exception: ' . $e->getMessage(), $orderId);
+                }
+            } elseif (!empty($reference) && $reference == 'fastcheckout') {               
+                $statusAction = isset($_GET['statusAction']) ? sanitize_text_field($_GET['statusAction']) : false;
+                $orderId = isset($_GET['id']) ? sanitize_text_field($_GET['id']) : false;
+                if($statusAction == 'PAID' || $statusAction == 'AUTHORIZE'){
+                    $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
+                    if (!$transactionLocalDB || empty($transactionLocalDB['order_id'])) {
+                        throw new PPMFWC_Exception_Notice('Could not find local transaction for order ' . $orderId);
+                    }
+                    $order = new WC_Order($transactionLocalDB['order_id']);
+                    $url = self::getOrderReturnUrl($order, $newStatus);
+                } else {
+                    $url = wc_get_cart_url();
                 }
             }
         } catch (PPMFWC_Exception_Notice $e) {
