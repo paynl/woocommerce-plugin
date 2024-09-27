@@ -117,6 +117,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Maestro',
         'PPMFWC_Gateway_Minitixsms',
         'PPMFWC_Gateway_Mistercash',
+        'PPMFWC_Gateway_Mobilepay',
         'PPMFWC_Gateway_Monizze',
         'PPMFWC_Gateway_Mooigiftcard',
         'PPMFWC_Gateway_Multibanco',
