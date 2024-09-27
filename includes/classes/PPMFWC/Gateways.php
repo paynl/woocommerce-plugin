@@ -732,51 +732,66 @@ class PPMFWC_Gateways
         add_action('woocommerce_api_wc_pay_gateway_featurerequest', array(__CLASS__, 'ppmfwc_onFeatureRequest'));
         add_action('woocommerce_api_wc_pay_gateway_pinrefund', array(__CLASS__, 'ppmfwc_onPinRefund'));
         add_action('woocommerce_api_wc_pay_gateway_fccreate', array(__CLASS__, 'ppmfwc_onFastCheckoutOrderCreate'));
-        add_action('woocommerce_api_wc_pay_gateway_fcfinish', array(__CLASS__, 'ppmfwc_onFastCheckoutOrderFinish'));
     }
 
     public static function ppmfwc_onFastCheckoutOrderCreate()
     {
-        global $wpdb;        
+        global $wpdb;
 
         try {
             $products = [];
             $tax = new WC_Tax();
+            $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(10);
+
+            if ($gateway->enabled == 'no') {
+                throw new \Exception("Selected payment method is not available.");
+            }
+
+            if (
+                (!empty($gateway->settings['ideal_fast_checkout_on_minicart']) || $gateway->settings['ideal_fast_checkout_on_minicart'] == 0) &&
+                (!empty($gateway->settings['ideal_fast_checkout_on_cart']) || $gateway->settings['ideal_fast_checkout_on_cart'] == 0) &&
+                (!empty($gateway->settings['ideal_fast_checkout_on_product']) || $gateway->settings['ideal_fast_checkout_on_product'] == 0)
+            ) {
+                throw new \Exception("Fast checkout is not available.");
+            }
 
             $source = isset($_GET['source']) ? sanitize_text_field($_GET['source']) : false;
-            
+
             WC()->session->set('chosen_payment_method', 'pay_gateway_ideal');
             WC()->cart->calculate_totals();
 
-            if($source == 'product'){
+            if ($source == 'product') {
                 $product_id = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
                 $quantity = isset($_GET['quantity']) ? $_GET['quantity'] : 0;
                 $variation_id = isset($_GET['variation_id']) ? $_GET['variation_id'] : 0;
 
-                WC()->cart->add_to_cart( $product_id , $quantity, $variation_id );             
-                WC()->cart->calculate_totals();    
+                WC()->cart->add_to_cart($product_id, $quantity, $variation_id);
+                WC()->cart->calculate_totals();
             }
 
             $packages = WC()->shipping()->get_packages();
             $package = $packages[0];
             $available_methods = $package['rates'];
 
-            if($source == 'cart'){
+            if ($source == 'cart') {
                 $shippingMethodId = WC()->session->get('chosen_shipping_methods')[0];
                 $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
             } else {
-                WC()->session->set('chosen_shipping_methods', array('flat_rate:2'));
-                WC()->cart->calculate_totals();      
-                $shippingMethodId = 'flat_rate:2';
+                WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shippping_default']));
+                WC()->cart->calculate_totals();
+                $shippingMethodId = $gateway->settings['ideal_fast_checkout_shippping_default'];
                 $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
             }
 
-            if(!$shippingMethod){
-                // use backup
+            if (!$shippingMethod) {
+                WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shippping_backup']));
+                WC()->cart->calculate_totals();
+                $shippingMethodId = $gateway->settings['ideal_fast_checkout_shippping_default'];
+                $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
             }
 
-            if(!$shippingMethod){
-                throw new \Exception("Selected shipping method is not available.", 1);                
+            if (!$shippingMethod) {
+                throw new \Exception("Selected shipping method is not available.");
             }
 
             foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
@@ -802,11 +817,11 @@ class PPMFWC_Gateways
                     'type' => 'ARTICLE',
                     'currency' => get_woocommerce_currency()
                 ];
-            }              
-            
+            }
+
             $shippingAmount = WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes());
 
-            if($shippingAmount > 0){
+            if ($shippingAmount > 0) {
                 $products[] = [
                     'id' => $shippingMethodId,
                     'name' => $shippingMethod->label,
@@ -819,25 +834,25 @@ class PPMFWC_Gateways
                 ];
             }
 
-            $amount = WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax;       
-            
+            $amount = WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax;
+
             $data = [
                 'amount' => WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax,
                 'products' => $products,
                 'currency' => get_woocommerce_currency(),
-                'paymentMethod' => 10
+                'paymentMethod' => PPMFWC_Gateway_Ideal::getOptionId()
             ];
 
             $order = self::createFastCheckoutOrder($data);
 
             $transaction = new PPMFWC_Helper_TransactionFastCheckout();
             $result = $transaction->create($data, $order);
-            
+
             $transactionId = $result['transactionId'];
             $redirectUrl = $result['redirectURL'];
 
             $table_name_fast_checkout = $wpdb->prefix . "pay_fast_checkout";
-            $wpdb->replace($table_name_fast_checkout, array('transaction_id' => $transactionId, 'products' => json_encode($products), 'created' => date('Y-m-d H:i:s')), array('%s', '%s', '%s'));      
+            $wpdb->replace($table_name_fast_checkout, array('transaction_id' => $transactionId, 'products' => json_encode($products), 'created' => date('Y-m-d H:i:s')), array('%s', '%s', '%s'));
 
             PPMFWC_Helper_Transaction::newTransaction($transactionId, $data['paymentMethod'], $order->get_total(), $order->get_id(), '');
 
@@ -845,10 +860,11 @@ class PPMFWC_Gateways
         } catch (\Exception $e) {
             wc_add_notice($e->getMessage(), 'error');
             wp_redirect(wc_get_cart_url());
-        }       
+        }
     }
 
-    public static function createFastCheckoutOrder($data){
+    public static function createFastCheckoutOrder($data)
+    {
         $order = new WC_Order();
         $order->set_created_via('fast checkout');
         $shippingProduct = null;
@@ -881,16 +897,16 @@ class PPMFWC_Gateways
         $order->add_item($shipping);
         $order->calculate_totals();
 
-        $order->set_payment_method('pay_gateway_ideal');
+        $order->set_payment_method(PPMFWC_Gateway_Ideal::getId());
         $order->set_payment_method_title('iDEAL Fast Checkout');
 
-        $order->add_meta_data( '_wc_order_attribution_source_type', 'utm' );
-        $order->add_meta_data( '_wc_order_attribution_utm_source', 'iDEAL Fast Checkout' );
+        $order->add_meta_data('_wc_order_attribution_source_type', 'utm');
+        $order->add_meta_data('_wc_order_attribution_utm_source', 'iDEAL Fast Checkout');
 
         $order->add_order_note(sprintf(esc_html(__('Pay.: Created iDEAL Fast Checkout order', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))));
 
-        $order->save(); 
-        
+        $order->save();
+
         return $order;
     }
 
@@ -901,72 +917,9 @@ class PPMFWC_Gateways
             if ($id == $method->id) {
                 $shippingMethod = $method;
             }
-        }           
+        }
         return $shippingMethod;
     }
-
-    public static function ppmfwc_onFastCheckoutOrderFinish()
-    {
-        // Add customer data and set order to paid.
-        global $wpdb;
-
-        $data = json_decode('{"id":"6693a2f4-5223-8992-1a5f-526160012372","uuid":"a1bf5261-6001-2372-5200-1705096a2372","links":{"void":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/void","abort":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/abort","debug":"https:\/\/checkout.payments.nl\/to\/checkout\/6693a2f4-5223-8992-1a5f-526160012372\/with\/debugging\/6693a2f4522389921a5f526160012372","status":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/status","approve":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/approve","capture":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/capture","decline":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/decline","checkout":"https:\/\/checkout.payments.nl\/to\/return\/6693a2f4-5223-8992-1a5f-526160012372","redirect":"https:\/\/checkout.payments.nl\/to\/return\/6693a2f4-5223-8992-1a5f-526160012372","captureAmount":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/capture\/amount","captureProducts":"https:\/\/connect.payments.nl\/v1\/orders\/6693a2f4-5223-8992-1a5f-526160012372\/capture\/products"},"amount":{"value":"10","currency":"EUR"},"status":{"code":"100","action":"PAID"},"orderId":"52001705096X2372","receipt":"","payments":[{"id":"6693a310-5223-88e3-2b77-052001705096","amount":{"value":"10","currency":"EUR"},"status":{"code":"100","action":"PAID"},"ipAddress":"","customerId":"NL93INGB0006700949","customerKey":"fd36c8fb62a554e1bd7be3a7fd7485a6","customerName":"Hr W M Jonker","customerType":"","secureStatus":"1","supplierData":{"contactDetails":{"email":"wouterjonker@hotmail.com","lastName":"Jonker","firstName":"Wouter","phoneNumber":" 31652457521"},"invoiceAddress":{"city":"Sommelsdijk","street":"Kortewegje","addition":"","lastName":"Jonker","firstName":"Wouter","postalCode":"3245XM","companyName":"","countryName":"Netherlands","houseNumber":"19"},"shippingAddress":{"city":"Sommelsdijk","street":"Kortewegje","addition":"","lastName":"Jonker","firstName":"Wouter","postalCode":"3245XM","companyName":"","countryName":"Netherlands","houseNumber":"19"}},"paymentMethod":{"id":"10","input":{"issuerId":""}},"capturedAmount":{"value":"10","currency":"EUR"},"currencyAmount":{"value":"10","currency":"EUR"},"authorizedAmount":{"value":"0","currency":"EUR"},"paymentVerificationMethod":"21"}],"createdAt":"2024-07-14T10:05:40 00:00","createdBy":"AT-0045-3283","expiresAt":"2024-07-21T10:05:40 00:00","reference":"","serviceId":"SL-5261-6001","modifiedAt":"2024-07-14T12:07:18 02:00","modifiedBy":"","completedAt":"2024-07-14T12:07:18 02:00","customerKey":"fd36c8fb62a554e1bd7be3a7fd7485a6","description":"","integration":{"test":""},"checkoutData":{"customer":{"email":"wouterjonker@hotmail.com","phone":" 31652457521","gender":"","locale":"","company":"","lastname":"Jonker","firstname":"Wouter","ipAddress":"","reference":"NL93INGB0006700949","dateOfBirth":""},"billingAddress":{"city":"Sommelsdijk","zipCode":"3245XM","lastName":"Jonker","firstName":"Wouter","regionCode":"","streetName":"Kortewegje","countryCode":"NL","streetNumber":"19","streetNumberAddition":""},"shippingAddress":{"city":"Sommelsdijk","zipCode":"3245XM","lastName":"Jonker","firstName":"Wouter","regionCode":"","streetName":"Kortewegje","countryCode":"NL","streetNumber":"19","streetNumberAddition":""}},"capturedAmount":{"value":"10","currency":"EUR"},"authorizedAmount":{"value":"0","currency":"EUR"},"manualTransferCode":"1000 0520 0170 5096"}');
-
-        $customerData = $data->checkoutData->customer;
-        $billingAddressData = $data->checkoutData->billingAddress;
-        $shippingAddressData = $data->checkoutData->shippingAddress;
-
-        $transactionId = '66a8d18274b78';
-
-        $table_name_fast_checkout = $wpdb->prefix . "pay_fast_checkout";
-        $result = $wpdb->get_results($wpdb->prepare(
-            "SELECT * FROM $table_name_fast_checkout WHERE transaction_id = %s",
-            $transactionId,
-            date('Y-m-d H:i:s')
-        ), ARRAY_A);
-
-        $dbData = $result[0];
-        $products = json_decode($dbData['products']);        
-
-        $billingAddress = array(
-            'first_name' => $customerData->firstname,
-            'last_name' => $customerData->lastname,
-            'company' => $customerData->company,
-            'email' => $customerData->email,
-            'phone' => $customerData->phone,
-            'address_1' => $billingAddressData->streetName . ' ' . $shippingAddressData->streetNumber . $shippingAddressData->streetNumberAddition,
-            'address_2' => '',
-            'city' => $billingAddressData->city,
-            'state' => '',
-            'postcode' => $billingAddressData->zipCode,
-            'country' => $billingAddressData->countryCode,
-        );
-
-        $shippingAddress = array(
-            'first_name' => $customerData->firstname,
-            'last_name' => $customerData->lastname,
-            'company' => $customerData->company,
-            'email' => $customerData->email,
-            'phone' => $customerData->phone,
-            'address_1' => $shippingAddressData->streetName . ' ' . $shippingAddressData->streetNumber . $shippingAddressData->streetNumberAddition,
-            'address_2' => '',
-            'city' => $shippingAddressData->city,
-            'state' => '',
-            'postcode' => $shippingAddressData->zipCode,
-            'country' => $shippingAddressData->countryCode,
-        );
-
-        $order->set_address($billingAddress, 'billing');
-        $order->set_address($shippingAddress, 'shipping');
-
-        if ($data->status->code == 100) {
-            $order->set_status('wc-completed');
-        }
-
-        $order->save();
-        exit('OK');
-    }
-    
 
     /**
      * After a (successfull, failed, cancelled etc.) PAY payment the user wil end up here
@@ -978,9 +931,9 @@ class PPMFWC_Gateways
         $orderId = isset($_GET['orderId']) ? sanitize_text_field($_GET['orderId']) : false;
         $url = wc_get_checkout_url();
 
-        $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);        
+        $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);
 
-        $reference = isset($_GET['reference']) ? sanitize_text_field($_GET['reference']) : false;      
+        $reference = isset($_GET['reference']) ? sanitize_text_field($_GET['reference']) : false;
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('FINISH, back from PAY payment', $orderId, array('orderStatusId' => $orderStatusId, 'status' => $status));
 
@@ -999,10 +952,10 @@ class PPMFWC_Gateways
                 } catch (Exception $e) {
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Exception: ' . $e->getMessage(), $orderId);
                 }
-            } elseif (!empty($reference) && $reference == 'fastcheckout') {               
+            } elseif (!empty($reference) && $reference == 'fastcheckout') {
                 $statusAction = isset($_GET['statusAction']) ? sanitize_text_field($_GET['statusAction']) : false;
                 $orderId = isset($_GET['id']) ? sanitize_text_field($_GET['id']) : false;
-                if($statusAction == 'PAID' || $statusAction == 'AUTHORIZE'){
+                if ($statusAction == 'PAID' || $statusAction == 'AUTHORIZE') {
                     $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
                     if (!$transactionLocalDB || empty($transactionLocalDB['order_id'])) {
                         throw new PPMFWC_Exception_Notice('Could not find local transaction for order ' . $orderId);
@@ -1140,15 +1093,146 @@ class PPMFWC_Gateways
     }
 
     /**
+     * @return boolean
+     */
+    private static function isSignExchange()
+    {
+        $headers = array_change_key_case(getallheaders(), CASE_LOWER);
+        $signingMethod = $headers['signature-method'] ?? null;
+        return $signingMethod === 'HMAC';
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+     */
+    private static function getPayLoad()
+    {
+        $action = strtolower(PPMFWC_Helper_Data::getRequestArg('action')) ?? null;
+        if (!empty($action)) {
+            # The argument "action" tells us this is not coming from TGU      
+            $paymentProfile = PPMFWC_Helper_Data::getRequestArg('payment_profile_id') ?? null;
+            $payOrderId = PPMFWC_Helper_Data::getRequestArg('order_id') ?? null;
+            $orderId = PPMFWC_Helper_Data::getRequestArg('extra1') ?? null;
+            $extra3 = PPMFWC_Helper_Data::getRequestArg('extra3') ?? null;
+            $data = null;
+        } else {
+            if (wp_is_json_request()) {
+                $rawBody = file_get_contents('php://input');
+                $data = json_decode($rawBody, true, 512, 4194304);
+                $exchangeType = $data['type'] ?? null;
+                if ($exchangeType != 'order') {
+                    throw new Exception('Cant handle exchange type other then order');
+                }
+            } else {
+                $data = $_REQUEST ?? null;
+            }
+
+            $payOrderId = $data['object']['orderId'] ?? '';
+            $internalStateId = $data['object']['status']['code'] ?? '';
+            $internalStateName = $data['object']['status']['action'] ?? '';
+            $orderId = $data['object']['reference'] ?? '';
+            $extra3 = $data['object']['extra3'] ?? null;
+            switch ($internalStateId) {
+                case 100:
+                case 95:
+                    $action = 'new_ppt';
+                    break;
+                case -90:
+                    $action = 'cancel';
+                    break;
+                default:
+                    $action = 'pending';
+                    break;
+            }
+            $checkoutData = $data['object']['checkoutData'] ?? '';
+        }
+
+        # Return mapped data so it works for all type of exchanges.
+        return [
+            'action' => $action,
+            'paymentProfile' => $paymentProfile ?? null,
+            'payOrderId' => $payOrderId,
+            'orderId' => $orderId,
+            'extra3' => $extra3 ?? null,
+            'internalStateId' => $internalStateId ?? null,
+            'internalStateName' => $internalStateName ?? null,
+            'checkoutData' => $checkoutData ?? null,
+            'orgData' => $data,
+        ];
+    }
+
+    /**
+     * @param array $params
+     * @return boolean
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+     */
+    private static function isFastCheckout($params)
+    {
+        return strpos($params['orderId'] ?? '', "fastcheckout") !== false && !empty($params['checkoutData'] ?? '');
+    }
+
+    /**
+     * @param array $params
+     * @param string $orderId
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+     */
+    private static function addAddressToOrder($params, $orderId)
+    {
+        $checkoutData = $params['checkoutData'];
+        $customerData = $checkoutData['customer'] ?? null;
+        $billingAddressData = $checkoutData['billingAddress'] ?? null;
+        $shippingAddressData = $checkoutData['shippingAddress'] ?? null;
+
+        $billingAddress = array(
+            'first_name' => $billingAddressData['firstName'] ?? $customerData['firstName'],
+            'last_name' => $billingAddressData['lastName'] ?? $customerData['lastName'],
+            'company' => $customerData['company'],
+            'email' => $customerData['email'],
+            'phone' => $customerData['phone'],
+            'address_1' => $billingAddressData['streetName'] . ' ' . $shippingAddressData['streetNumber'] . $shippingAddressData['streetNumberAddition'],
+            'address_2' => '',
+            'city' => $billingAddressData['city'],
+            'state' => '',
+            'postcode' => $billingAddressData['zipCode'],
+            'country' => $billingAddressData['countryCode'],
+        );
+
+        $shippingAddress = array(
+            'first_name' => $shippingAddressData['firstName'] ?? $customerData['firstName'],
+            'last_name' => $shippingAddressData['lastName'] ?? $customerData['lastName'],
+            'company' => $customerData['company'],
+            'email' => $customerData['email'],
+            'phone' => $customerData['phone'],
+            'address_1' => $shippingAddressData['streetName'] . ' ' . $shippingAddressData['streetNumber'] . $shippingAddressData['streetNumberAddition'],
+            'address_2' => '',
+            'city' => $shippingAddressData['city'],
+            'state' => '',
+            'postcode' => $shippingAddressData['zipCode'],
+            'country' => $shippingAddressData['countryCode'],
+        );
+
+        $order = new WC_Order($orderId);
+
+        $order->set_address($billingAddress, 'billing');
+        $order->set_address($shippingAddress, 'shipping');
+
+        $order->save();
+    }
+
+    /**
      * Handles the Pay. Exchange requests
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public static function ppmfwc_onExchange()
     {
-        $action = strtolower(PPMFWC_Helper_Data::getRequestArg('action'));
-        $order_id = PPMFWC_Helper_Data::getRequestArg('order_id');
-        $wc_order_id = PPMFWC_Helper_Data::getRequestArg('extra1');
-        $methodId = PPMFWC_Helper_Data::getRequestArg('payment_profile_id');
+        $params = self::getPayLoad();
+
+        $action = $params['action'];
+        $order_id = (string) $params['payOrderId'];
+        $wc_order_id = (string) $params['orderId'];
+        $methodId = $params['paymentProfile'];
 
         if ($methodId == PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND && $action == self::ACTION_NEWPPT) {
             $action = self::ACTION_PINREFUND;
@@ -1156,6 +1240,17 @@ class PPMFWC_Gateways
 
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
+
+        if (self::isFastCheckout($params)) {
+            $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($order_id);
+            $wc_order_id = $transactionLocalDB['order_id'];
+
+            if ($action == self::ACTION_NEWPPT) {
+                if ($wc_order_id) {
+                    self::addAddressToOrder($params, $wc_order_id);
+                }
+            }
+        }
 
         ob_start();
         try {
@@ -1317,6 +1412,11 @@ class PPMFWC_Gateways
                 'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
                 'ipaddress'     => $ipAddress,
                 'object'        => PPMFWC_Helper_Data::getObject(),
+                'bank' => $terminal,
+                'currency' => $currency,
+                'description' => str_replace('__', ' ', $prefix) . $order->get_order_number(),
+                'extra1' => apply_filters('paynl-extra1', $order->get_order_number(), $order),
+                'extra2' => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
             );
 
             $payTransaction = \Paynl\Transaction::start($startData);

@@ -105,3 +105,7 @@
     position: absolute;
     left: 0;
 }
+
+.woocommerce table.form-table th label[for="woocommerce_pay_gateway_ideal_fast_checkout_header"] {
+    font-size: 25px;
+}

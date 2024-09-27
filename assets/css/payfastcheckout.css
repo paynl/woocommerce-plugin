@@ -14,18 +14,18 @@
 }
 
 .woocommerce .pay-quick-checkout a.button.alt,
-.pay-quick-checkout a{
+.pay-quick-checkout a {
     background: #c90066;
     border-color: #c90066;
     background-image: url(../../assets/images/fastCheckoutIdeal.png);
     background-repeat: no-repeat;
     background-size: 51px;
     background-position: 23px center;
-    min-width: 260px;    
+    min-width: 260px;
     cursor: pointer;
 }
 
-.pay-quick-checkout-product a{
+.pay-quick-checkout-product a {
     padding: 0 45px 0px 80px;
     width: 260px;
     height: 50px;
