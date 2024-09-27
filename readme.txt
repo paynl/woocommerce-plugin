@@ -4,9 +4,9 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 3.5.1
-Stable tag: 3.19.3
+Stable tag: 3.19.4
 Tested up to: 6.6.2
-WC tested up to: 9.3.1
+WC tested up to: 9.3.3
 WC requires at least: 3.0
 Requires PHP: 7.0
 License: GPLv2
@@ -189,6 +189,14 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 3.19.4 =
+Added Xafax Mynetpay
+Added Flying blue+
+Added Kunst & Cultuur Kaart
+Added Kids or teen
+Added MobilePAY
+Added Rotterdam Citycard
+Added Stadspas Amsterdam
 = 3.19.3 =
 Updated Riverty name and logo
 = 3.19.2 =
