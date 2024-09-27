@@ -110,6 +110,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_In3business',
         'PPMFWC_Gateway_Incasso',
         'PPMFWC_Gateway_Instore',
+        'PPMFWC_Gateway_Kidsorteen',
         'PPMFWC_Gateway_Klarna',
         'PPMFWC_Gateway_Klarnakp',
         'PPMFWC_Gateway_Kunstencultuurkaart',
