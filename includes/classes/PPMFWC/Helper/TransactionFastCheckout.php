@@ -1,7 +1,7 @@
 <?php
 
 class PPMFWC_Helper_TransactionFastCheckout
-{   
+{
     /**
      * @return array
      */
@@ -15,7 +15,7 @@ class PPMFWC_Helper_TransactionFastCheckout
             ],
         ];
 
-        $parameters['paymentMethod'] = ['id' =>  $data['paymentMethod']];
+        $parameters['paymentMethod'] = ['id' => $data['paymentMethod']];
 
         $returnUrl = add_query_arg(array('wc-api' => 'Wc_Pay_Gateway_Return'), home_url('/'));
         $exchangeUrl = add_query_arg('wc-api', 'Wc_Pay_Gateway_Exchange', home_url('/'));
@@ -107,11 +107,11 @@ class PPMFWC_Helper_TransactionFastCheckout
     {
         $payload = $this->getData($data, $order);
 
-        $payload = json_encode($payload); 
+        $payload = json_encode($payload);
 
         $url = 'https://connect.payments.nl/v1/orders';
 
-        $rawResponse = (array) $this->sendCurlRequest($url, $payload, get_option('paynl_tokencode'), get_option('paynl_apitoken'));      
+        $rawResponse = (array) $this->sendCurlRequest($url, $payload, get_option('paynl_tokencode'), get_option('paynl_apitoken'));
 
         $response = array(
             'redirectURL' => $rawResponse['links']->redirect ?? '',
