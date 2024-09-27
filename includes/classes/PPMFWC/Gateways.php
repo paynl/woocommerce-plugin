@@ -748,9 +748,9 @@ class PPMFWC_Gateways
             }
 
             if (
-                (!empty($gateway->settings['ideal_fast_checkout_on_minicart']) || $gateway->settings['ideal_fast_checkout_on_minicart'] == 0) &&
-                (!empty($gateway->settings['ideal_fast_checkout_on_cart']) || $gateway->settings['ideal_fast_checkout_on_cart'] == 0) &&
-                (!empty($gateway->settings['ideal_fast_checkout_on_product']) || $gateway->settings['ideal_fast_checkout_on_product'] == 0)
+                (empty($gateway->settings['ideal_fast_checkout_on_minicart']) || $gateway->settings['ideal_fast_checkout_on_minicart'] == 0) &&
+                (empty($gateway->settings['ideal_fast_checkout_on_cart']) || $gateway->settings['ideal_fast_checkout_on_cart'] == 0) &&
+                (empty($gateway->settings['ideal_fast_checkout_on_product']) || $gateway->settings['ideal_fast_checkout_on_product'] == 0)
             ) {
                 throw new \Exception("Fast checkout is not available.");
             }
