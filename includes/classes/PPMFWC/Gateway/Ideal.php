@@ -131,7 +131,7 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                     1 => esc_html(__('On', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
                 ),
                 'default' => 0,
-                'desc_tip' => __('Show the fast checkout button on the cart page. <br/><br/> This button allows users to checkout directly from the cart without the need to fill in their address.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'desc_tip' => __('Show the fast checkout button on the cart page. <br/><br/> This button allows users to checkout directly from the cart without the need to fill in their address.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), // phpcs:ignore
             );
 
             $this->form_fields['ideal_fast_checkout_on_minicart'] = array(
@@ -142,7 +142,7 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                     1 => esc_html(__('On', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))
                 ),
                 'default' => 0,
-                'desc_tip' => __('Show the fast checkout button on the minicart. <br/><br/> This button allows users to checkout directly from the minicart without the need to fill in their address.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'desc_tip' => __('Show the fast checkout button on the minicart. <br/><br/> This button allows users to checkout directly from the minicart without the need to fill in their address.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), // phpcs:ignore
             );
 
             $this->form_fields['ideal_fast_checkout_on_product'] = array(
@@ -154,7 +154,7 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                 ),
                 'default' => 0,
                 'description' => '<br/>',
-                'desc_tip' => __('Show the fast checkout button on every product page. <br/><br/> This button allows users to checkout directly from the cart without the need to fill in their address.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'desc_tip' => __('Show the fast checkout button on every product page. <br/><br/> This button allows users to checkout directly from the cart without the need to fill in their address.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), // phpcs:ignore
             );
 
             $this->form_fields['ideal_fast_checkout_shippping_default'] = array(

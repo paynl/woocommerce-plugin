@@ -910,7 +910,7 @@ class PPMFWC_Gateways
 
     /**
      * @param array $data
-     * @return WC_Order 
+     * @return WC_Order
      * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
     public static function createFastCheckoutOrder($data)
@@ -966,11 +966,11 @@ class PPMFWC_Gateways
 
         return $order;
     }
-    
+
     /**
      * @param array $available_methods
      * @param string $id
-     * @return mixed     * 
+     * @return mixed
      * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
     public static function getShippingMethod($available_methods, $id)

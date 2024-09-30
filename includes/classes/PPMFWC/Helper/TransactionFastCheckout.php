@@ -84,7 +84,7 @@ class PPMFWC_Helper_TransactionFastCheckout
     }
 
     /**
-     * @param array $products 
+     * @param array $products
      * @return array
      */
     private function getProductData($products)
