@@ -89,7 +89,7 @@ class PPMFWC_Helper_Transaction
     }
 
     /**
-     * @param $orderId
+     * @param string $orderId
      * @return string|boolean
      */
     public static function getSuccessTransactionIdForOrderId($orderId)
@@ -346,7 +346,7 @@ class PPMFWC_Helper_Transaction
                 if (!$order->has_status('pending') && !$order->has_status('on-hold')) {
                     throw new PPMFWC_Exception_Notice('Cancel ignored, order is ' . $order->get_status());
                 }
-                if ($databaseStatusSuccess){
+                if ($databaseStatusSuccess) {
                     throw new PPMFWC_Exception_Notice('Not cancelling, order status in database is SUCCESS');
                 }
 
