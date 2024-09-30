@@ -1,9 +1,21 @@
 <?php
 
+/**
+ * PPMFWC_Helper_TransactionFastCheckout
+ *
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @phpcs:disable PSR1.Methods.CamelCapsMethodName
+ * @phpcs:disable PSR12.Properties.ConstantVisibility
+ * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+ */
+
 class PPMFWC_Helper_TransactionFastCheckout
 {
     /**
-     * @return array
+     * @param array $data
+     * @param WC_Order $order
+     * @return \Paynl\Result\Transaction\Start
      */
     public function getData($data, $order)
     {
@@ -63,7 +75,6 @@ class PPMFWC_Helper_TransactionFastCheckout
      * @param string $field
      * @param string $value
      * @return void
-     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
     private function _add(&$returnArr, $field, $value) // phpcs:ignore
     {
@@ -73,6 +84,7 @@ class PPMFWC_Helper_TransactionFastCheckout
     }
 
     /**
+     * @param array $products 
      * @return array
      */
     private function getProductData($products)
@@ -97,6 +109,8 @@ class PPMFWC_Helper_TransactionFastCheckout
     }
 
     /**
+     * @param array $data
+     * @param WC_Order $order
      * @return \Paynl\Result\Transaction\Start
      * @throws \Paynl\Error\Api
      * @throws \Paynl\Error\Error
@@ -129,7 +143,6 @@ class PPMFWC_Helper_TransactionFastCheckout
      * @param string $method
      * @return array
      * @throws \Exception
-     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
     public function sendCurlRequest($requestUrl, $payload, $tokenCode, $apiToken, $method = 'POST')
     {
@@ -185,5 +198,4 @@ class PPMFWC_Helper_TransactionFastCheckout
 
         return '';
     }
-
 }

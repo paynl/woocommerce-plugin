@@ -741,6 +741,10 @@ class PPMFWC_Gateways
         add_action('woocommerce_api_wc_pay_gateway_fccreate', array(__CLASS__, 'ppmfwc_onFastCheckoutOrderCreate'));
     }
 
+    /**
+     * Handles the Pay. fast checkout requests
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
     public static function ppmfwc_onFastCheckoutOrderCreate()
     {
         global $wpdb;
@@ -868,7 +872,7 @@ class PPMFWC_Gateways
                         'qty' => 1,
                         'amount' => WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()),
                         'amountExclTax' => WC()->cart->get_shipping_total(),
-                        'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage(WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()), array_shift($shippingMethod->get_taxes()))),
+                        'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage(WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()), array_shift($shippingMethod->get_taxes()))), // phpcs:ignore
                         'type' => 'SHIPPING',
                         'currency' => get_woocommerce_currency()
                     ];
@@ -904,6 +908,11 @@ class PPMFWC_Gateways
         }
     }
 
+    /**
+     * @param array $data
+     * @return WC_Order 
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+     */
     public static function createFastCheckoutOrder($data)
     {
         $order = new WC_Order();
@@ -957,7 +966,13 @@ class PPMFWC_Gateways
 
         return $order;
     }
-
+    
+    /**
+     * @param array $available_methods
+     * @param string $id
+     * @return mixed     * 
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+     */
     public static function getShippingMethod($available_methods, $id)
     {
         $shippingMethod = false;
@@ -1159,7 +1174,7 @@ class PPMFWC_Gateways
     {
         $action = strtolower(PPMFWC_Helper_Data::getRequestArg('action')) ?? null;
         if (!empty($action)) {
-            # The argument "action" tells us this is not coming from TGU      
+            # The argument "action" tells us this is not coming from TGU
             $paymentProfile = PPMFWC_Helper_Data::getRequestArg('payment_profile_id') ?? null;
             $payOrderId = PPMFWC_Helper_Data::getRequestArg('order_id') ?? null;
             $orderId = PPMFWC_Helper_Data::getRequestArg('extra1') ?? null;
@@ -1193,7 +1208,7 @@ class PPMFWC_Gateways
                     break;
                 case -90:
                 case -80:
-                case -63;
+                case -63:
                     $action = 'cancel';
                     break;
                 default:
@@ -1230,6 +1245,7 @@ class PPMFWC_Gateways
     /**
      * @param array $params
      * @param string $orderId
+     * @return void
      * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
     private static function addAddressToOrder($params, $orderId)

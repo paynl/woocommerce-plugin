@@ -139,6 +139,10 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     add_action('admin_notices', 'ppmfwc_error_woocommerce_not_active');
 }
 
+/**
+ * Add fast checkout CSS
+ * @return void
+ */
 function ppmfwc_quick_checkout_css()
 {
     $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(10);
@@ -154,6 +158,10 @@ function ppmfwc_quick_checkout_css()
     }
 }
 
+/**
+ * Show fast checkout on cart page
+ * @return void
+ */
 function ppmfwc_quick_checkout_cart()
 {
     $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(10);
@@ -167,6 +175,10 @@ function ppmfwc_quick_checkout_cart()
     }
 }
 
+/**
+ * Show fast checkout on mini cart
+ * @return void
+ */
 function ppmfwc_quick_checkout_mini_cart()
 {
     $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(10);
@@ -180,6 +192,10 @@ function ppmfwc_quick_checkout_mini_cart()
     }
 }
 
+/**
+ * Show fast checkout on product page
+ * @return void
+ */
 function ppmfwc_quick_checkout_product()
 {
     $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(10);
