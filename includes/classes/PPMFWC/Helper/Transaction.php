@@ -89,6 +89,25 @@ class PPMFWC_Helper_Transaction
     }
 
     /**
+     * @param $orderId
+     * @return string|boolean
+     */
+    public static function getSuccessTransactionIdForOrderId($orderId)
+    {
+        global $wpdb;
+        $table_name_transactions = $wpdb->prefix . "pay_transactions";
+        $result = $wpdb->get_results(
+            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE order_id = %s  AND status IN ('SUCCESS') ", $orderId),
+            ARRAY_A
+        );
+        if (!empty($result)) {
+            return $result[0];
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * @param string $transactionId
      * @param string $status
      * @return void
@@ -316,6 +335,7 @@ class PPMFWC_Helper_Transaction
 
             case PPMFWC_Gateways::STATUS_CANCELED:
                 $method = $order->get_payment_method();
+                $databaseStatusSuccess = self::getSuccessTransactionIdForOrderId($order->get_id());
 
                 if (substr($method, 0, 11) != 'pay_gateway') {
                     throw new PPMFWC_Exception_Notice('Not cancelling, last used method is not a Pay. method');
@@ -325,6 +345,9 @@ class PPMFWC_Helper_Transaction
                 }
                 if (!$order->has_status('pending') && !$order->has_status('on-hold')) {
                     throw new PPMFWC_Exception_Notice('Cancel ignored, order is ' . $order->get_status());
+                }
+                if ($databaseStatusSuccess){
+                    throw new PPMFWC_Exception_Notice('Not cancelling, order status in database is SUCCESS');
                 }
 
                 $order->set_status(self::getCustomWooComOrderStatus('cancel'));
