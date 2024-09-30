@@ -130,12 +130,28 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     }
     add_action('woocommerce_order_item_add_action_buttons', 'ppmfwc_add_order_js', 10, 1);
 
+    add_action('wp_enqueue_scripts', 'ppmfwc_quick_checkout_css');
     add_action('woocommerce_widget_shopping_cart_buttons', 'ppmfwc_quick_checkout_mini_cart', 30);
     add_action('woocommerce_after_cart_totals', 'ppmfwc_quick_checkout_cart', 30);
     add_action('woocommerce_after_add_to_cart_button', 'ppmfwc_quick_checkout_product', 30);
 } else {
     # WooCommerce seems to be inactive, show eror message
     add_action('admin_notices', 'ppmfwc_error_woocommerce_not_active');
+}
+
+function ppmfwc_quick_checkout_css()
+{
+    $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(10);
+    if ($gateway->enabled == 'yes') {
+        if (
+            (!empty($gateway->settings['ideal_fast_checkout_on_cart']) && $gateway->settings['ideal_fast_checkout_on_cart'] == 1) ||
+            (!empty($gateway->settings['ideal_fast_checkout_on_minicart']) && $gateway->settings['ideal_fast_checkout_on_minicart'] == 1) ||
+            (!empty($gateway->settings['ideal_fast_checkout_on_product']) && $gateway->settings['ideal_fast_checkout_on_product'] == 1)
+        ) {
+            wp_register_style('ppmfwc_quick_checkout_style', PPMFWC_PLUGIN_URL . 'assets/css/payfastcheckout.css');
+            wp_enqueue_style('ppmfwc_quick_checkout_style');
+        }
+    }
 }
 
 function ppmfwc_quick_checkout_cart()
@@ -146,8 +162,6 @@ function ppmfwc_quick_checkout_cart()
             if (is_user_logged_in() && !empty($gateway->settings['ideal_fast_checkout_guest_only']) && $gateway->settings['ideal_fast_checkout_guest_only'] == 'yes') {
                 return;
             }
-            wp_register_style('ppmfwc_quick_checkout_style', PPMFWC_PLUGIN_URL . 'assets/css/payfastcheckout.css');
-            wp_enqueue_style('ppmfwc_quick_checkout_style');
             echo '<div class="pay-quick-checkout cart"><a href="/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart" class="checkout-button button alt wc-forward">Fast Checkout</a></div>';
         }
     }
@@ -161,8 +175,6 @@ function ppmfwc_quick_checkout_mini_cart()
             if (is_user_logged_in() && !empty($gateway->settings['ideal_fast_checkout_guest_only']) && $gateway->settings['ideal_fast_checkout_guest_only'] == 'yes') {
                 return;
             }
-            wp_register_style('ppmfwc_quick_checkout_style', PPMFWC_PLUGIN_URL . 'assets/css/payfastcheckout.css');
-            wp_enqueue_style('ppmfwc_quick_checkout_style');
             echo '<div class="pay-quick-checkout mini"><a href="/?wc-api=Wc_Pay_Gateway_Fccreate" class="checkout-button button alt wc-forward">Fast Checkout</a></div>';
         }
     }
@@ -176,8 +188,6 @@ function ppmfwc_quick_checkout_product()
             if (is_user_logged_in() && !empty($gateway->settings['ideal_fast_checkout_guest_only']) && $gateway->settings['ideal_fast_checkout_guest_only'] == 'yes') {
                 return;
             }
-            wp_register_style('ppmfwc_quick_checkout_style', PPMFWC_PLUGIN_URL . 'assets/css/payfastcheckout.css');
-            wp_enqueue_style('ppmfwc_quick_checkout_style');
             wp_register_script('ppmfwc_fastcheckout_script', PPMFWC_PLUGIN_URL . 'assets/js/payfastcheckout.js', array('jquery'), '1.0', true);
             wp_enqueue_script('ppmfwc_fastcheckout_script');
             echo '<div class="pay-quick-checkout-product"><div class="pay-quick-checkout"><a class="checkout-button button alt wc-forward">Fast Checkout</a></div></div>';

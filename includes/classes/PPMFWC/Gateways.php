@@ -770,28 +770,30 @@ class PPMFWC_Gateways
             }
 
             $packages = WC()->shipping()->get_packages();
-            $package = $packages[0];
-            $available_methods = $package['rates'];
+            if (!empty($packages)) {
+                $package = $packages[0];
+                $available_methods = $package['rates'];
 
-            if ($source == 'cart') {
-                $shippingMethodId = WC()->session->get('chosen_shipping_methods')[0];
-                $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
-            } else {
-                WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shippping_default']));
-                WC()->cart->calculate_totals();
-                $shippingMethodId = $gateway->settings['ideal_fast_checkout_shippping_default'];
-                $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
-            }
+                if ($source == 'cart') {
+                    $shippingMethodId = WC()->session->get('chosen_shipping_methods')[0];
+                    $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
+                } else {
+                    WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shippping_default']));
+                    WC()->cart->calculate_totals();
+                    $shippingMethodId = $gateway->settings['ideal_fast_checkout_shippping_default'];
+                    $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
+                }
 
-            if (!$shippingMethod) {
-                WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shippping_backup']));
-                WC()->cart->calculate_totals();
-                $shippingMethodId = $gateway->settings['ideal_fast_checkout_shippping_default'];
-                $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
-            }
+                if (!$shippingMethod) {
+                    WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shippping_backup']));
+                    WC()->cart->calculate_totals();
+                    $shippingMethodId = $gateway->settings['ideal_fast_checkout_shippping_backup'];
+                    $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
+                }
 
-            if (!$shippingMethod) {
-                throw new \Exception("Selected shipping method is not available.");
+                if (!$shippingMethod) {
+                    throw new \Exception("Selected shipping method is not available.");
+                }
             }
 
             foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
@@ -819,25 +821,57 @@ class PPMFWC_Gateways
                 ];
             }
 
-            $shippingAmount = WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes());
+            $orderDiscount = 0;
 
-            if ($shippingAmount > 0) {
-                $products[] = [
-                    'id' => $shippingMethodId,
-                    'name' => $shippingMethod->label,
-                    'qty' => 1,
-                    'amount' => WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()),
-                    'amountExclTax' => WC()->cart->get_shipping_total(),
-                    'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage(WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()), array_shift($shippingMethod->get_taxes()))),
-                    'type' => 'SHIPPING',
-                    'currency' => get_woocommerce_currency()
-                ];
+            if (!empty(WC()->cart->applied_coupons)) {
+                foreach (WC()->cart->applied_coupons as $coupon_code) {
+                    $coupon = new WC_Coupon($coupon_code);
+                    $discount_total = $coupon->get_amount();
+
+                    if ($coupon->get_discount_type() == 'percent') {
+                        $discount_total = 0;
+                        foreach ($products as $product) {
+                            $couponAmount = $coupon->get_amount();
+                            $productAmount = $product['amount'];
+                            $discount_total += round(($productAmount / 100 * $couponAmount * $product['qty']), 2);
+                        }
+                    }
+
+                    $products[] = [
+                        'id' => $coupon_code,
+                        'name' => $coupon_code,
+                        'qty' => 1,
+                        'amount' => $discount_total,
+                        'taxPercentage' => 0,
+                        'type' => 'DISCOUNT',
+                        'discountType' => $coupon->get_discount_type(),
+                        'currency' => get_woocommerce_currency()
+                    ];
+
+                    $orderDiscount += $discount_total;
+                }
             }
 
-            $amount = WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax;
+            if ($shippingMethod) {
+                $shippingAmount = WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes());
+                if ($shippingAmount > 0) {
+                    $products[] = [
+                        'id' => $shippingMethodId,
+                        'name' => $shippingMethod->label,
+                        'qty' => 1,
+                        'amount' => WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()),
+                        'amountExclTax' => WC()->cart->get_shipping_total(),
+                        'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage(WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()), array_shift($shippingMethod->get_taxes()))),
+                        'type' => 'SHIPPING',
+                        'currency' => get_woocommerce_currency()
+                    ];
+                }
+            }
+
+            $amount = WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax - $orderDiscount;
 
             $data = [
-                'amount' => WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax,
+                'amount' => $amount,
                 'products' => $products,
                 'currency' => get_woocommerce_currency(),
                 'paymentMethod' => PPMFWC_Gateway_Ideal::getOptionId()
@@ -869,9 +903,16 @@ class PPMFWC_Gateways
         $order->set_created_via('fast checkout');
         $shippingProduct = null;
 
+        $coupons = array();
+
         foreach ($data['products'] as $product) {
             if ($product['type'] == 'SHIPPING') {
                 $shippingProduct = $product;
+                continue;
+            }
+            if ($product['type'] == 'DISCOUNT') {
+                $coupon = new WC_Coupon($product['id']);
+                $order->apply_coupon($coupon);
                 continue;
             }
             if (!empty($product['variation_id']) && $product['variation_id'] > 0) {
@@ -1136,10 +1177,16 @@ class PPMFWC_Gateways
             $extra3 = $data['object']['extra3'] ?? null;
             switch ($internalStateId) {
                 case 100:
+                case 98:
                 case 95:
                     $action = 'new_ppt';
                     break;
+                case 85:
+                    $action = 'verify';
+                    break;
                 case -90:
+                case -80:
+                case -63;
                     $action = 'cancel';
                     break;
                 default:
@@ -1188,29 +1235,29 @@ class PPMFWC_Gateways
         $billingAddress = array(
             'first_name' => $billingAddressData['firstName'] ?? $customerData['firstName'],
             'last_name' => $billingAddressData['lastName'] ?? $customerData['lastName'],
-            'company' => $customerData['company'],
-            'email' => $customerData['email'],
-            'phone' => $customerData['phone'],
+            'company' => $customerData['company'] ?? '',
+            'email' => $customerData['email'] ?? '',
+            'phone' => $customerData['phone'] ?? '',
             'address_1' => $billingAddressData['streetName'] . ' ' . $shippingAddressData['streetNumber'] . $shippingAddressData['streetNumberAddition'],
             'address_2' => '',
-            'city' => $billingAddressData['city'],
+            'city' => $billingAddressData['city'] ?? '',
             'state' => '',
-            'postcode' => $billingAddressData['zipCode'],
-            'country' => $billingAddressData['countryCode'],
+            'postcode' => $billingAddressData['zipCode'] ?? '',
+            'country' => $billingAddressData['countryCode'] ?? '',
         );
 
         $shippingAddress = array(
             'first_name' => $shippingAddressData['firstName'] ?? $customerData['firstName'],
             'last_name' => $shippingAddressData['lastName'] ?? $customerData['lastName'],
-            'company' => $customerData['company'],
-            'email' => $customerData['email'],
-            'phone' => $customerData['phone'],
+            'company' => $customerData['company'] ?? '',
+            'email' => $customerData['email'] ?? '',
+            'phone' => $customerData['phone'] ?? '',
             'address_1' => $shippingAddressData['streetName'] . ' ' . $shippingAddressData['streetNumber'] . $shippingAddressData['streetNumberAddition'],
             'address_2' => '',
-            'city' => $shippingAddressData['city'],
+            'city' => $shippingAddressData['city'] ?? '',
             'state' => '',
-            'postcode' => $shippingAddressData['zipCode'],
-            'country' => $shippingAddressData['countryCode'],
+            'postcode' => $shippingAddressData['zipCode'] ?? '',
+            'country' => $shippingAddressData['countryCode'] ?? '',
         );
 
         $order = new WC_Order($orderId);
