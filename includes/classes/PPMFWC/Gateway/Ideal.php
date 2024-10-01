@@ -178,7 +178,7 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                 'label' => ' ',
                 'type' => 'checkbox',
                 'default' => 'no',
-                'description' => esc_html(__('Show the fast checkout button on the cart page, only for guest customers.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'description' => esc_html(__('Show the fast checkout button, only for guest customers.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'desc_tip' => __('When enabled, the fast checkout button will only be shown on the for guest users.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             );
         }
