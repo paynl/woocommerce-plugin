@@ -42,7 +42,7 @@ class PPMFWC_Helper_TransactionFastCheckout
         $this->_add($parameters, 'reference', 'fastcheckout');
         $this->_add($parameters, 'exchangeUrl', $exchangeUrl);
 
-        $parameters['integration']['test'] = true;
+        $parameters['integration']['test'] = PPMFWC_Helper_Data::isTestMode();
 
         $optimize['flow'] = 'fastCheckout';
         $optimize['shippingAddress'] = true;
