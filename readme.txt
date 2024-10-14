@@ -6,7 +6,7 @@ Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 3.5.1
 Stable tag: 3.19.4
 Tested up to: 6.6.2
-WC tested up to: 9.3.3
+WC tested up to: 9.4.0
 WC requires at least: 3.0
 Requires PHP: 7.0
 License: GPLv2
