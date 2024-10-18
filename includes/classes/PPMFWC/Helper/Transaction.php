@@ -193,8 +193,12 @@ class PPMFWC_Helper_Transaction
         $internalPAYSatus = $data['paymentDetails']['state'];
         $payApiStatus = PPMFWC_Gateways::ppmfwc_getStatusFromStatusId($internalPAYSatus);
 
-        if ($localTransactionStatus != $payApiStatus && !($localTransactionStatus === PPMFWC_Gateways::STATUS_SUCCESS && $payApiStatus === PPMFWC_Gateways::STATUS_CANCELED)) {
-            self::updateStatus($transactionId, $payApiStatus);
+        if ($localTransactionStatus != $payApiStatus) {
+            if ($localTransactionStatus === PPMFWC_Gateways::STATUS_SUCCESS && $payApiStatus === PPMFWC_Gateways::STATUS_CANCELED){
+                PPMFWC_Helper_Data::ppmfwc_payLogger('Not changing order status to canceled, order is paid.');
+            } else {
+                self::updateStatus($transactionId, $payApiStatus);
+            }
         }
         $wcOrderStatus = $order->get_status();
 
