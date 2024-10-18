@@ -52,7 +52,6 @@ class PPMFWC_Helper_TransactionFastCheckout
         $this->_add($parameters, 'optimize', $optimize);
 
         $orderParameters = array();
-        $invoiceAddress = array();
         $productData = $this->getProductData($data['products']);
 
         $this->_add($orderParameters, 'products', $productData);
@@ -127,12 +126,10 @@ class PPMFWC_Helper_TransactionFastCheckout
 
         $rawResponse = (array) $this->sendCurlRequest($url, $payload, get_option('paynl_tokencode'), get_option('paynl_apitoken'));
 
-        $response = array(
+        return array(
             'redirectURL' => $rawResponse['links']->redirect ?? '',
             'transactionId' => $rawResponse['orderId'] ?? ''
         );
-
-        return $response;
     }
 
     /**

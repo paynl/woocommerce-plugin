@@ -157,7 +157,7 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                 'desc_tip' => __('Show the fast checkout button on every product page. <br/><br/> This button allows users to checkout directly from the cart without the need to fill in their address.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), // phpcs:ignore
             );
 
-            $this->form_fields['ideal_fast_checkout_shippping_default'] = array(
+            $this->form_fields['ideal_fast_checkout_shipping_default'] = array(
                 'title' => esc_html(__('Default shipping method', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'select',
                 'options' => $this->get_all_shipping_methods(),
@@ -165,7 +165,7 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                 'desc_tip' => __('The default shipping method will be applied to fast checkout orders when shipping method cannot be selected by user.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             );
 
-            $this->form_fields['ideal_fast_checkout_shippping_backup'] = array(
+            $this->form_fields['ideal_fast_checkout_shipping_backup'] = array(
                 'title' => esc_html(__('Fallback shipping method', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'select',
                 'options' => $this->get_all_shipping_methods(),

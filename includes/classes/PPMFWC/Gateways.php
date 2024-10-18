@@ -789,16 +789,16 @@ class PPMFWC_Gateways
                     $shippingMethodId = WC()->session->get('chosen_shipping_methods')[0];
                     $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
                 } else {
-                    WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shippping_default']));
+                    WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shipping_default']));
                     WC()->cart->calculate_totals();
-                    $shippingMethodId = $gateway->settings['ideal_fast_checkout_shippping_default'];
+                    $shippingMethodId = $gateway->settings['ideal_fast_checkout_shipping_default'];
                     $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
                 }
 
                 if (!$shippingMethod) {
-                    WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shippping_backup']));
+                    WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shipping_backup']));
                     WC()->cart->calculate_totals();
-                    $shippingMethodId = $gateway->settings['ideal_fast_checkout_shippping_backup'];
+                    $shippingMethodId = $gateway->settings['ideal_fast_checkout_shipping_backup'];
                     $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
                 }
 

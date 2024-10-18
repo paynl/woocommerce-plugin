@@ -141,7 +141,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
 
 /**
  * Add fast checkout CSS
- * @return void
+ * @return
  */
 function ppmfwc_fast_checkout_css()
 {
