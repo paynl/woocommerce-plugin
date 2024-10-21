@@ -1,7 +1,7 @@
 <?php
 
 /**
- * PPMFWC_Helper_TransactionFastCheckout
+ * PPMFWC_Hooks_FastCheckout_TransactionCreate
  *
  * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
  * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
@@ -10,7 +10,7 @@
  * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
  */
 
-class PPMFWC_Helper_TransactionFastCheckout
+class PPMFWC_Hooks_FastCheckout_TransactionCreate
 {
     /**
      * @param array $data
@@ -63,7 +63,7 @@ class PPMFWC_Helper_TransactionFastCheckout
         $this->_add($stats, 'object', PPMFWC_Helper_Data::getObject() . ' | fc');
         $this->_add($stats, 'extra1', apply_filters('paynl-extra1', $order->get_order_number(), $order));
         $this->_add($stats, 'extra2', apply_filters('paynl-extra2', $order->get_billing_email(), $order));
-        $this->_add($stats, 'extra3', apply_filters('paynl-extra3', $order_id, $order));
+        $this->_add($stats, 'extra3', apply_filters('paynl-extra3', $order->get_id(), $order));
         $this->_add($parameters, 'stats', $stats);
 
         return $parameters;
@@ -110,7 +110,7 @@ class PPMFWC_Helper_TransactionFastCheckout
     /**
      * @param array $data
      * @param WC_Order $order
-     * @return \Paynl\Result\Transaction\Start
+     * @return array
      * @throws \Paynl\Error\Api
      * @throws \Paynl\Error\Error
      * @throws \Paynl\Error\Required\ApiToken
