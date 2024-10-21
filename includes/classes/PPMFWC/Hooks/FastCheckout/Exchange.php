@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * PPMFWC_Hooks_FastCheckout_TransactionCreate
+ *
+ * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
+ * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
+ * @phpcs:disable PSR1.Methods.CamelCapsMethodName
+ * @phpcs:disable PSR12.Properties.ConstantVisibility
+ * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+ */
+
 class PPMFWC_Hooks_FastCheckout_Exchange
 {
     /**
