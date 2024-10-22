@@ -781,7 +781,7 @@ class PPMFWC_Gateways
                         throw new PPMFWC_Exception_Notice('Could not find local transaction for order ' . $orderId);
                     }
                     $order = new WC_Order($transactionLocalDB['order_id']);
-                    $url = self::getOrderReturnUrl($order, $newStatus);
+                    $url = self::getOrderReturnUrl($order, self::STATUS_SUCCESS);
                 } else {
                     $url = wc_get_cart_url();
                 }
