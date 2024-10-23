@@ -37,15 +37,15 @@ class PPMFWC_Hooks_FastCheckout_Start
                 throw new \Exception("Fast checkout is not available.");
             }
 
-            $source = isset($_GET['source']) ? sanitize_text_field($_GET['source']) : false;
+            $source = PPMFWC_Helper_Data::getRequestArg(fieldName: 'source') ?? false;
 
             WC()->session->set('chosen_payment_method', 'pay_gateway_ideal');
             WC()->cart->calculate_totals();
 
             if ($source == 'product') {
-                $product_id = isset($_GET['product_id']) ? $_GET['product_id'] : 0;
-                $quantity = isset($_GET['quantity']) ? $_GET['quantity'] : 0;
-                $variation_id = isset($_GET['variation_id']) ? $_GET['variation_id'] : 0;
+                $product_id = PPMFWC_Helper_Data::getRequestArg(fieldName: 'product_id') ?? 0;
+                $quantity = PPMFWC_Helper_Data::getRequestArg(fieldName: 'quantity') ?? 0;
+                $variation_id = PPMFWC_Helper_Data::getRequestArg(fieldName: 'variation_id') ?? 0;
 
                 WC()->cart->add_to_cart($product_id, $quantity, $variation_id);
                 WC()->cart->calculate_totals();

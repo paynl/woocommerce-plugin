@@ -753,7 +753,7 @@ class PPMFWC_Gateways
 
         $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);
 
-        $reference = isset($_GET['reference']) ? sanitize_text_field($_GET['reference']) : false;
+        $reference = PPMFWC_Helper_Data::getRequestArg('reference') ?? false;
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('FINISH, back from PAY payment', $orderId, array('orderStatusId' => $orderStatusId, 'status' => $status));
 
@@ -773,8 +773,8 @@ class PPMFWC_Gateways
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Exception: ' . $e->getMessage(), $orderId);
                 }
             } elseif (!empty($reference) && $reference == 'fastcheckout') {
-                $statusAction = isset($_GET['statusAction']) ? sanitize_text_field($_GET['statusAction']) : false;
-                $orderId = isset($_GET['id']) ? sanitize_text_field($_GET['id']) : false;
+                $statusAction = PPMFWC_Helper_Data::getRequestArg('statusAction') ?? false;
+                $orderId = PPMFWC_Helper_Data::getRequestArg('id') ?? false;
                 if ($statusAction == 'PAID' || $statusAction == 'AUTHORIZE') {
                     $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
                     if (!$transactionLocalDB || empty($transactionLocalDB['order_id'])) {
