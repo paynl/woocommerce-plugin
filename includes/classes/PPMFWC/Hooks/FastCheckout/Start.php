@@ -37,21 +37,25 @@ class PPMFWC_Hooks_FastCheckout_Start
                 throw new \Exception("Fast checkout is not available.");
             }
 
-            $source = PPMFWC_Helper_Data::getRequestArg(fieldName: 'source') ?? false;
+            $source = PPMFWC_Helper_Data::getRequestArg('source') ?? false;
 
             WC()->session->set('chosen_payment_method', 'pay_gateway_ideal');
             WC()->cart->calculate_totals();
 
             if ($source == 'product') {
-                $product_id = PPMFWC_Helper_Data::getRequestArg(fieldName: 'product_id') ?? 0;
-                $quantity = PPMFWC_Helper_Data::getRequestArg(fieldName: 'quantity') ?? 0;
-                $variation_id = PPMFWC_Helper_Data::getRequestArg(fieldName: 'variation_id') ?? 0;
+                $product_id = PPMFWC_Helper_Data::getRequestArg('product_id') ?? 0;
+                $quantity = PPMFWC_Helper_Data::getRequestArg('quantity') ?? 0;
+                $variation_id = PPMFWC_Helper_Data::getRequestArg('variation_id') ?? 0;
 
                 WC()->cart->add_to_cart($product_id, $quantity, $variation_id);
                 WC()->cart->calculate_totals();
             }
 
             $packages = WC()->shipping()->get_packages();
+
+            $shippingMethodId = null;
+            $shippingMethod = null;
+
             if (!empty($packages)) {
                 $package = $packages[0];
                 $available_methods = $package['rates'];
@@ -78,7 +82,7 @@ class PPMFWC_Hooks_FastCheckout_Start
                 }
             }
 
-            foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+            foreach (WC()->cart->get_cart() as $cart_item) {
                 $product = $cart_item['data'];
                 $product_id = $cart_item['product_id'];
                 $variation_id = $cart_item['variation_id'];
@@ -167,9 +171,6 @@ class PPMFWC_Hooks_FastCheckout_Start
             $transactionId = $result['transactionId'];
             $redirectUrl = $result['redirectURL'];
 
-            $table_name_fast_checkout = $wpdb->prefix . "pay_fast_checkout";
-            $wpdb->replace($table_name_fast_checkout, array('transaction_id' => $transactionId, 'products' => json_encode($products), 'created' => date('Y-m-d H:i:s')), array('%s', '%s', '%s'));
-
             PPMFWC_Helper_Transaction::newTransaction($transactionId, $data['paymentMethod'], $order->get_total(), $order->get_id(), '');
 
             wp_redirect($redirectUrl);
@@ -189,8 +190,6 @@ class PPMFWC_Hooks_FastCheckout_Start
         $order = new WC_Order();
         $order->set_created_via('fast checkout');
         $shippingProduct = null;
-
-        $coupons = array();
 
         foreach ($data['products'] as $product) {
             if ($product['type'] == 'SHIPPING') {
@@ -217,12 +216,16 @@ class PPMFWC_Hooks_FastCheckout_Start
             }
         }
 
-        $shipping = new WC_Order_Item_Shipping();
-        $shipping->set_method_title($shippingProduct['name']);
-        $shipping->set_method_id($shippingProduct['id']);
-        $shipping->set_total($shippingProduct['amountExclTax']);
+        if (!empty($shippingProduct)) {
+            $shipping = new WC_Order_Item_Shipping();
+            $shipping->set_method_title($shippingProduct['name'] ?? '');
+            $shipping->set_method_id($shippingProduct['id'] ?? null);
+            $shipping->set_total($shippingProduct['amountExclTax'] ?? 0);
 
-        $order->add_item($shipping);
+            if (!empty($shipping)) {
+                $order->add_item($shipping);
+            }
+        }
         $order->calculate_totals();
 
         $order->set_payment_method(PPMFWC_Gateway_Ideal::getId());

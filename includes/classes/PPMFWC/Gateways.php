@@ -913,16 +913,6 @@ class PPMFWC_Gateways
     }
 
     /**
-     * @return boolean
-     */
-    private static function isSignExchange()
-    {
-        $headers = array_change_key_case(getallheaders(), CASE_LOWER);
-        $signingMethod = $headers['signature-method'] ?? null;
-        return $signingMethod === 'HMAC';
-    }
-
-    /**
      * @return array
      * @throws Exception
      * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing

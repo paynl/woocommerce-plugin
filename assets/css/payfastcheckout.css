@@ -15,14 +15,15 @@
 
 .woocommerce .pay-fast-checkout a.button.alt,
 .pay-fast-checkout a {
-    background-color: #c90066;
-    border-color: #c90066;
-    background-image: url(../../assets/images/fastCheckoutIdeal.png);
+    background-color: #c90066 !important;
+    border-color: #c90066 !important;
+    background-image: url(../../assets/images/fastCheckoutIdeal.png) !important;
     background-repeat: no-repeat;
     background-size: 51px;
     background-position: 45px center;
     cursor: pointer;
     padding-left: 75px;
+    color: white !important;
 }
 
 .woocommerce .pay-fast-checkout-product .pay-fast-checkout a.button.alt,
@@ -37,14 +38,16 @@
 }
 
 .woocommerce-mini-cart__buttons .pay-fast-checkout-minicart a,
-.site-header-cart .widget_shopping_cart .pay-fast-checkout-minicart a.button {
-    background-color: #c90066;
-    border-color: #c90066;
-    background-image: url(../../assets/images/fastCheckoutIdeal.png);
+.woocommerce-mini-cart__buttons .pay-fast-checkout-minicart a:hover,
+.site-header-cart .widget_shopping_cart .pay-fast-checkout-minicart a.button,
+.site-header-cart .widget_shopping_cart .pay-fast-checkout-minicart a.button:hover {
+    background-color: #c90066 !important;
+    border-color: #c90066 !important;
+    background-image: url(../../assets/images/fastCheckoutIdeal.png) !important;
     background-repeat: no-repeat;
     background-size: 30px;
     background-position: 7px center;
     cursor: pointer;
-    color: white;
+    color: white !important;
     padding-left: 40px;
 }
