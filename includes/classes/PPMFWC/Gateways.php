@@ -772,15 +772,13 @@ class PPMFWC_Gateways
                 } catch (Exception $e) {
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Exception: ' . $e->getMessage(), $orderId);
                 }
-            } elseif (!empty($reference) && $reference == 'fastcheckout') {
+            } elseif (!empty($reference) && strpos($reference, "fastcheckout") !== false) {
                 $statusAction = PPMFWC_Helper_Data::getRequestArg('statusAction') ?? false;
                 $orderId = PPMFWC_Helper_Data::getRequestArg('id') ?? false;
-                if ($statusAction == 'PAID' || $statusAction == 'AUTHORIZE') {
-                    $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
-                    if (!$transactionLocalDB || empty($transactionLocalDB['order_id'])) {
-                        throw new PPMFWC_Exception_Notice('Could not find local transaction for order ' . $orderId);
-                    }
-                    $order = new WC_Order($transactionLocalDB['order_id']);
+                if ($statusAction == 'PAID' || $statusAction == 'AUTHORIZE') {    
+                    $wc_order_id = explode('fastcheckout', $reference);
+                    $wc_order_id = $wc_order_id[1] ?? '';                  
+                    $order = new WC_Order($wc_order_id);
                     $url = self::getOrderReturnUrl($order, self::STATUS_SUCCESS);
                 } else {
                     $url = wc_get_cart_url();
@@ -1000,8 +998,8 @@ class PPMFWC_Gateways
         $message = 'TRUE|Ignoring ' . $action;
 
         if (PPMFWC_Hooks_FastCheckout_Exchange::isFastCheckout($params)) {
-            $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($order_id);
-            $wc_order_id = $transactionLocalDB['order_id'];
+            $wc_order_id = explode('fastcheckout', $wc_order_id);
+            $wc_order_id = $wc_order_id[1] ?? '';
 
             if ($action == self::ACTION_NEWPPT) {
                 if ($wc_order_id) {

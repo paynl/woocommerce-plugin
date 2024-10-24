@@ -39,7 +39,7 @@ class PPMFWC_Hooks_FastCheckout_TransactionCreate
 
         $this->_add($parameters, 'returnUrl', $returnUrl);
         $this->_add($parameters, 'description', '');
-        $this->_add($parameters, 'reference', 'fastcheckout');
+        $this->_add($parameters, 'reference', 'fastcheckout' . $order->get_id());
         $this->_add($parameters, 'exchangeUrl', $exchangeUrl);
 
         $parameters['integration']['test'] = PPMFWC_Helper_Data::isTestMode();
@@ -61,9 +61,6 @@ class PPMFWC_Hooks_FastCheckout_TransactionCreate
         $this->_add($stats, 'info', '');
         $this->_add($stats, 'tool', '');
         $this->_add($stats, 'object', PPMFWC_Helper_Data::getObject() . ' | fc');
-        $this->_add($stats, 'extra1', apply_filters('paynl-extra1', $order->get_order_number(), $order));
-        $this->_add($stats, 'extra2', apply_filters('paynl-extra2', $order->get_billing_email(), $order));
-        $this->_add($stats, 'extra3', apply_filters('paynl-extra3', $order->get_id(), $order));
         $this->_add($parameters, 'stats', $stats);
 
         return $parameters;
