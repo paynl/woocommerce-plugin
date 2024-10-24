@@ -18,8 +18,6 @@ class PPMFWC_Hooks_FastCheckout_Start
      */
     public static function ppmfwc_onFastCheckoutOrderCreate()
     {
-        global $wpdb;
-
         try {
             $products = [];
             $tax = new WC_Tax();
@@ -62,20 +60,19 @@ class PPMFWC_Hooks_FastCheckout_Start
 
                 if ($source == 'cart') {
                     $shippingMethodId = WC()->session->get('chosen_shipping_methods')[0];
-                    $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
                 } else {
                     WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shipping_default']));
                     WC()->cart->calculate_totals();
                     $shippingMethodId = $gateway->settings['ideal_fast_checkout_shipping_default'];
-                    $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
                 }
 
                 if (!$shippingMethod) {
                     WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shipping_backup']));
                     WC()->cart->calculate_totals();
                     $shippingMethodId = $gateway->settings['ideal_fast_checkout_shipping_backup'];
-                    $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
                 }
+
+                $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
 
                 if (!$shippingMethod) {
                     throw new \Exception("Selected shipping method is not available.");
@@ -250,7 +247,7 @@ class PPMFWC_Hooks_FastCheckout_Start
     public static function getShippingMethod($available_methods, $id)
     {
         $shippingMethod = false;
-        foreach ($available_methods as $key => $method) {
+        foreach ($available_methods as $method) {
             if ($id == $method->id) {
                 $shippingMethod = $method;
             }
