@@ -181,6 +181,7 @@ class PPMFWC_Hooks_FastCheckout_Start
      * @param array $data
      * @return WC_Order
      * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+     * @throws WC_Data_Exception
      */
     public static function createFastCheckoutOrder($data)
     {
@@ -218,10 +219,7 @@ class PPMFWC_Hooks_FastCheckout_Start
             $shipping->set_method_title($shippingProduct['name'] ?? '');
             $shipping->set_method_id($shippingProduct['id'] ?? null);
             $shipping->set_total($shippingProduct['amountExclTax'] ?? 0);
-
-            if (!empty($shipping)) {
-                $order->add_item($shipping);
-            }
+            $order->add_item($shipping);
         }
         $order->calculate_totals();
 
@@ -231,7 +229,7 @@ class PPMFWC_Hooks_FastCheckout_Start
         $order->add_meta_data('_wc_order_attribution_source_type', 'utm');
         $order->add_meta_data('_wc_order_attribution_utm_source', 'iDEAL Fast Checkout');
 
-        $order->add_order_note(sprintf(esc_html(__('Pay.: Created iDEAL Fast Checkout order', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))));
+        $order->add_order_note(esc_html(__('Pay.: Created iDEAL Fast Checkout order', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
 
         $order->save();
 
