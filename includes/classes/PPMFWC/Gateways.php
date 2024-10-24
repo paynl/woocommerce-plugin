@@ -775,9 +775,9 @@ class PPMFWC_Gateways
             } elseif (!empty($reference) && strpos($reference, "fastcheckout") !== false) {
                 $statusAction = PPMFWC_Helper_Data::getRequestArg('statusAction') ?? false;
                 $orderId = PPMFWC_Helper_Data::getRequestArg('id') ?? false;
-                if ($statusAction == 'PAID' || $statusAction == 'AUTHORIZE') {    
+                if ($statusAction == 'PAID' || $statusAction == 'AUTHORIZE') {
                     $wc_order_id = explode('fastcheckout', $reference);
-                    $wc_order_id = $wc_order_id[1] ?? '';                  
+                    $wc_order_id = $wc_order_id[1] ?? '';
                     $order = new WC_Order($wc_order_id);
                     $url = self::getOrderReturnUrl($order, self::STATUS_SUCCESS);
                 } else {
