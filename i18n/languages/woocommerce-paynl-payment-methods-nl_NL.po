@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Pay. Payment Methods for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
-"POT-Creation-Date: 2024-11-05 17:00+0100\n"
-"PO-Revision-Date: 2024-11-06 10:08+0100\n"
+"POT-Creation-Date: 2024-11-06 11:10+0100\n"
+"PO-Revision-Date: 2024-11-06 11:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -365,13 +365,13 @@ msgstr "Winkelmand pagina"
 
 #: includes/classes/PPMFWC/Gateway/Ideal.php:130
 #: includes/classes/PPMFWC/Gateway/Ideal.php:141
-#: includes/classes/PPMFWC/Gateway/Ideal.php:152
+#: includes/classes/PPMFWC/Gateway/Ideal.php:153
 msgid "Off"
-msgstr "Ui"
+msgstr "Uit"
 
 #: includes/classes/PPMFWC/Gateway/Ideal.php:131
 #: includes/classes/PPMFWC/Gateway/Ideal.php:142
-#: includes/classes/PPMFWC/Gateway/Ideal.php:153
+#: includes/classes/PPMFWC/Gateway/Ideal.php:154
 msgid "On"
 msgstr "Aan"
 
@@ -397,11 +397,15 @@ msgstr ""
 "Toon de Snel bestellen knop op de mini winkelmand. <br/><br/> Via de iDEAL "
 "Snel bestellen-knop op de mini winkelmand, gaat men direct naar iDEAL."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:149
+#: includes/classes/PPMFWC/Gateway/Ideal.php:146
+msgid "Please note that not all themes are compatible with this option."
+msgstr "Houd er rekening mee dat niet alle thema’s deze optie ondersteunen."
+
+#: includes/classes/PPMFWC/Gateway/Ideal.php:150
 msgid "Product page"
 msgstr "Produkt pagina"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:157
+#: includes/classes/PPMFWC/Gateway/Ideal.php:158
 msgid ""
 "Show the fast checkout button on every product page. <br/><br/> This button "
 "allows users to checkout directly from the cart without the need to fill in "
@@ -410,15 +414,15 @@ msgstr ""
 "Toon de Snel bestellen knop op product pagina’s. <br/><br/> Hiermee gaat men "
 "vanaf de product pagina direct naar iDEAL."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:161
+#: includes/classes/PPMFWC/Gateway/Ideal.php:162
 msgid "Default shipping method"
 msgstr "Standaard verzendmethode"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:164
+#: includes/classes/PPMFWC/Gateway/Ideal.php:165
 msgid "Select the shipping method that should be applied first."
 msgstr "Selecteer de standaard verzendmethode."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:165
+#: includes/classes/PPMFWC/Gateway/Ideal.php:166
 msgid ""
 "The default shipping method will be applied to fast checkout orders when "
 "shipping method cannot be selected by user."
@@ -426,18 +430,18 @@ msgstr ""
 "De standaard verzendmethode wordt toegepast, wanneer de gebruiker geen keuze "
 "heeft voor een verzendmethode in de webshop."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:169
+#: includes/classes/PPMFWC/Gateway/Ideal.php:170
 msgid "Fallback shipping method"
 msgstr "Backup verzendmethode"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:172
+#: includes/classes/PPMFWC/Gateway/Ideal.php:173
 msgid ""
 "Select the fallback shipping method, which will be applied when the default "
 "shipping method could not be applied."
 msgstr ""
 "Selecteer welke verzendmethode in tweede instantie gebruikt moet worden."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:173
+#: includes/classes/PPMFWC/Gateway/Ideal.php:174
 msgid ""
 "In case the default shipping method could not by applied, this shipping "
 "method will be used."
@@ -446,17 +450,17 @@ msgstr ""
 "verzendmethode niet toegepast kon worden. Dit kan bijvoorbeeld zijn omdat "
 "hiervoor het bestelbedrag te laag was."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:177
+#: includes/classes/PPMFWC/Gateway/Ideal.php:178
 msgid "Guest checkout only"
 msgstr "Gast gebruikers"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:181
+#: includes/classes/PPMFWC/Gateway/Ideal.php:182
 msgid "Show the fast checkout button, only for guest customers."
 msgstr ""
 "Alleen iDEAL Snel bestellen toepassen voor gast gebruikers. Dus gebruikers "
 "die niet met een account zijn ingelogd."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:182
+#: includes/classes/PPMFWC/Gateway/Ideal.php:183
 msgid ""
 "When enabled, the fast checkout button will only be shown on the for guest "
 "users."
