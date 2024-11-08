@@ -62,7 +62,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
 
     add_action('wp_enqueue_scripts', function () {
         $post = get_post();
-        if (!empty($post)) {
+        if (!empty($post) && isset($post->ID)) {
             if (WC_Blocks_Utils::has_block_in_page($post->ID, 'woocommerce/checkout') === true || WC_Blocks_Utils::has_block_in_page($post->ID, 'woocommerce/cart') === true) {
                 $blocks_js_route = PPMFWC_PLUGIN_URL . 'assets/js/paynl-blocks.js';
                 $gateways = WC()->payment_gateways()->payment_gateways();
