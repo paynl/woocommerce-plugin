@@ -62,48 +62,50 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
 
     add_action('wp_enqueue_scripts', function () {
         $post = get_post();
-        if (WC_Blocks_Utils::has_block_in_page($post->ID, 'woocommerce/checkout') === true || WC_Blocks_Utils::has_block_in_page($post->ID, 'woocommerce/cart') === true) {
-            $blocks_js_route = PPMFWC_PLUGIN_URL . 'assets/js/paynl-blocks.js';
-            $gateways = WC()->payment_gateways()->payment_gateways();
-            $payGateways = [];
+        if (!empty($post)) {
+            if (WC_Blocks_Utils::has_block_in_page($post->ID, 'woocommerce/checkout') === true || WC_Blocks_Utils::has_block_in_page($post->ID, 'woocommerce/cart') === true) {
+                $blocks_js_route = PPMFWC_PLUGIN_URL . 'assets/js/paynl-blocks.js';
+                $gateways = WC()->payment_gateways()->payment_gateways();
+                $payGateways = [];
 
-            $texts['issuer'] = __('Issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-            $texts['selectissuer'] = __('Select an issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-            $texts['enterbirthdate'] = __('Date of birth', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-            $texts['enterCocNumber'] = __('COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-            $texts['requiredCocNumber'] = __('Please enter your COC number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-            $texts['enterVatNumber'] = __('VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-            $texts['requiredVatNumber'] = __('Please enter your VAT number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-            $texts['dobRequired'] = __('Please enter your date of birth, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['issuer'] = __('Issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['selectissuer'] = __('Select an issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['enterbirthdate'] = __('Date of birth', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['enterCocNumber'] = __('COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['requiredCocNumber'] = __('Please enter your COC number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['enterVatNumber'] = __('VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['requiredVatNumber'] = __('Please enter your VAT number, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['dobRequired'] = __('Please enter your date of birth, this field is required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
 
-            foreach ($gateways as $gateway_id => $gateway) {
-                /** @var PPMFWC_Gateway_Abstract $gateway */
-                if (substr($gateway_id, 0, 11) != 'pay_gateway') {
-                    continue;
+                foreach ($gateways as $gateway_id => $gateway) {
+                    /** @var PPMFWC_Gateway_Abstract $gateway */
+                    if (substr($gateway_id, 0, 11) != 'pay_gateway') {
+                        continue;
+                    }
+                    if ($gateway->enabled != 'yes') {
+                        continue;
+                    }
+                    $payGateways[] = array(
+                        'paymentMethodId' => $gateway_id,
+                        'title' => $gateway->get_title(),
+                        'description' => $gateway->description,
+                        'image_path' => $gateway->getIcon(),
+                        'issuers' => $gateway->getIssuers(),
+                        'issuersSelectionType' => $gateway->getSelectionType(),
+                        'texts' => $texts,
+                        'showbirthdate' => $gateway->askBirthdate(),
+                        'birthdateRequired' => $gateway->birthdateRequired(),
+                        'showVatField' => $gateway->showVat(),
+                        'vatRequired' => $gateway->vatRequired(),
+                        'showCocField' => $gateway->showCoc(),
+                        'cocRequired' => $gateway->cocRequired()
+                    );
                 }
-                if ($gateway->enabled != 'yes') {
-                    continue;
-                }
-                $payGateways[] = array(
-                'paymentMethodId' => $gateway_id,
-                'title' => $gateway->get_title(),
-                'description' => $gateway->description,
-                'image_path' => $gateway->getIcon(),
-                'issuers' => $gateway->getIssuers(),
-                'issuersSelectionType' => $gateway->getSelectionType(),
-                'texts' => $texts,
-                'showbirthdate' => $gateway->askBirthdate(),
-                'birthdateRequired' => $gateway->birthdateRequired(),
-                'showVatField' => $gateway->showVat(),
-                'vatRequired' => $gateway->vatRequired(),
-                'showCocField' => $gateway->showCoc(),
-                'cocRequired' => $gateway->cocRequired()
-                );
+                wp_enqueue_script('paynl-blocks-js', $blocks_js_route, array('wc-blocks-registry'), (string) time(), true);
+                wp_localize_script('paynl-blocks-js', 'paynl_gateways', $payGateways);
+                wp_register_style('paynl-blocks-style', PPMFWC_PLUGIN_URL . 'assets/css/paynl_blocks.css');
+                wp_enqueue_style('paynl-blocks-style');
             }
-            wp_enqueue_script('paynl-blocks-js', $blocks_js_route, array('wc-blocks-registry'), (string)time(), true);
-            wp_localize_script('paynl-blocks-js', 'paynl_gateways', $payGateways);
-            wp_register_style('paynl-blocks-style', PPMFWC_PLUGIN_URL . 'assets/css/paynl_blocks.css');
-            wp_enqueue_style('paynl-blocks-style');
         }
     });
 
