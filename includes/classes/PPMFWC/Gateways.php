@@ -352,7 +352,7 @@ class PPMFWC_Gateways
                     $section = $paymentOptionsAvailable[$option['id']]['id'];
                     $enabled = $paymentOptionsAvailable[$option['id']]['enabled'];
                     $href = admin_url('/admin.php?page=wc-settings&tab=checkout&section=' . $section);
-                    $loadedPaymentMethods .= '<li><a href="' . $href . '" target="_BLANK"><img height="50px" src="' . esc_attr($option['image']) . '" alt="' . esc_attr($option['name'])
+                    $loadedPaymentMethods .= '<li><a href="' . $href . '"><img height="50px" src="' . esc_attr($option['image']) . '" alt="' . esc_attr($option['name'])
                         . '" title="' . esc_attr($option['name']) . '" />' . esc_attr($option['name']) . ($enabled ? '<span class="enabled">&#10003;</span>' : '') . '</a></li>';
                 }
             }

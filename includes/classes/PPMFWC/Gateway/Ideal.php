@@ -143,6 +143,7 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                 ),
                 'default' => 0,
                 'desc_tip' => __('Show the fast checkout button on the minicart. <br/><br/> This button allows users to checkout directly from the minicart without the need to fill in their address.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), // phpcs:ignore
+                'description' => esc_html(__('Please note that not all themes are compatible with this option.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             );
 
             $this->form_fields['ideal_fast_checkout_on_product'] = array(
