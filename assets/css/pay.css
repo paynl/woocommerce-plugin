@@ -109,3 +109,28 @@
 .woocommerce table.form-table th label[for="woocommerce_pay_gateway_ideal_fast_checkout_header"] {
     font-size: 25px;
 }
+
+.obscuredInput {
+    text-security: disc;
+    -webkit-text-security: disc;
+    -moz-text-security: disc;
+}
+
+.obscuredInput.display {
+    text-security: none;
+    -webkit-text-security: none;
+    -moz-text-security: none;
+}
+
+.obscuredDisplayShow {
+    cursor: pointer;
+    background-image: url(../../assets/images/showPasswordIcon.png);
+    height: 20px;
+    width: 25px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: 35px auto;
+    background-position: center center;
+    margin-top: 5px;
+    margin-left: 5px;
+}

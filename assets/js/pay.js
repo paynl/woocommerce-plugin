@@ -35,7 +35,21 @@ jQuery(document).ready(function () {
         }
     });
 
+    jQuery('.obscuredInput').each(function () {
+        var input = this;
+        var label = jQuery('label[for="' + jQuery(this).attr('name') + '"]');
+        button = jQuery('<a class="obscuredDisplayShow"></a>');
+        button.click(function () {
+          toggleObscured(input);
+        });
+        button.insertAfter(input);
+    })
+
 });
+
+function toggleObscured (element) {
+  jQuery(element).parent().find('.obscuredInput').toggleClass('display');
+}
 
 function submitFeatureRequestForm () {
   jQuery('#email_error').hide()

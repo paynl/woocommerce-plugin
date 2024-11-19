@@ -651,7 +651,7 @@ class PPMFWC_Gateways
             );
             $addedSettings[] = array(
                 'name' => esc_html(__('API token', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'type' => 'password',
+                'type' => 'text',
                 'desc' => esc_html(
                     __(
                         'The API token used to communicate with the Pay. API, you can find your API token ',
@@ -659,6 +659,7 @@ class PPMFWC_Gateways
                     )
                 ) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">' . esc_html(__('here', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
                 'id' => 'paynl_apitoken',
+                'class' => 'obscuredInput',
             );
             $addedSettings[] = array(
                 'name' => esc_html(__('Sales Location *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
