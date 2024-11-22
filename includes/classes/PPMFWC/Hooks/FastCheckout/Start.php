@@ -19,8 +19,7 @@ class PPMFWC_Hooks_FastCheckout_Start
     public static function ppmfwc_onFastCheckoutOrderCreate()
     {
         try {
-            $products = [];
-            $tax = new WC_Tax();
+
             $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(10);
 
             if ($gateway->enabled == 'no') {
@@ -35,127 +34,19 @@ class PPMFWC_Hooks_FastCheckout_Start
                 throw new \Exception("Fast checkout is not available.");
             }
 
-            $source = PPMFWC_Helper_Data::getRequestArg('source') ?? false;
-
             WC()->session->set('chosen_payment_method', 'pay_gateway_ideal');
             WC()->cart->calculate_totals();
 
-            if ($source == 'product') {
-                $product_id = PPMFWC_Helper_Data::getRequestArg('product_id') ?? 0;
-                $quantity = PPMFWC_Helper_Data::getRequestArg('quantity') ?? 0;
-                $variation_id = PPMFWC_Helper_Data::getRequestArg('variation_id') ?? 0;
+            $shippingMethod = self::getShippingMethod($gateway);
 
-                WC()->cart->add_to_cart($product_id, $quantity, $variation_id);
-                WC()->cart->calculate_totals();
-            }
+            self::addProducts();
+            $productArr = self::getProducts($shippingMethod);
 
-            $packages = WC()->shipping()->get_packages();
-
-            $shippingMethodId = null;
-            $shippingMethod = null;
-
-            if (!empty($packages)) {
-                $package = $packages[0];
-                $available_methods = $package['rates'];
-
-                if ($source == 'cart') {
-                    $shippingMethodId = WC()->session->get('chosen_shipping_methods')[0];
-                } else {
-                    WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shipping_default']));
-                    WC()->cart->calculate_totals();
-                    $shippingMethodId = $gateway->settings['ideal_fast_checkout_shipping_default'];
-                }
-
-                if (!$shippingMethod) {
-                    WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shipping_backup']));
-                    WC()->cart->calculate_totals();
-                    $shippingMethodId = $gateway->settings['ideal_fast_checkout_shipping_backup'];
-                }
-
-                $shippingMethod = self::getShippingMethod($available_methods, $shippingMethodId);
-
-                if (!$shippingMethod) {
-                    throw new \Exception("Selected shipping method is not available.");
-                }
-            }
-
-            foreach (WC()->cart->get_cart() as $cart_item) {
-                $product = $cart_item['data'];
-                $product_id = $cart_item['product_id'];
-                $variation_id = $cart_item['variation_id'];
-                $name = $product->get_title();
-                $quantity = $cart_item['quantity'];
-                $price = $product->get_price();
-                $tax_percentage = 0;
-                $taxes = $tax->get_rates($product->get_tax_class());
-                if (!empty($taxes)) {
-                    $rates = array_shift($taxes);
-                    $tax_percentage = round(array_shift($rates));
-                }
-                $products[] = [
-                    'id' => $product_id,
-                    'variation_id' => $variation_id,
-                    'name' => $name,
-                    'qty' => $quantity,
-                    'amount' => $price,
-                    'taxPercentage' => $tax_percentage,
-                    'type' => 'ARTICLE',
-                    'currency' => get_woocommerce_currency()
-                ];
-            }
-
-            $orderDiscount = 0;
-
-            if (!empty(WC()->cart->applied_coupons)) {
-                foreach (WC()->cart->applied_coupons as $coupon_code) {
-                    $coupon = new WC_Coupon($coupon_code);
-                    $discount_total = $coupon->get_amount();
-
-                    if ($coupon->get_discount_type() == 'percent') {
-                        $discount_total = 0;
-                        foreach ($products as $product) {
-                            $couponAmount = $coupon->get_amount();
-                            $productAmount = $product['amount'];
-                            $discount_total += round(($productAmount / 100 * $couponAmount * $product['qty']), 2);
-                        }
-                    }
-
-                    $products[] = [
-                        'id' => $coupon_code,
-                        'name' => $coupon_code,
-                        'qty' => 1,
-                        'amount' => $discount_total,
-                        'taxPercentage' => 0,
-                        'type' => 'DISCOUNT',
-                        'discountType' => $coupon->get_discount_type(),
-                        'currency' => get_woocommerce_currency()
-                    ];
-
-                    $orderDiscount += $discount_total;
-                }
-            }
-
-            if ($shippingMethod) {
-                $shippingAmount = WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes());
-                if ($shippingAmount > 0) {
-                    $products[] = [
-                        'id' => $shippingMethodId,
-                        'name' => $shippingMethod->label,
-                        'qty' => 1,
-                        'amount' => WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()),
-                        'amountExclTax' => WC()->cart->get_shipping_total(),
-                        'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage(WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()), array_shift($shippingMethod->get_taxes()))), // phpcs:ignore
-                        'type' => 'SHIPPING',
-                        'currency' => get_woocommerce_currency()
-                    ];
-                }
-            }
-
-            $amount = WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax - $orderDiscount;
+            $amount = WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax - ($productArr['orderDiscount'] ?? 0);
 
             $data = [
                 'amount' => $amount,
-                'products' => $products,
+                'products' => $productArr['products'] ?? [],
                 'currency' => get_woocommerce_currency(),
                 'paymentMethod' => PPMFWC_Gateway_Ideal::getOptionId()
             ];
@@ -175,6 +66,167 @@ class PPMFWC_Hooks_FastCheckout_Start
             wc_add_notice($e->getMessage(), 'error');
             wp_redirect(wc_get_cart_url());
         }
+    }
+
+    /**
+     * @param object $gateway
+     * @return mixed
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+     */
+    public static function getShippingMethod($gateway)
+    {
+        $packages = WC()->shipping()->get_packages();
+        $source = PPMFWC_Helper_Data::getRequestArg('source') ?? false;
+        $shippingMethodId = null;
+        $shippingMethod = null;
+
+        if (!empty($packages)) {
+            $package = $packages[0];
+            $available_methods = $package['rates'];
+
+            if ($source == 'cart') {
+                $shippingMethodId = WC()->session->get('chosen_shipping_methods')[0];
+            } else {
+                WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shipping_default']));
+                WC()->cart->calculate_totals();
+                $shippingMethodId = $gateway->settings['ideal_fast_checkout_shipping_default'];
+            }
+            $shippingMethod = self::checkShippingMethod($available_methods, $shippingMethodId);
+
+            if (!$shippingMethod) {
+                WC()->session->set('chosen_shipping_methods', array($gateway->settings['ideal_fast_checkout_shipping_backup']));
+                WC()->cart->calculate_totals();
+                $shippingMethodId = $gateway->settings['ideal_fast_checkout_shipping_backup'];
+            }
+            $shippingMethod = self::checkShippingMethod($available_methods, $shippingMethodId);
+
+            if (!$shippingMethod) {
+                throw new \Exception("Selected shipping method is not available.");
+            }
+
+            return $shippingMethod;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param array $available_methods
+     * @param string $id
+     * @return mixed
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+     */
+    public static function checkShippingMethod($available_methods, $id)
+    {
+        $shippingMethod = false;
+        foreach ($available_methods as $method) {
+            if ($id == $method->id) {
+                $shippingMethod = $method;
+            }
+        }
+        return $shippingMethod;
+    }
+
+    /**
+     * @return void
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+     */
+    public static function addProducts()
+    {
+        $source = PPMFWC_Helper_Data::getRequestArg('source') ?? false;
+        if ($source == 'product') {
+            $product_id = PPMFWC_Helper_Data::getRequestArg('product_id') ?? 0;
+            $quantity = PPMFWC_Helper_Data::getRequestArg('quantity') ?? 0;
+            $variation_id = PPMFWC_Helper_Data::getRequestArg('variation_id') ?? 0;
+
+            WC()->cart->add_to_cart($product_id, $quantity, $variation_id);
+            WC()->cart->calculate_totals();
+        }
+    }
+
+    /**
+     * @param object $shippingMethod
+     * @return array
+     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
+     */
+    public static function getProducts($shippingMethod)
+    {
+        $tax = new WC_Tax();
+        $products = [];
+        $orderDiscount = 0;
+
+        foreach (WC()->cart->get_cart() as $cart_item) {
+            $product = $cart_item['data'];
+            $product_id = $cart_item['product_id'];
+            $variation_id = $cart_item['variation_id'];
+            $name = $product->get_title();
+            $quantity = $cart_item['quantity'];
+            $price = $product->get_price();
+            $tax_percentage = 0;
+            $taxes = $tax->get_rates($product->get_tax_class());
+            if (!empty($taxes)) {
+                $rates = array_shift($taxes);
+                $tax_percentage = round(array_shift($rates));
+            }
+            $products[] = [
+                'id' => $product_id,
+                'variation_id' => $variation_id,
+                'name' => $name,
+                'qty' => $quantity,
+                'amount' => $price,
+                'taxPercentage' => $tax_percentage,
+                'type' => 'ARTICLE',
+                'currency' => get_woocommerce_currency()
+            ];
+        }
+
+        if (!empty(WC()->cart->applied_coupons)) {
+            foreach (WC()->cart->applied_coupons as $coupon_code) {
+                $coupon = new WC_Coupon($coupon_code);
+                $discount_total = $coupon->get_amount();
+
+                if ($coupon->get_discount_type() == 'percent') {
+                    $discount_total = 0;
+                    foreach ($products as $product) {
+                        $couponAmount = $coupon->get_amount();
+                        $productAmount = $product['amount'];
+                        $discount_total += round(($productAmount / 100 * $couponAmount * $product['qty']), 2);
+                    }
+                }
+
+                $products[] = [
+                    'id' => $coupon_code,
+                    'name' => $coupon_code,
+                    'qty' => 1,
+                    'amount' => $discount_total,
+                    'taxPercentage' => 0,
+                    'type' => 'DISCOUNT',
+                    'discountType' => $coupon->get_discount_type(),
+                    'currency' => get_woocommerce_currency()
+                ];
+
+                $orderDiscount += $discount_total;
+            }
+        }
+
+        if ($shippingMethod) {
+            $shippingAmount = WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes());
+            if ($shippingAmount > 0) {
+                $products[] = [
+                    'id' => $shippingMethodId,
+                    'name' => $shippingMethod->label,
+                    'qty' => 1,
+                    'amount' => WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()),
+                    'amountExclTax' => WC()->cart->get_shipping_total(),
+                    'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage(WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()), array_shift($shippingMethod->get_taxes()))), // phpcs:ignore
+                    'type' => 'SHIPPING',
+                    'currency' => get_woocommerce_currency()
+                ];
+            }
+        }
+
+        return ['products' => $products, 'orderDiscount' => $orderDiscount];
     }
 
     /**
@@ -234,22 +286,5 @@ class PPMFWC_Hooks_FastCheckout_Start
         $order->save();
 
         return $order;
-    }
-
-    /**
-     * @param array $available_methods
-     * @param string $id
-     * @return mixed
-     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
-     */
-    public static function getShippingMethod($available_methods, $id)
-    {
-        $shippingMethod = false;
-        foreach ($available_methods as $method) {
-            if ($id == $method->id) {
-                $shippingMethod = $method;
-            }
-        }
-        return $shippingMethod;
     }
 }
