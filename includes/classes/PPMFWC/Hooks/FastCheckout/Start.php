@@ -19,7 +19,6 @@ class PPMFWC_Hooks_FastCheckout_Start
     public static function ppmfwc_onFastCheckoutOrderCreate()
     {
         try {
-
             $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(10);
 
             if ($gateway->enabled == 'no') {

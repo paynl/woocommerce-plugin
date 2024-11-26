@@ -107,5 +107,4 @@ class PPMFWC_Hooks_FastCheckout_Buttons
             }
         }
     }
-
 }
