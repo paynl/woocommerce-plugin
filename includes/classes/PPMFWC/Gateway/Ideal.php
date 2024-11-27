@@ -182,6 +182,15 @@ class PPMFWC_Gateway_Ideal extends PPMFWC_Gateway_Abstract
                 'description' => esc_html(__('Show the fast checkout button, only for guest customers.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'desc_tip' => __('When enabled, the fast checkout button will only be shown on the for guest users.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
             );
+
+            $this->form_fields['ideal_fast_checkout_modal'] = array(
+                'title' => esc_html(__('Show modal', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'label' => ' ',
+                'type' => 'checkbox',
+                'default' => 'no',
+                'description' => esc_html(__('Open modal before fast checkout', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'desc_tip' => __('When enabled, a modal explaining on how fast checkout works will show before going through with fast checkout.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            );
         }
     }
 }
