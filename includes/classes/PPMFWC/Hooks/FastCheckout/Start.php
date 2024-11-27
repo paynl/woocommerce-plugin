@@ -145,7 +145,7 @@ class PPMFWC_Hooks_FastCheckout_Start
     }
 
     /**
-     * @param object $shippingMethod
+     * @param array $shippingMethodArr
      * @return array
      * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
