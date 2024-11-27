@@ -45,9 +45,13 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                 }
 
                 if (!empty($gateway->settings['ideal_fast_checkout_modal']) && $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
-                    echo '<div class="pay-fast-checkout cart"><a class="checkout-button button alt wc-forward" onClick="toggleModal(\'/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart\')">Fast Checkout</a></div>';
+                    echo '<div class="pay-fast-checkout cart">
+                            <a class="checkout-button button alt wc-forward" onClick="toggleModal(\'/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart\')">Fast Checkout</a>
+                        </div>';
                 } else {
-                    echo '<div class="pay-fast-checkout cart"><a href="/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart" class="checkout-button button alt wc-forward fast-checkout-trigger-modal">Fast Checkout</a></div>';
+                    echo '<div class="pay-fast-checkout cart">
+                            <a href="/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart" class="checkout-button button alt wc-forward fast-checkout-trigger-modal">Fast Checkout</a>
+                        </div>';
                 }
             }
         }
@@ -67,9 +71,13 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                 }
 
                 if (!empty($gateway->settings['ideal_fast_checkout_modal']) && $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
-                    echo '<span class="pay-fast-checkout-minicart"><a class="checkout-button button alt fast-checkout-trigger-modal" onClick="toggleModal(\'/?wc-api=Wc_Pay_Gateway_Fccreate\')">Fast Checkout</a></span>';
+                    echo '<span class="pay-fast-checkout-minicart">
+                            <a class="checkout-button button alt fast-checkout-trigger-modal" onClick="toggleModal(\'/?wc-api=Wc_Pay_Gateway_Fccreate\')">Fast Checkout</a>
+                        </span>';
                 } else {
-                    echo '<span class="pay-fast-checkout-minicart"><a href="/?wc-api=Wc_Pay_Gateway_Fccreate" class="checkout-button button alt">Fast Checkout</a></span>';
+                    echo '<span class="pay-fast-checkout-minicart">
+                            <a href="/?wc-api=Wc_Pay_Gateway_Fccreate" class="checkout-button button alt">Fast Checkout</a>
+                        </span>';
                 }
             }
         }
@@ -91,9 +99,17 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                 echo '<input type="hidden" name="fast-checkout-product-id" value="' . esc_attr($product->get_id()) . '" />';
 
                 if (!empty($gateway->settings['ideal_fast_checkout_modal']) && $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
-                    echo '<div class="pay-fast-checkout-product"><div class="pay-fast-checkout fast-checkout-product-modal"><a class="checkout-button button alt">Fast Checkout</a></div></div>';
+                    echo '<div class="pay-fast-checkout-product">
+                            <div class="pay-fast-checkout fast-checkout-product-modal">
+                                <a class="checkout-button button alt">Fast Checkout</a>
+                            </div>
+                        </div>';
                 } else {
-                    echo '<div class="pay-fast-checkout-product"><div class="pay-fast-checkout"><a class="checkout-button button alt">Fast Checkout</a></div></div>';
+                    echo '<div class="pay-fast-checkout-product">
+                            <div class="pay-fast-checkout">
+                                <a class="checkout-button button alt">Fast Checkout</a>
+                            </div>
+                        </div>';
                 }
             }
         }
@@ -115,9 +131,13 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                 if (!empty($post) && WC_Blocks_Utils::has_block_in_page($post->ID, 'woocommerce/cart') === true) {
                     if (count(WC()->cart->get_cart()) > 0) {
                         if (!empty($gateway->settings['ideal_fast_checkout_modal']) && $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
-                            echo '<div class="pay-fast-checkout block-cart"><a class="checkout-button button alt wc-forward" onClick="toggleModal(\'/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart\')">Fast Checkout</a></div>';
+                            echo '<div class="pay-fast-checkout block-cart">
+                                    <a class="checkout-button button alt wc-forward" onClick="toggleModal(\'/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart\')">Fast Checkout</a>
+                                </div>';
                         } else {
-                            echo '<div class="pay-fast-checkout block-cart"><a href="/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart" class="checkout-button button alt wc-forward">Fast Checkout</a></div>';
+                            echo '<div class="pay-fast-checkout block-cart">
+                                    <a href="/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart" class="checkout-button button alt wc-forward">Fast Checkout</a>
+                                </div>';
                         }
                     }
                 }
@@ -163,5 +183,4 @@ class PPMFWC_Hooks_FastCheckout_Buttons
             }
         }
     }
-
 }
