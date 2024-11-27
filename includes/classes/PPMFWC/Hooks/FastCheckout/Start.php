@@ -36,10 +36,10 @@ class PPMFWC_Hooks_FastCheckout_Start
             WC()->session->set('chosen_payment_method', 'pay_gateway_ideal');
             WC()->cart->calculate_totals();
 
-            $shippingMethod = self::getShippingMethod($gateway);
+            $shippingMethodArr = self::getShippingMethod($gateway);
 
             self::addProducts();
-            $productArr = self::getProducts($shippingMethod);
+            $productArr = self::getProducts($shippingMethodArr);
 
             $amount = WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax - ($productArr['orderDiscount'] ?? 0);
 
@@ -103,7 +103,7 @@ class PPMFWC_Hooks_FastCheckout_Start
                 throw new \Exception("Selected shipping method is not available.");
             }
 
-            return $shippingMethod;
+            return ['shippingMethod' => $shippingMethod, 'shippingMethodId' => $shippingMethodId];
         }
 
         return false;
@@ -149,7 +149,7 @@ class PPMFWC_Hooks_FastCheckout_Start
      * @return array
      * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
-    public static function getProducts($shippingMethod)
+    public static function getProducts($shippingMethodArr)
     {
         $tax = new WC_Tax();
         $products = [];
@@ -209,16 +209,17 @@ class PPMFWC_Hooks_FastCheckout_Start
             }
         }
 
-        if ($shippingMethod) {
+        if (!empty($shippingMethodArr['shippingMethod'])) {
+            $shippingMethod = $shippingMethodArr['shippingMethod'];
             $shippingAmount = WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes());
             if ($shippingAmount > 0) {
                 $products[] = [
-                    'id' => $shippingMethodId,
+                    'id' => $shippingMethodArr['shippingMethodId'] ?? 0,
                     'name' => $shippingMethod->label,
                     'qty' => 1,
-                    'amount' => WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()),
+                    'amount' => $shippingAmount,
                     'amountExclTax' => WC()->cart->get_shipping_total(),
-                    'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage(WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes()), array_shift($shippingMethod->get_taxes()))), // phpcs:ignore
+                    'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage($shippingAmount, array_shift($shippingMethod->get_taxes()))), // phpcs:ignore
                     'type' => 'SHIPPING',
                     'currency' => get_woocommerce_currency()
                 ];
