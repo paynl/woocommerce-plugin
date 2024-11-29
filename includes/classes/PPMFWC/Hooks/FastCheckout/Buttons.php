@@ -105,6 +105,8 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                             </div>
                         </div>';
                 } else {
+                    wp_register_script('ppmfwc_fastcheckout_script', PPMFWC_PLUGIN_URL . 'assets/js/payfastcheckout.js', array('jquery'), '1.0', true);
+                    wp_enqueue_script('ppmfwc_fastcheckout_script');
                     echo '<div class="pay-fast-checkout-product">
                             <div class="pay-fast-checkout">
                                 <a class="checkout-button button alt">Fast Checkout</a>
