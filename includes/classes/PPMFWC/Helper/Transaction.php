@@ -298,10 +298,10 @@ class PPMFWC_Helper_Transaction
                     } else {
                         $order->payment_complete($transactionId);
                         if (!empty($transaction->getAccountNumber())) {
-                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
+                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber())); // phpcs:ignore
                         } else {
                             $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s).', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus));
-                        }    
+                        }
                     }
                 }
 

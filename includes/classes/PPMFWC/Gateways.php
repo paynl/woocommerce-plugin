@@ -996,7 +996,7 @@ class PPMFWC_Gateways
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
 
-        if (PPMFWC_Hooks_FastCheckout_Exchange::isPaymentBasedCheckout($params)) {           
+        if (PPMFWC_Hooks_FastCheckout_Exchange::isPaymentBasedCheckout($params)) {
             if ($action == self::ACTION_NEWPPT) {
                 if ($wc_order_id) {
                     PPMFWC_Hooks_FastCheckout_Exchange::addAddressToOrder($params, $wc_order_id);
