@@ -297,7 +297,11 @@ class PPMFWC_Helper_Transaction
                         $order->save();
                     } else {
                         $order->payment_complete($transactionId);
-                        $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
+                        if (!empty($transaction->getAccountNumber())) {
+                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
+                        } else {
+                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s).', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus));
+                        }    
                     }
                 }
 
