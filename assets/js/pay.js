@@ -47,6 +47,26 @@ jQuery(document).ready(function () {
 
 });
 
+jQuery(function ($) {
+  $(document).ready(function () {
+    function toggleTdVisibility() {
+      const pickupLocation = $('#woocommerce_pay_gateway_instore_paynl_instore_pickup_location').val();
+      const pickupLocationTerminal = $('#woocommerce_pay_gateway_instore_paynl_instore_pickup_location_terminal').parents().eq(2);
+
+      if (pickupLocation === 'direct') {
+        pickupLocationTerminal.hide();
+      } else {
+        pickupLocationTerminal.show();
+      }
+    }
+
+    toggleTdVisibility();
+
+    $('#woocommerce_pay_gateway_instore_paynl_instore_pickup_location').on('change', toggleTdVisibility);
+
+  });
+});
+
 function toggleObscured (element) {
   jQuery(element).parent().find('.obscuredInput').toggleClass('display');
 }

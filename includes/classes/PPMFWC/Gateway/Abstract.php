@@ -632,7 +632,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      * @throws \Paynl\Error\Required\ApiToken
      * @throws \Paynl\Error\Required\ServiceId
      */
-    protected function startTransaction(WC_Order $order)
+    protected function startTransaction(WC_Order $order, $pickupLocation = null)
     {
         $this->loginSDK(true);
 
@@ -764,6 +764,12 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         }
 
         $startData['language'] = $language;
+
+        if ($pickupLocation === true) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Payment at pickup, order has been made but transaction skipped.');
+            $order->save();
+            return false;
+        }
 
         $payTransaction = \Paynl\Transaction::start($startData);
 

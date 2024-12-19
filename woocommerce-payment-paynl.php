@@ -379,4 +379,40 @@ function ppmfwc_add_order_js($order)
             }
         }
     }
+
+    $orderId = $order->get_id();
+    $dbTransaction = PPMFWC_Helper_Transaction::getTransactionIdFromOrderId($orderId);
+
+    // Make sure there isn't a pin transaction already present
+    if (empty($dbTransaction)) {
+        if ($order->get_payment_method() == 'pay_gateway_instore') {
+            $cache_key = 'paynl_instore_terminals_' . PPMFWC_Gateway_Abstract::getServiceId();
+            $terminals = get_transient($cache_key);
+            if ($terminals === false) {
+                PPMFWC_Gateway_Abstract::loginSDK();
+                $terminals = \Paynl\Instore::getAllTerminals()->getList();
+                set_transient($cache_key, $terminals, HOUR_IN_SECONDS);
+            }
+
+            if (!empty($terminals)) {
+                $payment_gateways = WC_Payment_Gateways::instance();
+                $instoreGateway = $payment_gateways->payment_gateways()['pay_gateway_instore'];
+                $texts['i18n_pinmoment_error_zero'] = __("Pin transaction amount must be greater than €0.00", PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['i18n_pinmoment_invalid'] = __('Invalid transaction amount', 'woocommerce');
+                $texts['i18n_pinmoment_error'] = __('Error processing transaction. Please try again.', 'woocommerce');
+                $texts['i18n_pinmoment_title'] = __('Start pin transaction via Pay.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $texts['i18n_api_title'] = __('via Pay.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
+                $payData = array(
+                    'texts' => $texts,
+                    'terminals' => $terminals,
+                    'order_id' => $orderId,
+                    'order_total' => $order->get_total(),
+                    'default_terminal' => $instoreGateway->get_option('paynl_instore_pickup_location_terminal'),
+                );
+                wp_register_script('paynl_wp_admin_order_js', PPMFWC_PLUGIN_URL . 'assets/js/payorder.js', array('jquery'), PPMFWC_Helper_Data::getVersion(), true);
+                wp_enqueue_script('paynl_wp_admin_order_js');
+                wp_localize_script('paynl_wp_admin_order_js', 'paynl_order', $payData);
+            }
+        }
+    }
 }
