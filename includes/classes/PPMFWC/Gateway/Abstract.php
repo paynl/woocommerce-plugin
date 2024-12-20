@@ -626,7 +626,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
     /**
      * @param WC_Order $order
-     * @param $pickupLocation
+     * @param boolean $pickupLocation
      * @return false|\Paynl\Result\Transaction\Start
      * @throws \Paynl\Error\Api
      * @throws \Paynl\Error\Error

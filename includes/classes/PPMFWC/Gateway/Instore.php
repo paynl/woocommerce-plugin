@@ -134,9 +134,11 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             <?php
         }
 
-        if (substr($terminal, 0, 8) != 'checkout'
+        if (
+            substr($terminal, 0, 8) != 'checkout'
             || ($pickupLocation == 'checkout' && $shippingIsPickupLocation && $pickupLocationTerminal != 'select')
-            || ($pickupLocation == 'pickup' && $shippingIsPickupLocation)) {
+            || ($pickupLocation == 'pickup' && $shippingIsPickupLocation)
+        ) {
             return;
         }
         if ($terminal == 'checkout_save') {
