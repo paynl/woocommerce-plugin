@@ -66,7 +66,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
                 'title' => esc_html(__('Payment location', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'select',
                 'options' => $pickupLocationTerminal,
-                'description' => esc_html(__('Setting for where the payment should take place: instant, or at pickup location. Or provide this choice in the checkout.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+                'description' => esc_html(__('Setting for where the payment should take place: instant, or at pickup location. Or provide this choice in the checkout.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))); // phpcs:ignore
 
             $this->form_fields['paynl_instore_pickup_location_terminal'] = array(
                 'title' => esc_html(__('Payment location terminal', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -134,7 +134,9 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             <?php
         }
 
-        if (substr($terminal, 0, 8) != 'checkout' || ($pickupLocation == 'checkout' && $shippingIsPickupLocation && $pickupLocationTerminal != 'select') || ($pickupLocation == 'pickup' && $shippingIsPickupLocation)) {
+        if (substr($terminal, 0, 8) != 'checkout'
+            || ($pickupLocation == 'checkout' && $shippingIsPickupLocation && $pickupLocationTerminal != 'select')
+            || ($pickupLocation == 'pickup' && $shippingIsPickupLocation)) {
             return;
         }
         if ($terminal == 'checkout_save') {
@@ -210,7 +212,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
 
         if ($pickupLocationSetting == 'checkout' && $pin_moment == 'direct' && strpos($shippingMethods[0], 'local_pickup') === 0 && !isset($_POST['terminal_id'])) {
             $terminal = $pickup_location_terminal;
-        } else if (substr($terminal_setting, 0, 8) == 'checkout') {
+        } elseif (substr($terminal_setting, 0, 8) == 'checkout') {
             $terminal = isset($_POST['terminal_id']) ? sanitize_text_field($_POST['terminal_id']) : '';
 
             if (empty($_POST) && class_exists('WC_POS_Server')) {
