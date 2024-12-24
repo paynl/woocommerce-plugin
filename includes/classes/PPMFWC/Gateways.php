@@ -725,10 +725,20 @@ class PPMFWC_Gateways
     {
         add_action('admin_enqueue_scripts', array(__CLASS__, 'ppmfwc_addPayStyleSheet'));
         add_action('admin_enqueue_scripts', array(__CLASS__, 'ppmfwc_addPayJavascript'));
+        add_action('admin_enqueue_scripts', array(__CLASS__, 'enqueue_custom_admin_js'));
         add_filter('woocommerce_settings_tabs_array', array(__CLASS__, 'ppmfwc_addSettingsTab'), 50);
         add_action('woocommerce_sections_' . self::TAB_ID, array(__CLASS__, 'ppmfwc_addSettingsSections'));
         add_action('woocommerce_settings_' . self::TAB_ID, array(__CLASS__, 'ppmfwc_addGlobalSettingsTab'), 10);
         add_action('woocommerce_settings_save_' . self::TAB_ID, array(__CLASS__, 'ppmfwc_saveGlobalSettingsTab'), 10);
+    }
+
+
+    function enqueue_custom_admin_js()
+    {
+        $section = PPMFWC_Helper_Data::getRequestArg('section') ?? null;
+        if ($section == 'pay_gateway_instore') {
+            wp_enqueue_script('custom-admin-script', PPMFWC_PLUGIN_URL . 'assets/js/instore_setting.js', array('jquery'), PPMFWC_Helper_Data::getVersion(), true);
+        }
     }
 
     /**
