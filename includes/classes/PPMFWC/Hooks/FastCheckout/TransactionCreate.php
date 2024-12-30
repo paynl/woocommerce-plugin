@@ -39,7 +39,7 @@ class PPMFWC_Hooks_FastCheckout_TransactionCreate
 
         $this->_add($parameters, 'returnUrl', $returnUrl);
         $this->_add($parameters, 'description', '');
-        $this->_add($parameters, 'reference', 'fastcheckout' . $order->get_id());
+        $this->_add($parameters, 'reference', $order->get_id());
         $this->_add($parameters, 'exchangeUrl', $exchangeUrl);
 
         $parameters['integration']['test'] = PPMFWC_Helper_Data::isTestMode();
