@@ -750,13 +750,18 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_onReturn()
     {
-        $orderStatusId = isset($_GET['orderStatusId']) ? sanitize_text_field($_GET['orderStatusId']) : false;
-        $orderId = isset($_GET['orderId']) ? sanitize_text_field($_GET['orderId']) : false;
         $url = wc_get_checkout_url();
 
-        $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);
+        $transactionId = PPMFWC_Helper_Data::getRequestArg('id');
+        $statusCode = PPMFWC_Helper_Data::getRequestArg('statusCode');
 
-        $reference = PPMFWC_Helper_Data::getRequestArg('reference') ?? false;
+        $orderStatusId = isset($_GET['orderStatusId']) ? sanitize_text_field($_GET['orderStatusId']) : false;
+        $orderStatusId = (empty($orderStatusId) && !empty($statusCode)) ? $statusCode : $orderStatusId;
+
+        $orderId = isset($_GET['orderId']) ? sanitize_text_field($_GET['orderId']) : false;
+        $orderId = (empty($orderId) && !empty($transactionId)) ? $transactionId : $orderId;
+
+        $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('FINISH, back from PAY payment', $orderId, array('orderStatusId' => $orderStatusId, 'status' => $status));
 
@@ -774,17 +779,6 @@ class PPMFWC_Gateways
                     $url = self::getOrderReturnUrl($order, $newStatus);
                 } catch (Exception $e) {
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Exception: ' . $e->getMessage(), $orderId);
-                }
-            } elseif (!empty($reference) && strpos($reference, "fastcheckout") !== false) {
-                $statusAction = PPMFWC_Helper_Data::getRequestArg('statusAction') ?? false;
-                $orderId = PPMFWC_Helper_Data::getRequestArg('id') ?? false;
-                if ($statusAction == 'PAID' || $statusAction == 'AUTHORIZE') {
-                    $wc_order_id = explode('fastcheckout', $reference);
-                    $wc_order_id = $wc_order_id[1] ?? '';
-                    $order = new WC_Order($wc_order_id);
-                    $url = self::getOrderReturnUrl($order, self::STATUS_SUCCESS);
-                } else {
-                    $url = wc_get_cart_url();
                 }
             }
         } catch (PPMFWC_Exception_Notice $e) {
@@ -945,6 +939,7 @@ class PPMFWC_Gateways
             $internalStateName = $data['object']['status']['action'] ?? '';
             $orderId = $data['object']['reference'] ?? '';
             $extra3 = $data['object']['extra3'] ?? null;
+            $type = $data['object']['type'] ?? '';
             switch ($internalStateId) {
                 case 100:
                 case 98:
@@ -977,6 +972,7 @@ class PPMFWC_Gateways
             'internalStateName' => $internalStateName ?? null,
             'checkoutData' => $checkoutData ?? null,
             'orgData' => $data,
+            'type' => $type ?? null,
         ];
     }
 
@@ -1000,10 +996,7 @@ class PPMFWC_Gateways
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
 
-        if (PPMFWC_Hooks_FastCheckout_Exchange::isFastCheckout($params)) {
-            $wc_order_id = explode('fastcheckout', $wc_order_id);
-            $wc_order_id = $wc_order_id[1] ?? '';
-
+        if (PPMFWC_Hooks_FastCheckout_Exchange::isPaymentBasedCheckout($params)) {
             if ($action == self::ACTION_NEWPPT) {
                 if ($wc_order_id) {
                     PPMFWC_Hooks_FastCheckout_Exchange::addAddressToOrder($params, $wc_order_id);
