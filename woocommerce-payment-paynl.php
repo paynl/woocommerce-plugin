@@ -376,7 +376,7 @@ function ppmfwc_add_order_js($order)
                     );
 
                     setupInstoreScripts($terminals, $texts, $additionalData);
-                } else if (empty($dbTransaction)) {
+                } elseif (empty($dbTransaction)) {
                     $texts = array(
                         'i18n_pinmoment_error_zero' => __("Pin transaction amount must be greater than €0.00", PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                         'i18n_pinmoment_invalid' => __('Invalid transaction amount', 'woocommerce'),
@@ -392,12 +392,17 @@ function ppmfwc_add_order_js($order)
 
                     setupInstoreScripts($terminals, $texts, $additionalData);
                 }
-
             }
         }
     }
 }
 
+/**
+ * @param $terminals
+ * @param $texts
+ * @param $additionalData
+ * @return void
+ */
 function getPaynlTerminals()
 {
     $cache_key = 'paynl_instore_terminals_' . PPMFWC_Gateway_Abstract::getServiceId();
@@ -412,6 +417,12 @@ function getPaynlTerminals()
     return $terminals;
 }
 
+/**
+ * @param $terminals
+ * @param $texts
+ * @param $additionalData
+ * @return void
+ */
 function setupInstoreScripts($terminals, $texts, $additionalData)
 {
     $payData = array_merge(

@@ -733,7 +733,10 @@ class PPMFWC_Gateways
     }
 
 
-    function enqueue_custom_admin_js()
+    /**
+     * @return void
+     */
+    public static function enqueue_custom_admin_js()
     {
         $section = PPMFWC_Helper_Data::getRequestArg('section') ?? null;
         if ($section == 'pay_gateway_instore') {
