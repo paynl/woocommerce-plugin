@@ -354,7 +354,7 @@ function ppmfwc_add_order_js($order)
 
     if (!empty($transactionLocalDB) || empty($dbTransaction)) {
         if ($order->get_payment_method() == 'pay_gateway_instore') {
-            $terminals = getPaynlTerminals();
+            $terminals = ppmfwc_get_terminals();
 
             if (!empty($terminals)) {
                 $payment_gateways = WC_Payment_Gateways::instance();
@@ -375,7 +375,7 @@ function ppmfwc_add_order_js($order)
                         'default_terminal' => $instoreGateway->get_option('paynl_instore_terminal')
                     );
 
-                    setupInstoreScripts($terminals, $texts, $additionalData);
+                    ppmfwc_setup_instore_scripts($terminals, $texts, $additionalData);
                 } elseif (empty($dbTransaction)) {
                     $texts = array(
                         'i18n_pinmoment_error_zero' => __("Pin transaction amount must be greater than €0.00", PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
@@ -390,7 +390,7 @@ function ppmfwc_add_order_js($order)
                         'default_terminal' => $instoreGateway->get_option('paynl_instore_pickup_location_terminal'),
                     );
 
-                    setupInstoreScripts($terminals, $texts, $additionalData);
+                    ppmfwc_setup_instore_scripts($terminals, $texts, $additionalData);
                 }
             }
         }
@@ -403,7 +403,7 @@ function ppmfwc_add_order_js($order)
  * @param $additionalData
  * @return void
  */
-function getPaynlTerminals()
+function ppmfwc_get_terminals()
 {
     $cache_key = 'paynl_instore_terminals_' . PPMFWC_Gateway_Abstract::getServiceId();
     $terminals = get_transient($cache_key);
@@ -423,7 +423,7 @@ function getPaynlTerminals()
  * @param $additionalData
  * @return void
  */
-function setupInstoreScripts($terminals, $texts, $additionalData)
+function ppmfwc_setup_instore_scripts($terminals, $texts, $additionalData)
 {
     $payData = array_merge(
         array(
