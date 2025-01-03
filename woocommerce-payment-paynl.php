@@ -398,7 +398,8 @@ function ppmfwc_add_order_js($order)
     }
 }
 
-function getPaynlTerminals() {
+function getPaynlTerminals()
+{
     $cache_key = 'paynl_instore_terminals_' . PPMFWC_Gateway_Abstract::getServiceId();
     $terminals = get_transient($cache_key);
 
@@ -411,7 +412,8 @@ function getPaynlTerminals() {
     return $terminals;
 }
 
-function setupInstoreScripts($terminals, $texts, $additionalData) {
+function setupInstoreScripts($terminals, $texts, $additionalData)
+{
     $payData = array_merge(
         array(
             'texts' => $texts,
