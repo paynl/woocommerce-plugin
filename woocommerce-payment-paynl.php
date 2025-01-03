@@ -398,10 +398,7 @@ function ppmfwc_add_order_js($order)
 }
 
 /**
- * @param $terminals
- * @param $texts
- * @param $additionalData
- * @return void
+ * @return mixed
  */
 function ppmfwc_get_terminals()
 {
@@ -418,9 +415,9 @@ function ppmfwc_get_terminals()
 }
 
 /**
- * @param $terminals
- * @param $texts
- * @param $additionalData
+ * @param terminals $terminals
+ * @param array $texts
+ * @param array $additionalData
  * @return void
  */
 function ppmfwc_setup_instore_scripts($terminals, $texts, $additionalData)
