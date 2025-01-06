@@ -155,7 +155,7 @@ class PPMFWC_Hooks_FastCheckout_Buttons
     {
         $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(10);
         if ($gateway->enabled == 'yes') {
-            if (!empty($gateway->settings['ideal_fast_checkout_modal']) && $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
+            if (empty($gateway->settings['ideal_fast_checkout_modal']) || $gateway->settings['ideal_fast_checkout_modal'] != 'no') {
                 if (
                     (!empty($gateway->settings['ideal_fast_checkout_on_cart']) && $gateway->settings['ideal_fast_checkout_on_cart'] == 1) ||
                     (!empty($gateway->settings['ideal_fast_checkout_on_minicart']) && $gateway->settings['ideal_fast_checkout_on_minicart'] == 1) ||
@@ -169,14 +169,14 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                                 <div class="eye-catcher"></div>
                                 <div class="modal-content">
                                     <div class="modal-header roboto-slab">
-                                        <span>Bestel sneller</span> met iDEAL snel bestellen
+                                        <span>' . __('Order faster') . '</span> ' . __('with iDEAL fast checkout') . '
                                     </div>
                                     <div class="modal-text">
-                                        <p class="modal-description">Maak een iDEAL profiel aan en sla je adres op voor je volgende bestelling</p>
+                                        <p class="modal-description">' . __('Create an iDEAL profile and save your address for your next order') . '</p>
                                     </div>
                                     <div class="modal-actions">
-                                        <button class="modal-button button-primary">Fast Checkout</button>
-                                        <button class="modal-button button-secondary roboto-medium" onclick="closeModal()">Zelf mijn adres invullen en betalen</button>
+                                        <button class="modal-button button-primary">' . __('Fast Checkout') . '</button>
+                                        <button class="modal-button button-secondary roboto-medium" onclick="location.href=\'' . wc_get_checkout_url() . '\';">' . __('Enter my own address and pay') . '</button>
                                     </div>
                                 </div>
                             </div>
