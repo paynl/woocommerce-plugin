@@ -104,21 +104,6 @@ class PPMFWC_Helper_Transaction
     }
 
     /**
-     * @param string $orderId
-     * @return boolean
-     */
-    public static function getTransactionIdFromOrderId($orderId)
-    {
-        global $wpdb;
-        $table_name_transactions = $wpdb->prefix . "pay_transactions";
-        $result = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE order_id = %s", $orderId),
-            ARRAY_A
-        );
-        return !empty($result);
-    }
-
-    /**
      * @param string $transactionId
      * @param string $status
      * @return void

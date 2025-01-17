@@ -369,17 +369,16 @@ function ppmfwc_add_order_js($order)
     $orderId = $order->get_id();
 
     $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($transactionId);
-    $dbTransaction = PPMFWC_Helper_Transaction::getTransactionIdFromOrderId($orderId);
 
-    if (!empty($transactionLocalDB) || empty($dbTransaction)) {
+    if (!empty($transactionLocalDB) || empty($transactionId)) {
         if ($order->get_payment_method() == 'pay_gateway_instore') {
             $terminals = ppmfwc_get_terminals();
-
             if (!empty($terminals)) {
                 $payment_gateways = WC_Payment_Gateways::instance();
                 $instoreGateway = $payment_gateways->payment_gateways()['pay_gateway_instore'];
 
                 if (!empty($transactionLocalDB)) {
+                    // A Pay. transaction exists, therefore show the button for the retourpin option
                     $texts = array(
                         'i18n_refund_error_zero' => __("Refund amount must be greater than €0.00", PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                         'i18n_refund_invalid' => __('Invalid refund amount', 'woocommerce'),
@@ -395,7 +394,8 @@ function ppmfwc_add_order_js($order)
                     );
 
                     ppmfwc_setup_instore_scripts($terminals, $texts, $additionalData);
-                } elseif (empty($dbTransaction)) {
+                } elseif (empty($transactionId)) {
+                    // A pin transaction hasn't been made. Show the pin button to start a pin transaction
                     $texts = array(
                         'i18n_pinmoment_error_zero' => __("Pin transaction amount must be greater than €0.00", PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                         'i18n_pinmoment_invalid' => __('Invalid transaction amount', 'woocommerce'),
