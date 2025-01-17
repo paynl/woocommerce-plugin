@@ -117,6 +117,9 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     add_action('admin_notices', 'ppmfwc_error_woocommerce_not_active');
 }
 
+/**
+ * @return void
+ */
 function ppmfwc_registerBlockScripts()
 {
     $blocks_js_route = PPMFWC_PLUGIN_URL . 'assets/js/paynl-blocks.js';
