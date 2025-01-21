@@ -17,9 +17,9 @@ class PPMFWC_Hooks_FastCheckout_Exchange
      * @return boolean
      * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
-    public static function isFastCheckout($params)
+    public static function isPaymentBasedCheckout($params)
     {
-        return strpos($params['orderId'] ?? '', "fastcheckout") !== false && !empty($params['checkoutData'] ?? '');
+        return $params['type'] == "payment_based_checkout" && !empty($params['checkoutData'] ?? '');
     }
 
     /**

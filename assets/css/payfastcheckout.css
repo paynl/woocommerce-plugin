@@ -53,6 +53,18 @@
 }
 
 .pay-fast-checkout.block-cart {
+    margin: 0;
+}
+
+.pay-fast-checkout.block-cart a {
+    position: fixed;
+    z-index: 1000;
+    bottom: 15px;
+    right: 15px;
+    background-position: 15px center;
+}
+
+.pay-fast-checkout.block-cart {
     position: fixed;
     right: 25px;
     bottom: 25px;

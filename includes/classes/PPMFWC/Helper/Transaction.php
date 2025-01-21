@@ -150,24 +150,20 @@ class PPMFWC_Helper_Transaction
      */
     public static function processTransaction($transactionId, $status = null, $methodid = null)
     {
-        global $woocommerce;
-
-        # Retrieve local paymentstate
+        # Retrieve local payment state
         $transactionLocalDB = self::getTransaction($transactionId);
-        $localTransactionStatus = $transactionLocalDB['status'];
-        if (empty($transactionLocalDB)) {
-            throw new PPMFWC_Exception_Notice(__('Local transaction not found: ' . $transactionId, ''));
-        }
-        if (!isset($transactionLocalDB['order_id'])) {
-            throw new PPMFWC_Exception(__('OrderId not set in local transaction: ' . $transactionId, ''));
-        }
+        $localTransactionStatus = $transactionLocalDB['status'] ?? '';
+        $orderId = $transactionLocalDB['order_id'] ?? null;
 
-        $orderId = $transactionLocalDB['order_id'];
+        if (empty($transactionLocalDB)) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Notice: Cant find local transaction: ' . $transactionId);
+            $orderId = PPMFWC_Helper_Data::getRequestArg('extra1') ?? null;
+        }
 
         try {
             $order = new WC_Order($orderId);
         } catch (Exception $e) {
-            # Could not retrieve order from WooCommerce (this is a notice so exchange wont repeat)
+            # Could not retrieve order from WooCommerce (this is a notice so exchange won't repeat)
             throw new PPMFWC_Exception_Notice('Woocommerce could not find internal order ' . $orderId);
         }
 
@@ -186,6 +182,11 @@ class PPMFWC_Helper_Transaction
         PPMFWC_Gateway_Abstract::loginSDK(true);
 
         $transaction = \Paynl\Transaction::status($transactionId);
+
+        if (empty($transactionLocalDB)) {
+              PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
+              PPMFWC_Helper_Transaction::newTransaction($transactionId, $methodid ?? 0, $order->get_total(), $orderId, 'start-data');
+        }
 
         $transactionPaid = array($transaction->getCurrencyAmount(), $transaction->getPaidCurrencyAmount(), $transaction->getPaidAmount());
 
@@ -297,7 +298,11 @@ class PPMFWC_Helper_Transaction
                         $order->save();
                     } else {
                         $order->payment_complete($transactionId);
-                        $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber()));
+                        if (!empty($transaction->getAccountNumber())) {
+                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber())); // phpcs:ignore
+                        } else {
+                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s).', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus));
+                        }
                     }
                 }
 
