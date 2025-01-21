@@ -52,10 +52,6 @@
     padding-left: 40px;
 }
 
-.pay-fast-checkout.block-cart {
-    margin: 0;
-}
-
 .pay-fast-checkout.block-cart a {
     position: fixed;
     z-index: 1000;
@@ -65,15 +61,11 @@
 }
 
 .pay-fast-checkout.block-cart {
+    margin: 0;
     position: fixed;
     right: 25px;
     bottom: 25px;
 }
-
-.pay-fast-checkout.block-cart a {
-    background-position: 15px center;
-}
-
 
 .modal-trigger-button-wrapper {
     width: 250px;
