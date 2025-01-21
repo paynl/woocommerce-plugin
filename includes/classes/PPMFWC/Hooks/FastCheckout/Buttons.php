@@ -85,4 +85,26 @@ class PPMFWC_Hooks_FastCheckout_Buttons
             }
         }
     }
+
+    /**
+     * Show fast checkout on cart page
+     * @return void
+     */
+    public static function ppmfwc_fast_checkout_blocks_cart()
+    {
+        $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(10);
+        if ($gateway->enabled == 'yes') {
+            if (!empty($gateway->settings['ideal_fast_checkout_on_cart']) && $gateway->settings['ideal_fast_checkout_on_cart'] == 1) {
+                if (is_user_logged_in() && !empty($gateway->settings['ideal_fast_checkout_guest_only']) && $gateway->settings['ideal_fast_checkout_guest_only'] == 'yes') {
+                    return;
+                }
+                $post = get_post();
+                if (!empty($post) && WC_Blocks_Utils::has_block_in_page($post->ID, 'woocommerce/cart') === true) {
+                    if (count(WC()->cart->get_cart()) > 0) {
+                        echo '<div class="pay-fast-checkout block-cart"><a href="/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart" class="checkout-button button alt wc-forward">Fast Checkout</a></div>';
+                    }
+                }
+            }
+        }
+    }
 }
