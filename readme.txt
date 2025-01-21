@@ -4,7 +4,7 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 3.5.1
-Stable tag: 3.20.2
+Stable tag: 3.20.3
 Tested up to: 6.8.0
 WC tested up to: 9.4.0
 WC requires at least: 3.0
@@ -188,6 +188,9 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 3.20.3 =
+Updated fast checkout, added modal option.
+Small under the hood updates and fixes
 = 3.20.2 =
 Updated password field
 Added VISA en Mastercard
