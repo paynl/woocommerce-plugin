@@ -113,6 +113,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     add_action('woocommerce_proceed_to_checkout', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_cart'), 30);
     add_action('woocommerce_after_add_to_cart_button', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_product'), 30);
     add_action('wp_enqueue_scripts', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_blocks_cart'));
+    add_action('wp_enqueue_scripts', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_modal'));
 } else {
     # WooCommerce seems to be inactive, show eror message
     add_action('admin_notices', 'ppmfwc_error_woocommerce_not_active');
