@@ -32,7 +32,7 @@ class PPMFWC_Hooks_FastCheckout_Buttons
     }
 
     /**
-     * Show fast checkout on cart page
+     * Show fast checkout on (classic) cart page
      * @return void
      */
     public static function ppmfwc_fast_checkout_cart()
@@ -44,7 +44,7 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                     return;
                 }
 
-                if (!empty($gateway->settings['ideal_fast_checkout_modal']) && $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
+                if (empty($gateway->settings['ideal_fast_checkout_modal']) || $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
                     echo '<div class="pay-fast-checkout cart">
                             <a class="checkout-button button alt wc-forward" onClick="toggleModal(\'/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart\')">Fast Checkout</a>
                         </div>';
@@ -70,7 +70,7 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                     return;
                 }
 
-                if (!empty($gateway->settings['ideal_fast_checkout_modal']) && $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
+                if (empty($gateway->settings['ideal_fast_checkout_modal']) || $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
                     echo '<span class="pay-fast-checkout-minicart">
                             <a class="checkout-button button alt fast-checkout-trigger-modal" onClick="toggleModal(\'/?wc-api=Wc_Pay_Gateway_Fccreate\')">Fast Checkout</a>
                         </span>';
@@ -98,7 +98,7 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                 }
                 echo '<input type="hidden" name="fast-checkout-product-id" value="' . esc_attr($product->get_id()) . '" />';
 
-                if (!empty($gateway->settings['ideal_fast_checkout_modal']) && $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
+                if (empty($gateway->settings['ideal_fast_checkout_modal']) || $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
                     echo '<div class="pay-fast-checkout-product">
                             <div class="pay-fast-checkout fast-checkout-product-modal">
                                 <a class="checkout-button button alt">Fast Checkout</a>
@@ -118,7 +118,7 @@ class PPMFWC_Hooks_FastCheckout_Buttons
     }
 
     /**
-     * Show fast checkout on cart page
+     * Show fast checkout on BLOCKS cart page
      * @return void
      */
     public static function ppmfwc_fast_checkout_blocks_cart()
@@ -132,7 +132,7 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                 $post = get_post();
                 if (!empty($post) && WC_Blocks_Utils::has_block_in_page($post->ID, 'woocommerce/cart') === true) {
                     if (count(WC()->cart->get_cart()) > 0) {
-                        if (!empty($gateway->settings['ideal_fast_checkout_modal']) && $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
+                        if (empty($gateway->settings['ideal_fast_checkout_modal']) || $gateway->settings['ideal_fast_checkout_modal'] == 'yes') {
                             echo '<div class="pay-fast-checkout block-cart">
                                     <a class="checkout-button button alt wc-forward" onClick="toggleModal(\'/?wc-api=Wc_Pay_Gateway_Fccreate&source=cart\')">Fast Checkout</a>
                                 </div>';
@@ -148,7 +148,7 @@ class PPMFWC_Hooks_FastCheckout_Buttons
     }
 
     /**
-     * Show fast checkout on cart page
+     * Preparing fast checkout, initiating on each page.
      * @return void
      */
     public static function ppmfwc_fast_checkout_modal()
