@@ -25,7 +25,7 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                 (!empty($gateway->settings['ideal_fast_checkout_on_minicart']) && $gateway->settings['ideal_fast_checkout_on_minicart'] == 1) ||
                 (!empty($gateway->settings['ideal_fast_checkout_on_product']) && $gateway->settings['ideal_fast_checkout_on_product'] == 1)
             ) {
-                wp_register_style('ppmfwc_fast_checkout_style', PPMFWC_PLUGIN_URL . 'assets/css/payfastcheckout.css');
+                wp_register_style('ppmfwc_fast_checkout_style', PPMFWC_PLUGIN_URL . 'assets/css/payfastcheckout.css', false,  PPMFWC_Helper_Data::getVersion());
                 wp_enqueue_style('ppmfwc_fast_checkout_style');
             }
         }
@@ -105,7 +105,7 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                             </div>
                         </div>';
                 } else {
-                    wp_register_script('ppmfwc_fastcheckout_script', PPMFWC_PLUGIN_URL . 'assets/js/payfastcheckout.js', array('jquery'), '1.0', true);
+                    wp_register_script('ppmfwc_fastcheckout_script', PPMFWC_PLUGIN_URL . 'assets/js/payfastcheckout.js', array('jquery'), '2.0', true);
                     wp_enqueue_script('ppmfwc_fastcheckout_script');
                     echo '<div class="pay-fast-checkout-product">
                             <div class="pay-fast-checkout">
@@ -161,7 +161,7 @@ class PPMFWC_Hooks_FastCheckout_Buttons
                     (!empty($gateway->settings['ideal_fast_checkout_on_minicart']) && $gateway->settings['ideal_fast_checkout_on_minicart'] == 1) ||
                     (!empty($gateway->settings['ideal_fast_checkout_on_product']) && $gateway->settings['ideal_fast_checkout_on_product'] == 1)
                 ) {
-                    wp_register_script('ppmfwc_fastcheckout_script', PPMFWC_PLUGIN_URL . 'assets/js/payfastcheckout.js', array('jquery'), '1.0', true);
+                    wp_register_script('ppmfwc_fastcheckout_script', PPMFWC_PLUGIN_URL . 'assets/js/payfastcheckout.js', array('jquery'), '2.0', true);
                     wp_enqueue_script('ppmfwc_fastcheckout_script');
                     echo '<div class="modal-backdrop" id="modal-backdrop" onclick="closeModal()"></div>';
                     echo '<div class="modal" id="fast-checkout-modal">
