@@ -12,6 +12,12 @@
 
 class PPMFWC_Hooks_Settings
 {
+    /**
+     * @param string $recipient
+     * @param WC_Order $order
+     * @param WC_Email $email
+     * @return void
+     */
     public static function ppmfwc_settings_email($recipient, $order, $email)
     {
         if (!empty($order->get_address('billing')['company'])) {

@@ -127,10 +127,10 @@ class PPMFWC_Gateway_Billink extends PPMFWC_Gateway_Abstract
 
             $this->form_fields['b2b_invoices_disabled'] = array(
                 'title' => esc_html(__('Turn off invoices for B2B', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'label' => ' ',
+                'label' => esc_html(__('Disable creating invoices for business orders.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
                 'default' => 'no',
-                'description' => esc_html(__('Disable creating invoices for business orders.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'description' => esc_html(__('Enable this option to prevent the creation of invoices for business orders, thereby stopping invoice emails from being sent to customers.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
             );
         }
     }
