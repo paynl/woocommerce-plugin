@@ -68,7 +68,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     });
 
     add_action('init', function () {
-        if (strpos($_SERVER['REQUEST_URI'], '/post.php') !== false && is_admin()) {
+        if ((strpos($_SERVER['REQUEST_URI'], '/post.php') !== false || strpos($_SERVER['REQUEST_URI'], '/post-new.php') !== false) && is_admin()) {
             ppmfwc_registerBlockScripts();
         }
     });
@@ -203,11 +203,11 @@ function ppmfwc_plugin_add_settings_link($links)
 function ppmfwc_vatField($checkout)
 {
     woocommerce_form_field('vat_number', array(
-    'type' => 'text',
-    'class' => array('vat-number-field form-row-wide'),
-    'label' => esc_html(__('VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-    'placeholder' => esc_html(__('Enter your VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-    'required' => (get_option('paynl_show_vat_number') == 'yes_required'),
+        'type' => 'text',
+        'class' => array('vat-number-field form-row-wide'),
+        'label' => esc_html(__('VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+        'placeholder' => esc_html(__('Enter your VAT number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+        'required' => (get_option('paynl_show_vat_number') == 'yes_required'),
     ), $checkout->get_value('vat_number'));
 }
 
@@ -240,7 +240,7 @@ function ppmfwc_payScript()
                         $scriptsAdded[] = 'ppmfwc_checkout_script';
                     }
                     if (!empty($gateway->settings['applepay_detection']) && $gateway->settings['applepay_detection'] == 'yes' && !in_array('ppmfwc_applepay_script', $scriptsAdded)) {
-                    //Register the Apple Pay Detection javascript
+                        //Register the Apple Pay Detection javascript
                         wp_register_script('ppmfwc_applepay_script', PPMFWC_PLUGIN_URL . 'assets/js/applepay.js', array('jquery'), '1.0', true);
                         wp_enqueue_script('ppmfwc_applepay_script');
                         $scriptsAdded[] = 'ppmfwc_applepay_script';
@@ -259,11 +259,11 @@ function ppmfwc_payScript()
 function ppmfwc_cocField($checkout)
 {
     woocommerce_form_field('coc_number', array(
-    'type' => 'text',
-    'class' => array('coc-number-field form-row-wide'),
-    'label' => esc_html(__('COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-    'placeholder' => esc_html(__('Enter your COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-    'required' => (get_option('paynl_show_coc_number') == 'yes_required'),
+        'type' => 'text',
+        'class' => array('coc-number-field form-row-wide'),
+        'label' => esc_html(__('COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+        'placeholder' => esc_html(__('Enter your COC number', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+        'required' => (get_option('paynl_show_coc_number') == 'yes_required'),
     ), $checkout->get_value('coc_number'));
 }
 
