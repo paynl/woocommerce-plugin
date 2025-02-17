@@ -179,7 +179,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
 
         $pickupLocationSetting = $this->get_option('paynl_instore_pickup_location');
         $pickupLocation = false;
-        $pin_moment = isset($_POST['pin_moment']) ? sanitize_text_field($_POST['pin_moment']) : '';
+        $pin_moment = PPMFWC_Helper_Data::getPostTextField('pin_moment') ? sanitize_text_field(PPMFWC_Helper_Data::getPostTextField('pin_moment')) : '';
 
         if ($pickupLocationSetting == 'pickup' || ($pickupLocationSetting == 'checkout' && $pin_moment == 'pickup')) {
             $pickupLocation = true;
@@ -212,10 +212,10 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
         $pickup_location_terminal = $this->get_option('paynl_instore_pickup_location_terminal');
         $shippingMethods = WC()->session->get('chosen_shipping_methods');
 
-        if ($pickupLocationSetting == 'checkout' && $pin_moment == 'direct' && strpos($shippingMethods[0], 'local_pickup') === 0 && !isset($_POST['terminal_id'])) {
+        if ($pickupLocationSetting == 'checkout' && $pin_moment == 'direct' && strpos($shippingMethods[0], 'local_pickup') === 0 && !PPMFWC_Helper_Data::getPostTextField('terminal_id')) {
             $terminal = $pickup_location_terminal;
         } elseif (substr($terminal_setting, 0, 8) == 'checkout') {
-            $terminal = isset($_POST['terminal_id']) ? sanitize_text_field($_POST['terminal_id']) : '';
+            $terminal = sanitize_text_field(PPMFWC_Helper_Data::getPostTextField('terminal_id') ?? '');
 
             if (empty($_POST) && class_exists('WC_POS_Server')) {
                 $data = WC_POS_Server::get_raw_data();
