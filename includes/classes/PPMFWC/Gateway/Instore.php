@@ -179,7 +179,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
 
         $pickupLocationSetting = $this->get_option('paynl_instore_pickup_location');
         $pickupLocation = false;
-        $pin_moment = PPMFWC_Helper_Data::getPostTextField('pin_moment') ? sanitize_text_field(PPMFWC_Helper_Data::getPostTextField('pin_moment')) : '';
+        $pin_moment = PPMFWC_Helper_Data::getPostTextField('pin_moment', true);
 
         if ($pickupLocationSetting == 'pickup' || ($pickupLocationSetting == 'checkout' && $pin_moment == 'pickup')) {
             $pickupLocation = true;
@@ -215,7 +215,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
         if ($pickupLocationSetting == 'checkout' && $pin_moment == 'direct' && strpos($shippingMethods[0], 'local_pickup') === 0 && !PPMFWC_Helper_Data::getPostTextField('terminal_id')) {
             $terminal = $pickup_location_terminal;
         } elseif (substr($terminal_setting, 0, 8) == 'checkout') {
-            $terminal = sanitize_text_field(PPMFWC_Helper_Data::getPostTextField('terminal_id') ?? '');
+            $terminal = PPMFWC_Helper_Data::getPostTextField('terminal_id', true);
 
             if (empty($_POST) && class_exists('WC_POS_Server')) {
                 $data = WC_POS_Server::get_raw_data();
