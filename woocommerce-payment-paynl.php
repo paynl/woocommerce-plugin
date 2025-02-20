@@ -68,7 +68,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     });
 
     add_action('init', function () {
-        if (strpos($_SERVER['REQUEST_URI'], '/post.php') !== false && is_admin()) {
+        if ((strpos($_SERVER['REQUEST_URI'], '/post.php') !== false || strpos($_SERVER['REQUEST_URI'], '/post-new.php') !== false) && is_admin()) {
             ppmfwc_registerBlockScripts();
         }
     });
