@@ -21,7 +21,7 @@ class PPMFWC_Gateway_In3business extends PPMFWC_Gateway_Abstract
      */
     public static function getName()
     {
-        return 'In3 Business';
+        return 'Mondu (Zakelijk): Betalen in 30 dagen';
     }
 
     /**
