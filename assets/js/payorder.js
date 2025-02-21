@@ -21,20 +21,20 @@ function submitPinRefund($) {
         return;
     }
 
-    doAjaxRequest($, amount)
+    doAjaxRequest($, amount, 'refund')
 }
 
 function submitPinTransaction($) {
     var amount = parseFloat(paynl_order.order_total.toString().replace(',', '.'));
     if (amount == 0) {
-        alert(paynl_order.texts.i18n_refund_error_zero);
+        alert(paynl_order.texts.i18n_pinmoment_error_zero);
         return;
     }
 
-    doAjaxRequest($, amount)
+    doAjaxRequest($, amount, 'pinmoment')
 }
 
-function doAjaxRequest($, amount) {
+function doAjaxRequest($, amount, type) {
     var terminal = $('#pin_terminal').val();
     var ajaxurl = '/?wc-api=Wc_Pay_Gateway_Pinrefund';
     var data = {
@@ -53,11 +53,11 @@ function doAjaxRequest($, amount) {
             if (data.success) {
                 window.location.href = data.url;
             } else {
-                alert(paynl_order.texts.i18n_refund_error);
+                alert(type === 'refund' ? paynl_order.texts.i18n_refund_error : paynl_order.texts.i18n_pinmoment_error);
             }
         },
         error: function () {
-            alert(paynl_order.texts.i18n_refund_error);
+            alert(type === 'refund' ? paynl_order.texts.i18n_refund_error : paynl_order.texts.i18n_pinmoment_error);
         }
     })
 }
