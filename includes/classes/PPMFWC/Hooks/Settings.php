@@ -12,6 +12,7 @@
 
 class PPMFWC_Hooks_Settings
 {
+
     /**
      * @param string $recipient
      * @param WC_Order $order
@@ -20,6 +21,7 @@ class PPMFWC_Hooks_Settings
      */
     public static function ppmfwc_settings_email($recipient, $order, $email)
     {
+        # Setting check: dont send emails in case of B2B
         if (!empty($order->get_address('billing')['company'])) {
             $billink_gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(1672);
             if ($order->get_payment_method() == $billink_gateway->getId()) {
@@ -28,6 +30,5 @@ class PPMFWC_Hooks_Settings
                 }
             }
         }
-        return $recipient;
     }
 }
