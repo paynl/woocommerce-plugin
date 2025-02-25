@@ -5,8 +5,8 @@ Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 3.5.1
 Stable tag: 3.20.3
-Tested up to: 6.7.1
-WC tested up to: 9.6.0
+Tested up to: 6.7.2
+WC tested up to: 9.7.0
 WC requires at least: 3.0
 Requires PHP: 7.0
 License: GPLv2
