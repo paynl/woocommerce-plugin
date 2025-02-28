@@ -120,11 +120,6 @@ class PPMFWC_Gateway_Billink extends PPMFWC_Gateway_Abstract
         parent::init_form_fields();
         $optionId = $this->getOptionId();
         if (PPMFWC_Helper_Data::isOptionAvailable($optionId)) {
-            $default = get_option('paynl_bankselection');
-            if (empty($default)) {
-                $default = 'select';
-            }
-
             $this->form_fields['b2b_invoices_disabled'] = array(
                 'title' => esc_html(__('B2B invoice emails', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'label' => esc_html(__('Disable invoice emails business orders.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
