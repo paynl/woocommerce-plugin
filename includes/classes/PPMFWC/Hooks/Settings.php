@@ -30,5 +30,6 @@ class PPMFWC_Hooks_Settings
                 }
             }
         }
+        return $recipient;
     }
 }
