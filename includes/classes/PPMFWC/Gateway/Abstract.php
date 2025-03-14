@@ -202,7 +202,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $this->form_fields['country_limit'] = array(
                 'title'       => esc_html(__('Country', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type'        => 'multiselect',
-                'options'     => array_merge(array('all' => esc_html(__('Available for all countries', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))), !empty(WC()->countries) ? WC()->countries->get_countries() : array()),
+                'options'     => array_merge(array('all' => esc_html(__('Available for all countries', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))), !empty(WC()->countries) ? WC()->countries->get_countries() : array()), // phpcs:ignore
                 'default'     => 'all',
                 'description' => sprintf(esc_html(__('Select one or more billing countries for which %s should be available.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
                 'desc_tip'    => esc_html(__('Select in which (billing) country this method should be available.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -1000,6 +1000,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         }
     }
 
+    /**
+     * @param $orderIp
+     * @return mixed|string
+     */
     private function getIpAddress($orderIp)
     {
         switch (get_option('paynl_test_ipadress')) {
