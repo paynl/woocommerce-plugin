@@ -644,10 +644,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $exchangeUrl = $strAlternativeExchangeUrl;
         }
 
-        $ipAddress = $order->get_customer_ip_address();
-        if (empty($ipAddress)) {
-            $ipAddress = Paynl\Helper::getIp();
-        }
+        $orderIp = $order->get_customer_ip_address();
+        $ipAddress = $this->getIpAddress($orderIp);
 
         $currency = $order->get_currency();
         $order_id = $order->get_id();
@@ -1000,5 +998,33 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         if ($this->get_option('instructions')) {
             echo wpautop(wptexturize($this->get_option('instructions')));
         }
+    }
+
+    private function getIpAddress($orderIp)
+    {
+        switch (get_option('paynl_test_ipadress')) {
+            case 'orderremoteaddress':
+                $ipAddress = $orderIp;
+                break;
+            case 'remoteaddress':
+                $ipAddress = $_SERVER['REMOTE_ADDR'] ?? '';
+                break;
+            case 'httpforwarded':
+                $headers = function_exists('getallheaders') ? getallheaders() : $_SERVER;
+                $remoteIp = $_SERVER['REMOTE_ADDR'] ?? '';
+
+                if (!empty($headers['X-Forwarded-For'])) {
+                    $remoteIp = explode(',', $headers['X-Forwarded-For'])[0];
+                } elseif (!empty($headers['HTTP_X_FORWARDED_FOR'])) {
+                    $remoteIp = explode(',', $headers['HTTP_X_FORWARDED_FOR'])[0];
+                }
+
+                $ipAddress = trim($remoteIp, '[]');
+                break;
+            default:
+                $ipAddress = Paynl\Helper::getIp();
+        }
+
+        return $ipAddress;
     }
 }
