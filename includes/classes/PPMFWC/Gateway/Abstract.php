@@ -1001,8 +1001,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @param $orderIp
-     * @return mixed|string
+     * @param string $orderIp
+     * @return string
      */
     private function getIpAddress($orderIp)
     {
