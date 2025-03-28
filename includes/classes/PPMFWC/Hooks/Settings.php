@@ -10,14 +10,13 @@
  * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
  */
 
-class PPMFWC_Hooks_Settings
-{
+class PPMFWC_Hooks_Settings {
 
     /**
-     * @param string $recipient
-     * @param WC_Order $order
-     * @param WC_Email $email
-     * @return void
+     * @param $recipient
+     * @param $order
+     * @param $email
+     * @return mixed|void
      */
     public static function ppmfwc_settings_email($recipient, $order, $email)
     {
