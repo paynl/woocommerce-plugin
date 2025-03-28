@@ -11,7 +11,6 @@
  */
 
 class PPMFWC_Hooks_Settings {
-
     /**
      * @param string $recipient The recipient email address.
      * @param WC_Order|null $order The WooCommerce order object.
