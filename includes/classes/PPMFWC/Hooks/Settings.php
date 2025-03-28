@@ -10,13 +10,14 @@
  * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
  */
 
-class PPMFWC_Hooks_Settings {
+class PPMFWC_Hooks_Settings
+{
 
     /**
-     * @param $recipient
-     * @param $order
-     * @param $email
-     * @return mixed|void
+     * @param string $recipient The recipient email address.
+     * @param WC_Order|null $order The WooCommerce order object.
+     * @param WC_Email $email The WooCommerce email object.
+     * @return mixed|void Updated recipient or nothing to skip sending.
      */
     public static function ppmfwc_settings_email($recipient, $order, $email)
     {
