@@ -44,7 +44,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             $pickupLocationTerminalOptions = array();
             $pickupLocationTerminalOptions['select'] = esc_html(__('Select card terminal', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
 
-            if (isset($terminals) && !empty($terminals)) {
+            if (!empty($terminals)) {
                 foreach ($terminals as $terminal) {
                     $options[$terminal['id']] = $terminal['name'];
                     $pickupLocationTerminalOptions[$terminal['id']] = $terminal['name'];
@@ -142,7 +142,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             return;
         }
         if ($terminal == 'checkout_save') {
-            if (isset($_COOKIE['paynl_instore_terminal_id']) && !empty($_COOKIE['paynl_instore_terminal_id'])) {
+            if (!empty($_COOKIE['paynl_instore_terminal_id'])) {
                 echo "<input type='hidden' name='terminal_id' value='" . esc_attr($_COOKIE['paynl_instore_terminal_id']) . "' />";
                 return;
             }

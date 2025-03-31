@@ -367,7 +367,9 @@ function ppmfwc_auto_functions($order_id, $old_status, $new_status)
 }
 
 /**
- * Show Pin Refund on order page
+ * Hook for the order page in the admin
+ * Checking to see if we should display a button for retourpin, or to start a pin transaction.
+ *
  * @param order $order
  * @return void
  * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
@@ -387,7 +389,7 @@ function ppmfwc_add_order_js($order)
                 $instoreGateway = $payment_gateways->payment_gateways()['pay_gateway_instore'];
 
                 if (!empty($transactionLocalDB)) {
-                    // A Pay. transaction exists, therefore show the button for the retourpin option
+                    # A Pay. transaction exists, therefore show the button for the retourpin option
                     $texts = array(
                         'i18n_refund_error_zero' => __("Refund amount must be greater than €0.00", PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                         'i18n_refund_invalid' => __('Invalid refund amount', 'woocommerce'),
@@ -404,7 +406,7 @@ function ppmfwc_add_order_js($order)
 
                     ppmfwc_setup_instore_scripts($terminals, $texts, $additionalData);
                 } elseif (empty($transactionId)) {
-                    // A pin transaction hasn't been made. Show the pin button to start a pin transaction
+                    # A pin transaction hasn't been made. Show the pin button to start a pin transaction
                     $texts = array(
                         'i18n_pinmoment_error_zero' => __("Pin transaction amount must be greater than €0.00", PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                         'i18n_pinmoment_invalid' => __('Invalid transaction amount', 'woocommerce'),
