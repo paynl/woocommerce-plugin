@@ -202,7 +202,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $this->form_fields['country_limit'] = array(
                 'title'       => esc_html(__('Country', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type'        => 'multiselect',
-                'options'     => array_merge(array('all' => esc_html(__('Available for all countries', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))), !empty(WC()->countries) ? WC()->countries->get_countries() : array()),
+                'options'     => array_merge(array('all' => esc_html(__('Available for all countries', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))), !empty(WC()->countries) ? WC()->countries->get_countries() : array()), // phpcs:ignore
                 'default'     => 'all',
                 'description' => sprintf(esc_html(__('Select one or more billing countries for which %s should be available.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()),
                 'desc_tip'    => esc_html(__('Select in which (billing) country this method should be available.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
@@ -644,11 +644,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $exchangeUrl = $strAlternativeExchangeUrl;
         }
 
-        $ipAddress = $order->get_customer_ip_address();
-        if (empty($ipAddress)) {
-            $ipAddress = Paynl\Helper::getIp();
-        }
-
         $currency = $order->get_currency();
         $order_id = $order->get_id();
         $billing_country = $order->get_billing_country();
@@ -673,7 +668,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             'extra1'        => apply_filters('paynl-extra1', $order->get_order_number(), $order),
             'extra2'        => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
             'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
-            'ipaddress'     => $ipAddress,
+            'ipaddress'     => $this->getIpAddress($order),
             'object'        => PPMFWC_Helper_Data::getObject(),
         );
 
@@ -1001,4 +996,36 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             echo wpautop(wptexturize($this->get_option('instructions')));
         }
     }
+
+    /**
+     * @param $order
+     * @return mixed|string
+     */
+    private function getIpAddress($order)
+    {
+        $orderIp = $order->get_customer_ip_address();
+        switch (get_option('paynl_test_ipadress')) {
+            case 'orderremoteaddress':
+                return $orderIp;
+
+            case 'remoteaddress':
+                return $_SERVER['REMOTE_ADDR'] ?? '';
+
+            case 'httpforwarded':
+                $headers = function_exists('getallheaders') ? getallheaders() : [];
+                $remoteIp = $_SERVER['REMOTE_ADDR'] ?? '';
+
+                if (!empty($headers['X-Forwarded-For'])) {
+                    $remoteIp = explode(',', $headers['X-Forwarded-For'])[0];
+                } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                    $remoteIp = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+                }
+
+                return trim($remoteIp, '[]');
+
+            default:
+                return Paynl\Helper::getIp();
+        }
+    }
+
 }

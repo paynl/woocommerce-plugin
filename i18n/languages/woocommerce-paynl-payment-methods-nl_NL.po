@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Pay. Payment Methods for WooCommerce\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce-paynl-"
 "payment-methods\n"
-"POT-Creation-Date: 2025-02-10 14:33+0100\n"
-"PO-Revision-Date: 2025-02-10 14:38+0100\n"
+"POT-Creation-Date: 2025-03-31 14:21+0200\n"
+"PO-Revision-Date: 2025-03-31 14:28+0200\n"
 "Last-Translator: \n"
 "Language-Team: Dutch; Flemish\n"
 "Language: nl\n"
@@ -271,17 +271,17 @@ msgid "Date of birth: "
 msgstr "Geboortedatum: "
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:563
-#: woocommerce-payment-paynl.php:135
+#: woocommerce-payment-paynl.php:142
 msgid "Please enter your date of birth, this field is required."
 msgstr "Vul je geboortedatum in. Dit veld is verplicht."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:571
-#: woocommerce-payment-paynl.php:134
+#: woocommerce-payment-paynl.php:141
 msgid "Please enter your VAT number, this field is required."
 msgstr "Vul je BTW-nummer in. Dit veld is verplicht."
 
 #: includes/classes/PPMFWC/Gateway/Abstract.php:579
-#: woocommerce-payment-paynl.php:132
+#: woocommerce-payment-paynl.php:139
 msgid "Please enter your COC number, this field is required."
 msgstr "Vul je KVK-nummer in. Dit veld is verplicht."
 
@@ -295,15 +295,15 @@ msgstr "Pay.: Transactie gestart: %s (%s)"
 msgid "Initial status set to %s "
 msgstr "Initiële status op %s gezet "
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:899
+#: includes/classes/PPMFWC/Gateway/Abstract.php:894
 msgid "Shipping"
 msgstr "Verzendkosten"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:915
+#: includes/classes/PPMFWC/Gateway/Abstract.php:910
 msgid "Discount"
 msgstr "Korting"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:962
+#: includes/classes/PPMFWC/Gateway/Abstract.php:957
 msgid ""
 "This transaction seems to have already been refunded or may not be captured "
 "yet. Please check the status on My.pay."
@@ -311,16 +311,16 @@ msgstr ""
 "Deze betaling is al terugbetaald of nog niet gecaptured. Controleer de "
 "status in My.pay."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:980
+#: includes/classes/PPMFWC/Gateway/Abstract.php:975
 #, php-format
 msgid "Pay.: Refunded: %s %s"
 msgstr "Pay.: Terugbetaald: %s %s"
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:984
+#: includes/classes/PPMFWC/Gateway/Abstract.php:979
 msgid "Pay. could not refund the transaction."
 msgstr "Pay. kan de transactie niet terugbetalen."
 
-#: includes/classes/PPMFWC/Gateway/Abstract.php:985
+#: includes/classes/PPMFWC/Gateway/Abstract.php:980
 msgid ""
 "A (partial) refund has just been made on this transaction, please wait a "
 "moment, and try again."
@@ -328,55 +328,42 @@ msgstr ""
 "Deze transactie is zojuist al (deels) terugbetaald. Wacht enkele minuten en "
 "probeer het dan opnieuw."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:71
-msgid "Pay safely via your bank"
-msgstr "Betaal veilig via je eigen bank"
+#: includes/classes/PPMFWC/Gateway/Billink.php:124
+msgid "B2B invoice emails"
+msgstr "B2B factuur e-mails"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:73
-msgid "Select your bank..."
-msgstr "Selecteer jouw bank..."
+#: includes/classes/PPMFWC/Gateway/Billink.php:125
+msgid "Disable invoice emails business orders."
+msgstr "Factuur-e-mails voor zakelijke bestellingen uitschakelen"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:109
-msgid "Bank selection"
-msgstr "Bankselectie"
+#: includes/classes/PPMFWC/Gateway/Billink.php:128
+msgid ""
+"Enable this option to stop sending invoice emails in case of business orders."
+msgstr ""
+"Schakel deze optie in om geen factuur-e-mails te versturen bij zakelijke "
+"bestellingen"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:111
-msgid "No bank selection"
-msgstr "Geen bankselectie"
-
-#: includes/classes/PPMFWC/Gateway/Ideal.php:112
-msgid "Select box"
-msgstr "Dropdown"
-
-#: includes/classes/PPMFWC/Gateway/Ideal.php:113
-msgid "Radio buttons"
-msgstr "Lijst"
-
-#: includes/classes/PPMFWC/Gateway/Ideal.php:116
-msgid "Select the type of bank selection."
-msgstr "Geef aan hoe de iDEAL banken weergegeven worden in de checkout."
-
-#: includes/classes/PPMFWC/Gateway/Ideal.php:122
+#: includes/classes/PPMFWC/Gateway/Ideal.php:59
 msgid "Fast checkout"
 msgstr "Snel bestellen"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:127
+#: includes/classes/PPMFWC/Gateway/Ideal.php:64
 msgid "Cart page"
 msgstr "Winkelmand pagina"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:130
-#: includes/classes/PPMFWC/Gateway/Ideal.php:141
-#: includes/classes/PPMFWC/Gateway/Ideal.php:153
+#: includes/classes/PPMFWC/Gateway/Ideal.php:67
+#: includes/classes/PPMFWC/Gateway/Ideal.php:78
+#: includes/classes/PPMFWC/Gateway/Ideal.php:90
 msgid "Off"
 msgstr "Uit"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:131
-#: includes/classes/PPMFWC/Gateway/Ideal.php:142
-#: includes/classes/PPMFWC/Gateway/Ideal.php:154
+#: includes/classes/PPMFWC/Gateway/Ideal.php:68
+#: includes/classes/PPMFWC/Gateway/Ideal.php:79
+#: includes/classes/PPMFWC/Gateway/Ideal.php:91
 msgid "On"
 msgstr "Aan"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:134
+#: includes/classes/PPMFWC/Gateway/Ideal.php:71
 msgid ""
 "Show the fast checkout button on the cart page. <br/><br/> This button "
 "allows users to checkout directly from the cart without the need to fill in "
@@ -385,11 +372,11 @@ msgstr ""
 "Toon de Snel bestellen knop op de winkelmand pagina. <br/><br/> Via de iDEAL "
 "Snel bestellen-knop, gaat men direct naar iDEAL."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:138
+#: includes/classes/PPMFWC/Gateway/Ideal.php:75
 msgid "Minicart"
 msgstr "Mini winkelmand"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:145
+#: includes/classes/PPMFWC/Gateway/Ideal.php:82
 msgid ""
 "Show the fast checkout button on the minicart. <br/><br/> This button allows "
 "users to checkout directly from the minicart without the need to fill in "
@@ -398,15 +385,15 @@ msgstr ""
 "Toon de Snel bestellen knop op de mini winkelmand. <br/><br/> Via de iDEAL "
 "Snel bestellen-knop op de mini winkelmand, gaat men direct naar iDEAL."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:146
+#: includes/classes/PPMFWC/Gateway/Ideal.php:83
 msgid "Please note that not all themes are compatible with this option."
 msgstr "Houd er rekening mee dat niet alle thema’s deze optie ondersteunen."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:150
+#: includes/classes/PPMFWC/Gateway/Ideal.php:87
 msgid "Product page"
 msgstr "Product pagina"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:158
+#: includes/classes/PPMFWC/Gateway/Ideal.php:95
 msgid ""
 "Show the fast checkout button on every product page. <br/><br/> This button "
 "allows users to checkout directly from the cart without the need to fill in "
@@ -415,15 +402,15 @@ msgstr ""
 "Toon de Snel bestellen knop op product pagina’s. <br/><br/> Hiermee gaat men "
 "vanaf de product pagina direct naar iDEAL."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:162
+#: includes/classes/PPMFWC/Gateway/Ideal.php:99
 msgid "Default shipping method"
 msgstr "Standaard verzendmethode"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:165
+#: includes/classes/PPMFWC/Gateway/Ideal.php:102
 msgid "Select the shipping method that should be applied first."
 msgstr "Selecteer de standaard verzendmethode."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:166
+#: includes/classes/PPMFWC/Gateway/Ideal.php:103
 msgid ""
 "The default shipping method will be applied to fast checkout orders when "
 "shipping method cannot be selected by user."
@@ -431,18 +418,18 @@ msgstr ""
 "De standaard verzendmethode wordt toegepast, wanneer de gebruiker geen keuze "
 "heeft voor een verzendmethode in de webshop."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:170
+#: includes/classes/PPMFWC/Gateway/Ideal.php:107
 msgid "Fallback shipping method"
 msgstr "Backup verzendmethode"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:173
+#: includes/classes/PPMFWC/Gateway/Ideal.php:110
 msgid ""
 "Select the fallback shipping method, which will be applied when the default "
 "shipping method could not be applied."
 msgstr ""
 "Selecteer welke verzendmethode in tweede instantie gebruikt moet worden."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:174
+#: includes/classes/PPMFWC/Gateway/Ideal.php:111
 msgid ""
 "In case the default shipping method could not by applied, this shipping "
 "method will be used."
@@ -451,17 +438,17 @@ msgstr ""
 "verzendmethode niet toegepast kon worden. Dit kan bijvoorbeeld zijn omdat "
 "hiervoor het bestelbedrag te laag was."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:178
+#: includes/classes/PPMFWC/Gateway/Ideal.php:115
 msgid "Guest checkout only"
 msgstr "Gast gebruikers"
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:182
+#: includes/classes/PPMFWC/Gateway/Ideal.php:119
 msgid "Show the fast checkout button, only for guest customers."
 msgstr ""
 "Alleen iDEAL Snel bestellen toepassen voor gast gebruikers. Dus gebruikers "
 "die niet met een account zijn ingelogd."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:183
+#: includes/classes/PPMFWC/Gateway/Ideal.php:120
 msgid ""
 "When enabled, the fast checkout button will only be shown on the for guest "
 "users."
@@ -470,15 +457,15 @@ msgstr ""
 "voor gast gebruikers beschikbaar zijn. Niet voor gebruikers die zijn "
 "ingelogd."
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:187
+#: includes/classes/PPMFWC/Gateway/Ideal.php:124
 msgid "Show modal"
 msgstr ""
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:191
+#: includes/classes/PPMFWC/Gateway/Ideal.php:128
 msgid "Open modal before fast checkout"
 msgstr ""
 
-#: includes/classes/PPMFWC/Gateway/Ideal.php:192
+#: includes/classes/PPMFWC/Gateway/Ideal.php:129
 msgid ""
 "When enabled, a modal explaining on how fast checkout works will show before "
 "going through with fast checkout."
@@ -529,7 +516,7 @@ msgstr "Setup"
 msgid "Payment Methods"
 msgstr "Betaalmethoden"
 
-#: includes/classes/PPMFWC/Gateways.php:206 woocommerce-payment-paynl.php:193
+#: includes/classes/PPMFWC/Gateways.php:206 woocommerce-payment-paynl.php:200
 msgid "Settings"
 msgstr "Instellingen"
 
@@ -591,9 +578,8 @@ msgid "You can set your failover gateway under "
 msgstr "Stel de failover gateway in via "
 
 #: includes/classes/PPMFWC/Gateways.php:296
-#, fuzzy
 msgid "settings"
-msgstr "Instellingen"
+msgstr "instellingen"
 
 #: includes/classes/PPMFWC/Gateways.php:298
 msgid "Pay. successfully connected."
@@ -865,20 +851,61 @@ msgid "Leave this empty unless advised otherwise by Pay. Support"
 msgstr "Laat dit veld leeg tenzij anders geadviseerd door Pay. Support"
 
 #: includes/classes/PPMFWC/Gateways.php:589
+msgid "Customer IP"
+msgstr "Klanttypes"
+
+#: includes/classes/PPMFWC/Gateways.php:592
+msgid "Default (Pay. SDK)"
+msgstr "Standaard (Pay. SDK)"
+
+#: includes/classes/PPMFWC/Gateways.php:593
+msgid "WooCommerce Order IP"
+msgstr "WooCommerce Order IP"
+
+#: includes/classes/PPMFWC/Gateways.php:594
+msgid "HTTP forwarded"
+msgstr "HTTP forwarded"
+
+#: includes/classes/PPMFWC/Gateways.php:595
+#, fuzzy
+#| msgid "Test IP address"
+msgid "Remote address"
+msgstr "Test IP-adres"
+
+#: includes/classes/PPMFWC/Gateways.php:597
+#, fuzzy
+#| msgid "Choose the pin terminal"
+msgid "Choose how customer IP is determined."
+msgstr "Kies de pin terminal"
+
+#: includes/classes/PPMFWC/Gateways.php:598
+msgid ""
+"This setting allows you to define which customer IP is sent to Pay when "
+"initiating a transaction. If the default IP address doesn't work as "
+"expected, you can manually select an alternative here."
+msgstr ""
+"Hier stel je in welk klant-IP naar Pay wordt meegestuurd bij het starten van "
+"een transactie. Werkt het standaard IP-adres niet zoals verwacht, dan kun je "
+"hier handmatig een alternatief kiezen."
+
+#: includes/classes/PPMFWC/Gateways.php:603
 msgid "SSL verification"
 msgstr "SSL verification"
 
-#: includes/classes/PPMFWC/Gateways.php:591
+#: includes/classes/PPMFWC/Gateways.php:605
 msgid ""
 "Enabled by default for secure communications. Strongly recommended to leave "
 "this enabled, unless otherwise advised by Pay. Support."
 msgstr ""
+"Standaard ingeschakeld voor veilige communicatie. Het is sterk aanbevolen om "
+"deze instelling ingeschakeld te laten, tenzij anders geadviseerd door Pay "
+"Support."
 
-#: includes/classes/PPMFWC/Gateways.php:596
+#: includes/classes/PPMFWC/Gateways.php:610
 msgid "Extended logging"
 msgstr "Uitgebreide logging"
 
-#: includes/classes/PPMFWC/Gateways.php:598
+#: includes/classes/PPMFWC/Gateways.php:612
 msgid ""
 "Log payment information. Logfiles can be found at: WooCommerce > Status > "
 "Logs"
@@ -886,37 +913,37 @@ msgstr ""
 "Log betaalproces informatie. Deze kun je ophalen via: WooCommerce > Status > "
 "Logs"
 
-#: includes/classes/PPMFWC/Gateways.php:605
+#: includes/classes/PPMFWC/Gateways.php:619
 msgid "Use high risk methods"
 msgstr "Gebruik hoog risico betaalmethoden"
 
-#: includes/classes/PPMFWC/Gateways.php:607
+#: includes/classes/PPMFWC/Gateways.php:621
 msgid "Enable when you are using high risk payment methods"
 msgstr "Selecteer om hoog risico betaalmethoden te gebruiken"
 
-#: includes/classes/PPMFWC/Gateways.php:635
+#: includes/classes/PPMFWC/Gateways.php:649
 msgid "Pay. Setup"
 msgstr "Pay. Setup"
 
-#: includes/classes/PPMFWC/Gateways.php:641
+#: includes/classes/PPMFWC/Gateways.php:655
 msgid "Token Code *"
 msgstr "Token code *"
 
-#: includes/classes/PPMFWC/Gateways.php:646
+#: includes/classes/PPMFWC/Gateways.php:660
 msgid "The AT-code belonging to your API token, you can find this "
 msgstr "De AT-code behorende bij de API token, deze kun je vinden in "
 
-#: includes/classes/PPMFWC/Gateways.php:649
-#: includes/classes/PPMFWC/Gateways.php:660
-#: includes/classes/PPMFWC/Gateways.php:673
+#: includes/classes/PPMFWC/Gateways.php:663
+#: includes/classes/PPMFWC/Gateways.php:674
+#: includes/classes/PPMFWC/Gateways.php:687
 msgid "here"
 msgstr "My.pay"
 
-#: includes/classes/PPMFWC/Gateways.php:653
+#: includes/classes/PPMFWC/Gateways.php:667
 msgid "API token"
 msgstr "API token"
 
-#: includes/classes/PPMFWC/Gateways.php:657
+#: includes/classes/PPMFWC/Gateways.php:671
 msgid ""
 "The API token used to communicate with the Pay. API, you can find your API "
 "token "
@@ -924,27 +951,27 @@ msgstr ""
 "Een API token wordt gebruikt om met de API van Pay. te communiceren, je kunt "
 "de API token vinden in "
 
-#: includes/classes/PPMFWC/Gateways.php:665
+#: includes/classes/PPMFWC/Gateways.php:679
 msgid "Sales Location *"
 msgstr "Verkooplocatie *"
 
-#: includes/classes/PPMFWC/Gateways.php:670
+#: includes/classes/PPMFWC/Gateways.php:684
 msgid "The SL-code of your Sales Location, you can find your SL-code "
 msgstr "De SL-code van jouw verkooplocatie, deze kun je vinden in "
 
-#: includes/classes/PPMFWC/Gateways.php:675
+#: includes/classes/PPMFWC/Gateways.php:689
 msgid "The Sales Location should be in the following format: SL-xxxx-xxxx"
 msgstr "De verkooplocatie moet in het volgende formaat zijn: SL-xxxx-xxxx"
 
-#: includes/classes/PPMFWC/Gateways.php:678
+#: includes/classes/PPMFWC/Gateways.php:692
 msgid "Test mode"
 msgstr "Testmodus"
 
-#: includes/classes/PPMFWC/Gateways.php:680
+#: includes/classes/PPMFWC/Gateways.php:694
 msgid "Enable to start transactions in test mode"
 msgstr "Selecteer deze optie om betalingen in testmodus te starten"
 
-#: includes/classes/PPMFWC/Gateways.php:809
+#: includes/classes/PPMFWC/Gateways.php:823
 #, php-format
 msgid ""
 "Unfortunately the payment has been denied by %s. Please try again or use "
@@ -953,7 +980,7 @@ msgstr ""
 "Helaas is de betaling door %s afgewezen. Probeer het opnieuw of kies een "
 "andere betaalmethode."
 
-#: includes/classes/PPMFWC/Gateways.php:818
+#: includes/classes/PPMFWC/Gateways.php:832
 msgid ""
 "Unfortunately the payment has been denied by the payment method. Please try "
 "again or use another payment method."
@@ -961,11 +988,11 @@ msgstr ""
 "Helaas is de betaling door de betaalmethode afgewezen. Probeer het opnieuw "
 "of kies een andere betaalmethode."
 
-#: includes/classes/PPMFWC/Gateways.php:1215
+#: includes/classes/PPMFWC/Gateways.php:1229
 msgid "The payment has been cancelled, please try again"
 msgstr "De betaling is geannuleerd, probeer het opnieuw"
 
-#: includes/classes/PPMFWC/Gateways.php:1223
+#: includes/classes/PPMFWC/Gateways.php:1237
 msgid "The payment is pending or not completed"
 msgstr "De betaling moet worden verwerkt of is nog niet afgerond"
 
@@ -1032,7 +1059,7 @@ msgstr "Controle nodig. "
 
 #: includes/classes/PPMFWC/Hooks/FastCheckout/Buttons.php:172
 msgid "Order faster"
-msgstr ""
+msgstr "Sneller bestellen"
 
 #: includes/classes/PPMFWC/Hooks/FastCheckout/Buttons.php:172
 #, fuzzy
@@ -1053,7 +1080,7 @@ msgstr "Snel bestellen"
 
 #: includes/classes/PPMFWC/Hooks/FastCheckout/Buttons.php:179
 msgid "Enter my own address and pay"
-msgstr ""
+msgstr "Mijn eigen adresgegevens invoeren"
 
 #: includes/classes/PPMFWC/Hooks/FastCheckout/Start.php:284
 msgid "Pay.: Created iDEAL Fast Checkout order"
@@ -1072,29 +1099,29 @@ msgstr ""
 msgid "Woocommerce not found"
 msgstr "Woocommerce niet gevonden"
 
-#: woocommerce-payment-paynl.php:128
+#: woocommerce-payment-paynl.php:135
 msgid "Issuer"
 msgstr "Bank"
 
-#: woocommerce-payment-paynl.php:129
+#: woocommerce-payment-paynl.php:136
 msgid "Select an issuer"
 msgstr "Selecteer een bank"
 
-#: woocommerce-payment-paynl.php:130
+#: woocommerce-payment-paynl.php:137
 msgid "Date of birth"
 msgstr "Geboortedatum"
 
-#: woocommerce-payment-paynl.php:131 woocommerce-payment-paynl.php:264
-#: woocommerce-payment-paynl.php:313
+#: woocommerce-payment-paynl.php:138 woocommerce-payment-paynl.php:271
+#: woocommerce-payment-paynl.php:320
 msgid "COC number"
 msgstr "KVK-nummer"
 
-#: woocommerce-payment-paynl.php:133 woocommerce-payment-paynl.php:208
-#: woocommerce-payment-paynl.php:290
+#: woocommerce-payment-paynl.php:140 woocommerce-payment-paynl.php:215
+#: woocommerce-payment-paynl.php:297
 msgid "VAT number"
 msgstr "BTW-nummer"
 
-#: woocommerce-payment-paynl.php:174
+#: woocommerce-payment-paynl.php:181
 msgid ""
 "The Pay. Payment Methods for WooCommerce plugin requires WooCommerce to be "
 "active"
@@ -1102,7 +1129,7 @@ msgstr ""
 "Om Pay. Betaalmethoden voor WooCommerce te kunnen gebruiken, moet "
 "WooCommerce geactiveerd zijn"
 
-#: woocommerce-payment-paynl.php:183
+#: woocommerce-payment-paynl.php:190
 msgid ""
 "Curl is not installed. In order to use the Pay. payment methods, you must "
 "install install CURL. Ask your system administrator to install php_curl."
@@ -1111,47 +1138,68 @@ msgstr ""
 "kunnen gebruiken, moet CURL geïnstalleerd zijn. Vraag je systeembeheerder om "
 "php_curl te installeren."
 
-#: woocommerce-payment-paynl.php:209
+#: woocommerce-payment-paynl.php:216
 msgid "Enter your VAT number"
 msgstr "Vul jouw BTW-nummer in"
 
-#: woocommerce-payment-paynl.php:265
+#: woocommerce-payment-paynl.php:272
 msgid "Enter your COC number"
 msgstr "Vul jouw KVK-nummer in"
 
-#: woocommerce-payment-paynl.php:339
+#: woocommerce-payment-paynl.php:346
 #, php-format
 msgid "Pay.: Performed auto capture on transaction: %s"
 msgstr "Pay.: Succesvolle auto capture uitgevoerd voor transactie: %s"
 
-#: woocommerce-payment-paynl.php:351
+#: woocommerce-payment-paynl.php:358
 #, php-format
 msgid "Pay.: Performed auto void on transaction: %s"
 msgstr "Pay.: Succesvol auto void uitgevoerd voor transactie: %s"
 
-#: woocommerce-payment-paynl.php:384
+#: woocommerce-payment-paynl.php:391
 msgid "Refund amount must be greater than €0.00"
 msgstr "Het terug te betalen bedrag moet groter dan 0 zijn"
 
-#: woocommerce-payment-paynl.php:385
+#: woocommerce-payment-paynl.php:392
 msgid "Invalid refund amount"
 msgstr "Ongeldig bedrag voor terugbetaling"
 
-#: woocommerce-payment-paynl.php:386
+#: woocommerce-payment-paynl.php:393
 msgid "Error processing refund. Please try again."
 msgstr "Terugbetaling niet gelukt. Probeer het opnieuw."
 
-#: woocommerce-payment-paynl.php:387
+#: woocommerce-payment-paynl.php:394
 msgid "Refund"
 msgstr "Terugbetaling"
 
-#: woocommerce-payment-paynl.php:388
+#: woocommerce-payment-paynl.php:395
 msgid "via Retourpinnen"
 msgstr "via Retourpinnen"
 
-#: woocommerce-payment-paynl.php:389
+#: woocommerce-payment-paynl.php:396
 msgid "via Pay."
 msgstr "Via Pay."
+
+#~ msgid "Pay safely via your bank"
+#~ msgstr "Betaal veilig via je eigen bank"
+
+#~ msgid "Select your bank..."
+#~ msgstr "Selecteer jouw bank..."
+
+#~ msgid "Bank selection"
+#~ msgstr "Bankselectie"
+
+#~ msgid "No bank selection"
+#~ msgstr "Geen bankselectie"
+
+#~ msgid "Select box"
+#~ msgstr "Dropdown"
+
+#~ msgid "Radio buttons"
+#~ msgstr "Lijst"
+
+#~ msgid "Select the type of bank selection."
+#~ msgstr "Geef aan hoe de iDEAL banken weergegeven worden in de checkout."
 
 #~ msgid "Local transaction not found: "
 #~ msgstr "Transactie niet gevonden: "
@@ -1221,9 +1269,6 @@ msgstr "Via Pay."
 
 #~ msgid "Choose your bank"
 #~ msgstr "Kies uw bank"
-
-#~ msgid "Choose the pin terminal"
-#~ msgstr "Kies de pin terminal"
 
 #~ msgid "Show Payment Method Logos"
 #~ msgstr "Toon Logo's Betaalmethoden"
