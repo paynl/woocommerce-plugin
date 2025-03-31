@@ -1001,34 +1001,33 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @param string $orderIp
-     * @return string
+     * @param $orderIp
+     * @return mixed|string
      */
     private function getIpAddress($orderIp)
     {
         switch (get_option('paynl_test_ipadress')) {
             case 'orderremoteaddress':
-                $ipAddress = $orderIp;
-                break;
+                return $orderIp;
+
             case 'remoteaddress':
-                $ipAddress = $_SERVER['REMOTE_ADDR'] ?? '';
-                break;
+                return $_SERVER['REMOTE_ADDR'] ?? '';
+
             case 'httpforwarded':
-                $headers = function_exists('getallheaders') ? getallheaders() : $_SERVER;
+                $headers = function_exists('getallheaders') ? getallheaders() : [];
                 $remoteIp = $_SERVER['REMOTE_ADDR'] ?? '';
 
                 if (!empty($headers['X-Forwarded-For'])) {
                     $remoteIp = explode(',', $headers['X-Forwarded-For'])[0];
-                } elseif (!empty($headers['HTTP_X_FORWARDED_FOR'])) {
-                    $remoteIp = explode(',', $headers['HTTP_X_FORWARDED_FOR'])[0];
+                } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                    $remoteIp = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
                 }
 
-                $ipAddress = trim($remoteIp, '[]');
-                break;
-            default:
-                $ipAddress = Paynl\Helper::getIp();
-        }
+                return trim($remoteIp, '[]');
 
-        return $ipAddress;
+            default:
+                return Paynl\Helper::getIp();
+        }
     }
+
 }
