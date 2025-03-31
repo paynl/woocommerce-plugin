@@ -595,6 +595,7 @@ class PPMFWC_Gateways
                     'remoteaddress' => esc_html(__('Remote address', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 ),
                 'desc' => esc_html(__('Choose how customer IP is determined.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'desc_tip' => __('This setting allows you to define which customer IP is sent to Pay when initiating a transaction. If the default IP address doesn\'t work as expected, you can manually select an alternative here.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                 'id' => 'paynl_customer_ip',
                 'default' => 'default',
             );
