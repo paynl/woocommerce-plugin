@@ -644,9 +644,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $exchangeUrl = $strAlternativeExchangeUrl;
         }
 
-        $orderIp = $order->get_customer_ip_address();
-        $ipAddress = $this->getIpAddress($orderIp);
-
         $currency = $order->get_currency();
         $order_id = $order->get_id();
         $billing_country = $order->get_billing_country();
@@ -671,7 +668,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             'extra1'        => apply_filters('paynl-extra1', $order->get_order_number(), $order),
             'extra2'        => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
             'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
-            'ipaddress'     => $ipAddress,
+            'ipaddress'     => $this->getIpAddress($order),
             'object'        => PPMFWC_Helper_Data::getObject(),
         );
 
@@ -1001,11 +998,12 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @param $orderIp
+     * @param $order
      * @return mixed|string
      */
-    private function getIpAddress($orderIp)
+    private function getIpAddress($order)
     {
+        $orderIp = $order->get_customer_ip_address();
         switch (get_option('paynl_test_ipadress')) {
             case 'orderremoteaddress':
                 return $orderIp;
