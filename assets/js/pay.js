@@ -36,15 +36,11 @@ jQuery(document).ready(function () {
     });
 
     jQuery('.obscuredInput').each(function () {
-        var input = this;
-        var label = jQuery('label[for="' + jQuery(this).attr('name') + '"]');
-        button = jQuery('<a class="obscuredDisplayShow"></a>');
-        button.click(function () {
-          toggleObscured(input);
-        });
-        button.insertAfter(input);
+      var input = this;
+      jQuery('<a class="obscuredDisplayShow"></a>').click(function () {
+        toggleObscured(input)
+      }).insertAfter(input);
     })
-
 });
 
 function toggleObscured (element) {
