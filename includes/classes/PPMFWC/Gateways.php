@@ -586,6 +586,20 @@ class PPMFWC_Gateways
                 'id' => 'paynl_custom_failover_gateway',
             );
             $addedSettings[] = array(
+                'name' => __('Customer IP', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'select',
+                'options' => array(
+                    'default' => esc_html(__('Default (Pay. SDK)', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'orderremoteaddress' => esc_html(__('WooCommerce Order IP', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'httpforwarded' => esc_html(__('HTTP forwarded', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                    'remoteaddress' => esc_html(__('Remote address', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                ),
+                'desc' => esc_html(__('Choose how customer IP is determined.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'desc_tip' => __('This setting allows you to define which customer IP is sent to Pay when initiating a transaction. If the default IP address doesn\'t work as expected, you can manually select an alternative here.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'id' => 'paynl_customer_ip',
+                'default' => 'default',
+            );
+            $addedSettings[] = array(
                 'name' => esc_html(__('SSL verification', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
                 'desc' => esc_html(__('Enabled by default for secure communications. Strongly recommended to leave this enabled, unless otherwise advised by Pay. Support.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore

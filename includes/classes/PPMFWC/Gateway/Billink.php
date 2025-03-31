@@ -111,4 +111,22 @@ class PPMFWC_Gateway_Billink extends PPMFWC_Gateway_Abstract
     {
         return get_option('paynl_show_coc_number') == "yes_required";
     }
+
+    /**
+     * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     */
+    public function init_form_fields()
+    {
+        parent::init_form_fields();
+        $optionId = $this->getOptionId();
+        if (PPMFWC_Helper_Data::isOptionAvailable($optionId)) {
+            $this->form_fields['b2b_invoices_disabled'] = array(
+                'title' => esc_html(__('B2B invoice emails', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'label' => esc_html(__('Disable invoice emails business orders.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'checkbox',
+                'default' => 'no',
+                'description' => esc_html(__('Enable this option to stop sending invoice emails in case of business orders.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
+            );
+        }
+    }
 }
