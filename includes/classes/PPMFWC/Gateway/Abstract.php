@@ -84,26 +84,35 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     }
 
     /**
-     * @return array
+     * @return array|mixed
+     * @throws Exception
      */
     public function get_all_shipping_methods()
     {
-        $zones = array();
-        $data_store = WC_Data_Store::load('shipping-zone');
-        $raw_zones = $data_store->get_zones();
-        foreach ($raw_zones as $raw_zone) {
-            $zones[] = new WC_Shipping_Zone($raw_zone);
-        }
-        $zones[] = new WC_Shipping_Zone(0);
+        $cache_key = 'paynl_shipping_methods_wll_' . get_current_blog_id();
 
-        $shippingMethods = array();
+        $shippingMethods = get_transient($cache_key);
 
-        foreach ($zones as $zone) {
-            $zoneName = $zone->get_zone_name();
-            $zone_shipping_methods = $zone->get_shipping_methods();
-            foreach ($zone_shipping_methods as $method) {
-                $shippingMethods[$method->get_rate_id()] = '[' . $zoneName . '] ' . $method->get_title();
+        if ($shippingMethods === false) {
+            $zones = array();
+            $data_store = WC_Data_Store::load('shipping-zone');
+            $raw_zones = $data_store->get_zones();
+            foreach ($raw_zones as $raw_zone) {
+                $zones[] = new WC_Shipping_Zone($raw_zone);
             }
+            $zones[] = new WC_Shipping_Zone(0);
+
+            $shippingMethods = array();
+
+            foreach ($zones as $zone) {
+                $zoneName = $zone->get_zone_name();
+                $zone_shipping_methods = $zone->get_shipping_methods();
+                foreach ($zone_shipping_methods as $method) {
+                    $shippingMethods[$method->get_rate_id()] = '[' . $zoneName . '] ' . $method->get_title();
+                }
+            }
+
+            set_transient($cache_key, $shippingMethods, 5);
         }
 
         return $shippingMethods;
