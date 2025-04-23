@@ -134,11 +134,3 @@
     margin-top: 5px;
     margin-left: 5px;
 }
-
-tr:has(#paynl_externalrefund) ~ tr:has(#paynl_externalrefund_restock) {
-    display: none;
-}
-
-tr:has(#paynl_externalrefund:checked) ~ tr:has(#paynl_externalrefund_restock) {
-    display: table-row;
-}
