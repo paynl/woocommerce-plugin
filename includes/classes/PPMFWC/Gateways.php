@@ -1024,14 +1024,6 @@ class PPMFWC_Gateways
         $arrActions = self::ppmfwc_getPayActions();
         $message = 'TRUE|Ignoring ' . $action;
 
-        if (PPMFWC_Hooks_FastCheckout_Exchange::isPaymentBasedCheckout($params)) {
-            if ($action == self::ACTION_NEWPPT) {
-                if ($wc_order_id) {
-                    PPMFWC_Hooks_FastCheckout_Exchange::addAddressToOrder($params, $wc_order_id);
-                }
-            }
-        }
-
         ob_start();
         try {
             if ($action == self::ACTION_NEWPPT) {
@@ -1049,7 +1041,7 @@ class PPMFWC_Gateways
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id, 'methodid' => $methodId));
 
                 # Try to update the orderstatus.
-                $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status, $methodId);
+                $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status, $methodId, $params);
                 $message = 'TRUE|Status updated to ' . $newStatus;
             }
         } catch (PPMFWC_Exception_Notice $e) {

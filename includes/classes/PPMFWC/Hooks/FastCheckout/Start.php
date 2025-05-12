@@ -58,6 +58,9 @@ class PPMFWC_Hooks_FastCheckout_Start
             $transactionId = $result['transactionId'];
             $redirectUrl = $result['redirectURL'];
 
+            $order->update_meta_data('transactionId', $transactionId);
+            $order->save();
+
             PPMFWC_Helper_Transaction::newTransaction($transactionId, $data['paymentMethod'], $order->get_total(), $order->get_id(), '');
 
             wp_redirect($redirectUrl);

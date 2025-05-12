@@ -137,10 +137,11 @@ class PPMFWC_Helper_Transaction
     }
 
     /**
-     * @param string $transactionId TransactionID from PAY
-     * @param null $status
-     * @param null $methodid PAY's payment profile id
-     * @return mixed|string|void
+     * @param $transactionId
+     * @param $status
+     * @param $methodid
+     * @param array $params
+     * @return mixed|string|null
      * @throws PPMFWC_Exception
      * @throws PPMFWC_Exception_Notice
      * @throws \Paynl\Error\Api
@@ -148,7 +149,7 @@ class PPMFWC_Helper_Transaction
      * @throws \Paynl\Error\Required\ApiToken
      * @throws \Paynl\Error\Required\ServiceId
      */
-    public static function processTransaction($transactionId, $status = null, $methodid = null)
+    public static function processTransaction($transactionId, $status = null, $methodid = null, array $params = [])
     {
         # Retrieve local payment state
         $transactionLocalDB = self::getTransaction($transactionId);
@@ -236,6 +237,14 @@ class PPMFWC_Helper_Transaction
                 if (!in_array($order->get_total(), $transactionPaid)) {
                     $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), implode(' / ', $transactionPaid), $order->get_total())); // phpcs:ignore
                 } else {
+
+                    if (PPMFWC_Hooks_FastCheckout_Exchange::isPaymentBasedCheckout($params)) {
+                        if ($transactionId == $order->get_meta('transactionId')) {
+                            PPMFWC_Helper_Data::ppmfwc_payLogger('adding AddressToOrder' . print_r($params, true));;
+                            PPMFWC_Hooks_FastCheckout_Exchange::addAddressToOrder($params, $order);
+                        }
+                    }
+
                     if ($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE) {
                         $method = $order->get_payment_method();
                         $methodSettings = get_option('woocommerce_' . $method . '_settings');

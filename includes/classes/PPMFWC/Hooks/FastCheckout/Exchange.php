@@ -24,11 +24,11 @@ class PPMFWC_Hooks_FastCheckout_Exchange
 
     /**
      * @param array $params
-     * @param string $orderId
+     * @param $order
      * @return void
      * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
-    public static function addAddressToOrder($params, $orderId)
+    public static function addAddressToOrder(array $params, $order)
     {
         $checkoutData = $params['checkoutData'];
         $customerData = $checkoutData['customer'] ?? null;
@@ -63,11 +63,8 @@ class PPMFWC_Hooks_FastCheckout_Exchange
             'country' => $shippingAddressData['countryCode'] ?? '',
         );
 
-        $order = new WC_Order($orderId);
-
         $order->set_address($billingAddress, 'billing');
         $order->set_address($shippingAddress, 'shipping');
-
         $order->save();
     }
 }

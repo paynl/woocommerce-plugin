@@ -389,7 +389,7 @@ function ppmfwc_add_order_js($order)
                 $instoreGateway = $payment_gateways->payment_gateways()['pay_gateway_instore'];
 
                 if (!empty($transactionLocalDB)) {
-                    # A Pay. transaction exists, therefore show the button for the retourpin option
+                    # A Pay. transaction exists, therefore, show the button for the retourpin option
                     $texts = array(
                         'i18n_refund_error_zero' => __("Refund amount must be greater than €0.00", PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                         'i18n_refund_invalid' => __('Invalid refund amount', 'woocommerce'),
