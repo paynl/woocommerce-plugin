@@ -240,7 +240,7 @@ class PPMFWC_Helper_Transaction
 
                     if (PPMFWC_Hooks_FastCheckout_Exchange::isPaymentBasedCheckout($params)) {
                         if ($transactionId == $order->get_meta('transactionId')) {
-                            PPMFWC_Helper_Data::ppmfwc_payLogger('adding AddressToOrder' . print_r($params, true));;
+                            PPMFWC_Helper_Data::ppmfwc_payLogger('adding AddressToOrder');
                             PPMFWC_Hooks_FastCheckout_Exchange::addAddressToOrder($params, $order);
                         }
                     }
