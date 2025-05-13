@@ -417,7 +417,7 @@ class PPMFWC_Helper_Transaction
      * @param $tokenCode
      * @param $apiToken
      * @param string $method
-     * @return mixed
+     * @return array
      * @throws Exception
      */
     public function sendRequest($requestUrl, $payload = null, $tokenCode, $apiToken, string $method = 'POST')
