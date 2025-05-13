@@ -23,14 +23,15 @@ class PPMFWC_Hooks_FastCheckout_Exchange
     }
 
     /**
-     * @param array $params
-     * @param $order
+     * Adds billing and shipping address information to the given order based on provided checkout data.
+     *
+     * @param array $checkoutData An associative array containing customer, billing, and shipping address data.
+     * @param object $order The order object to which the addresses will be added.
      * @return void
      * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
      */
-    public static function addAddressToOrder(array $params, $order)
+    public static function addAddressToOrder(array $checkoutData, $order)
     {
-        $checkoutData = $params['checkoutData'];
         $customerData = $checkoutData['customer'] ?? null;
         $billingAddressData = $checkoutData['billingAddress'] ?? null;
         $shippingAddressData = $checkoutData['shippingAddress'] ?? null;
