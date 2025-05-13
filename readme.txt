@@ -4,9 +4,9 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 3.5.1
-Stable tag: 3.21.0
-Tested up to: 6.7.2
-WC tested up to: 9.7.0
+Stable tag: 3.21.1
+Tested up to: 6.8
+WC tested up to: 9.8.1
 WC requires at least: 3.0
 Requires PHP: 7.0
 License: GPLv2
@@ -45,7 +45,7 @@ The full list of payment methods implemented in the WooCommerce omnichannel paym
 A brief overview of some of the options:
 **Internetbanking** : iDEAL, Bancontact, Giropay, EPS, Sofort....
 **Creditcards** : Visa, Mastercard, AMEX...
-**Buy Now Pay Later / Instalments** : iDEAL in3, Riverty, Klarna, Billink, SprayPay...
+**Buy Now Pay Later / Instalments** : iDEAL in3, Riverty - Achteraf betalen, Klarna, Billink, SprayPay...
 **Wallets** : PayPal, Amazon Pay, WeChat Pay, AliPay, ApplePay...
 **Vouchers & prepaid** : Paysafecard, VVV Giftcard, Fashion Cheque, YourGift, Givacard...
 **Instore** payments: can be enabled when you have a card terminal via Pay.
@@ -148,7 +148,7 @@ At the moment the plugin supports the following payment methods:
 * Podiumcadeaukaart
 * Postepay
 * Przelewy24
-* Riverty
+* Riverty - Achteraf betalen
 * Shoes & Sneakers
 * Sodexo
 * Sofortbanking
@@ -188,6 +188,10 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 3.21.1 =
+Added a setting to control stock hold
+Updated Riverty branding
+Improved validation to enhance security and transaction integrity
 = 3.21.0 =
 Added support for payments at pickup locations.
 Added IP Mode setting
