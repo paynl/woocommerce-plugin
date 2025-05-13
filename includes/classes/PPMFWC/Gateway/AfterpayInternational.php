@@ -21,7 +21,7 @@ class PPMFWC_Gateway_AfterpayInternational extends PPMFWC_Gateway_Abstract
      */
     public static function getName()
     {
-        return 'Riverty';
+        return 'Riverty - Achteraf betalen';
     }
 
     /**
