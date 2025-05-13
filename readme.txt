@@ -189,7 +189,6 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 
 == Changelog ==
 = 3.21.1 =
-Added a setting to control stock hold
 Updated Riverty branding
 Improved validation to enhance security and transaction integrity
 = 3.21.0 =
