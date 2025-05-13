@@ -185,6 +185,10 @@ class PPMFWC_Helper_Transaction
         if (PPMFWC_Hooks_FastCheckout_Exchange::isPaymentBasedCheckout($params)) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('getting tgu-status');
             $transaction = self::getTguStatus($transactionId);
+            if (!$transaction) {
+                $order->add_order_note(esc_html(__('Pay.: Could not update address info. Please check your order at Pay.')));
+                throw new PPMFWC_Exception_Notice('Could not retrieve tgu status for ' . $transactionId);
+            }
         } else {
             PPMFWC_Helper_Data::ppmfwc_payLogger('getting gms-status');
             $transaction = \Paynl\Transaction::status($transactionId);
