@@ -137,10 +137,11 @@ class PPMFWC_Helper_Transaction
     }
 
     /**
-     * @param string $transactionId TransactionID from PAY
-     * @param null $status
-     * @param null $methodid PAY's payment profile id
-     * @return mixed|string|void
+     * @param $transactionId
+     * @param $status
+     * @param $methodid
+     * @param array $params
+     * @return mixed|string|null
      * @throws PPMFWC_Exception
      * @throws PPMFWC_Exception_Notice
      * @throws \Paynl\Error\Api
@@ -148,7 +149,7 @@ class PPMFWC_Helper_Transaction
      * @throws \Paynl\Error\Required\ApiToken
      * @throws \Paynl\Error\Required\ServiceId
      */
-    public static function processTransaction($transactionId, $status = null, $methodid = null)
+    public static function processTransaction($transactionId, $status = null, $methodid = null, array $params = [])
     {
         # Retrieve local payment state
         $transactionLocalDB = self::getTransaction($transactionId);
@@ -181,11 +182,21 @@ class PPMFWC_Helper_Transaction
         # Retrieve Pay. transaction paymentstate
         PPMFWC_Gateway_Abstract::loginSDK(true);
 
-        $transaction = \Paynl\Transaction::status($transactionId);
+        if (PPMFWC_Hooks_FastCheckout_Exchange::isPaymentBasedCheckout($params)) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('getting tgu-status');
+            $transaction = self::getTguStatus($transactionId);
+            if (!$transaction) {
+                $order->add_order_note(esc_html(__('Pay.: Could not update address info. Please check your order at Pay.')));
+                throw new PPMFWC_Exception_Notice('Could not retrieve tgu status for ' . $transactionId);
+            }
+        } else {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('getting gms-status');
+            $transaction = \Paynl\Transaction::status($transactionId);
+        }
 
         if (empty($transactionLocalDB)) {
-              PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
-              PPMFWC_Helper_Transaction::newTransaction($transactionId, $methodid ?? 0, $order->get_total(), $orderId, 'start-data');
+            PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
+            PPMFWC_Helper_Transaction::newTransaction($transactionId, $methodid ?? 0, $order->get_total(), $orderId, 'start-data');
         }
 
         $transactionPaid = array($transaction->getCurrencyAmount(), $transaction->getPaidCurrencyAmount(), $transaction->getPaidAmount());
@@ -236,6 +247,14 @@ class PPMFWC_Helper_Transaction
                 if (!in_array($order->get_total(), $transactionPaid)) {
                     $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), implode(' / ', $transactionPaid), $order->get_total())); // phpcs:ignore
                 } else {
+
+                    if (PPMFWC_Hooks_FastCheckout_Exchange::isPaymentBasedCheckout($params)) {
+                        if ($transactionId == $order->get_meta('transactionId')) {
+                            PPMFWC_Helper_Data::ppmfwc_payLogger('adding AddressToOrder');
+                            PPMFWC_Hooks_FastCheckout_Exchange::addAddressToOrder($transaction->getCheckoutData(), $order);
+                        }
+                    }
+
                     if ($payApiStatus == PPMFWC_Gateways::STATUS_AUTHORIZE) {
                         $method = $order->get_payment_method();
                         $methodSettings = get_option('woocommerce_' . $method . '_settings');
@@ -373,9 +392,77 @@ class PPMFWC_Helper_Transaction
     }
 
     /**
-     * @param order $order
-     * @param integer $amount
+     * @param $transactionId
+     * @return false|PPMFWC_Model_PayOrder
+     */
+    public static function getTguStatus($transactionId)
+    {
+        try {
+            $response = self::sendRequest('https://connect.pay.nl/v1/orders/' . $transactionId . '/status',
+                null,
+                get_option('paynl_tokencode'),
+                get_option('paynl_apitoken'),
+                'GET');
+
+            return new PPMFWC_Model_PayOrder($response);
+
+        } catch (Exception $e) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Notice: get tgu status failed: ' . $e->getMessage());
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $requestUrl
+     * @param $payload
+     * @param $tokenCode
+     * @param $apiToken
+     * @param string $method
+     * @return array
+     * @throws Exception
+     */
+    public static function sendRequest($requestUrl, $payload = null, $tokenCode, $apiToken, string $method = 'POST')
+    {
+        $authorization = base64_encode($tokenCode . ':' . $apiToken);
+
+        $args = [
+            'method'  => $method,
+            'headers' => [
+                'Authorization' => 'Basic ' . $authorization,
+                'Content-Type'  => 'application/json',
+                'Accept'        => 'application/json',
+            ],
+            'timeout' => 30,
+        ];
+
+        if (!empty($payload)) {
+            $args['body'] = $payload;
+        }
+
+        $response = wp_remote_request($requestUrl, $args);
+
+        if (is_wp_error($response)) {
+            throw new \Exception($response->get_error_message());
+        }
+
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body, true); // decode as array
+
+        if (!empty($data['violations'])) {
+            $field = $data['violations'][0]['propertyPath'] ?? ($data['violations'][0]['code'] ?? '');
+            throw new \Exception($field . ': ' . ($data['violations'][0]['message'] ?? ''));
+        }
+
+        return $data;
+    }
+
+
+    /**
+     * @param $order
+     * @param $amount
      * @return void
+     * @throws PPMFWC_Exception
      */
     public static function processRefund($order, $amount)
     {
