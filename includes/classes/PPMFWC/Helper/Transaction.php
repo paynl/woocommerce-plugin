@@ -393,7 +393,7 @@ class PPMFWC_Helper_Transaction
      * @param $transactionId
      * @return false|PPMFWC_Model_PayOrder
      */
-    public function getTguStatus($transactionId)
+    public static function getTguStatus($transactionId)
     {
         try {
             $response = self::sendRequest('https://connect.pay.nl/v1/orders/' . $transactionId . '/status',
@@ -420,7 +420,7 @@ class PPMFWC_Helper_Transaction
      * @return array
      * @throws Exception
      */
-    public function sendRequest($requestUrl, $payload = null, $tokenCode, $apiToken, string $method = 'POST')
+    public static function sendRequest($requestUrl, $payload = null, $tokenCode, $apiToken, string $method = 'POST')
     {
         $authorization = base64_encode($tokenCode . ':' . $apiToken);
 
