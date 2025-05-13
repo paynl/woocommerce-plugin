@@ -19,7 +19,7 @@ class PPMFWC_Hooks_FastCheckout_Exchange
      */
     public static function isPaymentBasedCheckout($params)
     {
-        return $params['type'] == "payment_based_checkout" && !empty($params['checkoutData'] ?? '');
+        return ($params['type'] ?? '') == "payment_based_checkout" && !empty($params['checkoutData'] ?? '');
     }
 
     /**
