@@ -496,6 +496,13 @@ class PPMFWC_Gateways
                 'default' => 'no',
             );
             $addedSettings[] = array(
+                'name' => __('Refund restock', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'checkbox',
+                'desc' => esc_html(__("Restock supply in WooCommerce upon refunds that are initiated in My.pay", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_externalrefund_restock',
+                'default' => 'yes',
+            );
+            $addedSettings[] = array(
                 'name' => esc_html(__('Auto capture', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
                 'desc' => esc_html(__('Enable auto capture for authorized transactions. Captures will be initiated when an order is set to Completed.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
