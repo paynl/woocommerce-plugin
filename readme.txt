@@ -4,7 +4,7 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 3.5.1
-Stable tag: 3.21.0
+Stable tag: 3.21.1
 Tested up to: 6.8
 WC tested up to: 9.8.1
 WC requires at least: 3.0
@@ -188,6 +188,10 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 3.21.1 =
+Added a setting to control stock hold
+Updated Riverty branding
+Improved validation to enhance security and transaction integrity
 = 3.21.0 =
 Added support for payments at pickup locations.
 Added IP Mode setting
