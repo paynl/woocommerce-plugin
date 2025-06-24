@@ -150,6 +150,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Webshopgiftcard',
         'PPMFWC_Gateway_Wijncadeau',
         'PPMFWC_Gateway_Winkelcheque',
+        'PPMFWC_Gateway_Wisselcadeaukaart',
         'PPMFWC_Gateway_Wechatpay',
         'PPMFWC_Gateway_XafaxMynetpay',
         'PPMFWC_Gateway_Yourgift',
