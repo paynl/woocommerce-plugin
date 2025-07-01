@@ -395,9 +395,9 @@ class PPMFWC_Helper_Transaction
     {
         try {
             $response = self::sendRequest('https://connect.pay.nl/v1/orders/' . $transactionId . '/status',
-                null,
                 get_option('paynl_tokencode'),
                 get_option('paynl_apitoken'),
+                null,
                 'GET');
 
             return new PPMFWC_Model_PayOrder($response);
@@ -418,7 +418,7 @@ class PPMFWC_Helper_Transaction
      * @return array
      * @throws Exception
      */
-    public static function sendRequest($requestUrl, $payload = null, $tokenCode, $apiToken, string $method = 'POST')
+    public static function sendRequest($requestUrl, $tokenCode, $apiToken, $payload = null, string $method = 'POST')
     {
         $authorization = base64_encode($tokenCode . ':' . $apiToken);
 
