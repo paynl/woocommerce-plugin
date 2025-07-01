@@ -411,11 +411,11 @@ class PPMFWC_Helper_Transaction
 
     /**
      * @param $requestUrl
-     * @param $payload
      * @param $tokenCode
      * @param $apiToken
+     * @param $payload
      * @param string $method
-     * @return array
+     * @return mixed
      * @throws Exception
      */
     public static function sendRequest($requestUrl, $tokenCode, $apiToken, $payload = null, string $method = 'POST')
