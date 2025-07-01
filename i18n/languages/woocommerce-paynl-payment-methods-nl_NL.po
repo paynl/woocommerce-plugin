@@ -1002,7 +1002,7 @@ msgstr "Gebruik de browsertaal"
 
 #: includes/classes/PPMFWC/Helper/Data.php:374
 msgid "Custom"
-msgstr "Klanttypen"
+msgstr "Aangepaste URL"
 
 #: includes/classes/PPMFWC/Helper/Transaction.php:220
 #, php-format
