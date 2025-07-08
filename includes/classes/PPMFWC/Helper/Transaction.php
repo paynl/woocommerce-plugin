@@ -340,7 +340,9 @@ class PPMFWC_Helper_Transaction
                 if (get_option('paynl_externalrefund') == "yes") {
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `refunded`', $transactionId);
                     $order->set_status('refunded');
-                    wc_increase_stock_levels($orderId);
+                    if (get_option('paynl_exclude_restock') != "yes") {
+                        wc_increase_stock_levels($orderId);
+                    }
                     $order->save();
                 }
                 break;
@@ -352,7 +354,9 @@ class PPMFWC_Helper_Transaction
                 }
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Changing order state to `chargeback`', $transactionId);
                 $order->set_status($status, 'Pay. Chargeback. Reason: "' . PPMFWC_Helper_Data::getRequestArg('external_reason_description') . '".');
-                wc_increase_stock_levels($orderId);
+                if (get_option('paynl_exclude_restock') != "yes") {
+                    wc_increase_stock_levels($orderId);
+                }
                 $order->save();
                 break;
 
@@ -477,7 +481,9 @@ class PPMFWC_Helper_Transaction
         }
         if (PPMFWC_Helper_Data::getRequestArg('amount') == $order->get_remaining_refund_amount()) {
             $order->set_status('refunded');
-            wc_increase_stock_levels($orderId);
+            if (get_option('paynl_exclude_restock') != "yes") {
+                wc_increase_stock_levels($orderId);
+            }
         }
         $order->save();
     }

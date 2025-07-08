@@ -513,6 +513,13 @@ class PPMFWC_Gateways
                 'id' => 'paynl_externalrefund',
                 'default' => 'no',
             );
+             $addedSettings[] = array(
+                'name' => __('Stock', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                'type' => 'checkbox',
+                'desc' => esc_html(__("Exclude stock updates for refunds and retourpin transaction", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_exclude_restock',
+                'default' => 'no',
+            );
             $addedSettings[] = array(
                 'name' => esc_html(__('Auto capture', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
