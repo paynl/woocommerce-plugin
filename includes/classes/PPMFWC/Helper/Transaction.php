@@ -244,8 +244,8 @@ class PPMFWC_Helper_Transaction
             case PPMFWC_Gateways::STATUS_AUTHORIZE:
             case PPMFWC_Gateways::STATUS_SUCCESS:
                 # Check the amount
-                $paidAmount = substr($order->get_total(), 0, strpos($order->get_total(), '.') + 3);
-                if (!in_array($paidAmount, $transactionPaid)) {
+                $orderAmount = substr($order->get_total(), 0, strpos($order->get_total(), '.') + 3);
+                if (!in_array($orderAmount, $transactionPaid) && !in_array($order->get_total(), $transactionPaid)) {
                     $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), implode(' / ', $transactionPaid), $paidAmount)); // phpcs:ignore
                 } else {
 
