@@ -889,9 +889,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             foreach ($items as $item) {
                 $pricePerPiece = ($item['line_subtotal'] + $item['line_subtotal_tax']) / $item['qty'];
                 $taxPerPiece   = $item['line_subtotal_tax'] / $item['qty'];
+                $itemName = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $item['name']);
                 $product       = array(
                     'id'    => $item['product_id'],
-                    'name'  => mb_substr($item['name'], 0, 45, "UTF-8"),
+                    'name'  => mb_substr($itemName, 0, 45, "UTF-8"),
                     'price' => $pricePerPiece,
                     'qty'   => $item['qty'],
                     'type'  => \Paynl\Transaction::PRODUCT_TYPE_ARTICLE,
