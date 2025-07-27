@@ -665,7 +665,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $request->setReference($order->get_order_number());
 
         if ($this->getOptionId() == 1927) {
-            paydbg(PPMFWC_Helper_Data::getPostTextField('terminal_id'));
+            //paydbg(PPMFWC_Helper_Data::getPostTextField('terminal_id'));
             $request->setTerminal(PPMFWC_Helper_Data::getPostTextField('terminal_id'));
         }
 

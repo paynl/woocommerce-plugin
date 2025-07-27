@@ -1015,8 +1015,6 @@ class PPMFWC_Gateways
         $exchange = new Exchange();
         $responseResult = true;
 
-        $xxx = logExchangeRequest('-');
-
         try {
             $action = $exchange->getAction();
 
