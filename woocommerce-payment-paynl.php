@@ -4,12 +4,12 @@
  * Plugin Name: Pay. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
  * Description: Pay. Payment Methods for WooCommerce
- * Version: 3.22.1
+ * Version: 4.0.0
  * Author: Pay.
  * Author URI: https://www.pay.nl
  * Requires at least: 3.5.1
  * WC requires at least: 3.0
- * Requires PHP: 7.0
+ * Requires PHP: 8.1
  * Text Domain: woocommerce-paynl-payment-methods
  * Domain Path: /i18n/languages
  */
@@ -17,7 +17,7 @@
 require_once dirname(__FILE__) . '/includes/classes/Autoload.php';
 require_once dirname(__FILE__) . '/vendor/autoload.php';
 
-# Load plugin functionality
+# Load plugin functionality.
 require_once(ABSPATH . '/wp-admin/includes/plugin.php');
 
 define('PPMFWC_WOOCOMMERCE_TEXTDOMAIN', 'woocommerce-paynl-payment-methods');
@@ -337,28 +337,26 @@ function ppmfwc_auto_functions($order_id, $old_status, $new_status)
         $transactionId = $order->get_transaction_id();
         $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($transactionId);
 
+        $config = PPMFWC_Helper_Config::getPayConfig();
+
         # Get transaction and make sure its status is Authorized
         if ($new_status == "completed" && get_option('paynl_auto_capture') == "yes" && !empty($transactionLocalDB['status']) && $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE) {
             try {
-                PPMFWC_Gateway_Abstract::loginSDK();
-                $bResult = \Paynl\Transaction::capture($transactionId);
-                if ($bResult) {
-                    $order->add_order_note(sprintf(esc_html(__('Pay.: Performed auto capture on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
-                } else {
-                    throw new Exception('Could not capture');
-                }
+
+                $request = new PayNL\Sdk\Model\Request\OrderCaptureRequest($transactionId);
+                $payOrder = $request->setConfig($config)->start();
+
+                $order->add_order_note(sprintf(esc_html(__('Pay.: Performed auto capture on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
+
             } catch (Exception $e) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Auto capture failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
             }
         } elseif ($new_status == "cancelled" && get_option('paynl_auto_void') == "yes" && !empty($transactionLocalDB['status']) && $transactionLocalDB['status'] == PPMFWC_Gateways::STATUS_AUTHORIZE) { // phpcs:ignore
             try {
-                PPMFWC_Gateway_Abstract::loginSDK();
-                $bResult = \Paynl\Transaction::void($transactionId);
-                if ($bResult) {
-                    $order->add_order_note(sprintf(esc_html(__('Pay.: Performed auto void on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
-                } else {
-                    throw new Exception('Could not void');
-                }
+                $request = new PayNL\Sdk\Model\Request\OrderVoidRequest($transactionId);
+                $payOrder = $request->setConfig($config)->start();
+
+                $order->add_order_note(sprintf(esc_html(__('Pay.: Performed auto void on transaction: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transactionId));
             } catch (Exception $e) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Auto void failed: ' . $e->getMessage(), $transactionId, array('wc-order-id' => $order_id));
             }
@@ -381,14 +379,18 @@ function ppmfwc_add_order_js($order)
 
     $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($transactionId);
 
-    if (!empty($transactionLocalDB) || empty($transactionId)) {
-        if ($order->get_payment_method() == 'pay_gateway_instore') {
+    if (!empty($transactionLocalDB) || empty($transactionId))
+    {
+        if ($order->get_payment_method() == 'pay_gateway_instore')
+        {
             $terminals = ppmfwc_get_terminals();
-            if (!empty($terminals)) {
+            if (!empty($terminals))
+            {
                 $payment_gateways = WC_Payment_Gateways::instance();
                 $instoreGateway = $payment_gateways->payment_gateways()['pay_gateway_instore'];
 
-                if (!empty($transactionLocalDB)) {
+                if (!empty($transactionLocalDB))
+                {
                     # A Pay. transaction exists, therefore, show the button for the retourpin option
                     $texts = array(
                         'i18n_refund_error_zero' => __("Refund amount must be greater than €0.00", PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
@@ -435,9 +437,9 @@ function ppmfwc_get_terminals()
     $cache_key = 'paynl_instore_terminals_' . PPMFWC_Gateway_Abstract::getServiceId();
     $terminals = get_transient($cache_key);
 
-    if ($terminals === false) {
-        PPMFWC_Gateway_Abstract::loginSDK();
-        $terminals = \Paynl\Instore::getAllTerminals()->getList();
+    if ($terminals === false)
+    {
+        $terminals = get_option('paynl_terminals');
         set_transient($cache_key, $terminals, HOUR_IN_SECONDS);
     }
 
@@ -445,12 +447,12 @@ function ppmfwc_get_terminals()
 }
 
 /**
- * @param terminals $terminals
+ * @param array $terminals
  * @param array $texts
  * @param array $additionalData
  * @return void
  */
-function ppmfwc_setup_instore_scripts($terminals, $texts, $additionalData)
+function ppmfwc_setup_instore_scripts(array $terminals, $texts, $additionalData)
 {
     $payData = array_merge(
         array(

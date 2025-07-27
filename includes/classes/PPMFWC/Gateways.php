@@ -1,5 +1,8 @@
 <?php
 
+use PayNL\Sdk\Model\Pay\PayStatus;
+use PayNL\Sdk\Util\Exchange;
+
 /**
  * PPMFWC_Gateways
  *
@@ -233,6 +236,7 @@ class PPMFWC_Gateways
         echo '</ul><br class="clear" />';
     }
 
+    static $pms = null;
     /**
      * Add Global Settings function
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
@@ -265,6 +269,20 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_checkCredentials()
     {
+        if (empty(self::$pms)) {
+            try {
+                $config = PPMFWC_Helper_Config::getPayConfig();
+                $request = new PayNL\Sdk\Model\Request\ServiceGetConfigRequest($config->getServiceId());
+                $serviceConfig = $request->setConfig($config)->start();
+                $paymentOptions = $serviceConfig->getPaymentMethods();
+                update_option('paynl_cores', $serviceConfig->getCores());
+                update_option('paynl_terminals', $serviceConfig->getTerminals());
+                update_option('paynl_payment_options', $paymentOptions);
+                self::$pms = $paymentOptions;
+            } catch (PPMFWC_Exception $e) {
+            }
+        }
+
         $html = '';
         $warning = '';
         $error = '';
@@ -825,10 +843,19 @@ class PPMFWC_Gateways
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('FINISH, back from PAY payment', $orderId, array('orderStatusId' => $orderStatusId, 'status' => $status));
 
+        ///?wc-api=Wc_Pay_Gateway_Return
+        /// id=44907558081X114c
+        /// reference=39
+        /// statusAction=CANCEL
+        /// statusCode=-64
+        /// ticket=
+        /// utm_nooverride=1
+
+        #return (new PayStatus())->get($statusCode) === PayStatus::DENIED
+
         try {
             # Retrieve URL to continue (and update status if necessary)
             if (!empty($orderId)) {
-                $newStatus = PPMFWC_Helper_Transaction::processTransaction($orderId, $status);
                 try {
                     $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
                     if (!$transactionLocalDB || empty($transactionLocalDB['order_id'])) {
@@ -836,13 +863,16 @@ class PPMFWC_Gateways
                     }
                     $order = new WC_Order($transactionLocalDB['order_id']);
 
-                    $url = self::getOrderReturnUrl($order, $newStatus);
+                    $url = self::getOrderReturnUrl($order, $status, $orderStatusId);
+
+                    if (in_array($status, array(PPMFWC_Gateways::STATUS_SUCCESS, PPMFWC_Gateways::STATUS_AUTHORIZE))) {
+                        WC()->cart->empty_cart();
+                    }
+
                 } catch (Exception $e) {
                     PPMFWC_Helper_Data::ppmfwc_payLogger('Exception: ' . $e->getMessage(), $orderId);
                 }
             }
-        } catch (PPMFWC_Exception_Notice $e) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue: ' . $e->getMessage(), $orderId);
         } catch (Exception $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Could not retrieve url to continue: ' . $e->getMessage(), $orderId, array(), 'error');
         }
@@ -852,14 +882,20 @@ class PPMFWC_Gateways
 
     /**
      * @param WC_Order $order
-     * @param string $newStatus
-     * @return array
+     * @param $newStatus
+     * @param $orderStatusId
+     * @return mixed|string|null
      */
-    public static function getOrderReturnUrl(WC_Order $order, $newStatus)
+    public static function getOrderReturnUrl(WC_Order $order, $newStatus, $orderStatusId)
     {
-        if ($newStatus == PPMFWC_Gateways::STATUS_CANCELED) {
+        $payStatus = new PayStatus();
+
+        if ($payStatus->get($orderStatusId) === PayStatus::CANCEL)
+        {
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
-        } elseif ($newStatus == PPMFWC_Gateways::STATUS_DENIED) {
+        } elseif ($payStatus->get($orderStatusId) === PayStatus::DENIED ||
+                  $newStatus == PPMFWC_Gateways::STATUS_DENIED)
+        {
             $methodName = $order->get_payment_method_title();
             if (!empty($methodName)) {
                 wc_add_notice(
@@ -922,6 +958,8 @@ class PPMFWC_Gateways
             $status = self::STATUS_REFUND_PARTIALLY;
         } elseif ($statusId == -63) {
             $status = self::STATUS_DENIED;
+        } elseif ($statusId == -64) {
+            $status = self::STATUS_DENIED;
         } elseif (in_array($statusId, array(20, 25, 50, 90))) {
             $status = self::STATUS_PENDING;
         } elseif ($statusId < 0) {
@@ -947,6 +985,7 @@ class PPMFWC_Gateways
         $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
         $arrPayActions[self::ACTION_CHARGEBACK] = self::STATUS_CHARGEBACK;
         $arrPayActions[self::ACTION_PINREFUND] = self::STATUS_PINREFUND;
+        $arrPayActions['refund:add'] = self::STATUS_REFUND;
         return $arrPayActions;
     }
 
@@ -968,130 +1007,73 @@ class PPMFWC_Gateways
     }
 
     /**
-     * @return array
-     * @throws Exception
-     * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
-     */
-    private static function getPayLoad()
-    {
-        $action = strtolower(PPMFWC_Helper_Data::getRequestArg('action')) ?? null;
-        if (!empty($action)) {
-            # The argument "action" tells us this is not coming from TGU
-            $paymentProfile = PPMFWC_Helper_Data::getRequestArg('payment_profile_id') ?? null;
-            $payOrderId = PPMFWC_Helper_Data::getRequestArg('order_id') ?? null;
-            $orderId = PPMFWC_Helper_Data::getRequestArg('extra1') ?? null;
-            $extra3 = PPMFWC_Helper_Data::getRequestArg('extra3') ?? null;
-            $data = null;
-        } else {
-            if (wp_is_json_request()) {
-                $rawBody = file_get_contents('php://input');
-                $data = json_decode($rawBody, true, 512, 4194304);
-                $exchangeType = $data['type'] ?? null;
-                if ($exchangeType != 'order') {
-                    throw new Exception('Cant handle exchange type other then order');
-                }
-            } else {
-                $data = $_REQUEST ?? null;
-            }
-
-            $payOrderId = $data['object']['orderId'] ?? '';
-            $internalStateId = $data['object']['status']['code'] ?? '';
-            $internalStateName = $data['object']['status']['action'] ?? '';
-            $orderId = $data['object']['reference'] ?? '';
-            $extra3 = $data['object']['extra3'] ?? null;
-            $type = $data['object']['type'] ?? '';
-            switch ($internalStateId) {
-                case 100:
-                case 98:
-                case 95:
-                    $action = 'new_ppt';
-                    break;
-                case 85:
-                    $action = 'verify';
-                    break;
-                case -90:
-                case -80:
-                case -63:
-                    $action = 'cancel';
-                    break;
-                default:
-                    $action = 'pending';
-                    break;
-            }
-            $checkoutData = $data['object']['checkoutData'] ?? '';
-        }
-
-        # Return mapped data so it works for all type of exchanges.
-        return [
-            'action' => $action,
-            'paymentProfile' => $paymentProfile ?? null,
-            'payOrderId' => $payOrderId,
-            'orderId' => $orderId,
-            'extra3' => $extra3 ?? null,
-            'internalStateId' => $internalStateId ?? null,
-            'internalStateName' => $internalStateName ?? null,
-            'checkoutData' => $checkoutData ?? null,
-            'orgData' => $data,
-            'type' => $type ?? null,
-        ];
-    }
-
-    /**
      * Handles the Pay. Exchange requests
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public static function ppmfwc_onExchange()
     {
-        $params = self::getPayLoad();
+        $exchange = new Exchange();
+        $responseResult = true;
 
-        $action = $params['action'];
-        $order_id = (string) $params['payOrderId'];
-        $wc_order_id = (string) $params['orderId'];
-        $methodId = $params['paymentProfile'];
+        $xxx = logExchangeRequest('-');
 
-        if ($methodId == PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND && $action == self::ACTION_NEWPPT) {
-            $action = self::ACTION_PINREFUND;
-        }
-
-        $arrActions = self::ppmfwc_getPayActions();
-        $message = 'TRUE|Ignoring ' . $action;
-
-        ob_start();
         try {
+            $action = $exchange->getAction();
+
+            if ($exchange->getAction() == 'pending') {
+                $exchange->setResponse(true, 'Ignoring pending');
+            }
+
+            $config = PPMFWC_Helper_Config::getPayConfig();
+            $payOrder = $exchange->process($config);
+
+            PPMFWC_Helper_Data::ppmfwc_payLogger('payOrder: ' . $payOrder->getOrderId());
+
+            if ($payOrder->isPending()) {
+                $exchange->setResponse(true, 'Ignoring pending.');
+            }
+
+            $order_id = $exchange->getReference();
+            $methodId = $payOrder->getPaymentMethod();
+
+            if ($methodId == PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND && $action == self::ACTION_NEWPPT) {
+                $action = self::ACTION_PINREFUND;
+            }
+
             if ($action == self::ACTION_NEWPPT) {
                 if (PPMFWC_Helper_Transaction::checkProcessing($order_id)) {
-                    die('FALSE| Already processing payment');
+                    $exchange->setResponse(false, 'Already processing payment.');
                 }
             }
+
+            $arrActions = self::ppmfwc_getPayActions();
             if (in_array($action, array_keys($arrActions))) {
                 $status = $arrActions[$action];
             } else {
                 throw new PPMFWC_Exception_Notice('Ignoring: ' . $action);
             }
 
-            if (!in_array($action, array(self::ACTION_PENDING))) {
-                PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id, 'methodid' => $methodId));
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => '', 'methodid' => $methodId));
 
-                # Try to update the orderstatus.
-                $newStatus = PPMFWC_Helper_Transaction::processTransaction($order_id, $status, $methodId, $params);
-                $message = 'TRUE|Status updated to ' . $newStatus;
-            }
+            $newStatus = PPMFWC_Helper_Transaction::processTransaction($payOrder, $status, $methodId);
+            $responseMessage = 'Status updated to ' . $newStatus;
+
+
         } catch (PPMFWC_Exception_Notice $e) {
-            $message = 'TRUE|Notice: ' . $e->getMessage();
+            $responseMessage = $e->getMessage();
         } catch (PPMFWC_Exception $e) {
-            $message = 'False|Error 1: ' . $e->getMessage();
+            $responseResult = false;
+            $responseMessage = 'Error 1: ' . $e->getMessage();
         } catch (Exception $e) {
-            $message = 'False|Error 2: ' . $e->getMessage();
+            $responseResult = false;
+            $responseMessage = 'Error 2: ' . $e->getMessage();
         }
-        $suppressed = ob_get_clean();
 
-        if (!empty($suppressed)) {
-            $message .= ' |Suppressed Output: ' . $suppressed;
-        }
-        if ($action == self::ACTION_NEWPPT) {
+        if (($action ?? '') == self::ACTION_NEWPPT && isset($order_id)) {
             PPMFWC_Helper_Transaction::removeProcessing($order_id);
         }
-        die($message);
+
+        $exchange->setResponse($responseResult, $responseMessage);
     }
 
     /**
@@ -1176,12 +1158,11 @@ class PPMFWC_Gateways
     public static function ppmfwc_onPinRefund()
     {
         try {
-            PPMFWC_Gateway_Abstract::loginSDK();
-
-            $amount = isset($_POST['amount']) ? $_POST['amount'] : null;
-            $terminal = isset($_POST['terminal']) ? $_POST['terminal'] : null;
-            $returnUrl = isset($_POST['returnUrl']) ? $_POST['returnUrl'] : null;
-            $order_id = isset($_POST['order_id']) ? $_POST['order_id'] : null;
+            $amount = PPMFWC_Helper_Data::getPostTextField('amount');
+            $terminal = PPMFWC_Helper_Data::getPostTextField('terminal');
+            $returnUrl = PPMFWC_Helper_Data::getPostTextField('returnUrl');
+            $order_id = PPMFWC_Helper_Data::getPostTextField('order_id');
+            $type = PPMFWC_Helper_Data::getPostTextField('type');
 
             $order = new WC_Order($order_id);
 
@@ -1192,57 +1173,54 @@ class PPMFWC_Gateways
                 $exchangeUrl = $strAlternativeExchangeUrl;
             }
 
-            $ipAddress = $order->get_customer_ip_address();
-            if (empty($ipAddress)) {
-                $ipAddress = Paynl\Helper::getIp();
-            }
-
             $currency = $order->get_currency();
             $order_id = $order->get_id();
 
             $prefix = empty(get_option('paynl_order_description_prefix')) ? '' : get_option('paynl_order_description_prefix');
 
-            $startData = array(
-                'amount'        => $amount,
-                'returnUrl'     => $returnUrl,
-                'exchangeUrl'   => $exchangeUrl,
-                'orderNumber'   => $order->get_order_number(),
-                'paymentMethod' => PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND,
-                'bank'          => $terminal,
-                'currency'      => $currency,
-                'description'   => str_replace('__', ' ', $prefix) . $order->get_order_number(),
-                'extra1'        => apply_filters('paynl-extra1', $order->get_order_number(), $order),
-                'extra2'        => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
-                'extra3'        => apply_filters('paynl-extra3', $order_id, $order),
-                'ipaddress'     => $ipAddress,
-                'object'        => PPMFWC_Helper_Data::getObject(),
-                'bank' => $terminal,
-                'currency' => $currency,
-                'description' => str_replace('__', ' ', $prefix) . $order->get_order_number(),
-                'extra1' => apply_filters('paynl-extra1', $order->get_order_number(), $order),
-                'extra2' => apply_filters('paynl-extra2', $order->get_billing_email(), $order),
+            $config = PPMFWC_Helper_Config::getPayConfig();
+            $request = new PayNL\Sdk\Model\Request\OrderCreateRequest();
+
+            $request->setServiceId($config->getServiceId());
+            $request->setAmount($amount);
+            $request->setReturnurl($returnUrl);
+            $request->setExchangeUrl($exchangeUrl);
+            $request->setReference($order->get_order_number());
+            $request->setDescription(str_replace('__', ' ', $prefix) . $order->get_order_number());
+            $request->setPaymentMethodId(
+                $type == 'pinmoment' ? PPMFWC_Gateway_Instore::getOptionId() :
+                    PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND
+            );
+            $request->setTerminal($terminal);
+            $request->setCurrency($currency);
+
+            $request->setStats( (new \PayNL\Sdk\Model\Stats())
+                ->setExtra1(apply_filters('paynl-extra1', $order->get_order_number(), $order))
+                ->setExtra2(apply_filters('paynl-extra2', $order->get_billing_email(), $order))
+                ->setExtra3(apply_filters('paynl-extra3', $order_id, $order))
+                ->setObject(PPMFWC_Helper_Data::getObject())
             );
 
-            $payTransaction = \Paynl\Transaction::start($startData);
+            $payOrder = $request->setConfig($config)->start();
 
-            $order->update_meta_data('pinRefundTransactionId', $payTransaction->getTransactionId());
+            $order->update_meta_data('pinRefundTransactionId', $payOrder->getOrderId());
             $order->save();
 
-            PPMFWC_Helper_Transaction::newTransaction($payTransaction->getTransactionId(), PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND, $amount, $order_id, '');
+            PPMFWC_Helper_Transaction::newTransaction($payOrder->getOrderId(), PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND, $amount, $order_id, '');
 
-            $returnarray = array(
+            $returnArray = array(
                 'success' => true,
-                'url' => $payTransaction->getRedirectUrl(),
+                'url' => $payOrder->getPaymentUrl(),
             );
         } catch (\Exception $e) {
-            $returnarray = array(
+            $returnArray = array(
                 'success' => false,
                 'message' => $e->getMessage(),
             );
         }
 
         header('Content-Type: application/json;charset=UTF-8');
-        die(json_encode($returnarray));
+        die(json_encode($returnArray));
     }
 
     /**
@@ -1250,11 +1228,11 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_registerCheckoutFlash()
     {
-        $paynlstatus = isset($_REQUEST['paynl_status']) ? sanitize_text_field($_REQUEST['paynl_status']) : null;
-        if ($paynlstatus == self::STATUS_CANCELED) {
+        $payNlStatus = isset($_REQUEST['paynl_status']) ? sanitize_text_field($_REQUEST['paynl_status']) : null;
+        if ($payNlStatus == self::STATUS_CANCELED) {
             add_action('woocommerce_before_checkout_form', array(__CLASS__, 'ppmfwc_displayFlashCanceled'), 20);
         }
-        if ($paynlstatus == self::STATUS_PENDING) {
+        if ($payNlStatus == self::STATUS_PENDING) {
             add_action('woocommerce_before_thankyou', array(__CLASS__, 'ppmfwc_displayFlashPending'), 20);
         }
     }

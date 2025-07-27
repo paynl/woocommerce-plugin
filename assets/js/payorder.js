@@ -34,14 +34,16 @@ function submitPinTransaction($) {
     doAjaxRequest($, amount, 'pinmoment')
 }
 
-function doAjaxRequest($, amount, type) {
+function doAjaxRequest($, amount, type)
+{
     var terminal = $('#pin_terminal').val();
     var ajaxurl = '/?wc-api=Wc_Pay_Gateway_Pinrefund';
     var data = {
         'amount': amount,
         'terminal': terminal,
         'order_id': paynl_order.order_id,
-        'returnUrl': window.location.href
+        'returnUrl': window.location.href,
+        'type': type
     };
 
     $.ajax({
@@ -95,10 +97,10 @@ function getTerminalOptions($) {
     var options = '';
     paynl_order.terminals.forEach((element) => {
         var selected = '';
-        if (element.id == paynl_order.default_terminal) {
+        if (element.code == paynl_order.default_terminal) {
             selected = 'selected="selected"';
         }
-        options += '<option value="' + element.id + '" ' + selected + '>' + element.name + '</option>';
+        options += '<option value="' + element.code + '" ' + selected + '>' + element.name + '</option>';
     })
 
     return options;

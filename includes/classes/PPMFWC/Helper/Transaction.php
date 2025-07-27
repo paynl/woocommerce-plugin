@@ -16,7 +16,7 @@ class PPMFWC_Helper_Transaction
      * @param mixed $payStatus
      * @return false|mixed|null
      */
-    public static function getCustomWooComOrderStatus($payStatus)
+    public static function getCustomWooComOrderStatus(mixed $payStatus): mixed
     {
         $arrStatus['processing'] = get_option('paynl_status_paid');
         $arrStatus['cancel'] = get_option('paynl_status_cancel');
@@ -37,14 +37,14 @@ class PPMFWC_Helper_Transaction
 
     /**
      * @param string $transactionId
-     * @param string $opionId
+     * @param string $optionId
      * @param string $amount
      * @param string $orderId
      * @param string $startData
      * @param string|null $optionSubId
      * @return string
      */
-    public static function newTransaction($transactionId, $opionId, $amount, $orderId, $startData, $optionSubId = null)
+    public static function newTransaction(string $transactionId, string $optionId, string $amount, string $orderId, string $startData, string $optionSubId = null)
     {
         global $wpdb;
 
@@ -54,7 +54,7 @@ class PPMFWC_Helper_Transaction
             $table_name_transactions,
             array(
                 'transaction_id' => $transactionId,
-                'option_id' => $opionId,
+                'option_id' => $optionId,
                 'option_sub_id' => $optionSubId,
                 'amount' => $amount,
                 'order_id' => $orderId,
@@ -65,15 +65,14 @@ class PPMFWC_Helper_Transaction
                 '%s', '%d', '%d', '%d', '%d', '%s', '%s',
             )
         );
-        $insertId = $wpdb->insert_id;
-        return $insertId;
+        return $wpdb->insert_id;
     }
 
     /**
      * @param string $orderId
      * @return string|boolean
      */
-    public static function getPaidTransactionIdForOrderId($orderId)
+    public static function getPaidTransactionIdForOrderId(string $orderId): bool|string
     {
         global $wpdb;
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
@@ -92,7 +91,7 @@ class PPMFWC_Helper_Transaction
      * @param string $orderId
      * @return boolean
      */
-    public static function getSuccessTransactionIdForOrderId($orderId)
+    public static function isTransactionPaid(string $orderId): bool
     {
         global $wpdb;
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
@@ -108,7 +107,7 @@ class PPMFWC_Helper_Transaction
      * @param string $status
      * @return void
      */
-    public static function updateStatus($transactionId, $status)
+    public static function updateStatus(string $transactionId, string $status): void
     {
         global $wpdb;
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
@@ -123,7 +122,7 @@ class PPMFWC_Helper_Transaction
      * @param string $transactionId
      * @return false|mixed
      */
-    public static function getTransaction($transactionId)
+    public static function getTransaction(string $transactionId): mixed
     {
         global $wpdb;
 
@@ -133,24 +132,21 @@ class PPMFWC_Helper_Transaction
             ARRAY_A
         );
 
-        return isset($result[0]) ? $result[0] : false;
+        return $result[0] ?? false;
     }
 
     /**
-     * @param $transactionId
+     * @param \PayNL\Sdk\Model\Pay\PayOrder $payOrder
      * @param $status
-     * @param $methodid
-     * @param array $params
+     * @param $methodId
      * @return mixed|string|null
      * @throws PPMFWC_Exception
      * @throws PPMFWC_Exception_Notice
-     * @throws \Paynl\Error\Api
-     * @throws \Paynl\Error\Error
-     * @throws \Paynl\Error\Required\ApiToken
-     * @throws \Paynl\Error\Required\ServiceId
      */
-    public static function processTransaction($transactionId, $status = null, $methodid = null, array $params = [])
+    public static function processTransaction(\PayNL\Sdk\Model\Pay\PayOrder $payOrder, $status = null, $methodId = null): mixed
     {
+        $transactionId = $payOrder->getOrderId();
+
         # Retrieve local payment state
         $transactionLocalDB = self::getTransaction($transactionId);
         $localTransactionStatus = $transactionLocalDB['status'] ?? '';
@@ -171,38 +167,18 @@ class PPMFWC_Helper_Transaction
         PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
 
         if ($status == $localTransactionStatus) {
-            if (in_array($status, array(PPMFWC_Gateways::STATUS_SUCCESS, PPMFWC_Gateways::STATUS_AUTHORIZE))) {
-                WC()->cart->empty_cart();
-            }
             PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - status allready up-to-date', $transactionId, array('status' => $status));
-            # We don't have to update
-            return $status;
-        }
-
-        # Retrieve Pay. transaction paymentstate
-        PPMFWC_Gateway_Abstract::loginSDK(true);
-
-        if (PPMFWC_Hooks_FastCheckout_Exchange::isPaymentBasedCheckout($params)) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('getting tgu-status');
-            $transaction = self::getTguStatus($transactionId);
-            if (!$transaction) {
-                $order->add_order_note(esc_html(__('Pay.: Could not update address info. Please check your order at Pay.')));
-                throw new PPMFWC_Exception_Notice('Could not retrieve tgu status for ' . $transactionId);
-            }
-        } else {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('getting gms-status');
-            $transaction = \Paynl\Transaction::status($transactionId);
+            throw new PPMFWC_Exception_Notice('Already ' . $status);
         }
 
         if (empty($transactionLocalDB)) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
-            PPMFWC_Helper_Transaction::newTransaction($transactionId, $methodid ?? 0, $order->get_total(), $orderId, 'start-data');
+            PPMFWC_Helper_Transaction::newTransaction($transactionId, $methodId ?? 0, $order->get_total(), $orderId, 'start-data');
         }
 
-        $transactionPaid = array($transaction->getCurrencyAmount(), $transaction->getPaidCurrencyAmount(), $transaction->getPaidAmount());
+        $transactionPaid = array($payOrder->getAmount());
 
-        $data = $transaction->getData();
-        $internalPAYSatus = $data['paymentDetails']['state'];
+        $internalPAYSatus = $payOrder->getStatusCode();
         $payApiStatus = PPMFWC_Gateways::ppmfwc_getStatusFromStatusId($internalPAYSatus);
 
         if ($localTransactionStatus != $payApiStatus) {
@@ -216,8 +192,8 @@ class PPMFWC_Helper_Transaction
 
         $logArray['wc-order-id'] = $orderId;
         $logArray['wcOrderStatus'] = $wcOrderStatus;
-        $logArray['PAY status'] = $payApiStatus;
-        $logArray['PAY status id'] = $internalPAYSatus;
+        $logArray['Pay status'] = $payApiStatus;
+        $logArray['Pay status id'] = $internalPAYSatus;
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $transactionId, $logArray);
 
@@ -249,10 +225,10 @@ class PPMFWC_Helper_Transaction
                     $order->update_status('on-hold', sprintf(__("Validation error: Paid amount does not match order amount. \npaidAmount: %s, \norderAmount: %s\n", PPMFWC_WOOCOMMERCE_TEXTDOMAIN), implode(' / ', $transactionPaid), $order->get_total())); // phpcs:ignore
                 } else {
 
-                    if (PPMFWC_Hooks_FastCheckout_Exchange::isPaymentBasedCheckout($params)) {
-                        if ($transactionId == $order->get_meta('transactionId')) {
+                    if ($payOrder->isFastCheckout()) {
+                        if ($transactionId == $order->get_meta('transactionId') && $order->get_meta('fc')) {
                             PPMFWC_Helper_Data::ppmfwc_payLogger('adding AddressToOrder');
-                            PPMFWC_Hooks_FastCheckout_Exchange::addAddressToOrder($transaction->getCheckoutData(), $order);
+                            PPMFWC_Hooks_FastCheckout_Exchange::addAddressToOrder($payOrder->getCheckoutData(), $order);
                         }
                     }
 
@@ -274,12 +250,12 @@ class PPMFWC_Helper_Transaction
                         # Launch action for custom implementation
                         do_action('paynl_order_authorised', $order->get_id(), $auth_status);
 
-                        # auth_status is null when paymentmethods don't have the authorize_status-setting, like iDEAL.
+                        # auth_status is null when payment methods don't have the authorize_status-setting, like iDEAL.
                         if ($auth_status !== null) {
                             if ($wcOrderStatus != $auth_status) {
                                 $order->update_status($auth_status);
                                 $newStatus = $auth_status . ' as configured in settings of ' . $method;
-                                $order->add_order_note(sprintf(esc_html(__('Pay.: Authorised order set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber())); // phpcs:ignore
+                                #$order->add_order_note(sprintf(esc_html(__('Pay.: Authorised order set to ' . $auth_status . ' according to settings.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $transaction->getAccountNumber())); // phpcs:ignore
                             }
 
                             if ($auth_status == PPMFWC_Gateway_Abstract::STATUS_PROCESSING) {
@@ -294,7 +270,7 @@ class PPMFWC_Helper_Transaction
                     }
 
                     $initialMethod = $order->get_payment_method();
-                    $usedMethod = PPMFWC_Gateways::ppmfwc_getGateWayById($methodid);
+                    $usedMethod = PPMFWC_Gateways::ppmfwc_getGateWayById($methodId);
 
                     if (!empty($usedMethod) && $usedMethod->getId() != $initialMethod && get_option('paynl_payment_method_display') == 1) {
                         if (PPMFWC_Helper_Data::isOptionAvailable($usedMethod->getOptionId())) {
@@ -318,16 +294,9 @@ class PPMFWC_Helper_Transaction
                         $order->save();
                     } else {
                         $order->payment_complete($transactionId);
-                        if (!empty($transaction->getAccountNumber())) {
-                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $transaction->getAccountNumber())); // phpcs:ignore
-                        } else {
-                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s).', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus));
-                        }
+                        $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s).', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus));
                     }
                 }
-
-                update_post_meta($orderId, 'CustomerName', esc_attr($transaction->getAccountHolderName()));
-                update_post_meta($orderId, 'CustomerKey', esc_attr($transaction->getAccountNumber()));
 
                 break;
 
@@ -363,7 +332,7 @@ class PPMFWC_Helper_Transaction
             case PPMFWC_Gateways::STATUS_CANCELED:
                 $method = $order->get_payment_method();
 
-                if (substr($method, 0, 11) != 'pay_gateway') {
+                if (!str_starts_with($method, 'pay_gateway')) {
                     throw new PPMFWC_Exception_Notice('Not cancelling, last used method is not a Pay. method');
                 }
                 if ($order->is_paid()) {
@@ -372,7 +341,7 @@ class PPMFWC_Helper_Transaction
                 if (!$order->has_status('pending') && !$order->has_status('on-hold')) {
                     throw new PPMFWC_Exception_Notice('Cancel ignored, order is ' . $order->get_status());
                 }
-                $databaseStatusSuccess = self::getSuccessTransactionIdForOrderId($order->get_id());
+                $databaseStatusSuccess = self::isTransactionPaid($order->get_id());
                 if ($databaseStatusSuccess) {
                     throw new PPMFWC_Exception_Notice('Not cancelling, order is paid.');
                 }
@@ -393,79 +362,13 @@ class PPMFWC_Helper_Transaction
     }
 
     /**
-     * @param $transactionId
-     * @return false|PPMFWC_Model_PayOrder
-     */
-    public static function getTguStatus($transactionId)
-    {
-        try {
-            $response = self::sendRequest('https://connect.pay.nl/v1/orders/' . $transactionId . '/status',
-                get_option('paynl_tokencode'),
-                get_option('paynl_apitoken'),
-                null,
-                'GET');
-
-            return new PPMFWC_Model_PayOrder($response);
-
-        } catch (Exception $e) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Notice: get tgu status failed: ' . $e->getMessage());
-        }
-
-        return false;
-    }
-
-    /**
-     * @param $requestUrl
-     * @param $tokenCode
-     * @param $apiToken
-     * @param $payload
-     * @param string $method
-     * @return mixed
-     * @throws Exception
-     */
-    public static function sendRequest($requestUrl, $tokenCode, $apiToken, $payload = null, string $method = 'POST')
-    {
-        $authorization = base64_encode($tokenCode . ':' . $apiToken);
-
-        $args = [
-            'method'  => $method,
-            'headers' => [
-                'Authorization' => 'Basic ' . $authorization,
-                'Content-Type'  => 'application/json',
-                'Accept'        => 'application/json',
-            ],
-            'timeout' => 30,
-        ];
-
-        if (!empty($payload)) {
-            $args['body'] = $payload;
-        }
-
-        $response = wp_remote_request($requestUrl, $args);
-
-        if (is_wp_error($response)) {
-            throw new \Exception($response->get_error_message());
-        }
-
-        $body = wp_remote_retrieve_body($response);
-        $data = json_decode($body, true); // decode as array
-
-        if (!empty($data['violations'])) {
-            $field = $data['violations'][0]['propertyPath'] ?? ($data['violations'][0]['code'] ?? '');
-            throw new \Exception($field . ': ' . ($data['violations'][0]['message'] ?? ''));
-        }
-
-        return $data;
-    }
-
-
-    /**
      * @param $order
      * @param $amount
      * @return void
      * @throws PPMFWC_Exception
+     * @throws Exception
      */
-    public static function processRefund($order, $amount)
+    public static function processRefund($order, $amount): void
     {
         $orderId = $order->get_id();
         $refund = wc_create_refund(array(
@@ -490,9 +393,9 @@ class PPMFWC_Helper_Transaction
 
     /**
      * @param string $transactionId
-     * @return array|object|stdClass[]
+     * @return bool
      */
-    public static function checkProcessing($transactionId)
+    public static function checkProcessing(string $transactionId): bool
     {
         global $wpdb;
 
@@ -519,7 +422,7 @@ class PPMFWC_Helper_Transaction
      * @param string $transactionId
      * @return void
      */
-    public static function removeProcessing($transactionId)
+    public static function removeProcessing(string $transactionId): void
     {
         global $wpdb;
         $table_name_processing = $wpdb->prefix . "pay_processing";

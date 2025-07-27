@@ -59,6 +59,7 @@ class PPMFWC_Hooks_FastCheckout_Start
             $redirectUrl = $result['redirectURL'];
 
             $order->update_meta_data('transactionId', $transactionId);
+            $order->update_meta_data('fc', true);
             $order->save();
 
             PPMFWC_Helper_Transaction::newTransaction($transactionId, $data['paymentMethod'], $order->get_total(), $order->get_id(), '');

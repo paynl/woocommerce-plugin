@@ -1,5 +1,7 @@
 <?php
 
+use PayNL\Sdk\Model\Request\TerminalsBrowseRequest;
+
 /**
  * PPMFWC_Gateway_Ideal
  *
@@ -30,11 +32,10 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
      */
     public function init_form_fields()
     {
-        parent::loginSDK();
-
         parent::init_form_fields();
         $optionId = $this->getOptionId();
-        if (PPMFWC_Helper_Data::isOptionAvailable($optionId)) {
+        if (PPMFWC_Helper_Data::isOptionAvailable($optionId))
+        {
             $terminals = $this->get_terminals();
 
             $options = array();
@@ -46,8 +47,8 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
 
             if (!empty($terminals)) {
                 foreach ($terminals as $terminal) {
-                    $options[$terminal['id']] = $terminal['name'];
-                    $pickupLocationTerminalOptions[$terminal['id']] = $terminal['name'];
+                    $options[$terminal['code']] = $terminal['name'];
+                    $pickupLocationTerminalOptions[$terminal['code']] = $terminal['name'];
                 }
             }
 
@@ -79,21 +80,10 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
     /**
      * @return array
      */
-    private function get_terminals()
+    private function get_terminals(): array
     {
-        try {
-            $cache_key = 'paynl_instore_terminals_' . $this->getServiceId();
-
-            $terminals = get_transient($cache_key);
-            if ($terminals === false) {
-                $terminals = \Paynl\Instore::getAllTerminals()->getList();
-                set_transient($cache_key, $terminals, HOUR_IN_SECONDS);
-            }
-            return $terminals;
-        } catch (Exception $e) {
-            set_transient($cache_key, array(), HOUR_IN_SECONDS);
-            return array();
-        }
+        $terminals = get_option('paynl_terminals');
+        return $terminals ?: array();
     }
 
     /**
@@ -101,7 +91,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
      */
     public static function getOptionId()
     {
-        return 1729;
+        return 1927;
     }
 
     /**
@@ -157,7 +147,7 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
                     <option value=""><?php echo esc_html(__('Select a card terminal...', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) ?></option>
                     <?php
                     foreach ($terminals as $terminal) {
-                        echo '<option value="' . esc_attr($terminal['id']) . '">' . esc_html($terminal['name']) . '</option>';
+                        echo '<option value="' . esc_attr($terminal['code']) . '">' . esc_html($terminal['name']) . '</option>';
                     }
                     ?>
                 </select>
@@ -174,8 +164,6 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
     {
         /** @var $wpdb wpdb The database */
         $order = new WC_Order($order_id);
-        $result = null;
-        $transactionFailed = false;
 
         $pickupLocationSetting = $this->get_option('paynl_instore_pickup_location');
         $pickupLocation = false;
@@ -190,68 +178,6 @@ class PPMFWC_Gateway_Instore extends PPMFWC_Gateway_Abstract
             return array('result' => 'success', 'redirect' => $order->get_checkout_order_received_url());
         }
 
-        try {
-            $result = $this->startTransaction($order, $pickupLocation);
-            $paymentOptionId = $this->getOptionId();
-        } catch (Exception $e) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate instore payment. Error: ' . esc_html($e->getMessage()));
-            $transactionFailed = true;
-        }
-
-        if (empty($result) || $transactionFailed) {
-            wc_add_notice(esc_html(__('Could not initiate instore payment.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
-            return;
-        }
-
-        $order->add_order_note(sprintf(esc_html(__('Pay.: Transaction started: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $result->getTransactionId()));
-
-        PPMFWC_Helper_Transaction::newTransaction($result->getTransactionId(), $paymentOptionId, $order->get_total(), $order->get_id(), '');
-
-        $terminal_setting = $this->get_option('paynl_instore_terminal');
-
-        $pickup_location_terminal = $this->get_option('paynl_instore_pickup_location_terminal');
-        $shippingMethods = WC()->session->get('chosen_shipping_methods');
-
-        if ($pickupLocationSetting == 'checkout' && $pin_moment == 'direct' && strpos($shippingMethods[0], 'local_pickup') === 0 && !PPMFWC_Helper_Data::getPostTextField('terminal_id')) {
-            $terminal = $pickup_location_terminal;
-        } elseif (substr($terminal_setting, 0, 8) == 'checkout') {
-            $terminal = PPMFWC_Helper_Data::getPostTextField('terminal_id', true);
-
-            if (empty($_POST) && class_exists('WC_POS_Server')) {
-                $data = WC_POS_Server::get_raw_data();
-                $terminal = $data['payment_details']['terminal_id'];
-            }
-        } else {
-            $terminal = $terminal_setting;
-        }
-        if ($terminal_setting == 'checkout_save') {
-            setcookie('paynl_instore_terminal_id', $terminal, time() + (60 * 60 * 24 * 365));
-        }
-
-        # Send to pinterminal
-        $result = \Paynl\Instore::payment(array('transactionId' => $result->getTransactionId(), 'terminalId' => $terminal));
-
-        $hash = $result->getHash();
-        ini_set('max_execution_time', 65);
-        for ($i = 0; $i < 60; $i++) {
-            $status = \Paynl\Instore::status(array('hash' => $hash));
-            if ($status->getTransactionState() != 'init') {
-                switch ($status->getTransactionState()) {
-                    case 'approved':
-                        $order->payment_complete();
-                        return array('result' => 'success', 'redirect' => $order->get_checkout_order_received_url());
-                        break;
-                    case 'cancelled':
-                    case 'expired':
-                    case 'error':
-                        return array('result' => 'failed');
-                        break;
-                }
-            }
-
-            sleep(1);
-        }
-
-        return array('result' => 'expired');
+        return parent::process_payment($order_id);
     }
 }

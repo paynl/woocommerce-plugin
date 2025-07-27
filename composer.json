@@ -1,14 +1,8 @@
 {
-    "name": "paynl/woocommerce-plugin",
-    "description": "Pay. woocommerce plugin",
+  "name": "paynl/woocommerce-plugin",
+  "description": "Pay. woocommerce plugin",
+  "license": "MIT",
     "require": {
-        "paynl/sdk": "^1.2"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Andy Pieters",
-            "email": "andy@pay.nl"
-        }
-    ]
+    "paynl/php-sdk": "^1.0"
+  }
 }

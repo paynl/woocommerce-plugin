@@ -117,17 +117,17 @@ class PPMFWC_Helper_Data
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public static function isTestMode()
+    public static function isTestMode(): bool
     {
         if (get_option('paynl_test_mode') == 'yes') {
             return true;
         }
         $ip = self::getIp();
-        $ipconfig = get_option('paynl_test_ipadress');
-        if (!empty($ipconfig)) {
-            $allowed_ips = explode(',', $ipconfig);
+        $ipConfig = get_option('paynl_test_ipadress');
+        if (!empty($ipConfig)) {
+            $allowed_ips = explode(',', $ipConfig);
             if (
                 in_array($ip, $allowed_ips) &&
                 filter_var($ip, FILTER_VALIDATE_IP) &&
@@ -142,6 +142,7 @@ class PPMFWC_Helper_Data
 
     /**
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
+     * @throws \PayNL\Sdk\Exception\PayException
      */
     public static function loadPaymentMethods()
     {
@@ -155,26 +156,14 @@ class PPMFWC_Helper_Data
         $wpdb->query('DELETE FROM `' . $table_name_option_subs . '`');
         $wpdb->query('DELETE FROM `' . $table_name_options . '`');
 
-        foreach ($paymentOptions as $paymentOption) {
-            $image = '';
-            if (isset($paymentOption['brand']['id'])) {
-                $image = PPMFWC_PLUGIN_URL . 'assets/logos/' . $paymentOption['brand']['id'] . '.png';
-            } elseif (isset($paymentOption['id'])) {
-                $image = 'https://static.pay.nl/payment_profiles/25x25/' . $paymentOption['id'] . '.png';
-            }
+        foreach ($paymentOptions as $method)
+        {
+            $im = str_replace(['/payment_methods/', '.svg'], ['', '.png'], $method->getImage());
+            $image = PPMFWC_PLUGIN_URL . 'assets/logos/' . $im;
 
             $sql = 'INSERT INTO `' . $table_name_options . '` (id,name,image,update_date) VALUES (%d,%s,%s,%s) ON DUPLICATE KEY UPDATE name = %s, image = %s, update_date = %s';
-            $sql = $wpdb->prepare($sql, $paymentOption['id'], $paymentOption['visibleName'], $image, current_time('mysql'), $paymentOption['visibleName'], $image, current_time('mysql'));
+            $sql = $wpdb->prepare($sql, $method->getId(), $method->getName(), $image, current_time('mysql'), $method->getName(), $image, current_time('mysql'));
             $wpdb->query($sql);
-
-            if ($paymentOption['id'] == 10 && isset($paymentOption['banks'])) {
-                foreach ($paymentOption['banks'] as $paymentOptionSub) {
-                    $image = 'https://static.pay.nl/ideal/banks/' . $paymentOptionSub['id'] . '.png';
-                    $sql = 'INSERT INTO `' . $table_name_option_subs . '` (option_id,option_sub_id,name,image,active) VALUES (%d,%s,%s,%s,%d) ON DUPLICATE KEY UPDATE name = %s, image = %s';
-                    $sql = $wpdb->prepare($sql, $paymentOption['id'], $paymentOptionSub['id'], $paymentOptionSub['visibleName'], $image, true, $paymentOptionSub['visibleName'], $image);
-                    $wpdb->query($sql);
-                }
-            }
         }
     }
 
@@ -238,17 +227,12 @@ class PPMFWC_Helper_Data
     }
 
     /**
-     * @return array
+     * @return array|null
+     * @throws \PayNL\Sdk\Exception\PayException
      */
     public static function getPaymentOptionsList()
     {
-        if (empty(self::$_payment_methods)) {
-            PPMFWC_Gateway_Abstract::loginSDK();
-            $paymentOptions = \Paynl\Paymentmethods::getList();
-            self::$_payment_methods = $paymentOptions;
-        }
-
-        return self::$_payment_methods;
+        return get_option('paynl_payment_options');
     }
 
     /**
@@ -316,7 +300,7 @@ class PPMFWC_Helper_Data
      */
     public static function getVersion()
     {
-        return '3.22.1';
+        return '4.0.0';
     }
 
     /**
@@ -369,8 +353,11 @@ class PPMFWC_Helper_Data
      */
     public static function ppmfwc_getGateways()
     {
-        $cores = \Paynl\Config::getCores();
+        $cores = get_site_option('paynl_cores') ?? [];
 
-        return array_merge($cores, ['custom' => esc_html(__('Custom', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))]);
+        $options = array_column($cores, 'label', 'domain');
+        $options['custom'] = esc_html(__('Custom', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));
+
+        return $options;
     }
 }
