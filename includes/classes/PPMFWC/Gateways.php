@@ -818,6 +818,7 @@ class PPMFWC_Gateways
         add_action('woocommerce_api_wc_pay_gateway_exchange', array(__CLASS__, 'ppmfwc_onExchange'));
         add_action('woocommerce_api_wc_pay_gateway_featurerequest', array(__CLASS__, 'ppmfwc_onFeatureRequest'));
         add_action('woocommerce_api_wc_pay_gateway_pinrefund', array(__CLASS__, 'ppmfwc_onPinRefund'));
+        add_action('woocommerce_api_wc_pay_gateway_retourpinreturn', array(__CLASS__, 'ppmfwc_retourpinReturn'));
         add_action('woocommerce_api_wc_pay_gateway_fccreate', array('PPMFWC_Hooks_FastCheckout_Start', 'ppmfwc_onFastCheckoutOrderCreate'));
         add_action('woocommerce_api_wc_pay_gateway_pintransaction', array(__CLASS__, 'ppmfwc_onPinRefund'));
     }
@@ -1150,6 +1151,19 @@ class PPMFWC_Gateways
     }
 
     /**
+     * @return void
+     */
+    public static function ppmfwc_retourpinReturn()
+    {
+        $orderId = (int)PPMFWC_Helper_Data::getRequestArg('order_id');
+        if (!empty($orderId)) {
+            # Redirect to WooCommerce orderpage
+            $redirectUrl = admin_url("admin.php?page=wc-orders&action=edit&id={$orderId}");
+            wp_redirect($redirectUrl);
+        }
+    }
+
+    /**
      * Handles the Pay. feature requests
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
@@ -1158,7 +1172,6 @@ class PPMFWC_Gateways
         try {
             $amount = PPMFWC_Helper_Data::getPostTextField('amount');
             $terminal = PPMFWC_Helper_Data::getPostTextField('terminal');
-            $returnUrl = PPMFWC_Helper_Data::getPostTextField('returnUrl');
             $order_id = PPMFWC_Helper_Data::getPostTextField('order_id');
             $type = PPMFWC_Helper_Data::getPostTextField('type');
 
@@ -1173,6 +1186,11 @@ class PPMFWC_Gateways
 
             $currency = $order->get_currency();
             $order_id = $order->get_id();
+
+            $returnUrl = add_query_arg([
+                'wc-api'    => 'wc_pay_gateway_retourpinreturn',
+                'order_id'  => $order->get_order_number(),
+            ], home_url('/'));
 
             $prefix = empty(get_option('paynl_order_description_prefix')) ? '' : get_option('paynl_order_description_prefix');
 
