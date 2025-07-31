@@ -605,7 +605,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 }
             }
 
-            PPMFWC_Helper_Transaction::newTransaction($payOrder->getOrderId(), $paymentOption, $order->get_total(), $order_id, '');
+            PPMFWC_Helper_Transaction::newTransaction($payOrder->getOrderId(), $paymentOption, ($order->get_total() * 100), $order_id, '');
 
             # Return success redirect
             return array(

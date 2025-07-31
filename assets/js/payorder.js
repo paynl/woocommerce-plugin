@@ -24,13 +24,13 @@ function submitPinRefund($) {
     doAjaxRequest($, amount, 'refund')
 }
 
-function submitPinTransaction($) {
+function submitPinTransaction($)
+{
     var amount = parseFloat(paynl_order.order_total.toString().replace(',', '.'));
     if (amount == 0) {
         alert(paynl_order.texts.i18n_pinmoment_error_zero);
         return;
     }
-
     doAjaxRequest($, amount, 'pinmoment')
 }
 
@@ -64,6 +64,9 @@ function doAjaxRequest($, amount, type)
     })
 }
 
+/**
+ * Button for: retour-pin
+ */
 function addButton($) {
     let buttonPlaced = $('#paynl-pin-refund').length > 0;
     paynl_order.max_amount = parseFloat(paynl_order.max_amount);
@@ -80,9 +83,15 @@ function addButton($) {
 }
 
 
-function addPinButton($) {
+/**
+ * Button for payment an order by "pin" from out the order
+ * @param $
+ */
+function addPinButton($)
+{
     let buttonPlaced = $('#paynl-pin-transaction').length > 0;
     paynl_order.order_total = parseFloat(paynl_order.order_total);
+
     if (!buttonPlaced && paynl_order.order_total > 0) {
         $('.wc-order-bulk-actions').prepend('<button style="background-color:#2271B1;;float: right; margin-left: 5px;" type="button" id="paynl-pin-transaction" class="button button-primary do-api-pin-transaction">' + paynl_order.texts.i18n_pinmoment_title + '</button>');
         $('#paynl-pin-transaction').click(function () {

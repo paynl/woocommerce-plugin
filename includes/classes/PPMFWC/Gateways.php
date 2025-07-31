@@ -826,7 +826,6 @@ class PPMFWC_Gateways
         add_action('woocommerce_api_wc_pay_gateway_pinrefund', array(__CLASS__, 'ppmfwc_onPinRefund'));
         add_action('woocommerce_api_wc_pay_gateway_retourpinreturn', array(__CLASS__, 'ppmfwc_retourpinReturn'));
         add_action('woocommerce_api_wc_pay_gateway_fccreate', array('PPMFWC_Hooks_FastCheckout_Start', 'ppmfwc_onFastCheckoutOrderCreate'));
-        add_action('woocommerce_api_wc_pay_gateway_pintransaction', array(__CLASS__, 'ppmfwc_onPinRefund'));
     }
 
     /**
@@ -988,7 +987,6 @@ class PPMFWC_Gateways
         $arrPayActions[self::ACTION_CANCEL] = self::STATUS_CANCELED;
         $arrPayActions[self::ACTION_VERIFY] = self::STATUS_VERIFY;
         $arrPayActions[self::ACTION_REFUND] = self::STATUS_REFUND;
-        $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
         $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
         $arrPayActions[self::ACTION_CHARGEBACK] = self::STATUS_CHARGEBACK;
         $arrPayActions[self::ACTION_PINREFUND] = self::STATUS_PINREFUND;
@@ -1228,7 +1226,7 @@ class PPMFWC_Gateways
             $order->update_meta_data('pinRefundTransactionId', $payOrder->getOrderId());
             $order->save();
 
-            PPMFWC_Helper_Transaction::newTransaction($payOrder->getOrderId(), PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND, $amount, $order_id, '');
+            PPMFWC_Helper_Transaction::newTransaction($payOrder->getOrderId(), PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND, ($amount * 100), $order_id, '');
 
             $returnArray = array(
                 'success' => true,

@@ -407,7 +407,8 @@ function ppmfwc_add_order_js($order)
                     );
 
                     ppmfwc_setup_instore_scripts($terminals, $texts, $additionalData);
-                } elseif (empty($transactionId)) {
+                }
+                elseif (empty($transactionId)) {
                     # A pin transaction hasn't been made. Show the pin button to start a pin transaction
                     $texts = array(
                         'i18n_pinmoment_error_zero' => __("Pin transaction amount must be greater than €0.00", PPMFWC_WOOCOMMERCE_TEXTDOMAIN),

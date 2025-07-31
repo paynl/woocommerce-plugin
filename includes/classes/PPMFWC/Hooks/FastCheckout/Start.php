@@ -62,7 +62,7 @@ class PPMFWC_Hooks_FastCheckout_Start
             $order->update_meta_data('fc', true);
             $order->save();
 
-            PPMFWC_Helper_Transaction::newTransaction($transactionId, $data['paymentMethod'], $order->get_total(), $order->get_id(), '');
+            PPMFWC_Helper_Transaction::newTransaction($transactionId, $data['paymentMethod'], ($order->get_total() * 100), $order->get_id(), '');
 
             wp_redirect($redirectUrl);
         } catch (\Exception $e) {

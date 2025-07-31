@@ -173,7 +173,7 @@ class PPMFWC_Helper_Transaction
 
         if (empty($transactionLocalDB)) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
-            PPMFWC_Helper_Transaction::newTransaction($transactionId, $methodId ?? 0, $order->get_total(), $orderId, 'start-data');
+            PPMFWC_Helper_Transaction::newTransaction($transactionId, $methodId ?? 0, ($order->get_total() * 100), $orderId, 'start-data');
         }
 
         $transactionPaid = array($payOrder->getAmount());
@@ -203,9 +203,10 @@ class PPMFWC_Helper_Transaction
             } elseif ($payApiStatus == PPMFWC_Gateways::STATUS_CHARGEBACK) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process chargeback', $transactionId);
             } elseif ($status == PPMFWC_Gateways::STATUS_PINREFUND && $payApiStatus == PPMFWC_Gateways::STATUS_SUCCESS) {
-                PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process pinrefund', $transactionId);
-                $order->add_order_note(sprintf(esc_html(__('Pay.: Refunded: EUR %s via Retourpinnen', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), PPMFWC_Helper_Data::getRequestArg('amount')));
-                self::processRefund($order, PPMFWC_Helper_Data::getRequestArg('amount'));
+                $pinRefundAmount = ($transactionLocalDB['amount'] / 100);
+                PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process pin refund', $transactionId);
+                $order->add_order_note(sprintf(esc_html(__('Pay.: Refunded: EUR %s via Retourpinnen', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $pinRefundAmount));
+                self::processRefund($order, $pinRefundAmount);
                 return PPMFWC_Gateways::STATUS_REFUND;
             } else {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Done', $transactionId);
@@ -372,7 +373,7 @@ class PPMFWC_Helper_Transaction
     {
         $orderId = $order->get_id();
         $refund = wc_create_refund(array(
-            'amount' => (int) $amount,
+            'amount' => (float)$amount,
             'reason' => null,
             'order_id' => $orderId,
             'line_items' => array(),
@@ -382,8 +383,8 @@ class PPMFWC_Helper_Transaction
         if ($refund instanceof WP_Error && $refund->has_errors()) {
             throw new PPMFWC_Exception($refund->get_error_message());
         }
-        if (PPMFWC_Helper_Data::getRequestArg('amount') == $order->get_remaining_refund_amount()) {
-            $order->set_status('refunded');
+
+        if ($amount == $order->get_total()) {
             if (get_option('paynl_exclude_restock') != "yes") {
                 wc_increase_stock_levels($orderId);
             }
