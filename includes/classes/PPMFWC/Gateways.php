@@ -269,6 +269,8 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_checkCredentials()
     {
+        $error = '';
+
         if (empty(self::$pms)) {
             try {
                 $config = PPMFWC_Helper_Config::getPayConfig();
@@ -279,21 +281,25 @@ class PPMFWC_Gateways
                 update_option('paynl_terminals', $serviceConfig->getTerminals());
                 update_option('paynl_payment_options', $paymentOptions);
                 self::$pms = $paymentOptions;
-            } catch (PPMFWC_Exception $e) {
+            } catch (PPMFWC_Exception|\PayNL\Sdk\Exception\PayException $e) {
+                $error = 'incorrect_credentials';
             }
         }
 
         $html = '';
         $warning = '';
-        $error = '';
+
         try {
+            if ($error) {
+                throw new Exception($error);
+            }
             PPMFWC_Helper_Data::loadPaymentMethods();
         } catch (Exception $e) {
             $current_apitoken = get_option('paynl_apitoken');
             $current_serviceid = get_option('paynl_serviceid');
             $current_tokencode = get_option('paynl_tokencode');
             $error = $e->getMessage();
-            if (strlen($current_apitoken . $current_serviceid . $current_tokencode) == 0) {
+            if (strlen(trim($current_apitoken . $current_serviceid . $current_tokencode)) == 0) {
                 $post_apitoken = PPMFWC_Helper_Data::getPostTextField('paynl_apitoken');
                 $post_serviceid = PPMFWC_Helper_Data::getPostTextField('paynl_serviceid');
                 $post_tokencode = PPMFWC_Helper_Data::getPostTextField('paynl_tokencode');
@@ -301,7 +307,6 @@ class PPMFWC_Gateways
                     $error = __('API token and Sales Location are required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
                 } else {
                     $warning = __('Pay. not connected.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
-                    ;
                 }
             } elseif (strlen($current_apitoken . $current_serviceid) == 0) {
                 $error = __('API token and Sales Location are required.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
@@ -312,6 +317,7 @@ class PPMFWC_Gateways
             }
 
             switch ($error) {
+                case 'incorrect_credentials':
                 case 'HTTP/1.0 401 Unauthorized':
                     $error = __('Token Code, API token or Sales Location invalid.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
                     break;
