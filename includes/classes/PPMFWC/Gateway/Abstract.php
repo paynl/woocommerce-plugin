@@ -69,6 +69,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         if (!empty($brandid)) {
             return PPMFWC_PLUGIN_URL . 'assets/logos/' . $this->get_option('brand_id') . '.png';
         }
+
+        if (!empty($this->getImagePathName())) {
+            return PPMFWC_PLUGIN_URL . 'assets/logos/payment_method_groups/' . $this->getImagePathName();
+        }
+
         return '';
     }
 
@@ -867,5 +872,12 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         }
     }
 
+    /**
+     * @return integer
+     */
+    public static function getImagePathName()
+    {
+        return '';
+    }
 
 }

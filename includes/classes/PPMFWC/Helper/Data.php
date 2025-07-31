@@ -351,7 +351,7 @@ class PPMFWC_Helper_Data
     /**
      * @return string[]
      */
-    public static function ppmfwc_getGateways()
+    public static function ppmfwc_getCores()
     {
         $cores = get_site_option('paynl_cores') ?? [];
 

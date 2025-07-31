@@ -176,6 +176,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Yourgift',
         'PPMFWC_Gateway_YourGreenGiftCard',
         'PPMFWC_Gateway_Yehhpay',
+        'PPMFWC_Gateway_GiftCardsGrouped',
     );
 
     /**
@@ -622,7 +623,7 @@ class PPMFWC_Gateways
             $addedSettings[] = array(
                 'name' => __('Multicore', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                 'type' => 'select',
-                'options' => PPMFWC_Helper_Data::ppmfwc_getGateways(),
+                'options' => PPMFWC_Helper_Data::ppmfwc_getCores(),
                 'desc' => esc_html(__('Select the core which will be used for processing payments', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'id' => 'paynl_failover_gateway',
                 'default' => 'nl',
