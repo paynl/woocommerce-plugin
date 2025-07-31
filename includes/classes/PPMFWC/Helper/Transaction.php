@@ -70,9 +70,9 @@ class PPMFWC_Helper_Transaction
 
     /**
      * @param string $orderId
-     * @return string|boolean
+     * @return array|boolean
      */
-    public static function getPaidTransactionIdForOrderId(string $orderId): bool|string
+    public static function getPaidTransactionIdForOrderId(string $orderId): bool|array
     {
         global $wpdb;
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
