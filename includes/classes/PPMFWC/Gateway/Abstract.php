@@ -491,7 +491,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 }
             }
 
-            if (is_array($arrShippingAllowed) && !in_array('all', $arrShippingAllowed)) {
+            if (is_array($arrShippingAllowed) && !in_array('all', $arrShippingAllowed) && !empty($shippingMethods)) {
                 foreach ($shippingMethods as $shippingMethod) {
                     if (!in_array($shippingMethod, $arrShippingAllowed)) {
                         return false;
