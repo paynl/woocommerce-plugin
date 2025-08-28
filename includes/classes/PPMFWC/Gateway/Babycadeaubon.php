@@ -7,7 +7,7 @@
  * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
  */
 
-class Babycadeaubon extends PPMFWC_Gateway_Abstract
+class PPMFWC_Gateway_Babycadeaubon extends PPMFWC_Gateway_Abstract
 {
     /**
      * @return string
