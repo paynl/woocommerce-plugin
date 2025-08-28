@@ -27,6 +27,7 @@ class PPMFWC_Gateways
     const ACTION_CANCEL = 'cancel';
     const ACTION_VERIFY = 'verify';
     const ACTION_REFUND = 'refund:received';
+    const ACTION_REFUND_ADD = 'refund:add';
     const ACTION_CAPTURE = 'capture';
     const ACTION_CHARGEBACK = 'chargeback:chargeback';
     const ACTION_PINREFUND = 'pinrefund';
@@ -947,6 +948,7 @@ class PPMFWC_Gateways
         $arrPayActions[self::ACTION_CANCEL] = self::STATUS_CANCELED;
         $arrPayActions[self::ACTION_VERIFY] = self::STATUS_VERIFY;
         $arrPayActions[self::ACTION_REFUND] = self::STATUS_REFUND;
+        $arrPayActions[self::ACTION_REFUND_ADD] = self::STATUS_REFUND;
         $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
         $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
         $arrPayActions[self::ACTION_CHARGEBACK] = self::STATUS_CHARGEBACK;
@@ -1067,13 +1069,15 @@ class PPMFWC_Gateways
                     die('FALSE| Already processing payment');
                 }
             }
-            if (in_array($action, array_keys($arrActions))) {
+            if (in_array($action, array_keys($arrActions)))
+            {
                 $status = $arrActions[$action];
             } else {
                 throw new PPMFWC_Exception_Notice('Ignoring: ' . $action);
             }
 
-            if (!in_array($action, array(self::ACTION_PENDING))) {
+            if (!in_array($action, array(self::ACTION_PENDING)))
+            {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => $wc_order_id, 'methodid' => $methodId));
 
                 # Try to update the orderstatus.
