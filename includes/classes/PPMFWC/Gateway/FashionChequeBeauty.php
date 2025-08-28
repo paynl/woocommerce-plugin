@@ -7,7 +7,7 @@
  * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
  */
 
-class FashionChequeBeauty extends PPMFWC_Gateway_Abstract
+class PPMFWC_Gateway_FashionChequeBeauty extends PPMFWC_Gateway_Abstract
 {
     /**
      * @return string
