@@ -166,22 +166,4 @@ class PPMFWC_Setup
             wp_die(esc_html($error), esc_html($title), array('back_link' => true));
         }
     }
-
-    /**
-     * @return void|boolean
-     */
-    public static function ppmfwc_testConnection()
-    {
-        # Only run this if the setting is not saved
-        if (get_option('paynl_verify_peer') === false) {
-            try {
-                # Test the connection using a dummy IP
-                \Paynl\Validate::isPayServerIp('10.20.30.40');
-                add_option('paynl_verify_peer', 'yes');
-            } catch (Exception $e) {
-                add_option('paynl_verify_peer', 'no');
-                return false;
-            }
-        }
-    }
 }
