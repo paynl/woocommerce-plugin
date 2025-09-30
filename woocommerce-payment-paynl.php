@@ -48,9 +48,6 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     # Register PAY gateway in WooCommerce
     PPMFWC_Gateways::ppmfwc_register();
 
-    # Test if Pay. can be reached
-    PPMFWC_Setup::ppmfwc_testConnection();
-
     # Register checkoutFlash
     PPMFWC_Gateways::ppmfwc_registerCheckoutFlash();
 

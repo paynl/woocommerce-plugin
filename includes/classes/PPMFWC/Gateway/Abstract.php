@@ -332,11 +332,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     $payDefaults = array();
                 }
 
-                $this->set_option_default('brand_id', (isset($payDefaults['brand']['id'])) ? $payDefaults['brand']['id']  : '', true);
-                $this->set_option_default('min_amount', (isset($payDefaults['min_amount'])) ? floatval($payDefaults['min_amount'] / 100)  : '', false);
-                $this->set_option_default('max_amount', (isset($payDefaults['max_amount'])) ? floatval($payDefaults['max_amount'] / 100)  : '', false);
+                $this->set_option_default('brand_id', (isset($payDefaults->brand->id)) ? $payDefaults->brand->id : '', true);
+                $this->set_option_default('min_amount', (isset($payDefaults->min_amount)) ? floatval($payDefaults->min_amount / 100)  : '', false);
+                $this->set_option_default('max_amount', (isset($payDefaults->max_amount)) ? floatval($payDefaults->max_amount / 100)  : '', false);
 
-                $pubDesc = isset($payDefaults['brand']['public_description']) ? $payDefaults['brand']['public_description'] : sprintf(esc_html(__('Pay with %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()); // phpcs:ignore
+                $pubDesc = (isset($payDefaults->brand->public_description)) ? $payDefaults->brand->public_description : sprintf(esc_html(__('Pay with %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()); // phpcs:ignore
                 $this->set_option_default('description', $pubDesc, true);
             }
         } else {
