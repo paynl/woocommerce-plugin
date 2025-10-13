@@ -38,9 +38,9 @@
             'dev_requirement' => false,
         ),
         'paynl/php-sdk' => array(
-            'pretty_version' => '1.0.4',
-            'version' => '1.0.4.0',
-            'reference' => 'cf703fcb9d705712c4196d3589ebc113d2b214b7',
+            'pretty_version' => '1.0.7',
+            'version' => '1.0.7.0',
+            'reference' => 'ca571e5fc28276e4d6d577a7e5a904d26647b42c',
             'type' => 'library',
             'install_path' => __DIR__ . '/../paynl/php-sdk',
             'aliases' => array(),

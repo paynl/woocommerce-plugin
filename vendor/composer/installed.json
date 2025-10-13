@@ -336,17 +336,17 @@
         },
         {
             "name": "paynl/php-sdk",
-            "version": "1.0.4",
-            "version_normalized": "1.0.4.0",
+            "version": "1.0.7",
+            "version_normalized": "1.0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paynl/php-sdk.git",
-                "reference": "cf703fcb9d705712c4196d3589ebc113d2b214b7"
+                "reference": "ca571e5fc28276e4d6d577a7e5a904d26647b42c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paynl/php-sdk/zipball/cf703fcb9d705712c4196d3589ebc113d2b214b7",
-                "reference": "cf703fcb9d705712c4196d3589ebc113d2b214b7",
+                "url": "https://api.github.com/repos/paynl/php-sdk/zipball/ca571e5fc28276e4d6d577a7e5a904d26647b42c",
+                "reference": "ca571e5fc28276e4d6d577a7e5a904d26647b42c",
                 "shasum": ""
             },
             "require": {
@@ -366,7 +366,7 @@
                 "squizlabs/php_codesniffer": "^3",
                 "symfony/var-dumper": "^7"
             },
-            "time": "2025-07-27T16:01:30+00:00",
+            "time": "2025-09-29T14:56:34+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -393,7 +393,7 @@
             "support": {
                 "email": "webshop@pay.nl",
                 "issues": "https://github.com/paynl/php-sdk/issues",
-                "source": "https://github.com/paynl/php-sdk/tree/v1.0.4"
+                "source": "https://github.com/paynl/php-sdk/tree/v1.0.7"
             },
             "install-path": "../paynl/php-sdk"
         },
