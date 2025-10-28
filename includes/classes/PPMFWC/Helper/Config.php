@@ -100,8 +100,8 @@ class PPMFWC_Helper_Config
 
         $company = new \PayNL\Sdk\Model\Company();
         $company->setName($order->get_billing_company());
-        $company->setVat(PPMFWC_Helper_Data::getPostTextField('vat_number', true));
-        $company->setCoc(PPMFWC_Helper_Data::getPostTextField('coc_number', true));
+        $company->setVat((string)PPMFWC_Helper_Data::getPostTextField('vat_number', true));
+        $company->setCoc((string)PPMFWC_Helper_Data::getPostTextField('coc_number', true));
         $company->setCountryCode(strtoupper($order->get_billing_country()));
         $customer->setCompany($company);
         $customer->setIpAddress(self::getIpAddress($order));

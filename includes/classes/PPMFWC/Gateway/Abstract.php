@@ -667,10 +667,12 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $request->setExchangeUrl($exchangeUrl);
         $request->setDescription(str_replace('__', ' ', $prefix) . $order->get_order_number());
         $request->setAmount($order->get_total());
-        $request->setReference($order->get_order_number());
+
+        $raw = (string)($order->get_order_number() ?? '');
+        $clean = preg_replace('/[^A-Za-z0-9]/u', '', $raw);
+        $request->setReference($clean);
 
         if ($this->getOptionId() == 1927) {
-            //paydbg(PPMFWC_Helper_Data::getPostTextField('terminal_id'));
             $request->setTerminal(PPMFWC_Helper_Data::getPostTextField('terminal_id'));
         }
 
@@ -689,78 +691,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $requestOrderData->setInvoiceAddress(PPMFWC_Helper_Config::getInvoiceAddress($order));
         $requestOrderData->setDeliveryAddress(PPMFWC_Helper_Config::getDeliveryAddress($order));
         $request->setOrder($requestOrderData);
-
-
-//        # Retrieve order data
-//        $shippingAddress = $order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2();
-//
-//        $billingAddress  = $order->get_billing_address_1() . ' ' . $order->get_billing_address_2();
-//        $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
-//        $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
-//
-//        # Check order meta for postNL plugin house number
-//        $_shipping_house_number = $order->get_meta('_shipping_house_number');
-//        if (empty($aShippingAddress[1]) && !empty($_shipping_house_number)) {
-//            $shippingAddress = $order->get_shipping_address_1() . ' ' . $_shipping_house_number . $order->get_shipping_address_2();
-//        }
-//
-//        $_billing_house_number = $order->get_meta('_billing_house_number');
-//        if (empty($aBillingAddress[1]) && !empty($_billing_house_number)) {
-//            $billingAddress = $order->get_billing_address_1() . ' ' . $_billing_house_number .
-//                $order->get_billing_address_2();
-//        }
-//
-//        $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
-//        $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
-//        $address = array(
-//            'streetName' => $aShippingAddress[0],
-//            'houseNumber' => $aShippingAddress[1],
-//            'zipCode' => $order->get_shipping_postcode(),
-//            'city' => $order->get_shipping_city(),
-//            'country' => $order->get_shipping_country()
-//        );
-//
-//        if ($this->get_option('use_invoice_address') == 'yes')
-//        {
-//            PPMFWC_Helper_Data::ppmfwc_payLogger('Use_invoice_address=yes. Updating shipping address');
-//            $address = array(
-//                'streetName'  => $aBillingAddress[0],
-//                'houseNumber' => $aBillingAddress[1],
-//                'zipCode'     => $order->get_billing_postcode(),
-//                'city'        => $order->get_billing_city(),
-//                'country'     => $billing_country
-//                );
-//        }
-
-      #  $startData['address'] = $address;
-//$startData['invoiceAddress'] = array(
-//    'initials'    => $order->get_billing_first_name(),
-//    'lastName'    => substr($order->get_billing_last_name(), 0, 32),
-//    'streetName'  => $aBillingAddress[0],
-//    'houseNumber' => $aBillingAddress[1],
-//    'zipCode'     => $order->get_billing_postcode(),
-//    'city'        => $order->get_billing_city(),
-//    'country'     => $billing_country,
-//);
-
-        //$startData['products'] = $this->getProductLines($order);
-
-//        $optionSubId = PPMFWC_Helper_Data::getPostTextField('selectedissuer');
-//        if (empty($optionSubId)) {
-//            $optionSubId = PPMFWC_Helper_Data::getPostTextField('option_sub_id');
-//        }
-
-//        if (!empty($optionSubId)) {
-//            $startData['bank'] = $optionSubId;
-//        }
-
-        $language = get_option('paynl_language');
-
-        if ($language == 'browser') {
-            $language = PPMFWC_Helper_Data::getBrowserLanguage();
-        }
-
-        //$startData['language'] = $language;
 
         if ($pickupLocation === true) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Payment at pickup, order has been made but transaction skipped.');

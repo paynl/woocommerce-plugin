@@ -1028,10 +1028,10 @@ class PPMFWC_Gateways
                 $exchange->setResponse(true, 'Ignoring pending');
             }
 
-            $config = PPMFWC_Helper_Config::getPayConfig();
-            $payOrder = $exchange->process($config);
+            $payOrder = $exchange->process(PPMFWC_Helper_Config::getPayConfig());
+            $payOrderId = $payOrder->getOrderId();
 
-            PPMFWC_Helper_Data::ppmfwc_payLogger('payOrder: ' . $payOrder->getOrderId());
+            PPMFWC_Helper_Data::ppmfwc_payLogger('payOrderId: ' . $payOrderId);
 
             if ($payOrder->isPending()) {
                 $exchange->setResponse(true, 'Ignoring pending.');
@@ -1045,7 +1045,7 @@ class PPMFWC_Gateways
             }
 
             if ($action == self::ACTION_NEWPPT) {
-                if (PPMFWC_Helper_Transaction::checkProcessing($order_id)) {
+                if (PPMFWC_Helper_Transaction::checkProcessing($payOrderId)) {
                     $exchange->setResponse(false, 'Already processing payment.');
                 }
             }
@@ -1073,8 +1073,8 @@ class PPMFWC_Gateways
             $responseMessage = 'Error 2: ' . $e->getMessage();
         }
 
-        if (($action ?? '') == self::ACTION_NEWPPT && isset($order_id)) {
-            PPMFWC_Helper_Transaction::removeProcessing($order_id);
+        if (($action ?? '') == self::ACTION_NEWPPT && isset($payOrderId)) {
+            PPMFWC_Helper_Transaction::removeProcessing($payOrderId);
         }
 
         $exchange->setResponse($responseResult, $responseMessage);
