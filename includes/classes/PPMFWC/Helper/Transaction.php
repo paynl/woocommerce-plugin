@@ -164,10 +164,10 @@ class PPMFWC_Helper_Transaction
             throw new PPMFWC_Exception_Notice('Woocommerce could not find internal order ' . $orderId);
         }
 
-        PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
+        PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $transactionId, array($status, $localTransactionStatus, $orderId));
 
         if ($status == $localTransactionStatus) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - status allready up-to-date', $transactionId, array('status' => $status));
+            PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - status already up-to-date', $transactionId, array('status' => $status));
             throw new PPMFWC_Exception_Notice('Already ' . $status);
         }
 
@@ -228,7 +228,7 @@ class PPMFWC_Helper_Transaction
 
                     if ($payOrder->isFastCheckout()) {
                         if ($transactionId == $order->get_meta('transactionId') && $order->get_meta('fc')) {
-                            PPMFWC_Helper_Data::ppmfwc_payLogger('adding AddressToOrder');
+                            PPMFWC_Helper_Data::ppmfwc_payLogger('FC: adding address to successful order', $transactionId);
                             PPMFWC_Hooks_FastCheckout_Exchange::addAddressToOrder($payOrder->getCheckoutData(), $order);
                         }
                     }

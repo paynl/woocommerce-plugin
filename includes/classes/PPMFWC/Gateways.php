@@ -850,16 +850,6 @@ class PPMFWC_Gateways
 
         PPMFWC_Helper_Data::ppmfwc_payLogger('FINISH, back from PAY payment', $orderId, array('orderStatusId' => $orderStatusId, 'status' => $status));
 
-        ///?wc-api=Wc_Pay_Gateway_Return
-        /// id=44907558081X114c
-        /// reference=39
-        /// statusAction=CANCEL
-        /// statusCode=-64
-        /// ticket=
-        /// utm_nooverride=1
-
-        #return (new PayStatus())->get($statusCode) === PayStatus::DENIED
-
         try {
             # Retrieve URL to continue (and update status if necessary)
             if (!empty($orderId)) {
@@ -1028,10 +1018,8 @@ class PPMFWC_Gateways
                 $exchange->setResponse(true, 'Ignoring pending');
             }
 
-            $config = PPMFWC_Helper_Config::getPayConfig();
-            $payOrder = $exchange->process($config);
-
-            PPMFWC_Helper_Data::ppmfwc_payLogger('payOrder: ' . $payOrder->getOrderId());
+            $payOrder = $exchange->process(PPMFWC_Helper_Config::getPayConfig());
+            $payOrderId = $payOrder->getOrderId();
 
             if ($payOrder->isPending()) {
                 $exchange->setResponse(true, 'Ignoring pending.');
@@ -1040,12 +1028,14 @@ class PPMFWC_Gateways
             $order_id = $exchange->getReference();
             $methodId = $payOrder->getPaymentMethod();
 
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange', $payOrderId, array('action' => $action, 'wc_order_id' => $order_id, 'methodid' => $methodId));
+
             if ($methodId == PPMFWC_Gateway_Abstract::PAYMENT_METHOD_PINREFUND && $action == self::ACTION_NEWPPT) {
                 $action = self::ACTION_PINREFUND;
             }
 
             if ($action == self::ACTION_NEWPPT) {
-                if (PPMFWC_Helper_Transaction::checkProcessing($order_id)) {
+                if (PPMFWC_Helper_Transaction::checkProcessing($payOrderId)) {
                     $exchange->setResponse(false, 'Already processing payment.');
                 }
             }
@@ -1057,7 +1047,7 @@ class PPMFWC_Gateways
                 throw new PPMFWC_Exception_Notice('Ignoring: ' . $action);
             }
 
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange incoming', $order_id, array('action' => $action, 'wc_order_id' => '', 'methodid' => $methodId));
+
 
             $newStatus = PPMFWC_Helper_Transaction::processTransaction($payOrder, $status, $methodId);
             $responseMessage = 'Status updated to ' . $newStatus;
@@ -1065,16 +1055,18 @@ class PPMFWC_Gateways
 
         } catch (PPMFWC_Exception_Notice $e) {
             $responseMessage = $e->getMessage();
+
         } catch (PPMFWC_Exception $e) {
-            $responseResult = false;
             $responseMessage = 'Error 1: ' . $e->getMessage();
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange error: ' . $e->getMessage(), ($order_id ?? 0), array('action' => ($action ?? ''), 'wc_order_id' => '', 'payOrderId' => ($payOrderId ?? '')), 'critical');
+
         } catch (Exception $e) {
-            $responseResult = false;
             $responseMessage = 'Error 2: ' . $e->getMessage();
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange Error: ' . $e->getMessage(), ($order_id ?? 0), array('action' => ($action ?? ''), 'wc_order_id' => '', 'payOrderId' => ($payOrderId ?? '')), 'critical');
         }
 
-        if (($action ?? '') == self::ACTION_NEWPPT && isset($order_id)) {
-            PPMFWC_Helper_Transaction::removeProcessing($order_id);
+        if (($action ?? '') == self::ACTION_NEWPPT && isset($payOrderId)) {
+            PPMFWC_Helper_Transaction::removeProcessing($payOrderId);
         }
 
         $exchange->setResponse($responseResult, $responseMessage);

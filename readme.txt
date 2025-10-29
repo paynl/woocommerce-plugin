@@ -1,12 +1,12 @@
 === Pay. Payment Methods for WooCommerce ===
-Contributors: andypay
+Contributors: woutse
 Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
-Requires at least: 3.5.1
+Requires at least: 6.1.0
 Stable tag: 4.0.0
-Tested up to: 6.8
-WC tested up to: 9.8.1
+Tested up to: 6.8.3
+WC tested up to: 10.3.3
 WC requires at least: 3.0
 Requires PHP: 8.1
 License: GPLv2

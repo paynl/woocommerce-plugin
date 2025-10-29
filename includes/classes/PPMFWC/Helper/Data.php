@@ -23,13 +23,11 @@ class PPMFWC_Helper_Data
      */
     public static function ppmfwc_payLogger($message, $payTransactionId = null, $infoFields = array(), $type = 'info')
     {
-        if (self::$paylog === true || self::$paylog === null) {
-            if (empty(self::$paylog)) {
-                self::$paylog = get_option('paynl_paylogger') == 'yes';
-                if (!self::$paylog) {
-                    return;
-                }
-            }
+        if (self::$paylog === null) {
+            self::$paylog = get_option('paynl_paylogger') == 'yes';
+        }
+
+        if (self::$paylog === true || strtolower($type) == 'critical') {
             if (!in_array($type, array('emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug'))) {
                 $type = 'info';
             }

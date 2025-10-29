@@ -9,7 +9,7 @@ use PayNL\Sdk\Model\Request\OrderCreateRequest;
  * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
  * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  * @phpcs:disable PSR1.Methods.CamelCapsMethodName
- * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
+ * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
  * @phpcs:disable PSR12.Properties.ConstantVisibility
  */
 
@@ -614,15 +614,17 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             # Return success redirect
             return array(
-              'result'   => 'success',
-              'redirect' => $payOrder->getPaymentUrl()
+                'result' => 'success',
+                'redirect' => $payOrder->getPaymentUrl()
             );
+
         } catch (PPMFWC_Exception_Notice $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Process payment start notice: ' . $e->getMessage());
             $message = $e->getMessage();
             wc_add_notice($message, 'error');
-        } catch (Exception $e) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error: ' . esc_html($e->getMessage()), null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
+
+        } catch (Exception $e)  {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error ' . esc_html($e->getMessage()), null, array('wc_order_id' => $order_id, 'methodid' => $paymentOption), 'critical');
             $message = 'Could not initiate payment. Please try again or use another payment method.';
             wc_add_notice(esc_html(__($message, PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
         }
@@ -667,10 +669,12 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $request->setExchangeUrl($exchangeUrl);
         $request->setDescription(str_replace('__', ' ', $prefix) . $order->get_order_number());
         $request->setAmount($order->get_total());
-        $request->setReference($order->get_order_number());
+
+        $raw = (string)($order->get_order_number() ?? '');
+        $clean = preg_replace('/[^A-Za-z0-9]/u', '', $raw);
+        $request->setReference($clean);
 
         if ($this->getOptionId() == 1927) {
-            //paydbg(PPMFWC_Helper_Data::getPostTextField('terminal_id'));
             $request->setTerminal(PPMFWC_Helper_Data::getPostTextField('terminal_id'));
         }
 
@@ -689,78 +693,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $requestOrderData->setInvoiceAddress(PPMFWC_Helper_Config::getInvoiceAddress($order));
         $requestOrderData->setDeliveryAddress(PPMFWC_Helper_Config::getDeliveryAddress($order));
         $request->setOrder($requestOrderData);
-
-
-//        # Retrieve order data
-//        $shippingAddress = $order->get_shipping_address_1() . ' ' . $order->get_shipping_address_2();
-//
-//        $billingAddress  = $order->get_billing_address_1() . ' ' . $order->get_billing_address_2();
-//        $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
-//        $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
-//
-//        # Check order meta for postNL plugin house number
-//        $_shipping_house_number = $order->get_meta('_shipping_house_number');
-//        if (empty($aShippingAddress[1]) && !empty($_shipping_house_number)) {
-//            $shippingAddress = $order->get_shipping_address_1() . ' ' . $_shipping_house_number . $order->get_shipping_address_2();
-//        }
-//
-//        $_billing_house_number = $order->get_meta('_billing_house_number');
-//        if (empty($aBillingAddress[1]) && !empty($_billing_house_number)) {
-//            $billingAddress = $order->get_billing_address_1() . ' ' . $_billing_house_number .
-//                $order->get_billing_address_2();
-//        }
-//
-//        $aBillingAddress = \Paynl\Helper::splitAddress($billingAddress);
-//        $aShippingAddress = \Paynl\Helper::splitAddress($shippingAddress);
-//        $address = array(
-//            'streetName' => $aShippingAddress[0],
-//            'houseNumber' => $aShippingAddress[1],
-//            'zipCode' => $order->get_shipping_postcode(),
-//            'city' => $order->get_shipping_city(),
-//            'country' => $order->get_shipping_country()
-//        );
-//
-//        if ($this->get_option('use_invoice_address') == 'yes')
-//        {
-//            PPMFWC_Helper_Data::ppmfwc_payLogger('Use_invoice_address=yes. Updating shipping address');
-//            $address = array(
-//                'streetName'  => $aBillingAddress[0],
-//                'houseNumber' => $aBillingAddress[1],
-//                'zipCode'     => $order->get_billing_postcode(),
-//                'city'        => $order->get_billing_city(),
-//                'country'     => $billing_country
-//                );
-//        }
-
-      #  $startData['address'] = $address;
-//$startData['invoiceAddress'] = array(
-//    'initials'    => $order->get_billing_first_name(),
-//    'lastName'    => substr($order->get_billing_last_name(), 0, 32),
-//    'streetName'  => $aBillingAddress[0],
-//    'houseNumber' => $aBillingAddress[1],
-//    'zipCode'     => $order->get_billing_postcode(),
-//    'city'        => $order->get_billing_city(),
-//    'country'     => $billing_country,
-//);
-
-        //$startData['products'] = $this->getProductLines($order);
-
-//        $optionSubId = PPMFWC_Helper_Data::getPostTextField('selectedissuer');
-//        if (empty($optionSubId)) {
-//            $optionSubId = PPMFWC_Helper_Data::getPostTextField('option_sub_id');
-//        }
-
-//        if (!empty($optionSubId)) {
-//            $startData['bank'] = $optionSubId;
-//        }
-
-        $language = get_option('paynl_language');
-
-        if ($language == 'browser') {
-            $language = PPMFWC_Helper_Data::getBrowserLanguage();
-        }
-
-        //$startData['language'] = $language;
 
         if ($pickupLocation === true) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Payment at pickup, order has been made but transaction skipped.');
@@ -821,21 +753,22 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function process_refund($order_id, $amount = null, $reason = '')
     {
-        PPMFWC_Helper_Data::ppmfwc_payLogger('process_refund', $order_id, array('orderid' => $order_id, 'amount' => $amount));
-
         if ($amount <= 0) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('process_refund: fund amount must be greater than 0.0', '', array('orderid' => $order_id, 'amount' => $amount));
             return new WP_Error('1', "Refund amount must be greater than €0.00");
         }
 
         $order = wc_get_order($order_id);
         $transactionLocalDB = PPMFWC_Helper_Transaction::getPaidTransactionIdForOrderId($order_id);
+        $transactionId = $transactionLocalDB['transaction_id'] ?? '';
 
-        if (empty($order) || empty($transactionLocalDB) || empty($transactionLocalDB['transaction_id'])) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Refund canceled, order empty', $order_id, array('orderid' => $order_id, 'amunt' => $amount, 'transactionId' => $transactionLocalDB['transaction_id'])); // phpcs:ignore
+        PPMFWC_Helper_Data::ppmfwc_payLogger('process_refund', $transactionId, array('orderid' => $order_id, 'amount' => $amount));
+
+        if (empty($order) || empty($transactionId)) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Refund canceled, order empty', $order_id, array('orderid' => $order_id, 'amunt' => $amount, 'transactionId' => $transactionId)); // phpcs:ignore
             return new WP_Error(1, esc_html(__('This transaction seems to have already been refunded or may not be captured yet. Please check the status on My.pay.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
         }
 
-        $transactionId = $transactionLocalDB['transaction_id'];
 
         try {
             # First set local state to refund so that the exchange will not try to refund aswell.
