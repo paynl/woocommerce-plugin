@@ -30,6 +30,7 @@ class PPMFWC_Gateways
     const ACTION_CANCEL = 'cancel';
     const ACTION_VERIFY = 'verify';
     const ACTION_REFUND = 'refund:received';
+    const ACTION_REFUND_ADD = 'refund:add';
     const ACTION_CAPTURE = 'capture';
     const ACTION_CHARGEBACK = 'chargeback:chargeback';
     const ACTION_PINREFUND = 'pinrefund';
@@ -76,6 +77,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Applepay',
         'PPMFWC_Gateway_Afterpay',
         'PPMFWC_Gateway_AfterpayInternational',
+        'PPMFWC_Gateway_Babycadeaubon',
         'PPMFWC_Gateway_BataviastadCadeaukaart',
         'PPMFWC_Gateway_Bbqcadeaukaart',
         'PPMFWC_Gateway_Beautyandmorecadeaukaart',
@@ -88,6 +90,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Blik',
         'PPMFWC_Gateway_BloemenCadeaukaart',
         'PPMFWC_Gateway_Boekenbon',
+        'PPMFWC_Gateway_Boekencadeau',
         'PPMFWC_Gateway_Brite',
         'PPMFWC_Gateway_Cartasi',
         'PPMFWC_Gateway_Capayable',
@@ -105,11 +108,13 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Dinerbon',
         'PPMFWC_Gateway_Eps',
         'PPMFWC_Gateway_Fashioncheque',
+        'PPMFWC_Gateway_FashionChequeBeauty',
         'PPMFWC_Gateway_Fashiongiftcard',
         'PPMFWC_Gateway_FestivalCadeaukaart',
         'PPMFWC_Gateway_Flyingblueplus',
         'PPMFWC_Gateway_Focum',
         'PPMFWC_Gateway_Gezondheidsbon',
+        'PPMFWC_Gateway_Giftforgood',
         'PPMFWC_Gateway_Giropay',
         'PPMFWC_Gateway_Givacard',
         'PPMFWC_Gateway_Googlepay',
@@ -122,6 +127,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Klarna',
         'PPMFWC_Gateway_Klarnakp',
         'PPMFWC_Gateway_Kunstencultuurkaart',
+        'PPMFWC_Gateway_Leescadeaukaart',
         'PPMFWC_Gateway_Maestro',
         'PPMFWC_Gateway_Mastercard',
         'PPMFWC_Gateway_Mbway',
@@ -152,8 +158,10 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Scholierenpas',
         'PPMFWC_Gateway_ShoesAndSneakers',
         'PPMFWC_Gateway_Sodexo',
+        'PPMFWC_Gateway_Sofort',
         'PPMFWC_Gateway_Sofortbanking',
         'PPMFWC_Gateway_SofortbankingDigitalServices',
+        'PPMFWC_Gateway_SportsGiftCard',
         'PPMFWC_Gateway_Spraypay',
         'PPMFWC_Gateway_StadspasAmsterdam',
         'PPMFWC_Gateway_Swish',
@@ -978,6 +986,7 @@ class PPMFWC_Gateways
         $arrPayActions[self::ACTION_CANCEL] = self::STATUS_CANCELED;
         $arrPayActions[self::ACTION_VERIFY] = self::STATUS_VERIFY;
         $arrPayActions[self::ACTION_REFUND] = self::STATUS_REFUND;
+        $arrPayActions[self::ACTION_REFUND_ADD] = self::STATUS_REFUND;
         $arrPayActions[self::ACTION_CAPTURE] = self::STATUS_CAPTURE;
         $arrPayActions[self::ACTION_CHARGEBACK] = self::STATUS_CHARGEBACK;
         $arrPayActions[self::ACTION_PINREFUND] = self::STATUS_PINREFUND;

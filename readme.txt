@@ -190,6 +190,9 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 == Changelog ==
 = 4.0.0 =
 Updated SDK
+= 3.22.2 =
+Added new payment methods
+Fixed an issue for downloadable products
 = 3.22.1 =
 Added validation for 4-decimal order amounts
 Added setting to enable stock updates on refund
