@@ -7,8 +7,9 @@
  * Version: 4.0.0
  * Author: Pay.
  * Author URI: https://www.pay.nl
- * Requires at least: 3.5.1
- * WC requires at least: 3.0
+ * Requires at least: 6.1.0
+ * WC requires at least: 6.5
+ * WC tested up to: 10.3.3
  * Requires PHP: 8.1
  * Text Domain: woocommerce-paynl-payment-methods
  * Domain Path: /i18n/languages

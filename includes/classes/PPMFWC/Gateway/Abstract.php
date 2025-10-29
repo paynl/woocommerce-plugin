@@ -9,7 +9,7 @@ use PayNL\Sdk\Model\Request\OrderCreateRequest;
  * @phpcs:disable PSR1.Classes.ClassDeclaration.MissingNamespace
  * @phpcs:disable Squiz.Classes.ValidClassName.NotCamelCaps
  * @phpcs:disable PSR1.Methods.CamelCapsMethodName
- * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing 
+ * @phpcs:disable Squiz.Commenting.FunctionComment.TypeHintMissing
  * @phpcs:disable PSR12.Properties.ConstantVisibility
  */
 
@@ -614,15 +614,17 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             # Return success redirect
             return array(
-              'result'   => 'success',
-              'redirect' => $payOrder->getPaymentUrl()
+                'result' => 'success',
+                'redirect' => $payOrder->getPaymentUrl()
             );
+
         } catch (PPMFWC_Exception_Notice $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Process payment start notice: ' . $e->getMessage());
             $message = $e->getMessage();
             wc_add_notice($message, 'error');
-        } catch (Exception $e) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error: ' . esc_html($e->getMessage()), null, array('wc-order-id' => $order_id, 'paymentOption' => $paymentOption));
+
+        } catch (Exception $e)  {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error ' . esc_html($e->getMessage()), null, array('wc_order_id' => $order_id, 'methodid' => $paymentOption), 'critical');
             $message = 'Could not initiate payment. Please try again or use another payment method.';
             wc_add_notice(esc_html(__($message, PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
         }
@@ -751,21 +753,22 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function process_refund($order_id, $amount = null, $reason = '')
     {
-        PPMFWC_Helper_Data::ppmfwc_payLogger('process_refund', $order_id, array('orderid' => $order_id, 'amount' => $amount));
-
         if ($amount <= 0) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('process_refund: fund amount must be greater than 0.0', '', array('orderid' => $order_id, 'amount' => $amount));
             return new WP_Error('1', "Refund amount must be greater than €0.00");
         }
 
         $order = wc_get_order($order_id);
         $transactionLocalDB = PPMFWC_Helper_Transaction::getPaidTransactionIdForOrderId($order_id);
+        $transactionId = $transactionLocalDB['transaction_id'] ?? '';
 
-        if (empty($order) || empty($transactionLocalDB) || empty($transactionLocalDB['transaction_id'])) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Refund canceled, order empty', $order_id, array('orderid' => $order_id, 'amunt' => $amount, 'transactionId' => $transactionLocalDB['transaction_id'])); // phpcs:ignore
+        PPMFWC_Helper_Data::ppmfwc_payLogger('process_refund', $transactionId, array('orderid' => $order_id, 'amount' => $amount));
+
+        if (empty($order) || empty($transactionId)) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Refund canceled, order empty', $order_id, array('orderid' => $order_id, 'amunt' => $amount, 'transactionId' => $transactionId)); // phpcs:ignore
             return new WP_Error(1, esc_html(__('This transaction seems to have already been refunded or may not be captured yet. Please check the status on My.pay.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
         }
 
-        $transactionId = $transactionLocalDB['transaction_id'];
 
         try {
             # First set local state to refund so that the exchange will not try to refund aswell.
