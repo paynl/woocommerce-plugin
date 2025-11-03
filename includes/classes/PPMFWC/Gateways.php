@@ -1056,11 +1056,8 @@ class PPMFWC_Gateways
                 throw new PPMFWC_Exception_Notice('Ignoring: ' . $action);
             }
 
-
-
             $newStatus = PPMFWC_Helper_Transaction::processTransaction($payOrder, $status, $methodId);
             $responseMessage = 'Status updated to ' . $newStatus;
-
 
         } catch (PPMFWC_Exception_Notice $e) {
             $responseMessage = $e->getMessage();

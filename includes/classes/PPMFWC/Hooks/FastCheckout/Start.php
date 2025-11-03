@@ -155,29 +155,32 @@ class PPMFWC_Hooks_FastCheckout_Start
      */
     public static function getProducts($shippingMethodArr)
     {
-        $tax = new WC_Tax();
         $products = [];
         $orderDiscount = 0;
 
-        foreach (WC()->cart->get_cart() as $cart_item) {
+        foreach (WC()->cart->get_cart() as $itemNumber => $cart_item) {
             $product = $cart_item['data'];
             $product_id = $cart_item['product_id'];
             $variation_id = $cart_item['variation_id'];
-            $name = $product->get_title();
-            $quantity = $cart_item['quantity'];
-            $price = $product->get_price();
-            $tax_percentage = 0;
-            $taxes = $tax->get_rates($product->get_tax_class());
-            if (!empty($taxes)) {
-                $rates = array_shift($taxes);
-                $tax_percentage = round(array_shift($rates));
-            }
+
+            $line_total = $cart_item['line_total']; // excl tax
+            $line_tax = $cart_item['line_tax'];   // tax amount
+            $qty = $cart_item['quantity'];
+
+            $price_ex_tax = $line_total / $qty;
+            $tax_per_unit = $line_tax / $qty;
+            $price_inc_tax = $price_ex_tax + $tax_per_unit;
+
+            $tax_percentage = $price_ex_tax > 0
+                ? round(($tax_per_unit / $price_ex_tax) * 100, 2)
+                : 0;
+
             $products[] = [
-                'id' => $product_id,
+                'id' => empty($product_id) ? 'p' . $itemNumber : $product_id,
                 'variation_id' => $variation_id,
-                'name' => $name,
-                'qty' => $quantity,
-                'amount' => $price,
+                'name' => $product->get_title(),
+                'qty' => $cart_item['quantity'],
+                'amount' => round($price_inc_tax, 2),
                 'taxPercentage' => $tax_percentage,
                 'type' => 'ARTICLE',
                 'currency' => get_woocommerce_currency()
@@ -215,15 +218,20 @@ class PPMFWC_Hooks_FastCheckout_Start
 
         if (!empty($shippingMethodArr['shippingMethod'])) {
             $shippingMethod = $shippingMethodArr['shippingMethod'];
-            $shippingAmount = WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes());
+            $shippingAmount = WC()->cart->get_shipping_total() + (float)array_shift($shippingMethod->get_taxes());
+
             if ($shippingAmount > 0) {
+                $shipTotal = WC()->cart->get_shipping_total();
+                $shipTax = WC()->cart->get_shipping_tax();
+                $vatPerc = round((100 * $shipTax) / $shipTotal);
+
                 $products[] = [
-                    'id' => $shippingMethodArr['shippingMethodId'] ?? 0,
+                    'id' => 'shipping',
                     'name' => $shippingMethod->label,
                     'qty' => 1,
                     'amount' => $shippingAmount,
                     'amountExclTax' => WC()->cart->get_shipping_total(),
-                    'taxPercentage' => round(\Paynl\Helper::calculateTaxPercentage($shippingAmount, array_shift($shippingMethod->get_taxes()))), // phpcs:ignore
+                    'taxPercentage' => $vatPerc,
                     'type' => 'SHIPPING',
                     'currency' => get_woocommerce_currency()
                 ];

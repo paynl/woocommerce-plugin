@@ -200,17 +200,20 @@ class PPMFWC_Helper_Transaction
         if (in_array($wcOrderStatus, array('complete', 'processing'))) {
             if ($payApiStatus == PPMFWC_Gateways::STATUS_REFUND) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process refund', $transactionId);
+
             } elseif ($payApiStatus == PPMFWC_Gateways::STATUS_CHARGEBACK) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process chargeback', $transactionId);
+
             } elseif ($status == PPMFWC_Gateways::STATUS_PINREFUND && $payApiStatus == PPMFWC_Gateways::STATUS_SUCCESS) {
                 $pinRefundAmount = ($transactionLocalDB['amount'] / 100);
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Continue to process pin refund', $transactionId);
                 $order->add_order_note(sprintf(esc_html(__('Pay.: Refunded: EUR %s via Retourpinnen', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $pinRefundAmount));
                 self::processRefund($order, $pinRefundAmount);
                 return PPMFWC_Gateways::STATUS_REFUND;
+
             } else {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - Done', $transactionId);
-                throw new PPMFWC_Exception_Notice('Order is already completed or processed');
+                throw new PPMFWC_Exception_Notice('Order is already completed or processed: ' . $wcOrderStatus . '/' . $status . '/' . $payApiStatus);
             }
         }
 
