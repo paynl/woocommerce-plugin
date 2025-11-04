@@ -21,7 +21,7 @@ class PPMFWC_Helper_Config
             $failOver = get_option('paynl_custom_failover_gateway');
         }
 
-        if (!empty($failOver) && strlen($failOver) > 12) {
+        if (!empty($failOver) && in_array($failOver, ['https://connect.pay.nl', 'https://connect.achterelkebetaling.nl', 'https://connect.payments.nl'])) {
             $config->setCore($failOver);
         }
 

@@ -623,8 +623,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             $message = $e->getMessage();
             wc_add_notice($message, 'error');
 
-        } catch (Exception $e)  {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error ' . esc_html($e->getMessage()), null, array('wc_order_id' => $order_id, 'methodid' => $paymentOption), 'critical');
+        } catch (Exception $e) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Could not initiate payment. Error ' . $e->getMessage(), null, array('wc_order_id' => $order_id, 'methodid' => $paymentOption), 'critical');
             $message = 'Could not initiate payment. Please try again or use another payment method.';
             wc_add_notice(esc_html(__($message, PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 'error');
         }

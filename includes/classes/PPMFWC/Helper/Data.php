@@ -347,11 +347,11 @@ class PPMFWC_Helper_Data
     }
 
     /**
-     * @return string[]
+     * @return array
      */
-    public static function ppmfwc_getCores()
+    public static function ppmfwc_getCores(): array
     {
-        $cores = get_site_option('paynl_cores') ?? [];
+        $cores = (array)(get_site_option('paynl_cores') ?? []);
 
         $options = array_column($cores, 'label', 'domain');
         $options['custom'] = esc_html(__('Custom', PPMFWC_WOOCOMMERCE_TEXTDOMAIN));

@@ -8,5 +8,5 @@ return [
         'password' => '', # Use API token or secret. Use Secret in combination with SL-Code.
     ],
     'debug' => false,
-    'useFileCaching' => true
+    'useFileCaching' => false
 ];
