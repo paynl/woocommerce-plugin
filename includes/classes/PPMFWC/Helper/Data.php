@@ -24,7 +24,7 @@ class PPMFWC_Helper_Data
     public static function ppmfwc_payLogger($message, $payTransactionId = null, $infoFields = array(), $type = 'info')
     {
         if (self::$paylog === null) {
-            self::$paylog = get_option('paynl_paylogger') == 'yes';
+            self::$paylog = get_option('paynl_paylogger', 'yes') === 'yes';
         }
 
         if (self::$paylog === true || strtolower($type) == 'critical') {
