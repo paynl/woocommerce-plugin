@@ -61,13 +61,13 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function getIcon()
     {
-        $brandid = $this->get_option('brand_id');
+        $paymentImage = $this->get_option('payment_image');
 
         if (!empty($this->get_option('external_logo')) && wc_is_valid_url($this->get_option('external_logo'))) {
             return $this->get_option('external_logo');
         }
-        if (!empty($brandid)) {
-            return PPMFWC_PLUGIN_URL . 'assets/logos/' . $this->get_option('brand_id') . '.png';
+        if (!empty($paymentImage)) {
+            return $paymentImage;
         }
 
         if (!empty($this->getImagePathName())) {
@@ -320,21 +320,32 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             }
 
             if (
-                (!$this->get_option('brand_id')) || (strlen($this->get_option('brand_id')) == 0) ||
+                (!$this->get_option('payment_image')) || (strlen($this->get_option('payment_image')) == 0) ||
                 (!$this->get_option('min_amount')) || (strlen($this->get_option('min_amount')) == 0) ||
                 (!$this->get_option('max_amount')) || (strlen($this->get_option('max_amount')) == 0) ||
                 $this->get_option('description') == 'pay_init'
             ) {
                 try {
                     $paymentOptions = PPMFWC_Helper_Data::getPaymentOptionsList();
-                    $payDefaults = (isset($paymentOptions[$optionId])) ? $paymentOptions[$optionId] : array();
+
+                    foreach ($paymentOptions as $option) {
+                        if ($option->getId() == $optionId) {
+                            $payDefaults = $option;
+                            break;
+                        }
+                    }
                 } catch (Exception $e) {
                     $payDefaults = array();
                 }
+                $minAmount = $payDefaults->getMinAmount();
+                $maxAmount = $payDefaults->getMaxAmount();
 
-                $this->set_option_default('brand_id', (isset($payDefaults->brand->id)) ? $payDefaults->brand->id : '', true);
-                $this->set_option_default('min_amount', (isset($payDefaults->min_amount)) ? floatval($payDefaults->min_amount / 100)  : '', false);
-                $this->set_option_default('max_amount', (isset($payDefaults->max_amount)) ? floatval($payDefaults->max_amount / 100)  : '', false);
+                $im = str_replace(['/payment_methods/', '.svg'], ['', '.png'], $payDefaults->getImage());
+                $image = PPMFWC_PLUGIN_URL . 'assets/logos/' . $im;
+
+                $this->set_option_default('payment_image', (isset($image)) ? $image : '', true);
+                $this->set_option_default('min_amount', (isset($minAmount)) ? floatval($minAmount / 100)  : '', false);
+                $this->set_option_default('max_amount', (isset($maxAmount)) ? floatval($maxAmount / 100)  : '', false);
 
                 $pubDesc = (isset($payDefaults->brand->public_description)) ? $payDefaults->brand->public_description : sprintf(esc_html(__('Pay with %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()); // phpcs:ignore
                 $this->set_option_default('description', $pubDesc, true);
