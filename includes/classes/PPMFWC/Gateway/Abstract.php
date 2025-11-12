@@ -337,15 +337,18 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 } catch (Exception $e) {
                     $payDefaults = array();
                 }
-                $minAmount = $payDefaults->getMinAmount();
-                $maxAmount = $payDefaults->getMaxAmount();
 
-                $im = str_replace(['/payment_methods/', '.svg'], ['', '.png'], $payDefaults->getImage());
-                $image = PPMFWC_PLUGIN_URL . 'assets/logos/' . $im;
+                if ((isset($payDefaults))) {
+                    $minAmount = $payDefaults->getMinAmount();
+                    $maxAmount = $payDefaults->getMaxAmount();
+
+                    $im = str_replace(['/payment_methods/', '.svg'], ['', '.png'], $payDefaults->getImage());
+                    $image = PPMFWC_PLUGIN_URL . 'assets/logos/' . $im;
+                }
 
                 $this->set_option_default('payment_image', (isset($image)) ? $image : '', true);
-                $this->set_option_default('min_amount', (isset($minAmount)) ? floatval($minAmount / 100)  : '', false);
-                $this->set_option_default('max_amount', (isset($maxAmount)) ? floatval($maxAmount / 100)  : '', false);
+                $this->set_option_default('min_amount', (isset($minAmount)) ? floatval($minAmount / 100) : '', false);
+                $this->set_option_default('max_amount', (isset($maxAmount)) ? floatval($maxAmount / 100) : '', false);
 
                 $pubDesc = (isset($payDefaults->brand->public_description)) ? $payDefaults->brand->public_description : sprintf(esc_html(__('Pay with %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()); // phpcs:ignore
                 $this->set_option_default('description', $pubDesc, true);
