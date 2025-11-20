@@ -219,7 +219,7 @@ class PPMFWC_Helper_Config
                         $fee['name'],
                         $fee['line_total'],
                         null,
-                        PayNL\Sdk\Model\Product::TYPE_DISCOUNT,
+                        PayNL\Sdk\Model\Product::TYPE_HANDLING,
                         1,
                         null,
                         null
