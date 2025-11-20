@@ -61,13 +61,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function getIcon()
     {
-        $paymentImage = $this->get_option('payment_image');
-
         if (!empty($this->get_option('external_logo')) && wc_is_valid_url($this->get_option('external_logo'))) {
             return $this->get_option('external_logo');
         }
-        if (!empty($paymentImage)) {
-            return $paymentImage;
+        if (!empty($this->get_option('payment_image'))) {
+            return $this->get_option('payment_image');
         }
 
         if (!empty($this->getImagePathName())) {
