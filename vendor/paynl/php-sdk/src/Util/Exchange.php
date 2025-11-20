@@ -200,7 +200,7 @@ class Exchange
     public function getPayLoad()
     {
         if (!empty($this->payload)) {
-            # Payload already initilized, then return payload.
+            # Payload already initialized, then return payload.
             return $this->payload;
         }
 
