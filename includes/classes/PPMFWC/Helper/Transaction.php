@@ -298,11 +298,18 @@ class PPMFWC_Helper_Transaction
                         $order->save();
                     } else {
                         $order->payment_complete($transactionId);
-                        $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s).', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus));
+                        if (!empty($payOrder->getCustomerId())) {
+                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $payOrder->getCustomerId())); // phpcs:ignore
+                        } else {
+                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s).', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus));
+                        }
                     }
                 }
 
-                break;
+            update_post_meta($orderId, 'CustomerName', esc_attr($payOrder->getCustomerName() ?? ''));
+            update_post_meta($orderId, 'CustomerKey', esc_attr($payOrder->getCustomerId() ?? ''));
+
+            break;
 
             case PPMFWC_Gateways::STATUS_DENIED:
                 $order->add_order_note(esc_html(__('Pay.: Payment denied. ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));

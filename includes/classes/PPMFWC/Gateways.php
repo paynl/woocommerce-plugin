@@ -613,6 +613,15 @@ class PPMFWC_Gateways
               'text' => '<h2 class="paynl_advanced_settings_title">' . esc_html(__('Advanced settings', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</h2>'
             );
 
+
+            $addedSettings[] = array(
+                'name' => esc_html(__('Expire time', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => 'number',
+                'placeholder' => '',
+                'desc' => esc_html(__('Enter your desired transaction expire time in minutes', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'id' => 'paynl_payment_expire_time',
+                'desc_tip' => __('Automatically cancel transactions and orders sooner than the default 4-hour expiry by setting your own time in minutes.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            );
             $addedSettings[] = array(
                 'name' => esc_html(__('Test IP address', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'text',

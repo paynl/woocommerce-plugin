@@ -682,6 +682,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $request->setDescription(str_replace('__', ' ', $prefix) . $order->get_order_number());
         $request->setAmount($order->get_total());
 
+        $expireTime = get_option('paynl_payment_expire_time');
+        if (!empty($expireTime)) {
+            $request->setExpire(date('c', time() + ($expireTime * 60)));
+        }
+
         $raw = (string)($order->get_order_number() ?? '');
         $clean = preg_replace('/[^A-Za-z0-9]/u', '', $raw);
         $request->setReference($clean);
