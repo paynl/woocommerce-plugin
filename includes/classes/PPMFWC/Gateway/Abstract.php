@@ -326,10 +326,12 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 try {
                     $paymentOptions = PPMFWC_Helper_Data::getPaymentOptionsList();
 
-                    foreach ($paymentOptions as $option) {
-                        if ($option->getId() == $optionId) {
-                            $payDefaults = $option;
-                            break;
+                    if (is_array($paymentOptions)) {
+                        foreach ($paymentOptions as $option) {
+                            if ($option->getId() == $optionId) {
+                                $payDefaults = $option;
+                                break;
+                            }
                         }
                     }
                 } catch (Exception $e) {
