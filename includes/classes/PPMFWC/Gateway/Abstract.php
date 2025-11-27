@@ -72,7 +72,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             return PPMFWC_PLUGIN_URL . 'assets/logos/payment_method_groups/' . $this->getImagePathName();
         }
 
-        return '';
+        // if any of the above settings are not set use static.pay for checkout images
+        $fallback = 'https://static.pay.nl/payment_profiles/100x100/' . $this->getOptionId() . '.png';
+        return $fallback;
     }
 
     /**
