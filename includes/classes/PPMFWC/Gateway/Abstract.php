@@ -745,7 +745,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public static function getServiceId()
     {
-        return get_option('paynl_serviceid');
+        return PPMFWC_Helper_Config::getServiceId();
     }
 
     /**
