@@ -6,7 +6,6 @@ class PPMFWC_Helper_Config
 {
 
     /**
-     * Get PayNL Token Code from wp-config constant or fallback to option
      * @return string
      */
     public static function getTokenCode(): string
@@ -18,7 +17,6 @@ class PPMFWC_Helper_Config
     }
 
     /**
-     * Get PayNL API Token from wp-config constant or fallback to option
      * @return string
      */
     public static function getApiToken(): string
@@ -30,7 +28,6 @@ class PPMFWC_Helper_Config
     }
 
     /**
-     * Get PayNL Service ID from wp-config constant or fallback to option
      * @return string
      */
     public static function getServiceId(): string
@@ -42,7 +39,6 @@ class PPMFWC_Helper_Config
     }
 
     /**
-     * Check if credentials are defined in wp-config
      * @return bool
      */
     public static function isConfiguredInWpConfig(): bool
