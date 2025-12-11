@@ -905,7 +905,7 @@ class PPMFWC_Gateways
         $payStatus = new PayStatus();
         $method = $order->get_payment_method() ?? '';
 
-        if ($method == 'pay_gateway_instore') {
+        if ($method == 'pay_gateway_instore' && (in_array($newStatus, [PPMFWC_Gateways::STATUS_CANCELED, PPMFWC_Gateways::STATUS_PENDING]))) {
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
 
         } elseif ($payStatus->get($orderStatusId) === PayStatus::CANCEL) {
