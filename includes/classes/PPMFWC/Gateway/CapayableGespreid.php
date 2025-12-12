@@ -21,7 +21,7 @@ class PPMFWC_Gateway_CapayableGespreid extends PPMFWC_Gateway_Abstract
      */
     public static function getName()
     {
-        return 'iDEAL in3';
+        return 'in3';
     }
 
     /**
