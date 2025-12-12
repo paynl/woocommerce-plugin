@@ -903,13 +903,15 @@ class PPMFWC_Gateways
     public static function getOrderReturnUrl(WC_Order $order, $newStatus, $orderStatusId)
     {
         $payStatus = new PayStatus();
+        $method = $order->get_payment_method() ?? '';
 
-        if ($payStatus->get($orderStatusId) === PayStatus::CANCEL)
-        {
+        if ($method == 'pay_gateway_instore' && (in_array($newStatus, [PPMFWC_Gateways::STATUS_CANCELED, PPMFWC_Gateways::STATUS_PENDING]))) {
             $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
-        } elseif ($payStatus->get($orderStatusId) === PayStatus::DENIED ||
-                  $newStatus == PPMFWC_Gateways::STATUS_DENIED)
-        {
+
+        } elseif ($payStatus->get($orderStatusId) === PayStatus::CANCEL) {
+            $url = add_query_arg('paynl_status', PPMFWC_Gateways::STATUS_CANCELED, wc_get_checkout_url());
+
+        } elseif ($payStatus->get($orderStatusId) === PayStatus::DENIED || $newStatus == PPMFWC_Gateways::STATUS_DENIED) {
             $methodName = $order->get_payment_method_title();
             if (!empty($methodName)) {
                 wc_add_notice(
