@@ -694,8 +694,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $clean = preg_replace('/[^A-Za-z0-9]/u', '', $raw);
         $request->setReference($clean);
 
-        if ($this->getOptionId() == 1927) {
-            $request->setTerminal(PPMFWC_Helper_Data::getPostTextField('terminal_id'));
+        if ($this->getOptionId() == PayNL\Sdk\Model\Method::PIN) {
+            $request->setTerminal($this->getTerminal());
         }
 
         $extra1 = apply_filters('paynl-extra1', $order->get_order_number(), $order);
@@ -731,6 +731,30 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $order->save();
 
         return $payOrder;
+    }
+
+    /**
+     * @return false|string
+     */
+    private function getTerminal()
+    {
+        $terminalThCode = PPMFWC_Helper_Data::getPostTextField('terminal_id');
+        $terminal_setting = $this->get_option('paynl_instore_terminal');
+
+        if ($terminal_setting == 'checkout') {
+            # do nothing, just use terminalThCode
+        }
+        if ($terminal_setting == 'checkout_save') {
+            # Only save the tg-code in the cookie. This will then later be integrated in the checkout-view(hidden).
+            setcookie('paynl_instore_terminal_id', $terminalThCode, time() + (60 * 60 * 24 * 365));
+
+        } elseif (str_starts_with(strtoupper($terminal_setting), 'TH')) {
+            # A designated TH-code is selected as preferred terminal, so always use this one.
+            $terminalThCode = $terminal_setting;
+        }
+
+
+        return $terminalThCode ?? '';
     }
 
     /**
