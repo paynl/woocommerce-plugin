@@ -1041,8 +1041,14 @@ class PPMFWC_Gateways
             $payOrder = $exchange->process(PPMFWC_Helper_Config::getPayConfig());
             $payOrderId = $payOrder->getOrderId();
 
-            if ($payOrder->isPending()) {
+            if ($payOrder->isPending() && $action == self::ACTION_PENDING) {
                 $exchange->setResponse(true, 'Ignoring pending.');
+            } elseif ($payOrder->isPending() && $action != self::ACTION_PENDING) {
+                $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state Pending.');
+            } elseif ($payOrder->isCancelled() && $action != self::ACTION_CANCEL) {
+                $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state Cancelled.');
+            } elseif ($payOrder->isRefunded() && $action != self::ACTION_REFUND && $action != self::ACTION_REFUND_ADD) {
+                $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state Cancelled.');
             }
 
             $order_id = $exchange->getReference();
