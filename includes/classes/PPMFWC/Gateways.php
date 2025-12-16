@@ -732,72 +732,37 @@ class PPMFWC_Gateways
                 'id' => 'paynl_setup',
             );
 
-            if ($isConfiguredInWpConfig) {
-                $addedSettings[] = array(
-                    'name' => esc_html(__('Token Code *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'type' => 'text',
-                    'desc' => esc_html(__('This credential is set in the config and can\'t be changed here.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'id' => 'paynl_tokencode_readonly',
-                    'default' => 'Token Code',
-                    'custom_attributes' => array('readonly' => 'readonly', 'style' => 'background-color: #f1f1f1;'),
-                );
-                $addedSettings[] = array(
-                    'name' => esc_html(__('API token', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'type' => 'text',
-                    'desc' => esc_html(__('This credential is set in the config and can\'t be changed here.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'id' => 'paynl_apitoken_readonly',
-                    'default' => 'API token',
-                    'custom_attributes' => array('readonly' => 'readonly', 'style' => 'background-color: #f1f1f1;'),
-                );
-                $addedSettings[] = array(
-                    'name' => esc_html(__('Sales Location *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'type' => 'text',
-                    'desc' => esc_html(__('This credential is set in the config and can\'t be changed here.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'id' => 'paynl_serviceid_readonly',
-                    'default' => 'Service ID',
-                    'custom_attributes' => array('readonly' => 'readonly', 'style' => 'background-color: #f1f1f1;'),
-                );
-            } else {
-                $addedSettings[] = array(
-                    'name' => esc_html(__('Token Code *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'placeholder' => 'AT-####-####',
-                    'type' => 'text',
-                    'desc' => esc_html(
-                        __(
-                            'The AT-code belonging to your API token, you can find this ',
-                            PPMFWC_WOOCOMMERCE_TEXTDOMAIN
-                        )
-                    ) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">' . esc_html(__('here', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
-                    'id' => 'paynl_tokencode',
-                    'desc_tip' => __('The Token Code should be in the following format: AT-xxxx-xxxx <br/> Optionally, this credential can be defined in the config as "PAYNL_TOKEN_CODE"', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                );
-                $addedSettings[] = array(
-                    'name' => esc_html(__('API token', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'type' => 'text',
-                    'desc' => esc_html(
-                        __(
-                            'The API token used to communicate with the Pay. API, you can find your API token ',
-                            PPMFWC_WOOCOMMERCE_TEXTDOMAIN
-                        )
-                    ) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">' . esc_html(__('here', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
-                    'id' => 'paynl_apitoken',
-                    'class' => 'obscuredInput',
-                    'desc_tip' => __('Optionally, this credential can be defined in the config as "PAYNL_API_TOKEN"', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                );
-                $addedSettings[] = array(
-                    'name' => esc_html(__('Sales Location *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                    'placeholder' => 'SL-####-####',
-                    'type' => 'text',
-                    'desc' => esc_html(
-                        __(
-                            'The SL-code of your Sales Location, you can find your SL-code ',
-                            PPMFWC_WOOCOMMERCE_TEXTDOMAIN
-                        )
-                    ) . '<a href="https://admin.pay.nl/programs/programs" target="serviceid">' . esc_html(__('here', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
-                    'id' => 'paynl_serviceid',
-                    'desc_tip' => __('The Sales Location should be in the following format: SL-xxxx-xxxx <br/> Optionally, this credential can be defined in the config as "PAYNL_SERVICE_ID"', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                );
-            }
+            $addedSettings[] = array(
+                'name' => esc_html(__('Token Code *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'placeholder' => 'AT-####-####',
+                'type' => $isConfiguredInWpConfig ? 'info' : 'text',
+                'text' => 'Token Code',
+                'desc' => esc_html(__('The AT-code belonging to your API token, you can find this ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '<a href="https://admin.pay.nl/company/tokens" target="api_token">' . esc_html(__('here', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
+                'id' => 'paynl_tokencode',
+                'desc_tip' => __('The Token Code should be in the following format: AT-xxxx-xxxx <br/> Optionally, this credential can be defined in the config as "PAYNL_TOKEN_CODE"', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            );
+
+            $addedSettings[] = array(
+                'name' => esc_html(__('API token', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'type' => $isConfiguredInWpConfig ? 'info' : 'text',
+                'text' => 'API Token',
+                'desc' => esc_html(__('The API token used to communicate with the Pay. API, you can find your API token ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) .
+                    '<a href="https://admin.pay.nl/company/tokens" target="api_token">' . esc_html(__('here', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
+                'id' => 'paynl_apitoken',
+                'class' => 'obscuredInput',
+                'desc_tip' => __('Optionally, this credential can be defined in the config as "PAYNL_API_TOKEN"', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            );
+
+            $addedSettings[] = array(
+                'name' => esc_html(__('Sales Location *', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+                'placeholder' => 'SL-####-####',
+                'type' => $isConfiguredInWpConfig ? 'info' : 'text',
+                'text' => 'Service ID',
+                'desc' => esc_html(__('The SL-code of your Sales Location, you can find your SL-code ', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) .
+                    '<a href="https://admin.pay.nl/programs/programs" target="serviceid">' . esc_html(__('here', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)) . '</a>',
+                'id' => 'paynl_serviceid',
+                'desc_tip' => __('The Sales Location should be in the following format: SL-xxxx-xxxx <br/> Optionally, this credential can be defined in the config as "PAYNL_SERVICE_ID"', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            );
             $addedSettings[] = array(
                 'name' => esc_html(__('Test mode', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
                 'type' => 'checkbox',
