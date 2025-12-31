@@ -20,7 +20,7 @@ class PPMFWC_Hooks_FastCheckout_TransactionCreate
     public function getData($data, $order)
     {
         $parameters = [
-            'serviceId' => get_option('paynl_serviceid'),
+            'serviceId' => PPMFWC_Helper_Config::getServiceId(),
             'amount' => [
                 'value' => $data['amount'] * 100,
                 'currency' => $data['currency'],
@@ -121,7 +121,7 @@ class PPMFWC_Hooks_FastCheckout_TransactionCreate
 
         $url = 'https://connect.payments.nl/v1/orders';
 
-        $rawResponse = (array) $this->sendCurlRequest($url, $payload, get_option('paynl_tokencode'), get_option('paynl_apitoken'));
+        $rawResponse = (array) $this->sendCurlRequest($url, $payload, PPMFWC_Helper_Config::getTokenCode(), PPMFWC_Helper_Config::getApiToken());
 
         return array(
             'redirectURL' => $rawResponse['links']->redirect ?? '',
