@@ -4,9 +4,9 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 6.1.0
-Stable tag: 4.0.4
+Stable tag: 4.0.5
 Tested up to: 6.9.0
-WC tested up to: 10.4.2
+WC tested up to: 10.4.3
 WC requires at least: 3.0
 Requires PHP: 8.1
 License: GPLv2
@@ -188,6 +188,9 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 4.0.5 =
+Fixed an icon issue
+UTH fixes
 = 4.0.4 =
 Fixed instore issues
 = 4.0.3 =
