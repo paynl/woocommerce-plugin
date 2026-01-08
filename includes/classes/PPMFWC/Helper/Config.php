@@ -6,15 +6,59 @@ class PPMFWC_Helper_Config
 {
 
     /**
+     * @return string
+     */
+    public static function getTokenCode(): string
+    {
+        if (defined('PAYNL_TOKEN_CODE') && !empty(PAYNL_TOKEN_CODE)) {
+            return PAYNL_TOKEN_CODE;
+        }
+        return get_option('paynl_tokencode', '');
+    }
+
+    /**
+     * @return string
+     */
+    public static function getApiToken(): string
+    {
+        if (defined('PAYNL_API_TOKEN') && !empty(PAYNL_API_TOKEN)) {
+            return PAYNL_API_TOKEN;
+        }
+        return get_option('paynl_apitoken', '');
+    }
+
+    /**
+     * @return string
+     */
+    public static function getServiceId(): string
+    {
+        if (defined('PAYNL_SERVICE_ID') && !empty(PAYNL_SERVICE_ID)) {
+            return PAYNL_SERVICE_ID;
+        }
+        return get_option('paynl_serviceid', '');
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isConfiguredInWpConfig(): bool
+    {
+        return (defined('PAYNL_TOKEN_CODE') && !empty(PAYNL_TOKEN_CODE)) &&
+               (defined('PAYNL_API_TOKEN') && !empty(PAYNL_API_TOKEN)) &&
+               (defined('PAYNL_SERVICE_ID') && !empty(PAYNL_SERVICE_ID));
+    }
+
+
+    /**
      * @return PayConfig
      */
     public static function getPayConfig(): PayConfig
     {
         $config = new PayConfig;
         $config->setCaching(false);
-        $config->setUsername(get_option('paynl_tokencode'));
-        $config->setPassword(get_option('paynl_apitoken'));
-        $config->setServiceId(get_option('paynl_serviceid'));
+        $config->setUsername(self::getTokenCode());
+        $config->setPassword(self::getApiToken());
+        $config->setServiceId(self::getServiceId());
 
         $failOver = get_option('paynl_failover_gateway');
         if ($failOver == 'custom') {
