@@ -65,7 +65,7 @@ class PPMFWC_Helper_Config
             $failOver = get_option('paynl_custom_failover_gateway');
         }
 
-        if (!empty($failOver) && in_array($failOver, ['https://connect.pay.nl', 'https://connect.achterelkebetaling.nl', 'https://connect.payments.nl'])) {
+        if (!empty($failOver) && in_array($failOver, ['https://zero.pay.nl', 'https://connect.pay.nl', 'https://connect.achterelkebetaling.nl', 'https://connect.payments.nl'])) {
             $config->setCore($failOver);
         }
 
