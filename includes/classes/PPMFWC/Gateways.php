@@ -1,5 +1,6 @@
 <?php
 
+use PayNL\Sdk\Model\Pay\PayOrder;
 use PayNL\Sdk\Model\Pay\PayStatus;
 use PayNL\Sdk\Util\Exchange;
 
@@ -1024,6 +1025,27 @@ class PPMFWC_Gateways
     }
 
     /**
+     * @param string $action
+     * @param PayOrder $payOrder
+     * @param Exchange $exchange
+     * @return void
+     * @throws Exception
+     */
+    private static function validateExchange(string $action, PayOrder $payOrder, Exchange $exchange): void
+    {
+        if ($payOrder->isPending() && $action != self::ACTION_PENDING) {
+            $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state pending.');
+
+        } elseif ($payOrder->isCancelled() && $action != self::ACTION_CANCEL) {
+            $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state cancelled.');
+
+        } elseif ($payOrder->isRefunded() && $action != self::ACTION_REFUND && $action != self::ACTION_REFUND_ADD) {
+            $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state refunded.');
+
+        }
+    }
+
+    /**
      * Handles the Pay. Exchange requests
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
@@ -1042,15 +1064,7 @@ class PPMFWC_Gateways
             $payOrder = $exchange->process(PPMFWC_Helper_Config::getPayConfig());
             $payOrderId = $payOrder->getOrderId();
 
-            if ($payOrder->isPending() && $action == self::ACTION_PENDING) {
-                $exchange->setResponse(true, 'Ignoring pending.');
-            } elseif ($payOrder->isPending() && $action != self::ACTION_PENDING) {
-                $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state Pending.');
-            } elseif ($payOrder->isCancelled() && $action != self::ACTION_CANCEL) {
-                $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state Cancelled.');
-            } elseif ($payOrder->isRefunded() && $action != self::ACTION_REFUND && $action != self::ACTION_REFUND_ADD) {
-                $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state Cancelled.');
-            }
+            self::validateExchange($action, $payOrder, $exchange);
 
             $order_id = $exchange->getReference();
             $methodId = $payOrder->getPaymentMethod();
