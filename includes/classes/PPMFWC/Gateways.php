@@ -107,6 +107,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Dankort',
         'PPMFWC_Gateway_DeCadeaukaart',
         'PPMFWC_Gateway_Dinerbon',
+        'PPMFWC_Gateway_Doenkado',
         'PPMFWC_Gateway_Eps',
         'PPMFWC_Gateway_Fashioncheque',
         'PPMFWC_Gateway_FashionChequeBeauty',
