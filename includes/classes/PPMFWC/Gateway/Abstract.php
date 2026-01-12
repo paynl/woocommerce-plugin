@@ -820,7 +820,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
 
             $config = PPMFWC_Helper_Config::getPayConfig();
 
-            $request = new PayNL\Sdk\Model\Request\TransactionRefundRequest($transactionId, $amount);
+            $request = new PayNL\Sdk\Model\Request\TransactionRefundRequest($transactionId, $amount, $order->get_currency());
 
             $payOrder = $request->setConfig($config)->start();
 
