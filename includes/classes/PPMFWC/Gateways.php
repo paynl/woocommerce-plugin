@@ -32,6 +32,7 @@ class PPMFWC_Gateways
     const ACTION_VERIFY = 'verify';
     const ACTION_REFUND = 'refund:received';
     const ACTION_REFUND_ADD = 'refund:add';
+    const ACTION_REFUND_SEND = 'refund:send';
     const ACTION_CAPTURE = 'capture';
     const ACTION_CHARGEBACK = 'chargeback:chargeback';
     const ACTION_PINREFUND = 'pinrefund';
@@ -1036,14 +1037,13 @@ class PPMFWC_Gateways
     private static function validateExchange(string $action, PayOrder $payOrder, Exchange $exchange): void
     {
         if ($payOrder->isPending() && $action != self::ACTION_PENDING) {
-            $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state pending.');
+            $exchange->setResponse(false, "Unexpected action ({$action}) for order state pending.");
 
         } elseif ($payOrder->isCancelled() && $action != self::ACTION_CANCEL) {
-            $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state cancelled.');
+            $exchange->setResponse(false, "Unexpected action ({$action}) for order state cancelled.");
 
-        } elseif ($payOrder->isRefunded() && $action != self::ACTION_REFUND && $action != self::ACTION_REFUND_ADD) {
-            $exchange->setResponse(false, 'Unexpected action (' . $action . ') for order state refunded.');
-
+        } elseif ($payOrder->isRefunded() && stripos($action, 'refund') === false) {
+            $exchange->setResponse(false, "Unexpected action ({$action}) for order state refunded.");
         }
     }
 
