@@ -63,17 +63,58 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     {
         if (!empty($this->get_option('external_logo')) && wc_is_valid_url($this->get_option('external_logo'))) {
             return $this->get_option('external_logo');
+        }     
+
+        if ($this->saveLogo($this->get_option('payment_image_cached'))) {
+            return PPMFWC_PLUGIN_URL . 'assets/cache' . $this->get_option('payment_image_cached');
+        } else {           
+            return 'https://static.pay.nl' . $this->get_option('payment_image_cached');
         }
-        if (!empty($this->get_option('payment_image'))) {
-            return $this->get_option('payment_image');
+    }
+
+    /**
+     * Save logo
+     *
+     * @param $imagePath
+     * @return bool
+     */
+    public function saveLogo($imagePath): bool
+    {
+        $path = PPMFWC_PLUGIN_PATH . 'assets/cache';
+        if (file_exists($path . $imagePath) && (time() - filemtime($path . $imagePath) < 86400)) {         
+            return true;
+        }        
+        $imageUrl = 'https://static.pay.nl/' . $imagePath;        
+        return $this->downloadImage($imageUrl, $path, $imagePath);        
+    }
+
+    /**
+     * Download image from url
+     *
+     * @param string $url
+     * @param string $basePath
+     * @param string $image
+     * @return bool
+     */
+    public function downloadImage(string $url, string $basePath, string $image): bool
+    {      
+        $data = file_get_contents($url);
+        if ($data === false) {
+            return false;
         }
 
-        if (!empty($this->getImagePathName())) {
-            return PPMFWC_PLUGIN_URL . 'assets/logos/payment_method_groups/' . $this->getImagePathName();
-        }
+        $fullPath = rtrim($basePath, '/') . '/' . ltrim($image, '/');
 
-        // if any of the above settings are not set use static.pay for checkout images
-        return 'https://static.pay.nl/payment_profiles/100x100/' . $this->getOptionId() . '.png';
+        $dir = dirname($fullPath);
+        if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
+            return false;
+        }        
+
+        try {
+            return file_put_contents($fullPath, $data) !== false;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 
     /**
@@ -319,7 +360,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             }
 
             if (
-                (!$this->get_option('payment_image')) || (strlen($this->get_option('payment_image')) == 0) ||
+                (!$this->get_option('payment_image_cached')) || (strlen($this->get_option('payment_image_cached')) == 0) ||
                 (!$this->get_option('min_amount')) || (strlen($this->get_option('min_amount')) == 0) ||
                 (!$this->get_option('max_amount')) || (strlen($this->get_option('max_amount')) == 0) ||
                 $this->get_option('description') == 'pay_init'
@@ -342,12 +383,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 if ((isset($payDefaults))) {
                     $minAmount = $payDefaults->getMinAmount();
                     $maxAmount = $payDefaults->getMaxAmount();
-
-                    $im = str_replace(['/payment_methods/', '.svg'], ['', '.png'], $payDefaults->getImage());
-                    $image = PPMFWC_PLUGIN_URL . 'assets/logos/' . $im;
+                    $icon = $payDefaults->getImage();
                 }
 
-                $this->set_option_default('payment_image', (isset($image)) ? $image : '', true);
+                $this->set_option_default('payment_image_cached', (isset($icon)) ? $icon : '', true);
                 $this->set_option_default('min_amount', (isset($minAmount)) ? floatval($minAmount / 100) : '', false);
                 $this->set_option_default('max_amount', (isset($maxAmount)) ? floatval($maxAmount / 100) : '', false);
 
