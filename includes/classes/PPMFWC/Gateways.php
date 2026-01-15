@@ -1045,8 +1045,6 @@ class PPMFWC_Gateways
         } elseif ($payOrder->isCancelled() && $action != self::ACTION_CANCEL) {
             $exchange->setResponse(false, "Unexpected action ({$action}) for order state cancelled.");
 
-        } elseif ($payOrder->isRefunded() && stripos($action, 'refund') === false) {
-            $exchange->setResponse(false, "Unexpected action ({$action}) for order state refunded.");
         }
     }
 
