@@ -4,7 +4,7 @@
  * Plugin Name: Pay. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
  * Description: Pay. Payment Methods for WooCommerce
- * Version: 4.0.5
+ * Version: 4.0.6
  * Author: Pay.
  * Author URI: https://www.pay.nl
  * Requires at least: 6.1.0
