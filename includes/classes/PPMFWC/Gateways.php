@@ -1208,15 +1208,15 @@ class PPMFWC_Gateways
     public static function ppmfwc_onPinRefund()
     {
         $security = PPMFWC_Helper_Data::getPostTextField('security');
-        check_ajax_referer($security, 'security');
-
-        // If execution reaches here, the nonce is valid.
-        if (AjaxSecurityHelper::isUserAdminAjax()) {
-            wp_send_json_success(['message' => 'Nonce valid and user is Admin!']);
-        } else {
-            wp_send_json_error(['message' => 'Unauthorized User'], 403);
+        if ((empty($security) || !wp_verify_nonce($security, 'ajax_nonce')) || (!current_user_can('manage_woocommerce') && !current_user_can('manage_options'))) {
+            $returnArray = array(
+                'success' => false,
+                'message' => __('You do not have permission to perform this action.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+            );
+            header('Content-Type: application/json;charset=UTF-8');
+            die(json_encode($returnArray));
         }
-        
+                
         try {
             $amount = PPMFWC_Helper_Data::getPostTextField('amount');
             $terminal = PPMFWC_Helper_Data::getPostTextField('terminal');
