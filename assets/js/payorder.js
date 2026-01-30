@@ -43,7 +43,8 @@ function doAjaxRequest($, amount, type)
         'terminal': terminal,
         'order_id': paynl_order.order_id,
         'returnUrl': window.location.href,
-        'type': type
+        'type': type,
+        'security': paynl_order.nonce
     };
 
     $.ajax({

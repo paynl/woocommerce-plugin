@@ -457,6 +457,7 @@ function ppmfwc_setup_instore_scripts(array $terminals, $texts, $additionalData)
         array(
             'texts' => $texts,
             'terminals' => $terminals,
+            'nonce' => wp_create_nonce('ajax_nonce')
         ),
         $additionalData
     );
