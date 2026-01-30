@@ -59,33 +59,43 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
     /**
      * @return string
      */
-    public function getIcon()
+    public function getIcon(): string
     {
         if (!empty($this->get_option('external_logo')) && wc_is_valid_url($this->get_option('external_logo'))) {
             return $this->get_option('external_logo');
-        }     
-
-        if ($this->saveLogo($this->get_option('payment_image_cached'))) {
-            return PPMFWC_PLUGIN_URL . 'assets/cache' . $this->get_option('payment_image_cached');
-        } else {           
-            return 'https://static.pay.nl' . $this->get_option('payment_image_cached');
         }
+
+        $paymentImage = $this->get_option('payment_image_cached');
+
+        if (empty($paymentImage)) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('paymentImage empty: ' . print_r($paymentImage, true));
+            return '';
+        }
+
+        if ($this->saveLogo($paymentImage)) {
+            return PPMFWC_PLUGIN_URL . 'assets/cache' . $paymentImage;
+        }
+
+        return 'https://static.pay.nl' . $paymentImage;
     }
 
     /**
      * Save logo
      *
-     * @param $imagePath
+     * @param string $imagePath
      * @return bool
      */
-    public function saveLogo($imagePath): bool
+    public function saveLogo(string $imagePath): bool
     {
-        $path = PPMFWC_PLUGIN_PATH . 'assets/cache';
-        if (file_exists($path . $imagePath) && (time() - filemtime($path . $imagePath) < 86400)) {         
+        $imagePath = ltrim($imagePath, '/');
+        $path = rtrim(PPMFWC_PLUGIN_PATH . 'assets/cache', '/');
+
+        if (file_exists($path . '/' . $imagePath) && (time() - filemtime($path . '/' . $imagePath) < 86400)) {
             return true;
-        }        
-        $imageUrl = 'https://static.pay.nl/' . $imagePath;        
-        return $this->downloadImage($imageUrl, $path, $imagePath);        
+        }
+
+        $imageUrl = 'https://static.pay.nl/' . $imagePath;
+        return $this->downloadImage($imageUrl, $path, $imagePath);
     }
 
     /**
@@ -97,25 +107,43 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      * @return bool
      */
     public function downloadImage(string $url, string $basePath, string $image): bool
-    {      
-        $data = file_get_contents($url);
+    {
+        $image = ltrim($image, '/');
+
+        if (str_contains($image, '..')) {
+            return false;
+        }
+        if (!preg_match('~^[a-zA-Z0-9/_\.\-]+$~', $image)) {
+            return false;
+        }
+
+        // Alleen bekende image-extensies toestaan
+        if (!preg_match('~\.(svg|png|jpe?g|webp)$~i', $image)) {
+            return false;
+        }
+
+        // Download (404 e.d. geeft geen warning)
+        $data = @file_get_contents($url);
         if ($data === false) {
             return false;
         }
 
-        $fullPath = rtrim($basePath, '/') . '/' . ltrim($image, '/');
+
+        $fullPath = rtrim($basePath, '/') . '/' . $image;
 
         $dir = dirname($fullPath);
         if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
             return false;
-        }        
-
-        try {
-            return file_put_contents($fullPath, $data) !== false;
-        } catch (\Throwable $th) {
-            return false;
         }
+
+        $writeResult = false;
+        if (is_writable(dirname($fullPath))) {
+            $writeResult = file_put_contents($fullPath, $data) !== false;
+        }
+
+        return $writeResult;
     }
+
 
     /**
      * @param string $key
