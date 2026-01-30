@@ -21,6 +21,13 @@ require_once dirname(__FILE__) . '/vendor/autoload.php';
 # Load plugin functionality.
 require_once(ABSPATH . '/wp-admin/includes/plugin.php');
 
+$apilogFile = '/src/public/apilog_functions.php';
+if (file_exists($apilogFile)) {
+    include_once($apilogFile);
+}
+
+
+
 define('PPMFWC_WOOCOMMERCE_TEXTDOMAIN', 'woocommerce-paynl-payment-methods');
 define('PPMFWC_PLUGIN_URL', plugins_url('/', __FILE__));
 define('PPMFWC_PLUGIN_PATH', plugin_dir_path(__FILE__));
