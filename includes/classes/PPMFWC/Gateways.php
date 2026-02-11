@@ -192,6 +192,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_YourGreenGiftCard',
         'PPMFWC_Gateway_Yehhpay',
         'PPMFWC_Gateway_GiftCardsGrouped',
+        'PPMFWC_Gateway_CreditCardsGrouped',
     );
 
     /**
