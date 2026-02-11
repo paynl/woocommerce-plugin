@@ -149,7 +149,7 @@ function ppmfwc_registerBlockScripts()
         }
         $payGateways[] = array(
             'paymentMethodId' => $gateway_id,
-            'title' => $gateway->get_title(),
+            'title' => html_entity_decode($gateway->get_title()),
             'description' => $gateway->description,
             'image_path' => $gateway->getIcon(),
             'issuers' => $gateway->getIssuers(),
