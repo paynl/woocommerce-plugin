@@ -4,9 +4,9 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 6.1.0
-Stable tag: 4.0.6
-Tested up to: 6.9.0
-WC tested up to: 10.4.3
+Stable tag: 4.0.7
+Tested up to: 6.9.1
+WC tested up to: 10.5.1
 WC requires at least: 3.0
 Requires PHP: 8.1
 License: GPLv2
@@ -188,6 +188,9 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 4.0.7 =
+Added credit card payment method
+Several under the hood improvements
 = 4.0.6 =
 Fixed issue handling refund responses in exchange callbacks
 Added support for payment methods Keuze Cadeau, Doenkado, Pix, Floa and Bancomat
