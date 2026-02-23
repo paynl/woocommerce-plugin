@@ -415,11 +415,11 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 }
 
                 $this->set_option_default('payment_image_cached', (isset($icon)) ? $icon : '', true);
-                $this->set_option_default('min_amount', (isset($minAmount)) ? floatval($minAmount / 100) : '', false);
-                $this->set_option_default('max_amount', (isset($maxAmount)) ? floatval($maxAmount / 100) : '', false);
+                $this->set_option_default('min_amount', (isset($minAmount)) ? floatval($minAmount / 100) : '');
+                $this->set_option_default('max_amount', (isset($maxAmount)) ? floatval($maxAmount / 100) : '');
 
                 $pubDesc = (isset($payDefaults->brand->public_description)) ? $payDefaults->brand->public_description : sprintf(esc_html(__('Pay with %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()); // phpcs:ignore
-                $this->set_option_default('description', $pubDesc, true);
+                $this->set_option_default('description', $pubDesc);
             }
         } else {
             $this->form_fields = array(
