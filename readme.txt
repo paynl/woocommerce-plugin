@@ -4,7 +4,7 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 6.1.0
-Stable tag: 4.0.7
+Stable tag: 4.0.8
 Tested up to: 6.9.1
 WC tested up to: 10.5.1
 WC requires at least: 3.0
@@ -188,6 +188,9 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 4.0.8 =
+Added Stadspas Purmerend
+Fixed description issue for grouped credit cards
 = 4.0.7 =
 Added credit card payment method
 Several under the hood improvements
