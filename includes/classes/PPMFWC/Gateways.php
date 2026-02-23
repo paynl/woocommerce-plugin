@@ -171,6 +171,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_SportsGiftCard',
         'PPMFWC_Gateway_Spraypay',
         'PPMFWC_Gateway_StadspasAmsterdam',
+        'PPMFWC_Gateway_StadspasPurmerend',
         'PPMFWC_Gateway_Swish',
         'PPMFWC_Gateway_Tikkie',
         'PPMFWC_Gateway_Trustly',
