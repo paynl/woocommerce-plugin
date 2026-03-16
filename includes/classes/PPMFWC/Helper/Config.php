@@ -83,7 +83,7 @@ class PPMFWC_Helper_Config
 
         $_billing_house_number = $order->get_meta('_billing_house_number');
         if ((empty($aBillingAddress[1]) && !empty($_billing_house_number))
-            || (empty($aBillingAddress['number']) && !empty($_billing_house_number) && get_option('paynl_payment_method_display') == 1)
+            || (empty($aBillingAddress['number']) && !empty($_billing_house_number) && get_option('paynl_payment_method_housenumber') == 1)
         ) {
             $billingAddress = $order->get_billing_address_1() . ' ' . $_billing_house_number . $order->get_billing_address_2();
             $aBillingAddress = paynl_split_address($billingAddress);
