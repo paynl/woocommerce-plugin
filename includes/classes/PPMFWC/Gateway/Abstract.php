@@ -108,40 +108,45 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function downloadImage(string $url, string $basePath, string $image): bool
     {
-        $image = ltrim($image, '/');
+        try {
+            $image = ltrim($image, '/');
 
-        if (str_contains($image, '..')) {
+            if (str_contains($image, '..')) {
+                return false;
+            }
+            
+            if (!preg_match('~^[a-zA-Z0-9/_\.\-]+$~', $image)) {
+                return false;
+            }
+
+            // Alleen bekende image-extensies toestaan
+            if (!preg_match('~\.(svg|png|jpe?g|webp)$~i', $image)) {
+                return false;
+            }
+
+            // Download (404 e.d. geeft geen warning)
+            $data = @file_get_contents($url);
+            if ($data === false) {
+                return false;
+            }
+
+            $fullPath = rtrim($basePath, '/') . '/' . $image;
+
+            $dir = dirname($fullPath);
+            if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
+                return false;
+            }
+
+            $writeResult = false;
+            if (is_writable(dirname($fullPath))) {
+                $writeResult = file_put_contents($fullPath, $data) !== false;
+            }
+
+            return $writeResult;
+        } catch (\Throwable $t) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Error downloading image: ' . $t->getMessage(), null, null, 'error');
             return false;
         }
-        if (!preg_match('~^[a-zA-Z0-9/_\.\-]+$~', $image)) {
-            return false;
-        }
-
-        // Alleen bekende image-extensies toestaan
-        if (!preg_match('~\.(svg|png|jpe?g|webp)$~i', $image)) {
-            return false;
-        }
-
-        // Download (404 e.d. geeft geen warning)
-        $data = @file_get_contents($url);
-        if ($data === false) {
-            return false;
-        }
-
-
-        $fullPath = rtrim($basePath, '/') . '/' . $image;
-
-        $dir = dirname($fullPath);
-        if (!is_dir($dir) && !mkdir($dir, 0755, true) && !is_dir($dir)) {
-            return false;
-        }
-
-        $writeResult = false;
-        if (is_writable(dirname($fullPath))) {
-            $writeResult = file_put_contents($fullPath, $data) !== false;
-        }
-
-        return $writeResult;
     }
 
 
