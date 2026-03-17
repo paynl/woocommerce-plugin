@@ -109,7 +109,7 @@ class PPMFWC_Helper_Config
 
         $_shipping_house_number = $order->get_meta('_shipping_house_number');
         if ((empty($aShippingAddress[1]) && !empty($_shipping_house_number))
-            || (empty($aShippingAddress['number']) && !empty($_shipping_house_number) && get_option('paynl_payment_method_display') == 1)
+            || (empty($aShippingAddress['number']) && !empty($_shipping_house_number) && get_option('paynl_payment_method_housenumber') == 1)
         ) {
             $shippingAddress = $order->get_shipping_address_1() . ' ' . $_shipping_house_number . $order->get_shipping_address_2();
             $aShippingAddress = paynl_split_address($shippingAddress);
