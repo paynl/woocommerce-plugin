@@ -615,14 +615,6 @@ class PPMFWC_Gateways
                 'id' => 'paynl_payment_method_display',
                 'default' => 1,
             );
-            $addedSettings[] = array(
-                'name' => esc_html(__('Check for alternate house number field', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
-                'type' => 'select',
-                'options' => array(0 => esc_html(__('No', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), 1 => esc_html(__('Yes', PPMFWC_WOOCOMMERCE_TEXTDOMAIN))),
-                'desc' => esc_html(__('Default set to No. Enable if you use a custom checkout that causes the house number to be incorrect.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), // phpcs:ignore
-                'id' => 'paynl_payment_method_housenumber',
-                'default' => 0,
-            );
 
             $addedSettings[] = array(
               'css' => 'padding-bottom:40px;display:block;color:#f0f0f1',
