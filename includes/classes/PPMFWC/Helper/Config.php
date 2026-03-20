@@ -83,7 +83,7 @@ class PPMFWC_Helper_Config
 
         $_billing_house_number = $order->get_meta('_billing_house_number');
         if (empty($aBillingAddress['number']) && !empty($_billing_house_number)) {
-            $billingAddress = $order->get_billing_address_1() . ' ' . $_billing_house_number . $order->get_billing_address_2();
+            $billingAddress = $order->get_billing_address_1() . ' ' . $_billing_house_number . ' ' . $order->get_billing_address_2();
             $aBillingAddress = paynl_split_address($billingAddress);
         }
 
@@ -107,7 +107,7 @@ class PPMFWC_Helper_Config
 
         $_shipping_house_number = $order->get_meta('_shipping_house_number');
         if (empty($aShippingAddress['number']) && !empty($_shipping_house_number)) {
-            $shippingAddress = $order->get_shipping_address_1() . ' ' . $_shipping_house_number . $order->get_shipping_address_2();
+            $shippingAddress = $order->get_shipping_address_1() . ' ' . $_shipping_house_number . ' ' . $order->get_shipping_address_2();
             $aShippingAddress = paynl_split_address($shippingAddress);
         }
 
