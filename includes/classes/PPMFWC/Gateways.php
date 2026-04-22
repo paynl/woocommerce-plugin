@@ -144,6 +144,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Mooigiftcard',
         'PPMFWC_Gateway_Multibanco',
         'PPMFWC_Gateway_Mybank',
+        'PPMFWC_Gateway_Nationalegolfbon',
         'PPMFWC_Gateway_Nationaletuinbon',
         'PPMFWC_Gateway_Nexi',
         'PPMFWC_Gateway_OkPayments',
