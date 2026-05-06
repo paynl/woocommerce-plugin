@@ -871,10 +871,10 @@ class PPMFWC_Gateways
         $transactionId = PPMFWC_Helper_Data::getRequestArg('id');
         $statusCode = PPMFWC_Helper_Data::getRequestArg('statusCode');
 
-        $orderStatusId = isset($_GET['orderStatusId']) ? sanitize_text_field($_GET['orderStatusId']) : false;
+        $orderStatusId =  PPMFWC_Helper_Data::getRequestArg('orderStatusId');
         $orderStatusId = (empty($orderStatusId) && !empty($statusCode)) ? $statusCode : $orderStatusId;
 
-        $orderId = isset($_GET['orderId']) ? sanitize_text_field($_GET['orderId']) : false;
+        $orderId = PPMFWC_Helper_Data::getRequestArg('orderId');
         $orderId = (empty($orderId) && !empty($transactionId)) ? $transactionId : $orderId;
 
         $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);
