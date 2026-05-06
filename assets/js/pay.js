@@ -67,7 +67,8 @@ function submitFeatureRequestForm () {
   var ajaxurl = '/?wc-api=Wc_Pay_Gateway_Featurerequest'
   var data = {
     'email': email,
-    'message': message
+    'message': message,
+    'security': paynl_data.nonce
   }
 
   jQuery.ajax({
