@@ -144,6 +144,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Mooigiftcard',
         'PPMFWC_Gateway_Multibanco',
         'PPMFWC_Gateway_Mybank',
+        'PPMFWC_Gateway_Nationalegolfbon',
         'PPMFWC_Gateway_Nationaletuinbon',
         'PPMFWC_Gateway_Nexi',
         'PPMFWC_Gateway_OkPayments',
@@ -811,8 +812,11 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_addPayJavascript()
     {
+        $data = array('nonce' => wp_create_nonce('ajax_nonce_feature_request'));
+
         wp_register_script('paynl_wp_admin_js', PPMFWC_PLUGIN_URL . 'assets/js/pay.js', array('jquery'), PPMFWC_Helper_Data::getVersion(), true);
         wp_enqueue_script('paynl_wp_admin_js');
+        wp_localize_script('paynl_wp_admin_js', 'paynl_data', $data);
     }
 
     /**
@@ -867,10 +871,10 @@ class PPMFWC_Gateways
         $transactionId = PPMFWC_Helper_Data::getRequestArg('id');
         $statusCode = PPMFWC_Helper_Data::getRequestArg('statusCode');
 
-        $orderStatusId = isset($_GET['orderStatusId']) ? sanitize_text_field($_GET['orderStatusId']) : false;
+        $orderStatusId =  PPMFWC_Helper_Data::getRequestArg('orderStatusId');
         $orderStatusId = (empty($orderStatusId) && !empty($statusCode)) ? $statusCode : $orderStatusId;
 
-        $orderId = isset($_GET['orderId']) ? sanitize_text_field($_GET['orderId']) : false;
+        $orderId = PPMFWC_Helper_Data::getRequestArg('orderId');
         $orderId = (empty($orderId) && !empty($transactionId)) ? $transactionId : $orderId;
 
         $status = self::ppmfwc_getStatusFromStatusId($orderStatusId);
@@ -1122,6 +1126,16 @@ class PPMFWC_Gateways
     public static function ppmfwc_onFeatureRequest()
     {
         try {
+            $security = PPMFWC_Helper_Data::getPostTextField('security');
+            if ((empty($security) || !wp_verify_nonce($security, 'ajax_nonce_feature_request')) || (!current_user_can('manage_woocommerce') && !current_user_can('manage_options'))) {
+                $returnArray = array(
+                    'success' => false,
+                    'message' => __('You do not have permission to perform this action.', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
+                );
+                header('Content-Type: application/json;charset=UTF-8');
+                die(json_encode($returnArray));
+            }
+
             global $wp_version;
             global $woocommerce;
             $email = isset($_POST['email']) ? strtolower($_POST['email']) : null;
@@ -1195,7 +1209,11 @@ class PPMFWC_Gateways
      */
     public static function ppmfwc_retourpinReturn()
     {
-        $orderId = (int)PPMFWC_Helper_Data::getRequestArg('order_id');
+        $orderId = (int)PPMFWC_Helper_Data::getRequestArg('order_id');  
+        if (!current_user_can('manage_woocommerce') && !current_user_can('manage_options')) {
+            wp_redirect(wc_get_cart_url());
+            exit;
+        }
         if (!empty($orderId)) {
             # Redirect to WooCommerce orderpage
             $redirectUrl = admin_url("admin.php?page=wc-orders&action=edit&id={$orderId}");
