@@ -41,7 +41,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $this->icon = $this->getIcon();
         $this->optionId = $this->getOptionId();
 
-        $this->has_fields         = true;
         $this->method_title       = esc_html('Pay. - ' . $this->getName());
         $this->method_description = esc_html(sprintf(__('Activate this module to accept %s transactions', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $this->getName()));
 
@@ -504,6 +503,34 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function birthdateRequired()
     {
+        return false;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function has_fields()
+    {
+        if (trim((string) $this->get_description()) !== '') {
+            return true;
+        }
+    
+        if (!empty($this->getIssuers())) {
+            return true;
+        }
+
+        if ($this->askBirthdate()) {
+            return true;
+        }
+
+        if ($this->showVat()) {
+            return true;
+        }
+
+        if ($this->showCoc()) {
+            return true;
+        }
+
         return false;
     }
 
