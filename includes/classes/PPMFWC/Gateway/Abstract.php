@@ -426,9 +426,9 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                     $pubDesc = (isset($payDefaults->brand->public_description))
                     ? $payDefaults->brand->public_description
                     : sprintf(esc_html(__('Pay with %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()); // phpcs:ignore
-                
+                    
                     $this->update_option('description', $pubDesc);
-                  }
+                }
             }
         } else {
             $this->form_fields = array(
