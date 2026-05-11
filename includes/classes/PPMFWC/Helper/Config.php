@@ -150,6 +150,19 @@ class PPMFWC_Helper_Config
         $customer->setCompany($company);
         $customer->setIpAddress(self::getIpAddress($order));
 
+        $country  = strtoupper($order->get_billing_country() ?: 'NL');
+
+        $language = get_option('paynl_language');
+
+        if ($language === 'browser' || empty($language)) {
+            $language = PPMFWC_Helper_Data::getBrowserLanguage();
+        }
+        if (empty($language)) {
+            $language = substr(get_locale(), 0, 2);
+        }
+
+        $customer->setLocale(strtolower($language) . '_' . $country);
+
         return $customer;
     }
 
