@@ -75,51 +75,35 @@ const PaynlComponent = (props) =>{
     }, [onPaymentSetup, selectedIssuer, dob, cocNumber, vatNumber]);
 
         return React.createElement('div', {className: 'PPMFWC_container'},
-                React.createElement('img', {src: image_path}, null),
-                React.createElement('span', {className: 'description'}, gateway.description),
-                React.createElement('span', {className: 'descriptionError'}, processingErrorMessage),
-                React.createElement('div', {},
-                    (gateway.paymentMethodId == 'pay_gateway_ideal' && gateway.issuersSelectionType == 'select' ?
-                        React.createElement('div', {className: 'field'},
-                            React.createElement('span', {className: 'payLabel'}, gateway.texts.issuer),
-                            React.createElement('select',  {onChange: (e)=>{
-                                    selectIssuer(e.target.value)
-                                }},
-                            React.createElement("option", {}, gateway.texts.selectissuer),
-                            ...payIssuers.map(issuer => React.createElement("option", {value: issuer.option_sub_id}, issuer.name))
+                (gateway.description.length > 0 || processingErrorMessage.length > 0) ? (
+                    React.createElement(React.Fragment, null,
+                        React.createElement('img', { src: image_path }),
+                        gateway.description.length > 0 && 
+                            React.createElement('span', { className: 'description' }, gateway.description),
+                        processingErrorMessage.length > 0 && 
+                            React.createElement('span', { className: 'descriptionError' }, processingErrorMessage)
+                    )
+                ) : '',
+                (gateway.showVatField || gateway.showCocField || gateway.showbirthdate) ? (
+                    React.createElement('div', {},
+                        gateway.showbirthdate && 
+                            React.createElement('div', {className: 'field'},
+                                React.createElement('span', {className: 'payLabel'}, gateway.texts.enterbirthdate),
+                                React.createElement('input', {type: 'date', onChange: (e) => selectDate(e.target.value)})
+                            ),
+                        gateway.showCocField && 
+                            React.createElement('div', {className: 'field'},
+                                React.createElement('span', {className: 'payLabel'}, gateway.texts.enterCocNumber),
+                                React.createElement('input', {type: 'text', onChange: (e) => setCocNumber(e.target.value)})
+                            ),
+                        gateway.showVatField && 
+                            React.createElement('div', {className: 'field'},
+                                React.createElement('span', {className: 'payLabel'}, gateway.texts.enterVatNumber),
+                                React.createElement('input', {type: 'text', onChange: (e) => setVatNumber(e.target.value)})
                             )
-                        ) : ''),
-                    (gateway.paymentMethodId == 'pay_gateway_ideal' && gateway.issuersSelectionType == 'radio' ?
-                        React.createElement('div', {className: 'field'},              
-                            React.createElement('div', {className: 'issuerlist'},
-                                ...payIssuers.map(
-                                    issuer => 
-                                        React.createElement('div', {className: 'issuerradio'},  
-                                            React.createElement("label", {},
-                                                React.createElement('input', {type: 'radio', value: issuer.option_sub_id, id: 'ideal_'+issuer.option_sub_id, name: 'ideal_issuer_list', onChange: (e)=>{ selectIssuer(e.target.value)}}),                                                                                           
-                                                React.createElement('img', {src: issuer.image_path, className: 'issuerlogo'}, null),  
-                                                issuer.name
-                                            ),                                                                                  
-                                        ),                                                                          
-                                ),                                
-                            ),                                                   
-                        ) : ''),
-                    (gateway.showbirthdate == true ?
-                        React.createElement('div', {className: 'field'},
-                                 React.createElement('span', {className: 'payLabel'}, gateway.texts.enterbirthdate),
-                                 React.createElement('input', {type: 'date', onChange: (e)=>{ selectDate(e.target.value)}})
-                        ) : '' ),
-                    (gateway.showCocField == true ?
-                        React.createElement('div', {className: 'field'},
-                            React.createElement('span', {className: 'payLabel'}, gateway.texts.enterCocNumber),
-                            React.createElement('input', {type: 'text', onChange: (e)=>{ setCocNumber(e.target.value)}})
-                        ) : '' ),
-                    (gateway.showVatField == true ?
-                        React.createElement('div', {className: 'field'},
-                            React.createElement('span', {className: 'payLabel'}, gateway.texts.enterVatNumber),
-                            React.createElement('input', {type: 'text', onChange: (e)=>{ setVatNumber(e.target.value)}})
-                        ) : '' )
-        ))
+                    )
+                ) : ''
+            )
 
 }
 
