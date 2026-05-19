@@ -41,7 +41,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $this->icon = $this->getIcon();
         $this->optionId = $this->getOptionId();
 
-        $this->has_fields         = true;
+        $this->has_fields         = $this->has_fields();
         $this->method_title       = esc_html('Pay. - ' . $this->getName());
         $this->method_description = esc_html(sprintf(__('Activate this module to accept %s transactions', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $this->getName()));
 
@@ -423,8 +423,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
                 $this->set_option_default('min_amount', (isset($minAmount)) ? floatval($minAmount / 100) : '');
                 $this->set_option_default('max_amount', (isset($maxAmount)) ? floatval($maxAmount / 100) : '');
 
-                $pubDesc = (isset($payDefaults->brand->public_description)) ? $payDefaults->brand->public_description : sprintf(esc_html(__('Pay with %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()); // phpcs:ignore
-                $this->set_option_default('description', $pubDesc);
+                if ($this->get_option('description') === 'pay_init') {
+                    $pubDesc = (isset($payDefaults->brand->public_description)) ? $payDefaults->brand->public_description : sprintf(esc_html(__('Pay with %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $this->getName()); // phpcs:ignore
+                    $this->update_option('description', $pubDesc);
+                }
             }
         } else {
             $this->form_fields = array(
@@ -437,6 +439,35 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             );
         }
     }
+
+    /**
+     * @return boolean
+     */
+    public function has_fields()
+    {
+        if (trim((string) $this->get_description()) !== '') {
+            return true;
+        }
+    
+        if (!empty($this->getIssuers())) {
+            return true;
+        }
+
+        if ($this->askBirthdate()) {
+            return true;
+        }
+
+        if ($this->showVat()) {
+            return true;
+        }
+
+        if ($this->showCoc()) {
+            return true;
+        }
+
+        return false;
+    }
+
 
     /**
      * @return boolean Payment methods that are confirmed slowly (like banktransfer) should return true here
