@@ -154,17 +154,18 @@ class PPMFWC_Helper_Data
         $wpdb->query('DELETE FROM `' . $table_name_option_subs . '`');
         $wpdb->query('DELETE FROM `' . $table_name_options . '`');
 
-        foreach ($paymentOptions as $method)
-        {
-            if (file_exists(PPMFWC_PLUGIN_PATH . 'assets/cache' . $method->getImage())) {
-                $image = PPMFWC_PLUGIN_URL . 'assets/cache' . $method->getImage();
-            } else {
-                $image = 'https://static.pay.nl/' . $method->getImage();
-            }
+        if (is_array($paymentOptions)) {
+            foreach ($paymentOptions as $method) {
+                if (file_exists(PPMFWC_PLUGIN_PATH . 'assets/cache' . $method->getImage())) {
+                    $image = PPMFWC_PLUGIN_URL . 'assets/cache' . $method->getImage();
+                } else {
+                    $image = 'https://static.pay.nl/' . $method->getImage();
+                }
 
-            $sql = 'INSERT INTO `' . $table_name_options . '` (id,name,image,update_date) VALUES (%d,%s,%s,%s) ON DUPLICATE KEY UPDATE name = %s, image = %s, update_date = %s';
-            $sql = $wpdb->prepare($sql, $method->getId(), $method->getName(), $image, current_time('mysql'), $method->getName(), $image, current_time('mysql'));
-            $wpdb->query($sql);
+                $sql = 'INSERT INTO `' . $table_name_options . '` (id,name,image,update_date) VALUES (%d,%s,%s,%s) ON DUPLICATE KEY UPDATE name = %s, image = %s, update_date = %s';
+                $sql = $wpdb->prepare($sql, $method->getId(), $method->getName(), $image, current_time('mysql'), $method->getName(), $image, current_time('mysql'));
+                $wpdb->query($sql);
+            }
         }
     }
 
