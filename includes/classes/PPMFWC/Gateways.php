@@ -710,7 +710,7 @@ class PPMFWC_Gateways
             $addedSettings[] = array(
               'name' => __('Hash customer IBAN', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
               'type' => 'checkbox',
-              'desc' => esc_html(__("Enable hashing of customer IBAN for added security", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
+              'desc' => esc_html(__("Enable hashing of customer IBAN for added security. Disabling this setting later will not unhash previously processed IBANs.", PPMFWC_WOOCOMMERCE_TEXTDOMAIN)),
               'id' => 'paynl_hash_iban',
               'default' => 'no',
             );
