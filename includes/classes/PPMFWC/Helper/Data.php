@@ -125,14 +125,35 @@ class PPMFWC_Helper_Data
         $ip = self::getIp();
         $ipConfig = get_option('paynl_test_ipadress');
         if (!empty($ipConfig)) {
+            $ipConfig = preg_replace('/\s+/', '', $ipConfig);
             $allowed_ips = explode(',', $ipConfig);
             if (
-                in_array($ip, $allowed_ips) &&
                 filter_var($ip, FILTER_VALIDATE_IP) &&
                 strlen($ip) > 0 &&
                 count($allowed_ips) > 0
             ) {
-                return true;
+                if (in_array($ip, $allowed_ips)) {
+                    return true;                
+                } else {
+                    foreach ($allowed_ips as $allowed_ip) {
+                        $allowed_ip = trim($allowed_ip);
+                        if (strpos($allowed_ip, '/') !== false) {
+                            list($start_ip, $end_suffix) = explode('/', $allowed_ip);
+
+                            $ip_parts = explode('.', $start_ip);
+                            $ip_parts[3] = $end_suffix;
+                            $end_ip = implode('.', $ip_parts);
+
+                            $current_long = ip2long($ip);
+                            $start_long = ip2long($start_ip);
+                            $end_long = ip2long($end_ip);
+
+                            if ($current_long >= $start_long && $current_long <= $end_long) {
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
         }
         return false;
