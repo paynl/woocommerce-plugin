@@ -223,6 +223,12 @@ class PPMFWC_Helper_Transaction
         switch ($payApiStatus) {
             case PPMFWC_Gateways::STATUS_AUTHORIZE:
             case PPMFWC_Gateways::STATUS_SUCCESS:
+                if(get_option('paynl_hash_iban') == 'yes' && !empty($payOrder->getCustomerId())) {
+                    $customerId = substr($payOrder->getCustomerId(), 0, 4) . "XXXXXXXXXXXXXX";
+                } else {
+                    $customerId = $payOrder->getCustomerId();
+                }
+
                 # Check the amount
                 $skipAmountValidation = get_option('paynl_verify_amount') == 'yes';
                 if (!$skipAmountValidation && !in_array($order->get_total(), $transactionPaid)) {
@@ -298,8 +304,8 @@ class PPMFWC_Helper_Transaction
                         $order->save();
                     } else {
                         $order->payment_complete($transactionId);
-                        if (!empty($payOrder->getCustomerId())) {
-                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $payOrder->getCustomerId())); // phpcs:ignore
+                        if (!empty($customerId)) {
+                            $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s). customerkey: %s', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus, $customerId)); // phpcs:ignore
                         } else {
                             $order->add_order_note(sprintf(esc_html(__('Pay.: Payment complete (%s).', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)), $payApiStatus));
                         }
@@ -307,7 +313,7 @@ class PPMFWC_Helper_Transaction
                 }
 
             update_post_meta($orderId, 'CustomerName', esc_attr($payOrder->getCustomerName() ?? ''));
-            update_post_meta($orderId, 'CustomerKey', esc_attr($payOrder->getCustomerId() ?? ''));
+            update_post_meta($orderId, 'CustomerKey', esc_attr($customerId ?? ''));
 
             break;
 
