@@ -41,6 +41,7 @@
 |  |  | Festival Cadeaukaart |  |
 |  |  | Huis & Tuin Cadeau |  |
 |  |  | Winkelcheque |  |
+|  |  | Energieloket Cadeaukaart |  |
 
 # Installation
   #### Installing
