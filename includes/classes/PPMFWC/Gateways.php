@@ -867,6 +867,9 @@ class PPMFWC_Gateways
         add_action('woocommerce_api_wc_pay_gateway_pinrefund', array(__CLASS__, 'ppmfwc_onPinRefund'));
         add_action('woocommerce_api_wc_pay_gateway_retourpinreturn', array(__CLASS__, 'ppmfwc_retourpinReturn'));
         add_action('woocommerce_api_wc_pay_gateway_fccreate', array('PPMFWC_Hooks_FastCheckout_Start', 'ppmfwc_onFastCheckoutOrderCreate'));
+
+        add_action('woocommerce_api_wc_pay_gateway_paypartssession', array('PPMFWC_Hooks_PayParts_Session', 'ppmfwc_onPayPartsSessionCreate'));        
+        add_action('woocommerce_api_wc_pay_gateway_paypartsordercreate', array('PPMFWC_Hooks_PayParts_Order', 'ppmfwc_onPayPartsOrderCreate'));
     }
 
     /**

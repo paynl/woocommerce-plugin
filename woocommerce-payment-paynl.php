@@ -100,6 +100,7 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     }
 
     add_action('wp_enqueue_scripts', 'ppmfwc_payScript');
+    add_filter('script_loader_tag', 'ppmfwc_payparts_scripts_modules', 10, 3);
 
     if (get_option('paynl_auto_capture') == "yes" || get_option('paynl_auto_void') == "yes") {
         add_action('woocommerce_order_status_changed', 'ppmfwc_auto_functions', 10, 3);
@@ -250,8 +251,51 @@ function ppmfwc_payScript()
                         wp_enqueue_script('ppmfwc_applepay_script');
                         $scriptsAdded[] = 'ppmfwc_applepay_script';
                     }
+
+                    if (!empty($gateway->settings['credit_cards_grouped_pay_parts']) && $gateway->settings['credit_cards_grouped_pay_parts'] == 1) {
+                        wp_register_script(
+                            'payparts-external-sdk',
+                            'https://zero-parts.pay.nl/sdk/payparts-sdk.js',
+                            array(),
+                            null,
+                            true
+                        );
+
+                        wp_enqueue_script('payparts-external-sdk');
+                        $scriptsAdded[] = 'payparts-external-sdk';
+
+                        wp_register_script(
+                            'payparts-gateway-js',
+                            PPMFWC_PLUGIN_URL . 'assets/js/payparts.js',
+                            array('payparts-external-sdk', 'jquery'),
+                            '1.0.0',
+                            true
+                        );
+
+                        wp_enqueue_script('payparts-gateway-js');
+                        $scriptsAdded[] = 'payparts-gateway-js';
+                    }
                 }
             }
+        }
+    }
+}
+
+function ppmfwc_payparts_scripts_modules($tag, $handle, $src)
+{
+    $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(11);
+    if ($gateway->enabled == 'yes') {
+        if (!empty($gateway->settings['credit_cards_grouped_pay_parts']) && $gateway->settings['credit_cards_grouped_pay_parts'] == 1) {
+            $module_handles = array(
+                'payparts-external-sdk',
+                'payparts-gateway-js'
+            );
+
+            if (in_array($handle, $module_handles)) {
+                $tag = str_replace('<script ', '<script type="module" ', $tag);
+            }
+
+            return $tag;
         }
     }
 }
