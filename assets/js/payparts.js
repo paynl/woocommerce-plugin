@@ -9,25 +9,26 @@ async function initSession($) {
         dataType: 'json',
         success: function (data) {
             if (data.success) {
-                window.initPayment($, data.data.sessionToken);
+                window.initPayment($, data.data.sessionToken, data.data.sessionId);
             }
         }
     })
 }
 
-async function initPayment($, sessionToken) {
+async function initPayment($, sessionToken, sessionId) {
 
     if (!window.PayPartsSDK) {
-        console.error('PayPartsSDK external script has not finished loading on the page.');
         return;
     }
 
     if (sessionToken === undefined || sessionToken === null) {
-        console.error('Session token is not available.');
         return;
     }
 
     try {
+
+        var woocommerceOrderId = null;
+        var woocommerceOrderIdAdded = false;
         const checkout = await window.PayPartsSDK.init({
             sessionToken: sessionToken,
             apiUrl: 'https://zero-parts.pay.nl',
@@ -44,25 +45,42 @@ async function initPayment($, sessionToken) {
                 event.resolve();
             },
             onSubmit: (event) => {
-                var ajaxurl = '/?wc-api=Wc_Pay_Gateway_PaypartsOrderCreate';
-                var data = { order_id: event.orderId };
-                $.ajax({
-                    url: ajaxurl,
-                    type: 'POST',
-                    data: data,
-                    dataType: 'json',
-                    success: function (data) {
-                        console.log('Order Finalized', data);
+                var $checkoutForm = $('form.checkout');
+                $checkoutForm.block({
+                    message: null,
+                    overlayCSS: {
+                        background: '#fff',
+                        opacity: 0.6
                     }
                 });
-                // todo: update session with orderID, currently hasnt been made yet.
-                event.resolve();
+
+                if (!woocommerceOrderIdAdded) {
+                    var ajaxurl = '/?wc-api=Wc_Pay_Gateway_PaypartsOrderCreate';
+                    var data = { sessionId: sessionId };
+                    $.ajax({
+                        url: ajaxurl,
+                        type: 'POST',
+                        data: data,
+                        dataType: 'json',
+                        success: function (data) {
+                            woocommerceOrderId = data.order_id;
+                            woocommerceOrderIdAdded = true;
+                            event.resolve({ reference: woocommerceOrderId.toString() });
+                        },
+                        error: function (data) {
+                            event.reject(new Error('Order creation failed'));
+                        }
+                    });
+                } else {
+                    event.resolve();
+                }
             },
             onSuccess: (event) => {
-                //window.location.href = event.returnUrl . '?&transaction=' + event.orderId;
+                window.location.href = event.returnUrl + '&id=' + event.orderId + '&orderId=' + woocommerceOrderId + '&statusCode=' + event.paymentStatus.action + '&orderStatusId=' + event.paymentStatus.code;
                 event.resolve();
             },
             onError: (event) => {
+                $('form.checkout').unblock();
                 event.resolve();
             }
         };
@@ -83,7 +101,7 @@ async function initPayment($, sessionToken) {
         });
 
     } catch (error) {
-        console.error('Failed to initialize PayParts checkout:', error);
+        return;
     }
 }
 

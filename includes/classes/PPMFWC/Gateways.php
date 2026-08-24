@@ -896,12 +896,24 @@ class PPMFWC_Gateways
         try {
             # Retrieve URL to continue (and update status if necessary)
             if (!empty($orderId)) {
+           
                 try {
                     $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
                     if (!$transactionLocalDB || empty($transactionLocalDB['order_id'])) {
-                        throw new PPMFWC_Exception_Notice('Could not find local transaction for order ' . $orderId);
+                        $config = PPMFWC_Helper_Config::getPayConfig();
+                        $request = new PayNL\Sdk\Model\Request\TransactionStatusRequest($transactionId);
+                        $payOrder = $request->setConfig($config)->start();
+                        $reference = $payOrder->getReference();
+                        if (!empty($reference) && $reference == $orderId) {
+                            $order = new WC_Order($reference);
+                        }
+                    } else {
+                        $order = new WC_Order($transactionLocalDB['order_id']);
+                    }      
+              
+                    if(!$order){
+                        throw new Exception('Order not found for orderId: ' . $orderId);
                     }
-                    $order = new WC_Order($transactionLocalDB['order_id']);
 
                     $url = self::getOrderReturnUrl($order, $status, $orderStatusId);
 
@@ -1109,7 +1121,7 @@ class PPMFWC_Gateways
                 throw new PPMFWC_Exception_Notice('Ignoring: ' . $action);
             }
 
-            $newStatus = PPMFWC_Helper_Transaction::processTransaction($payOrder, $status, $methodId);
+            $newStatus = PPMFWC_Helper_Transaction::processTransaction($payOrder, $status, $methodId, $order_id);
             $responseMessage = 'Status updated to ' . $newStatus;
 
         } catch (PPMFWC_Exception_Notice $e) {

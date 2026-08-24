@@ -25,17 +25,26 @@ class PPMFWC_Hooks_PayParts_Order
                 throw new \Exception('Cart is empty or not found');
             }
 
-            $order_id = WC()->session ? WC()->session->get('reserved_order_id') : false;
+            $order = wc_create_order(array(
+                'customer_id' => get_current_user_id(),
+                'status' => 'checkout-draft',
+            ));
 
-            if (!$order_id) {
-                $order_id = self::ppmfwc_reserveOrderId();
+            if (is_wp_error($order)) {
+                return false;
             }
 
-            $order = wc_get_order($order_id);
+            $order_id = $order->get_id();
 
-            if (!$order) {
-                throw new \Exception('Order not found');
-            }
+            $order->update_meta_data('_created_by', 'Pay. Parts');
+            $order->add_meta_data('_wc_order_attribution_source_type', 'utm');
+            $order->add_meta_data('_wc_order_attribution_utm_source', 'Pay. Parts');
+            $order->add_order_note(esc_html(__('Pay.: Created Pay. Parts order', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)));
+
+            $order->set_address(WC()->customer->get_billing(), 'billing');
+            $order->set_address(WC()->customer->get_shipping(), 'shipping');
+            $order->calculate_totals();
+            $order->save();
 
             foreach (WC()->cart->get_cart() as $cart_item_key => $values) {
                 $product_id = $values['product_id'];
@@ -48,9 +57,6 @@ class PPMFWC_Hooks_PayParts_Order
                     array('variation' => $variation)
                 );
             }
-
-            $order->set_address(WC()->customer->get_billing(), 'billing');
-            $order->set_address(WC()->customer->get_shipping(), 'shipping');
 
             foreach (WC()->cart->get_coupons() as $code => $coupon) {
                 $order->apply_coupon($code);
@@ -65,7 +71,7 @@ class PPMFWC_Hooks_PayParts_Order
                 $order->add_item($shipping_item);
             }
 
-            $payment_method = WC()->session->get('chosen_payment_method');
+            $payment_method = PPMFWC_Gateway_CreditCardsGrouped::getId();
             if ($payment_method) {
                 $gateways = WC()->payment_gateways()->payment_gateways();
                 if (isset($gateways[$payment_method])) {
@@ -77,10 +83,8 @@ class PPMFWC_Hooks_PayParts_Order
             $order->set_status('pending');
             $order->save();
 
-            WC()->session->__unset('reserved_order_id');
-
-            $transactionId = isset($_POST['order_id']) ? $_POST['order_id'] : 0;
-            PPMFWC_Helper_Transaction::newTransaction($transactionId, PPMFWC_Gateway_CreditCardsGrouped::getOptionId(), ($order->get_total() * 100), $order->get_id(), '');
+            $sessionId = isset($_POST['sessionId']) ? $_POST['sessionId'] : 0;
+            PPMFWC_Helper_Transaction::newTransaction($sessionId, PPMFWC_Gateway_CreditCardsGrouped::getOptionId(), ($order->get_total() * 100), $order->get_id(), '');
 
             $returnarray = array(
                 'success' => true,
@@ -96,44 +100,4 @@ class PPMFWC_Hooks_PayParts_Order
         header('Content-Type: application/json;charset=UTF-8');
         die(json_encode($returnarray));
     }
-
-    public static function ppmfwc_reserveOrderId()
-    {
-
-        if (!WC()->cart || WC()->cart->is_empty()) {
-            return false;
-        }
-
-        $order_id = WC()->session->get('reserved_order_id');
-
-        if ($order_id) {
-            $order = wc_get_order($order_id);
-
-            if ($order && in_array($order->get_status(), array('pending', 'checkout-draft', 'draft'))) {
-                $order->calculate_totals();
-                return $order_id;
-            }
-        }
-
-        $order = wc_create_order(array(
-            'customer_id' => get_current_user_id(),
-            'status' => 'checkout-draft',
-        ));
-
-        if (is_wp_error($order)) {
-            return false;
-        }
-
-        $new_order_id = $order->get_id();
-
-        $order->set_address(WC()->customer->get_billing(), 'billing');
-        $order->set_address(WC()->customer->get_shipping(), 'shipping');
-        $order->calculate_totals();
-        $order->save();
-
-        WC()->session->set('reserved_order_id', $new_order_id);
-
-        return $new_order_id;
-    }
-
 }

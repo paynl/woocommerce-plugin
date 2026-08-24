@@ -136,6 +136,23 @@ class PPMFWC_Helper_Transaction
     }
 
     /**
+     * @param string $transactionId
+     * @return false|mixed
+     */
+    public static function getTransactionByOrderId(string $orderId): mixed
+    {
+        global $wpdb;
+
+        $table_name_transactions = $wpdb->prefix . "pay_transactions";
+        $result = $wpdb->get_results(
+            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE order_id = %s", $orderId),
+            ARRAY_A
+        );
+
+        return $result[0] ?? false;
+    }
+
+    /**
      * @param \PayNL\Sdk\Model\Pay\PayOrder $payOrder
      * @param $status
      * @param $methodId
@@ -143,19 +160,23 @@ class PPMFWC_Helper_Transaction
      * @throws PPMFWC_Exception
      * @throws PPMFWC_Exception_Notice
      */
-    public static function processTransaction(\PayNL\Sdk\Model\Pay\PayOrder $payOrder, $status = null, $methodId = null): mixed
+    public static function processTransaction(\PayNL\Sdk\Model\Pay\PayOrder $payOrder, $status = null, $methodId = null, $orderId = null): mixed
     {
-        $transactionId = $payOrder->getOrderId();
+        $transactionId = $payOrder->getOrderId();        
+
+        if (empty($orderId)) {
+            $orderId = PPMFWC_Helper_Data::getRequestArg('extra1') ?? null;
+        }
 
         # Retrieve local payment state
         $transactionLocalDB = self::getTransaction($transactionId);
-        $localTransactionStatus = $transactionLocalDB['status'] ?? '';
-        $orderId = $transactionLocalDB['order_id'] ?? null;
-
+        $transactionDbId = $transactionId;
         if (empty($transactionLocalDB)) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('Notice: Cant find local transaction: ' . $transactionId);
-            $orderId = PPMFWC_Helper_Data::getRequestArg('extra1') ?? null;
+            $transactionLocalDB = self::getTransactionByOrderId($orderId);      
+            $transactionDbId = $transactionLocalDB['transaction_id'];
         }
+
+        $localTransactionStatus = $transactionLocalDB['status'] ?? ''; 
 
         try {
             $order = new WC_Order($orderId);
@@ -185,7 +206,7 @@ class PPMFWC_Helper_Transaction
             if ($localTransactionStatus === PPMFWC_Gateways::STATUS_SUCCESS && $payApiStatus === PPMFWC_Gateways::STATUS_CANCELED) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Not changing order status to canceled, order is paid.');
             } else {
-                self::updateStatus($transactionId, $payApiStatus);
+                self::updateStatus($transactionDbId, $payApiStatus);
             }
         }
         $wcOrderStatus = $order->get_status();
