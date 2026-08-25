@@ -41,7 +41,6 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $this->icon = $this->getIcon();
         $this->optionId = $this->getOptionId();
 
-        $this->has_fields         = $this->has_fields();
         $this->method_title       = esc_html('Pay. - ' . $this->getName());
         $this->method_description = esc_html(sprintf(__('Activate this module to accept %s transactions', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $this->getName()));
 
@@ -50,8 +49,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $this->init_form_fields();
         $this->init_settings();
 
-        $this->title       = $this->get_option('title');
-        $this->description = $this->get_option('description');
+        $this->title       = $this->get_option('title', '');
+        $this->description = $this->get_option('description', '');
+
+        $this->has_fields = $this->has_fields();
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this,'process_admin_options'));
     }
@@ -445,7 +446,8 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function has_fields()
     {
-        if (trim((string) $this->get_description()) !== '') {
+        // Use $this->description directly: get_description() runs wp_kses_post() and must not receive null.
+        if (trim((string) $this->description) !== '') {
             return true;
         }
     
