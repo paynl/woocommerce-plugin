@@ -446,8 +446,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      */
     public function has_fields()
     {
-        // Use $this->description directly: get_description() runs wp_kses_post() and must not receive null.
-        if (trim((string) $this->description) !== '') {
+        if (trim((string) $this->get_description()) !== '') {
             return true;
         }
     
