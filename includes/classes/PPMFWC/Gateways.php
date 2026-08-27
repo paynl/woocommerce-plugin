@@ -1119,6 +1119,7 @@ class PPMFWC_Gateways
 
         } catch (Exception $e) {
             $responseMessage = 'Error 2: ' . $e->getMessage();
+            $responseResult = false;
             PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange Error: ' . $e->getMessage(), ($order_id ?? 0), array('action' => ($action ?? ''), 'wc_order_id' => '', 'payOrderId' => ($payOrderId ?? '')), 'critical');
         }
 
