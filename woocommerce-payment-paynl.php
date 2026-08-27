@@ -100,8 +100,9 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     }
 
     add_action('wp_enqueue_scripts', 'ppmfwc_payScript');
-    add_filter('script_loader_tag', 'ppmfwc_payparts_scripts_modules', 10, 3);
-
+    if (!is_admin()) {
+        add_filter('script_loader_tag', 'ppmfwc_payparts_scripts_modules', 10, 3);
+    }
     if (get_option('paynl_auto_capture') == "yes" || get_option('paynl_auto_void') == "yes") {
         add_action('woocommerce_order_status_changed', 'ppmfwc_auto_functions', 10, 3);
     }
@@ -293,11 +294,10 @@ function ppmfwc_payparts_scripts_modules($tag, $handle, $src)
 
             if (in_array($handle, $module_handles)) {
                 $tag = str_replace('<script ', '<script type="module" ', $tag);
-            }
-
-            return $tag;
+            }            
         }
     }
+    return $tag;
 }
 
 /**
