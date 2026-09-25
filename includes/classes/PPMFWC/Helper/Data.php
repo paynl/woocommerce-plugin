@@ -196,8 +196,8 @@ class PPMFWC_Helper_Data
                             $image = 'https://static.pay.nl/' . $issuerImage;
                         }
 
-                        $sql = 'INSERT INTO `' . $table_name_option_subs . '` (option_id,option_sub_id,name,image,active) VALUES (%d,%d,%s,%s,%d) ON DUPLICATE KEY UPDATE name = %s, image = %s, active = 1';
-                        $sql = $wpdb->prepare($sql, $method->getId(), $issuer['id'], $issuer['name'], $image, 1, $issuer['name'], $image);
+                        $sql = 'INSERT INTO `' . $table_name_option_subs . '` (option_id,option_sub_id,name,image,active,issuer_id) VALUES (%d,%d,%s,%s,%d,%s) ON DUPLICATE KEY UPDATE name = %s, image = %s, active = 1';
+                        $sql = $wpdb->prepare($sql, $method->getId(), $issuer['id'], $issuer['name'], $image, 1, $issuer['issuerId'], $issuer['name'], $image);
                         $wpdb->query($sql);
                     }
                 }
@@ -227,7 +227,7 @@ class PPMFWC_Helper_Data
         global $wpdb;
 
         $table_name_option_subs = $wpdb->prefix . "pay_option_subs";
-        $query = $wpdb->prepare("SELECT option_id, option_sub_id, name, image "
+        $query = $wpdb->prepare("SELECT option_id, option_sub_id, name, image, issuer_id "
             . "FROM $table_name_option_subs "
             . "WHERE active = 1 AND option_id = %d", $optionId);
 

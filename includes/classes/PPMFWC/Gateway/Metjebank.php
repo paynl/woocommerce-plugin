@@ -67,11 +67,11 @@ class PPMFWC_Gateway_Metjebank extends PPMFWC_Gateway_Abstract
                 ?>
                 <fieldset>
                     <legend><?php echo esc_html(__('Pay safely via your bank', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)); ?></legend>
-                    <select name="option_sub_id">
+                    <select name="issuer_id">
                         <option value=""><?php echo esc_html(__('Select your bank...', PPMFWC_WOOCOMMERCE_TEXTDOMAIN)); ?></option>
                         <?php
                         foreach ($optionSubs as $optionSub) {
-                            echo '<option value="' . esc_attr($optionSub['option_sub_id']) . '">' . esc_html($optionSub['name']) . '</option>';
+                            echo '<option value="' . esc_attr($optionSub['issuer_id']) . '">' . esc_html($optionSub['name']) . '</option>';
                         }
                         ?>
                     </select>
@@ -81,7 +81,7 @@ class PPMFWC_Gateway_Metjebank extends PPMFWC_Gateway_Abstract
                 <ul class="pay_radio_select">
                     <?php
                     foreach ($optionSubs as $optionSub) {
-                        echo '<li><label><input type="radio" name="option_sub_id" value="' . esc_attr($optionSub['option_sub_id']) . '" />&nbsp;<img src="' . esc_url($optionSub['image']) . '" alt="' . esc_attr($optionSub['name']) . '" title="' . esc_attr($optionSub['name']) . '" /><span>' . esc_attr($optionSub['name']) . '</span></label></li>'; // phpcs:ignore
+                        echo '<li><label><input type="radio" name="issuer_id" value="' . esc_attr($optionSub['issuer_id']) . '" />&nbsp;<img src="' . esc_url($optionSub['image']) . '" alt="' . esc_attr($optionSub['name']) . '" title="' . esc_attr($optionSub['name']) . '" /><span>' . esc_attr($optionSub['name']) . '</span></label></li>'; // phpcs:ignore
                     }
                     ?>
                 </ul>
