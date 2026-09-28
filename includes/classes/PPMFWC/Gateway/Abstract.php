@@ -790,7 +790,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $request->setAmount($order->get_total());
 
         if (!empty(PPMFWC_Helper_Data::getPostTextField('issuer_id'))) {
-            $request->setIssuerId(PPMFWC_Helper_Data::getPostTextField('issuer_id'));
+            $request->setPaymentInputData(['issuerId' => PPMFWC_Helper_Data::getPostTextField('issuer_id')]);
         }
 
         $expireTime = get_option('paynl_payment_expire_time');
