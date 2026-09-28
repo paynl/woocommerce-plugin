@@ -29,7 +29,7 @@ class PPMFWC_Hooks_PayParts_Session
                 throw new \Exception("Selected payment method is not available.");
             }
 
-            $api_url = 'https://zero-parts.pay.nl/v1/session/start';
+            $api_url = 'https://parts.pay.nl/v1/session/start';
 
             $returnUrl = add_query_arg(array('wc-api' => 'Wc_Pay_Gateway_Return'), home_url('/'));
             $exchangeUrl = add_query_arg('wc-api', 'Wc_Pay_Gateway_Exchange', home_url('/'));

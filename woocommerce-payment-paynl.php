@@ -256,7 +256,7 @@ function ppmfwc_payScript()
                     if (!empty($gateway->settings['credit_cards_grouped_pay_parts']) && $gateway->settings['credit_cards_grouped_pay_parts'] == 1) {
                         wp_register_script(
                             'payparts-external-sdk',
-                            'https://zero-parts.pay.nl/sdk/payparts-sdk.js',
+                            'https://parts.pay.nl/sdk/payparts-sdk.js',
                             array(),
                             null,
                             true

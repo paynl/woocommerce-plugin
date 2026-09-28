@@ -900,7 +900,7 @@ class PPMFWC_Gateways
                 try {
                     $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
                     if (!$transactionLocalDB || empty($transactionLocalDB['order_id'])) {
-                        $config = PPMFWC_Helper_Config::getPayConfig();
+                        $config = PPMFWC_Helper_Config::getPayConfig();                   
                         $request = new PayNL\Sdk\Model\Request\TransactionStatusRequest($transactionId);
                         $payOrder = $request->setConfig($config)->start();
                         $reference = $payOrder->getReference();
