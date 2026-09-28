@@ -336,17 +336,17 @@
         },
         {
             "name": "paynl/php-sdk",
-            "version": "1.0.7",
-            "version_normalized": "1.0.7.0",
+            "version": "2.0.1",
+            "version_normalized": "2.0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paynl/php-sdk.git",
-                "reference": "ca571e5fc28276e4d6d577a7e5a904d26647b42c"
+                "reference": "9a7a1a8bbbf3ab2b036fc3b8040e597abb1878f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paynl/php-sdk/zipball/ca571e5fc28276e4d6d577a7e5a904d26647b42c",
-                "reference": "ca571e5fc28276e4d6d577a7e5a904d26647b42c",
+                "url": "https://api.github.com/repos/paynl/php-sdk/zipball/9a7a1a8bbbf3ab2b036fc3b8040e597abb1878f8",
+                "reference": "9a7a1a8bbbf3ab2b036fc3b8040e597abb1878f8",
                 "shasum": ""
             },
             "require": {
@@ -359,14 +359,13 @@
             },
             "require-dev": {
                 "ext-simplexml": "*",
-                "phpmd/phpmd": "^2",
                 "phpstan/phpstan": "^2",
-                "phpunit/phpunit": "^11",
+                "phpunit/phpunit": "^10.5.20",
                 "roave/security-advisories": "dev-master",
-                "squizlabs/php_codesniffer": "^3",
-                "symfony/var-dumper": "^7"
+                "slevomat/coding-standard": "^8.22",
+                "squizlabs/php_codesniffer": "^3"
             },
-            "time": "2025-09-29T14:56:34+00:00",
+            "time": "2026-08-28T14:42:27+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -383,17 +382,22 @@
             "license": [
                 "MIT"
             ],
-            "description": "Software Development Kit for implementing Pay.'s API version 3",
+            "description": "Pay. API client library for PHP. Pay. is an all-in-one European PSP offering 50+ payment methods both online and instore.",
             "keywords": [
+                "Apple Pay",
                 "api",
-                "plugins",
-                "rest",
-                "sdk"
+                "bancontact",
+                "ideal",
+                "pay",
+                "payment",
+                "paynl",
+                "php",
+                "psp"
             ],
             "support": {
                 "email": "webshop@pay.nl",
                 "issues": "https://github.com/paynl/php-sdk/issues",
-                "source": "https://github.com/paynl/php-sdk/tree/v1.0.7"
+                "source": "https://github.com/paynl/php-sdk/tree/v2.0.1"
             },
             "install-path": "../paynl/php-sdk"
         },

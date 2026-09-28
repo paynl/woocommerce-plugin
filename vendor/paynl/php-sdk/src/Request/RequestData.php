@@ -25,8 +25,8 @@ abstract class RequestData implements RequestDataInterface
     protected ?Config $config;
 
     /**
-     * @param string $mapperName Internal name of the call to make
-     * @param string $uri Path for API
+     * @param string $mapperName    Internal name of the call to make.
+     * @param string $uri           Path for API.
      * @param string $requestMethod Should be for example RequestInterface::METHOD_POST, RequestInterface::METHOD_GET, etc.
      */
     public function __construct(string $mapperName, string $uri, string $requestMethod = 'POST')
@@ -59,7 +59,7 @@ abstract class RequestData implements RequestDataInterface
 
 
     /**
-     * @return Config|null
+     * @return Config
      * @throws PayException
      */
     private function getConfig(): Config
@@ -111,6 +111,10 @@ abstract class RequestData implements RequestDataInterface
                 $errorMessage = (empty($errorMessage) && !empty($jsonData['error'])) ? $jsonData['error'] : $errorMessage;
                 if (empty($errorMessage) && isset($jsonData['errors']['transactionId']['message'])) {
                     $errorMessage = $jsonData['errors']['transactionId']['message'];
+                }
+                if (empty($errorMessage) && isset($jsonData['errors']['general']['message'])) {
+                    $errorMessage = $jsonData['errors']['general']['message'];
+                    $code = $jsonData['errors']['general']['code'] ?? $code;
                 }
                 $detail = empty($detail) ? $errorMessage : $detail;
                 throw (new PayException($code . ' - ' . $detail, (int)substr($code, 4), $response->getStatusCode()))->setFriendlyMessage(Text::getFriendlyMessage($errorMessage));
