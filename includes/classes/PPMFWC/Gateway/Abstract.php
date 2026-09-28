@@ -789,7 +789,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $request->setDescription(str_replace('__', ' ', $prefix) . $order->get_order_number());
         $request->setAmount($order->get_total());
 
-        if (!empty(PPMFWC_Helper_Data::getPostTextField('issuer_id'))) {
+        if ($this->getOptionId() === PPMFWC_Gateway_Metjebank::getOptionId() && !empty(PPMFWC_Helper_Data::getPostTextField('issuer_id'))) {
             $request->setPaymentInputData(['issuerId' => PPMFWC_Helper_Data::getPostTextField('issuer_id')]);
         }
 
