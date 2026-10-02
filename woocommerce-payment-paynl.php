@@ -113,8 +113,8 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     add_filter('woocommerce_email_recipient_customer_on_hold_order', array('PPMFWC_Hooks_Settings', 'ppmfwc_settings_email'), 10, 3);
     add_filter('woocommerce_email_recipient_customer_processing_order', array('PPMFWC_Hooks_Settings', 'ppmfwc_settings_email'), 10, 3);
     add_filter('woocommerce_email_recipient_customer_pending_order', array('PPMFWC_Hooks_Settings', 'ppmfwc_settings_email'), 10, 3);
-    add_action('wp_enqueue_scripts', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_blocks_cart'));
-    add_action('wp_enqueue_scripts', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_modal'));
+    add_action('wp_footer', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_blocks_cart'));
+    add_action('wp_footer', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_modal'));
 } else {
     # WooCommerce seems to be inactive, show eror message
     add_action('admin_notices', 'ppmfwc_error_woocommerce_not_active');
