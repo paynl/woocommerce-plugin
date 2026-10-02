@@ -31,7 +31,7 @@ async function initPayment($, sessionToken, sessionId) {
         var woocommerceOrderIdAdded = false;
         const checkout = await window.PayPartsSDK.init({
             sessionToken: sessionToken,
-            apiUrl: 'https://zero-parts.pay.nl',
+            apiUrl: 'https://parts.pay.nl',
             language: 'nl',
             country: 'NL',
             debugMode: false,
