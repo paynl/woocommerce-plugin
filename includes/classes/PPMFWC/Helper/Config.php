@@ -210,9 +210,8 @@ class PPMFWC_Helper_Config
 
         if (is_array($items)) {
             foreach ($items as $item) {
-                $pricePerPiece = ($item['line_subtotal'] + $item['line_subtotal_tax']) / $item['qty'];
-                $code = paynl_determine_vat_class(($item['line_subtotal'] + $item['line_subtotal_tax']), $item['line_subtotal_tax']);
-
+                $pricePerPiece = ($item['line_subtotal'] + $item['line_subtotal_tax']) / $item['qty'];                
+                $vatPercentage = $item['line_subtotal'] > 0 ? round(($item['line_subtotal_tax'] / $item['line_subtotal']) * 100) : 0;
                 $collectionProducts->addProduct(
                     new PayNL\Sdk\Model\Product(
                         (string)$item['product_id'],
@@ -221,7 +220,8 @@ class PPMFWC_Helper_Config
                         null,
                         PayNL\Sdk\Model\Product::TYPE_ARTICLE,
                         $item['qty'],
-                        $code,
+                        null,
+                        $vatPercentage,
                     )
                 );
             }
@@ -231,9 +231,8 @@ class PPMFWC_Helper_Config
 
         # Add shipping costs information
         $shipping = floatval($shipping_total) + floatval($order->get_shipping_tax());
-        if ($shipping != 0) {
-            $code = paynl_determine_vat_class($shipping_total, $order->get_shipping_tax());
-
+        if ($shipping != 0) {            
+            $vatPercentage = $shipping_total > 0 ? round((100 * $order->get_shipping_tax()) / $shipping_total) : 0;
             $collectionProducts->addProduct(
                 new PayNL\Sdk\Model\Product(
                     'shipping',
@@ -242,7 +241,8 @@ class PPMFWC_Helper_Config
                     null,
                     PayNL\Sdk\Model\Product::TYPE_SHIPPING,
                     1,
-                    $code,
+                    null,
+                    $vatPercentage,
                 )
             );
         }
@@ -251,8 +251,8 @@ class PPMFWC_Helper_Config
         $discount = $order->get_total_discount(false);
         if ($discount != 0) {
             $discountExcl = $order->get_total_discount();
-            $discountTax = $discount - $discountExcl;
-            $code = paynl_determine_vat_class(($discount * -1), $discountTax);
+            $discountTax = $discount - $discountExcl;            
+            $vatPercentage = $discountExcl > 0 ? round(($discountTax / $discountExcl) * 100) : 0;
             $collectionProducts->addProduct(
                 new PayNL\Sdk\Model\Product(
                     'discount',
@@ -261,7 +261,8 @@ class PPMFWC_Helper_Config
                     null,
                     PayNL\Sdk\Model\Product::TYPE_DISCOUNT,
                     1,
-                    $code
+                    null,
+                    $vatPercentage
                 )
             );
         }
