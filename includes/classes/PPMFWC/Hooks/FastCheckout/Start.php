@@ -238,6 +238,25 @@ class PPMFWC_Hooks_FastCheckout_Start
             }
         }
 
+        if(isset(WC()->cart) && !empty(WC()->cart->get_fees())) {
+            foreach (WC()->cart->get_fees() as $fee_key => $fee) {
+                $fee_total = $fee->total;
+                $fee_tax = $fee->tax;
+                $fee_vat = $fee_tax > 0 && $fee->amount > 0 ? round((100 * $fee_tax) / $fee->amount) : 0;
+
+                $products[] = [
+                    'id' => 'fee_' . $fee_key,
+                    'name' => $fee->name,
+                    'qty' => 1,
+                    'amount' => $fee_total + $fee_tax,
+                    'amountExclTax' => $fee_total,
+                    'taxPercentage' => $fee_vat,
+                    'type' => 'HANDLING',
+                    'currency' => get_woocommerce_currency()
+                ];
+            }
+        }
+
         return ['products' => $products, 'orderDiscount' => $orderDiscount];
     }
 
