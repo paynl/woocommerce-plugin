@@ -139,6 +139,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Maestro',
         'PPMFWC_Gateway_Mastercard',
         'PPMFWC_Gateway_Mbway',
+        'PPMFWC_Gateway_Metjebank',
         'PPMFWC_Gateway_Minitixsms',
         'PPMFWC_Gateway_Mistercash',
         'PPMFWC_Gateway_Mobilepay',
@@ -1133,6 +1134,7 @@ class PPMFWC_Gateways
 
         } catch (Exception $e) {
             $responseMessage = 'Error 2: ' . $e->getMessage();
+            $responseResult = false;
             PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange Error: ' . $e->getMessage(), ($order_id ?? 0), array('action' => ($action ?? ''), 'wc_order_id' => '', 'payOrderId' => ($payOrderId ?? '')), 'critical');
         }
 
