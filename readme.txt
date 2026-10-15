@@ -4,7 +4,7 @@ Donate link: https://www.pay.nl/webshops/plugin-woocommerce
 Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 6.1.0
-Stable tag: 4.0.13
+Stable tag: 4.1.0
 Tested up to: 7.0.0
 WC tested up to: 10.8.1
 WC requires at least: 6.5
@@ -188,6 +188,9 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 8. One platform for all payments.
 
 == Changelog ==
+= 4.1.0 =
+Updated payment method Metjebank.nl
+Updated internal SDK
 = 4.0.13 =
 Integrated Doenkado Ticket and Metjebank.nl
 Fixed small issues
