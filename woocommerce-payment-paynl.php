@@ -4,12 +4,12 @@
  * Plugin Name: Pay. Payment Methods for WooCommerce
  * Plugin URI: https://wordpress.org/plugins/woocommerce-paynl-payment-methods/
  * Description: Pay. Payment Methods for WooCommerce
- * Version: 4.0.13
+ * Version: 4.1.0
  * Author: Pay.
  * Author URI: https://www.pay.nl
  * Requires at least: 6.1.0
  * WC requires at least: 6.5
- * WC tested up to: 10.7.0
+ * WC tested up to: 11.2.1
  * Requires PHP: 8.1
  * Text Domain: woocommerce-paynl-payment-methods
  * Domain Path: /i18n/languages
@@ -115,8 +115,8 @@ if (is_plugin_active('woocommerce/woocommerce.php') || is_plugin_active_for_netw
     add_filter('woocommerce_email_recipient_customer_on_hold_order', array('PPMFWC_Hooks_Settings', 'ppmfwc_settings_email'), 10, 3);
     add_filter('woocommerce_email_recipient_customer_processing_order', array('PPMFWC_Hooks_Settings', 'ppmfwc_settings_email'), 10, 3);
     add_filter('woocommerce_email_recipient_customer_pending_order', array('PPMFWC_Hooks_Settings', 'ppmfwc_settings_email'), 10, 3);
-    add_action('wp_enqueue_scripts', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_blocks_cart'));
-    add_action('wp_enqueue_scripts', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_modal'));
+    add_action('wp_footer', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_blocks_cart'));
+    add_action('wp_footer', array('PPMFWC_Hooks_FastCheckout_Buttons', 'ppmfwc_fast_checkout_modal'));
 } else {
     # WooCommerce seems to be inactive, show eror message
     add_action('admin_notices', 'ppmfwc_error_woocommerce_not_active');

@@ -12,7 +12,7 @@
 
 class PPMFWC_Setup
 {
-    const DB_VERSION = 1.2;
+    const DB_VERSION = 1.3;
 
     /**
      * @return void
@@ -69,9 +69,15 @@ class PPMFWC_Setup
                 `name` varchar(255) NOT NULL COMMENT 'The name of the option sub',
                 `image` varchar(255) NOT NULL COMMENT 'The url to the icon image',
                 `active` tinyint(1) NOT NULL COMMENT 'OptionSub  active or not',
+                `issuer_id` varchar(255) DEFAULT NULL COMMENT 'Issuer Id',
                 PRIMARY KEY (`option_id`, option_sub_id));";
 
             maybe_create_table($table_name_option_subs, $sqlOptionSub);
+
+            if (!empty($pay_db_version) && $pay_db_version < 1.3) {
+                $sql = "ALTER TABLE `$table_name_option_subs` ADD `issuer_id` varchar(255) DEFAULT NULL COMMENT 'Issuer Id';";
+                $wpdb->query($sql);
+            }
 
             $sqlProcessing = "CREATE TABLE `$table_name_processing` (
                 `id` int(11) NOT NULL AUTO_INCREMENT,

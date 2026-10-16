@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "32631bea90965b49bb2e86d692b335d2",
+    "content-hash": "67652645f62e21c4a8253c8cf4282aca",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -333,16 +333,16 @@
         },
         {
             "name": "paynl/php-sdk",
-            "version": "1.0.7",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paynl/php-sdk.git",
-                "reference": "ca571e5fc28276e4d6d577a7e5a904d26647b42c"
+                "reference": "fe66c7bf1ea232c64ca11dab20d53faebc594b2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paynl/php-sdk/zipball/ca571e5fc28276e4d6d577a7e5a904d26647b42c",
-                "reference": "ca571e5fc28276e4d6d577a7e5a904d26647b42c",
+                "url": "https://api.github.com/repos/paynl/php-sdk/zipball/fe66c7bf1ea232c64ca11dab20d53faebc594b2c",
+                "reference": "fe66c7bf1ea232c64ca11dab20d53faebc594b2c",
                 "shasum": ""
             },
             "require": {
@@ -355,12 +355,11 @@
             },
             "require-dev": {
                 "ext-simplexml": "*",
-                "phpmd/phpmd": "^2",
                 "phpstan/phpstan": "^2",
-                "phpunit/phpunit": "^11",
+                "phpunit/phpunit": "^10.5.20",
                 "roave/security-advisories": "dev-master",
-                "squizlabs/php_codesniffer": "^3",
-                "symfony/var-dumper": "^7"
+                "slevomat/coding-standard": "^8.22",
+                "squizlabs/php_codesniffer": "^3"
             },
             "type": "library",
             "autoload": {
@@ -377,19 +376,24 @@
             "license": [
                 "MIT"
             ],
-            "description": "Software Development Kit for implementing Pay.'s API version 3",
+            "description": "Pay. API client library for PHP. Pay. is an all-in-one European PSP offering 50+ payment methods both online and instore.",
             "keywords": [
+                "Apple Pay",
                 "api",
-                "plugins",
-                "rest",
-                "sdk"
+                "bancontact",
+                "ideal",
+                "pay",
+                "payment",
+                "paynl",
+                "php",
+                "psp"
             ],
             "support": {
                 "email": "webshop@pay.nl",
                 "issues": "https://github.com/paynl/php-sdk/issues",
-                "source": "https://github.com/paynl/php-sdk/tree/v1.0.7"
+                "source": "https://github.com/paynl/php-sdk/tree/v2.0.2"
             },
-            "time": "2025-09-29T14:56:34+00:00"
+            "time": "2026-09-28T14:28:17+00:00"
         },
         {
             "name": "psr/container",
@@ -719,10 +723,13 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform": {},
+    "platform-dev": {},
+    "platform-overrides": {
+        "php": "8.1.0"
+    },
+    "plugin-api-version": "2.6.0"
 }

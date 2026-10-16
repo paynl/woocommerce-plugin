@@ -186,6 +186,21 @@ class PPMFWC_Helper_Data
                 $sql = 'INSERT INTO `' . $table_name_options . '` (id,name,image,update_date) VALUES (%d,%s,%s,%s) ON DUPLICATE KEY UPDATE name = %s, image = %s, update_date = %s';
                 $sql = $wpdb->prepare($sql, $method->getId(), $method->getName(), $image, current_time('mysql'), $method->getName(), $image, current_time('mysql'));
                 $wpdb->query($sql);
+
+                if ($method->getId() == 5358) {
+                    foreach ($method->getOptions() as $issuer) {
+                        $issuerImage = $issuer['image'];
+                        if (PPMFWC_Gateway_Abstract::saveLogo($issuerImage)) {
+                            $image = PPMFWC_PLUGIN_URL . 'assets/cache' . $issuerImage;
+                        } else {
+                            $image = 'https://static.pay.nl/' . $issuerImage;
+                        }
+
+                        $sql = 'INSERT INTO `' . $table_name_option_subs . '` (option_id,option_sub_id,name,image,active,issuer_id) VALUES (%d,%d,%s,%s,%d,%s) ON DUPLICATE KEY UPDATE name = %s, image = %s, active = 1';
+                        $sql = $wpdb->prepare($sql, $method->getId(), $issuer['id'], $issuer['name'], $image, 1, $issuer['issuerId'], $issuer['name'], $image);
+                        $wpdb->query($sql);
+                    }
+                }
             }
         }
     }
@@ -212,7 +227,7 @@ class PPMFWC_Helper_Data
         global $wpdb;
 
         $table_name_option_subs = $wpdb->prefix . "pay_option_subs";
-        $query = $wpdb->prepare("SELECT option_id, option_sub_id, name, image "
+        $query = $wpdb->prepare("SELECT option_id, option_sub_id, name, image, issuer_id "
             . "FROM $table_name_option_subs "
             . "WHERE active = 1 AND option_id = %d", $optionId);
 
@@ -323,7 +338,7 @@ class PPMFWC_Helper_Data
      */
     public static function getVersion()
     {
-        return '4.0.13';
+        return '4.1.0';
     }
 
     /**
