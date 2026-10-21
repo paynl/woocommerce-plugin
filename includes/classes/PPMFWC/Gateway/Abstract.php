@@ -73,7 +73,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
             return '';
         }
 
-        if ($this->saveLogo($paymentImage)) {
+        if (self::saveLogo($paymentImage)) {
             return PPMFWC_PLUGIN_URL . 'assets/cache' . $paymentImage;
         }
 
@@ -86,7 +86,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      * @param string $imagePath
      * @return bool
      */
-    public function saveLogo(string $imagePath): bool
+    public static function saveLogo(string $imagePath): bool
     {
         $imagePath = ltrim($imagePath, '/');
         $path = rtrim(PPMFWC_PLUGIN_PATH . 'assets/cache', '/');
@@ -96,7 +96,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         }
 
         $imageUrl = 'https://static.pay.nl/' . $imagePath;
-        return $this->downloadImage($imageUrl, $path, $imagePath);
+        return self::downloadImage($imageUrl, $path, $imagePath);
     }
 
     /**
@@ -107,7 +107,7 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
      * @param string $image
      * @return bool
      */
-    public function downloadImage(string $url, string $basePath, string $image): bool
+    public static function downloadImage(string $url, string $basePath, string $image): bool
     {
         try {
             $image = ltrim($image, '/');
@@ -788,6 +788,10 @@ abstract class PPMFWC_Gateway_Abstract extends WC_Payment_Gateway
         $request->setExchangeUrl($exchangeUrl);
         $request->setDescription(str_replace('__', ' ', $prefix) . $order->get_order_number());
         $request->setAmount($order->get_total());
+
+        if ($this->getOptionId() === PPMFWC_Gateway_Metjebank::getOptionId() && !empty(PPMFWC_Helper_Data::getPostTextField('issuer_id'))) {
+            $request->setPaymentInputData(['issuerId' => PPMFWC_Helper_Data::getPostTextField('issuer_id')]);
+        }
 
         $expireTime = get_option('paynl_payment_expire_time');
         if (!empty($expireTime)) {
