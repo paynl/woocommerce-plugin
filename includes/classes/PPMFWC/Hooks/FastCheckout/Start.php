@@ -245,14 +245,23 @@ class PPMFWC_Hooks_FastCheckout_Start
 
         if (isset(WC()->cart) && !empty(WC()->cart->get_fees())) {
             foreach (WC()->cart->get_fees() as $fee_key => $fee) {
-                $fee_total = $fee->total;
+                $fee_total = (float) $fee->total;
+                $fee_tax = (float) $fee->tax;
+                $tax_percentage = $fee_total > 0
+                    ? round(($fee_tax / $fee_total) * 100, 2)
+                    : 0;
+
                 $products[] = [
                     'id' => 'fee_' . $fee_key,
                     'name' => $fee->name,
                     'qty' => 1,
-                    'amount' => $fee_total,
+                    'amount' => round($fee_total + $fee_tax, 2),
                     'amountExclTax' => $fee_total,
-                    'taxPercentage' => 0,
+                    'taxPercentage' => $tax_percentage,
+                    'taxable' => !empty($fee->taxable),
+                    'tax_class' => $fee->tax_class ?? '',
+                    'tax' => $fee_tax,
+                    'tax_data' => $fee->tax_data ?? [],
                     'type' => 'HANDLING',
                     'currency' => get_woocommerce_currency()
                 ];
@@ -306,11 +315,22 @@ class PPMFWC_Hooks_FastCheckout_Start
 
         foreach ($feeItems as $feeData) {
             $fee = new WC_Order_Item_Fee();
-            $fee->set_name('Handling Fee');
-            $fee->set_amount($feeData['amount'] ?? 0);
-            $fee->set_total($feeData['amount'] ?? 0);
-            $fee->set_tax_status('none');
-            $fee->set_tax_class('');
+            $feeExclTax = $feeData['amountExclTax'] ?? 0;
+            $taxable = !empty($feeData['taxable']);
+
+            $fee->set_name($feeData['name'] ?? 'Handling Fee');
+            $fee->set_amount($feeExclTax);
+            $fee->set_total($feeExclTax);
+            $fee->set_tax_status($taxable ? 'taxable' : 'none');
+            $fee->set_tax_class($taxable ? ($feeData['tax_class'] ?? '') : '');
+
+            if ($taxable) {
+                $fee->set_total_tax($feeData['tax'] ?? 0);
+                $fee->set_taxes([
+                    'total' => $feeData['tax_data'] ?? [],
+                ]);
+            }
+
             $order->add_item($fee);
         }
 
