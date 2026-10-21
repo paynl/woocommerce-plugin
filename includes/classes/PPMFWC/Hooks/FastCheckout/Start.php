@@ -255,7 +255,7 @@ class PPMFWC_Hooks_FastCheckout_Start
                     'id' => 'fee_' . $fee_key,
                     'name' => $fee->name,
                     'qty' => 1,
-                    'amount' => round($fee_total + $fee_tax, 2),
+                    'amount' => $fee_total + $fee_tax,
                     'amountExclTax' => $fee_total,
                     'taxPercentage' => $tax_percentage,
                     'taxable' => !empty($fee->taxable),
