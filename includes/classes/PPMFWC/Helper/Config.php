@@ -206,12 +206,27 @@ class PPMFWC_Helper_Config
         $collectionProducts = new PayNL\Sdk\Model\Products();
 
         $items = $order->get_items();
-
+        $vatRates = [];
+        foreach ($order->get_taxes() as $tax) {
+            $vatRates[$tax->get_rate_id()] = $tax->get_rate_percent();
+        }
 
         if (is_array($items)) {
             foreach ($items as $item) {
+                $taxes = $item['line_tax_data']['subtotal'] ?? [];
+                # Retrieve used vatPercentage from wooCommerce..
+                $vatPercentage = count($taxes) === 1 ? ($vatRates[array_key_first($taxes)] ?? null) : null;
+
+                if (empty($vatPercentage)) {
+                    # fallback if no vatPercentage is used.
+                    $code = paynl_determine_vat_class(($item['line_subtotal'] + $item['line_subtotal_tax']), $item['line_subtotal_tax']);
+                    $vatPercentage = null;
+                } else {
+                    $code = null;
+                }
+
                 $pricePerPiece = ($item['line_subtotal'] + $item['line_subtotal_tax']) / $item['qty'];                
-                $vatPercentage = $item['line_subtotal'] > 0 ? ($item['line_subtotal_tax'] / $item['line_subtotal'] * 100) : 0;
+
                 $collectionProducts->addProduct(
                     new PayNL\Sdk\Model\Product(
                         (string)$item['product_id'],
@@ -220,7 +235,7 @@ class PPMFWC_Helper_Config
                         null,
                         PayNL\Sdk\Model\Product::TYPE_ARTICLE,
                         $item['qty'],
-                        null,
+                        $code,
                         $vatPercentage,
                     )
                 );
@@ -232,18 +247,9 @@ class PPMFWC_Helper_Config
         # Add shipping costs information
         $shipping = floatval($shipping_total) + floatval($order->get_shipping_tax());
         if ($shipping != 0) {            
-            $vatPercentage = $shipping_total > 0 ? (100 * $order->get_shipping_tax() / $shipping_total): 0;
+            $vatPercentage = paynl_calc_vat_percentage($shipping, (float)$order->get_shipping_tax());
             $collectionProducts->addProduct(
-                new PayNL\Sdk\Model\Product(
-                    'shipping',
-                    __('Shipping', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                    $shipping,
-                    null,
-                    PayNL\Sdk\Model\Product::TYPE_SHIPPING,
-                    1,
-                    null,
-                    $vatPercentage,
-                )
+                new PayNL\Sdk\Model\Product('shipping', __('Shipping', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $shipping, null, PayNL\Sdk\Model\Product::TYPE_SHIPPING, 1, null, $vatPercentage,)
             );
         }
 
@@ -252,18 +258,9 @@ class PPMFWC_Helper_Config
         if ($discount != 0) {
             $discountExcl = $order->get_total_discount();
             $discountTax = $discount - $discountExcl;            
-            $vatPercentage = $discountExcl > 0 ? ($discountTax / $discountExcl) * 100 : 0;
+            $vatPercentage = paynl_calc_vat_percentage($discount, $discountTax);
             $collectionProducts->addProduct(
-                new PayNL\Sdk\Model\Product(
-                    'discount',
-                    __('Discount', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
-                    $discount * -1,
-                    null,
-                    PayNL\Sdk\Model\Product::TYPE_DISCOUNT,
-                    1,
-                    null,
-                    $vatPercentage
-                )
+                new PayNL\Sdk\Model\Product('discount', __('Discount', PPMFWC_WOOCOMMERCE_TEXTDOMAIN), $discount * -1, null, PayNL\Sdk\Model\Product::TYPE_DISCOUNT, 1, null, $vatPercentage)
             );
         }
 
@@ -272,16 +269,7 @@ class PPMFWC_Helper_Config
         if (!empty($fees)) {
             foreach ($fees as $fee) {
                 $collectionProducts->addProduct(
-                    new PayNL\Sdk\Model\Product(
-                        $fee['type'],
-                        $fee['name'],
-                        $fee['line_total'],
-                        null,
-                        PayNL\Sdk\Model\Product::TYPE_HANDLING,
-                        1,
-                        null,
-                        null
-                    )
+                    new PayNL\Sdk\Model\Product($fee['type'], $fee['name'], $fee['line_total'], null, PayNL\Sdk\Model\Product::TYPE_HANDLING, 1, null, null)
                 );
             }
         }
