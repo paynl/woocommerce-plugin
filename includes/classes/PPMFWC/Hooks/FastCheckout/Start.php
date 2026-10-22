@@ -41,7 +41,12 @@ class PPMFWC_Hooks_FastCheckout_Start
             self::addProducts();
             $productArr = self::getProducts($shippingMethodArr);
 
-            $amount = WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax - ($productArr['orderDiscount'] ?? 0);
+            $fees = 0;
+            foreach (WC()->cart->get_fees() as $fee_key => $fee) {
+                $fee_total = $fee->total;
+                $fees += $fee_total;
+            }
+            $amount = WC()->cart->get_taxes_total() + WC()->cart->get_shipping_total() + WC()->cart->subtotal_ex_tax - ($productArr['orderDiscount'] ?? 0) + $fees;
 
             $data = [
                 'amount' => $amount,
@@ -218,7 +223,7 @@ class PPMFWC_Hooks_FastCheckout_Start
 
         if (!empty($shippingMethodArr['shippingMethod'])) {
             $shippingMethod = $shippingMethodArr['shippingMethod'];
-            $shippingAmount = WC()->cart->get_shipping_total() + (float)array_shift($shippingMethod->get_taxes());
+            $shippingAmount = WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes());
 
             if ($shippingAmount > 0) {
                 $shipTotal = WC()->cart->get_shipping_total();
@@ -238,6 +243,31 @@ class PPMFWC_Hooks_FastCheckout_Start
             }
         }
 
+        if (isset(WC()->cart) && !empty(WC()->cart->get_fees())) {
+            foreach (WC()->cart->get_fees() as $fee_key => $fee) {
+                $fee_total = (float) $fee->total;
+                $fee_tax = (float) $fee->tax;
+                $tax_percentage = $fee_total > 0
+                    ? round(($fee_tax / $fee_total) * 100, 2)
+                    : 0;
+
+                $products[] = [
+                    'id' => 'fee_' . $fee_key,
+                    'name' => $fee->name,
+                    'qty' => 1,
+                    'amount' => $fee_total + $fee_tax,
+                    'amountExclTax' => $fee_total,
+                    'taxPercentage' => $tax_percentage,
+                    'taxable' => !empty($fee->taxable),
+                    'tax_class' => $fee->tax_class ?? '',
+                    'tax' => $fee_tax,
+                    'tax_data' => $fee->tax_data ?? [],
+                    'type' => 'HANDLING',
+                    'currency' => get_woocommerce_currency()
+                ];
+            }
+        }
+
         return ['products' => $products, 'orderDiscount' => $orderDiscount];
     }
 
@@ -252,6 +282,7 @@ class PPMFWC_Hooks_FastCheckout_Start
         $order = new WC_Order();
         $order->set_created_via('fast checkout');
         $shippingProduct = null;
+        $feeItems = [];
 
         foreach ($data['products'] as $product) {
             if ($product['type'] == 'SHIPPING') {
@@ -261,6 +292,10 @@ class PPMFWC_Hooks_FastCheckout_Start
             if ($product['type'] == 'DISCOUNT') {
                 $coupon = new WC_Coupon($product['id']);
                 $order->apply_coupon($coupon);
+                continue;
+            }
+            if ($product['type'] == 'HANDLING') {
+                $feeItems[] = $product;
                 continue;
             }
             if (!empty($product['variation_id']) && $product['variation_id'] > 0) {
@@ -276,6 +311,27 @@ class PPMFWC_Hooks_FastCheckout_Start
                     $product['qty']
                 );
             }
+        }
+
+        foreach ($feeItems as $feeData) {
+            $fee = new WC_Order_Item_Fee();
+            $feeExclTax = $feeData['amountExclTax'] ?? 0;
+            $taxable = !empty($feeData['taxable']);
+
+            $fee->set_name($feeData['name'] ?? 'Handling Fee');
+            $fee->set_amount($feeExclTax);
+            $fee->set_total($feeExclTax);
+            $fee->set_tax_status($taxable ? 'taxable' : 'none');
+            $fee->set_tax_class($taxable ? ($feeData['tax_class'] ?? '') : '');
+
+            if ($taxable) {
+                $fee->set_total_tax($feeData['tax'] ?? 0);
+                $fee->set_taxes([
+                    'total' => $feeData['tax_data'] ?? [],
+                ]);
+            }
+
+            $order->add_item($fee);
         }
 
         if (!empty($shippingProduct)) {
