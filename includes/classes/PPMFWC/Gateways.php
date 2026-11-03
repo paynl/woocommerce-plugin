@@ -29,6 +29,7 @@ class PPMFWC_Gateways
     const ACTION_NEWPPT = 'new_ppt';
     const ACTION_PENDING = 'pending';
     const ACTION_CANCEL = 'cancel';
+    const ACTION_FAILURE = 'failure';
     const ACTION_VERIFY = 'verify';
     const ACTION_REFUND = 'refund:received';
     const ACTION_REFUND_ADD = 'refund:add';
@@ -1060,7 +1061,7 @@ class PPMFWC_Gateways
         if ($payOrder->isPending() && $action != self::ACTION_PENDING) {
             $exchange->setResponse(false, "Unexpected action ({$action}) for order state pending.");
 
-        } elseif ($payOrder->isCancelled() && $action != self::ACTION_CANCEL) {
+        } elseif ($payOrder->isCancelled() && !in_array($action, [self::ACTION_CANCEL, self::ACTION_FAILURE])) {
             $exchange->setResponse(false, "Unexpected action ({$action}) for order state cancelled.");
 
         }
