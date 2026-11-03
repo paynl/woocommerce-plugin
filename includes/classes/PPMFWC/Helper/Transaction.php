@@ -152,9 +152,9 @@ class PPMFWC_Helper_Transaction
         $localTransactionStatus = $transactionLocalDB['status'] ?? '';
         $orderId = $transactionLocalDB['order_id'] ?? null;
 
-        if (empty($transactionLocalDB)) {
+        if (empty($transactionLocalDB) || empty($orderId)) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Notice: Cant find local transaction: ' . $transactionId);
-            $orderId = PPMFWC_Helper_Data::getRequestArg('extra1') ?? null;
+            throw new PPMFWC_Exception_Notice('Pay. order not found');
         }
 
         try {
@@ -169,11 +169,6 @@ class PPMFWC_Helper_Transaction
         if ($status == $localTransactionStatus) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - status already up-to-date', $transactionId, array('status' => $status));
             throw new PPMFWC_Exception_Notice('Already ' . $status);
-        }
-
-        if (empty($transactionLocalDB)) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
-            PPMFWC_Helper_Transaction::newTransaction($transactionId, $methodId ?? 0, ($order->get_total() * 100), $orderId, 'start-data');
         }
 
         $transactionPaid = array($payOrder->getAmount());
