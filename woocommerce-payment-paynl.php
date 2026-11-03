@@ -163,7 +163,7 @@ function ppmfwc_registerBlockScripts()
             'cocRequired' => $gateway->cocRequired()
         );
     }
-    wp_enqueue_script('paynl-blocks-js', $blocks_js_route, array('wc-blocks-registry'), (string) time(), true);
+    wp_enqueue_script('paynl-blocks-js', $blocks_js_route, array('wc-blocks-registry'), (string) filemtime(PPMFWC_PLUGIN_PATH . 'assets/js/paynl-blocks.js'), true);
     wp_localize_script('paynl-blocks-js', 'paynl_gateways', $payGateways);
     wp_register_style('paynl-blocks-style', PPMFWC_PLUGIN_URL . 'assets/css/paynl_blocks.css');
     wp_enqueue_style('paynl-blocks-style');
