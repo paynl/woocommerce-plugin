@@ -170,7 +170,10 @@ class PPMFWC_Helper_Transaction
 
         # Retrieve local payment state
         $transactionLocalDB = self::getTransaction($transactionId);
-        $localTransactionStatus = $transactionLocalDB['status'] ?? '';
+        if (empty($transactionLocalDB) && !empty($orderId)) {
+            $transactionLocalDB = self::getTransactionByOrderId($orderId);
+        }
+
         $orderId = $transactionLocalDB['order_id'] ?? null;
 
         if (empty($transactionLocalDB) || empty($orderId)) {
@@ -178,13 +181,7 @@ class PPMFWC_Helper_Transaction
             throw new PPMFWC_Exception_Notice('Pay. order not found');
         }
 
-        $transactionDbId = $transactionId;
-        if (empty($transactionLocalDB)) {
-            $transactionLocalDB = self::getTransactionByOrderId($orderId);
-            $transactionDbId = $transactionLocalDB['transaction_id'];
-        }
-
-
+        $transactionDbId = $transactionLocalDB['transaction_id'];
         $localTransactionStatus = $transactionLocalDB['status'] ?? '';
 
         try {
