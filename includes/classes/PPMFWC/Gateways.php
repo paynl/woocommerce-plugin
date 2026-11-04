@@ -29,6 +29,7 @@ class PPMFWC_Gateways
     const ACTION_NEWPPT = 'new_ppt';
     const ACTION_PENDING = 'pending';
     const ACTION_CANCEL = 'cancel';
+    const ACTION_FAILURE = 'failure';
     const ACTION_VERIFY = 'verify';
     const ACTION_REFUND = 'refund:received';
     const ACTION_REFUND_ADD = 'refund:add';
@@ -99,6 +100,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Capayable',
         'PPMFWC_Gateway_CapayableGespreid',
         'PPMFWC_Gateway_Cartebleue',
+        'PPMFWC_Gateway_CashbackXL',
         'PPMFWC_Gateway_Clickandbuy',
         'PPMFWC_Gateway_CreditClick',
         'PPMFWC_Gateway_Cashly',
@@ -164,6 +166,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Postepay',
         'PPMFWC_Gateway_RotterdamCitycard',
         'PPMFWC_Gateway_Rvrpas',
+        'PPMFWC_Gateway_SASEurobonus',
         'PPMFWC_Gateway_Satispay',
         'PPMFWC_Gateway_Saunaandwellnesscadeaukaart',
         'PPMFWC_Gateway_Scholierenpas',
@@ -1073,7 +1076,7 @@ class PPMFWC_Gateways
         if ($payOrder->isPending() && $action != self::ACTION_PENDING) {
             $exchange->setResponse(false, "Unexpected action ({$action}) for order state pending.");
 
-        } elseif ($payOrder->isCancelled() && $action != self::ACTION_CANCEL) {
+        } elseif ($payOrder->isCancelled() && !in_array($action, [self::ACTION_CANCEL, self::ACTION_FAILURE])) {
             $exchange->setResponse(false, "Unexpected action ({$action}) for order state cancelled.");
 
         }

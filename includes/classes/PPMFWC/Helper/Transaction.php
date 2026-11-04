@@ -162,7 +162,7 @@ class PPMFWC_Helper_Transaction
      */
     public static function processTransaction(\PayNL\Sdk\Model\Pay\PayOrder $payOrder, $status = null, $methodId = null, $orderId = null): mixed
     {
-        $transactionId = $payOrder->getOrderId();        
+        $transactionId = $payOrder->getOrderId();
 
         if (empty($orderId)) {
             $orderId = PPMFWC_Helper_Data::getRequestArg('extra1') ?? null;
@@ -170,13 +170,22 @@ class PPMFWC_Helper_Transaction
 
         # Retrieve local payment state
         $transactionLocalDB = self::getTransaction($transactionId);
+        $localTransactionStatus = $transactionLocalDB['status'] ?? '';
+        $orderId = $transactionLocalDB['order_id'] ?? null;
+
+        if (empty($transactionLocalDB) || empty($orderId)) {
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Notice: Cant find local transaction: ' . $transactionId);
+            throw new PPMFWC_Exception_Notice('Pay. order not found');
+        }
+
         $transactionDbId = $transactionId;
         if (empty($transactionLocalDB)) {
-            $transactionLocalDB = self::getTransactionByOrderId($orderId);      
+            $transactionLocalDB = self::getTransactionByOrderId($orderId);
             $transactionDbId = $transactionLocalDB['transaction_id'];
         }
 
-        $localTransactionStatus = $transactionLocalDB['status'] ?? ''; 
+
+        $localTransactionStatus = $transactionLocalDB['status'] ?? '';
 
         try {
             $order = new WC_Order($orderId);
@@ -190,11 +199,6 @@ class PPMFWC_Helper_Transaction
         if ($status == $localTransactionStatus) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction - status already up-to-date', $transactionId, array('status' => $status));
             throw new PPMFWC_Exception_Notice('Already ' . $status);
-        }
-
-        if (empty($transactionLocalDB)) {
-            PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $orderId, array($status, $localTransactionStatus));
-            PPMFWC_Helper_Transaction::newTransaction($transactionId, $methodId ?? 0, ($order->get_total() * 100), $orderId, 'start-data');
         }
 
         $transactionPaid = array($payOrder->getAmount());
