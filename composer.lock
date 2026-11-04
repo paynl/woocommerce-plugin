@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "67652645f62e21c4a8253c8cf4282aca",
+    "content-hash": "11427674d74f77d5fca8c803cd1b046f",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -333,22 +333,22 @@
         },
         {
             "name": "paynl/php-sdk",
-            "version": "2.0.2",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paynl/php-sdk.git",
-                "reference": "fe66c7bf1ea232c64ca11dab20d53faebc594b2c"
+                "reference": "c44c3615aa8ee9456cc141c5b0894b82e6947a04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paynl/php-sdk/zipball/fe66c7bf1ea232c64ca11dab20d53faebc594b2c",
-                "reference": "fe66c7bf1ea232c64ca11dab20d53faebc594b2c",
+                "url": "https://api.github.com/repos/paynl/php-sdk/zipball/c44c3615aa8ee9456cc141c5b0894b82e6947a04",
+                "reference": "c44c3615aa8ee9456cc141c5b0894b82e6947a04",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
-                "guzzlehttp/guzzle": "^7",
+                "guzzlehttp/guzzle": "^7 || ^8",
                 "php": "^8.1",
                 "psr/container": "^2 || ^1",
                 "psr/http-message": "^2 || ^1"
@@ -391,9 +391,9 @@
             "support": {
                 "email": "webshop@pay.nl",
                 "issues": "https://github.com/paynl/php-sdk/issues",
-                "source": "https://github.com/paynl/php-sdk/tree/v2.0.2"
+                "source": "https://github.com/paynl/php-sdk/tree/v2.1.1"
             },
-            "time": "2026-09-28T14:28:17+00:00"
+            "time": "2026-11-03T15:04:29+00:00"
         },
         {
             "name": "psr/container",
@@ -723,11 +723,11 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
-    "platform-dev": {},
+    "platform": [],
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.1.0"
     },

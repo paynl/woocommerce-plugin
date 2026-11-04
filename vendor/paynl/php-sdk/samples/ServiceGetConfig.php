@@ -12,6 +12,7 @@ use PayNL\Sdk\Exception\PayException;
 $config = new Config();
 $config->setUsername($_REQUEST['username'] ?? '');
 $config->setPassword($_REQUEST['password'] ?? '');
+# $config->setServiceGetConfigCacheTtl(3600); // Optional override of config.global.php, in seconds.
 
 try {
     $slCode = $_REQUEST['slcode'] ?? '';
@@ -44,6 +45,7 @@ foreach ($paymentMethods as $k =>  $method) {
     echo $method->getId() . ' - ';
     echo $method->getName() . ' - ';
     echo $method->getImage() . ' - ';
+    echo implode(',', $method->getTargetCountries()) . ' - ';
     echo $method->getMinAmount() . ' - ';
     echo $method->getMaxAmount() . ' - ';
     echo $method->getDescription() . ' - ';

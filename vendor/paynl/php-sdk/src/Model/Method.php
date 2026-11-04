@@ -15,6 +15,7 @@ class Method implements ModelInterface
     public const PIN = 1927;
     public const PAYPAL = 138;
     public const RETOURPIN = 2351;
+    public const METJEBANK = 5358;
 
     /**
      * @var int
@@ -40,6 +41,11 @@ class Method implements ModelInterface
      * @var string
      */
     protected $image;
+
+    /**
+     * @var array
+     */
+    protected ?array $targetCountries = null;
 
     /**
      * @var array
@@ -134,6 +140,24 @@ class Method implements ModelInterface
     public function setImage(string $image): self
     {
         $this->image = $image;
+        return $this;
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getTargetCountries(): array
+    {
+        return $this->targetCountries ?? [];
+    }
+
+    /**
+     * @param array $targetedCountries
+     * @return $this
+     */
+    public function setTargetCountries(array $targetedCountries): self
+    {
+        $this->targetCountries = $targetedCountries;
         return $this;
     }
 
