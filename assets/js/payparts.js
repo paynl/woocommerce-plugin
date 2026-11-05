@@ -1,7 +1,17 @@
 
-async function initSession($) {
-    var ajaxurl = '/?wc-api=Wc_Pay_Gateway_PaypartsSession';
+
+async function initSession($)
+{
+    var cardSection = $('#card-section');
+    if (!cardSection.length || cardSection.data('payparts-initialized')) {
+        return;
+    }
+    cardSection.data('payparts-initialized', true);
+
+    console.info('initSession().')
     var data = {};
+    var ajaxurl = '/?wc-api=Wc_Pay_Gateway_PaypartsSession';
+
     $.ajax({
         url: ajaxurl,
         type: 'POST',
@@ -9,19 +19,27 @@ async function initSession($) {
         dataType: 'json',
         success: function (data) {
             if (data.success) {
-                window.initPayment($, data.data.sessionToken, data.data.sessionId);
+                window.initPayment($, data.data.sessionToken, data.csrfToken);
+            } else {
+                cardSection.removeData('payparts-initialized');
+                console.error('Pay.: couldn\'t load pay parts: ' + data.error);
             }
+        },
+        error: function () {
+            cardSection.removeData('payparts-initialized');
         }
     })
 }
 
-async function initPayment($, sessionToken, sessionId) {
+async function initPayment($, sessionToken, csrfToken)
+{
+    var cardSection = $('#card-section');
 
-    if (!window.PayPartsSDK) {
-        return;
-    }
+    console.info('initPayment()');
 
-    if (sessionToken === undefined || sessionToken === null) {
+
+    if (!window.PayPartsSDK || sessionToken == null) {
+        cardSection.removeData('payparts-initialized');
         return;
     }
 
@@ -29,6 +47,7 @@ async function initPayment($, sessionToken, sessionId) {
 
         var woocommerceOrderId = null;
         var woocommerceOrderIdAdded = false;
+        console.info('initPayment() -> init pay parts');
         const checkout = await window.PayPartsSDK.init({
             sessionToken: sessionToken,
             apiUrl: 'https://parts.pay.nl',
@@ -41,10 +60,14 @@ async function initPayment($, sessionToken, sessionId) {
         });
 
         checkout.events = {
-            onReady: (event) => {
+            onReady: (event) =>
+            {
+                console.log('initPayment onReady');
                 event.resolve();
             },
-            onSubmit: (event) => {
+            onSubmit: (event) =>
+            {
+                console.log('initPayment onSubmit');
                 var $checkoutForm = $('form.checkout');
                 $checkoutForm.block({
                     message: null,
@@ -55,31 +78,42 @@ async function initPayment($, sessionToken, sessionId) {
                 });
 
                 if (!woocommerceOrderIdAdded) {
+                    console.log('Wc_Pay_Gateway_PaypartsOrderCreate aanroep');
                     var ajaxurl = '/?wc-api=Wc_Pay_Gateway_PaypartsOrderCreate';
-                    var data = { sessionId: sessionId };
+                    var data = { csrfToken: csrfToken };
                     $.ajax({
                         url: ajaxurl,
                         type: 'POST',
                         data: data,
                         dataType: 'json',
                         success: function (data) {
+                            if (!data.success || !data.order_id || !data.session_id) {
+                                $checkoutForm.unblock();
+                                event.reject(new Error(data.error || 'Order creation failed'));
+                                return;
+                            }
                             woocommerceOrderId = data.order_id;
                             woocommerceOrderIdAdded = true;
-                            event.resolve({ reference: woocommerceOrderId.toString() });
+                            event.resolve({ reference: data.session_id });
                         },
                         error: function (data) {
+                            $checkoutForm.unblock();
                             event.reject(new Error('Order creation failed'));
                         }
                     });
                 } else {
+                    console.log('Wc_Pay_Gateway_PaypartsOrderCreate aanroep - oh nee toch niet.');
                     event.resolve();
                 }
             },
             onSuccess: (event) => {
+                console.log('initPayment onSuccess');
+                console.log(event);
                 window.location.href = event.returnUrl + '&id=' + event.orderId + '&orderId=' + woocommerceOrderId + '&statusCode=' + event.paymentStatus.action + '&orderStatusId=' + event.paymentStatus.code;
                 event.resolve();
             },
             onError: (event) => {
+                console.log('initPayment onError');
                 $('form.checkout').unblock();
                 event.resolve();
             }
@@ -101,6 +135,7 @@ async function initPayment($, sessionToken, sessionId) {
         });
 
     } catch (error) {
+        cardSection.removeData('payparts-initialized');
         return;
     }
 }
@@ -109,10 +144,16 @@ window.initSession = initSession;
 window.initPayment = initPayment;
 
 jQuery(function ($) {
-    $(document).ready(function () {
-        initSession($);
-        $(document.body).on('updated_checkout', function (event, data) {
-            initSession($);
+    $(document).ready(function ()
+    {
+        console.log('doc ready - init session')
+
+
+        $(document.body).on('updated_checkout payment_method_selected', function (event, data)
+        {
+            if ($('input[name="payment_method"]:checked').val() === 'pay_gateway_creditcardsgrouped') {
+                initSession($);
+            }
         });
     });
 });

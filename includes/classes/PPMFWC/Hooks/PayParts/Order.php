@@ -20,21 +20,22 @@ class PPMFWC_Hooks_PayParts_Order
     {
 
         try {
+            $payPartsSession = WC()->session->get('payparts_session', []);
+            $csrfToken = PPMFWC_Helper_Data::getPostTextField('csrfToken', true);
+            if (empty($payPartsSession['id']) || empty($payPartsSession['csrf_token']) || !is_string($csrfToken) || !hash_equals($payPartsSession['csrf_token'], $csrfToken)) {
+                throw new \Exception('Invalid or expired PayParts session');
+            }
+            $sessionId = $payPartsSession['id'];
 
             if (!WC()->cart || WC()->cart->is_empty()) {
                 throw new \Exception('Cart is empty or not found');
             }
 
-            $order = wc_create_order(array(
-                'customer_id' => get_current_user_id(),
-                'status' => 'checkout-draft',
-            ));
+            $order = wc_create_order(array('customer_id' => get_current_user_id(), 'status' => 'checkout-draft'));
 
             if (is_wp_error($order)) {
                 return false;
             }
-
-            $order_id = $order->get_id();
 
             $order->update_meta_data('_created_by', 'Pay. Parts');
             $order->add_meta_data('_wc_order_attribution_source_type', 'utm');
@@ -46,19 +47,14 @@ class PPMFWC_Hooks_PayParts_Order
             $order->calculate_totals();
             $order->save();
 
-            foreach (WC()->cart->get_cart() as $cart_item_key => $values) {
+            foreach (WC()->cart->get_cart() as $values) {
                 $product_id = $values['product_id'];
                 $quantity = $values['quantity'];
                 $variation = isset($values['variation']) ? $values['variation'] : array();
-
-                $item_id = $order->add_product(
-                    wc_get_product($values['variation_id'] ? $values['variation_id'] : $product_id),
-                    $quantity,
-                    array('variation' => $variation)
-                );
+                $order->add_product(wc_get_product($values['variation_id'] ?: $product_id), $quantity, array('variation' => $variation));
             }
 
-            foreach (WC()->cart->get_coupons() as $code => $coupon) {
+            foreach (array_keys(WC()->cart->get_coupons()) as $code) {
                 $order->apply_coupon($code);
             }
 
@@ -83,12 +79,18 @@ class PPMFWC_Hooks_PayParts_Order
             $order->set_status('pending');
             $order->save();
 
-            $sessionId = isset($_POST['sessionId']) ? $_POST['sessionId'] : 0;
             PPMFWC_Helper_Transaction::newTransaction($sessionId, PPMFWC_Gateway_CreditCardsGrouped::getOptionId(), ($order->get_total() * 100), $order->get_id(), '');
+
+            $payPartsOrders = WC()->session->get('payparts_orders', []);
+            $payPartsOrders[$order->get_id()] = true;
+            WC()->session->set('payparts_orders', $payPartsOrders);
+
+            PPMFWC_Helper_Data::ppmfwc_payDebug('Created internal transaction for PayParts sessionid: ' . $sessionId);
 
             $returnarray = array(
                 'success' => true,
                 'order_id' => $order->get_id(),
+                'session_id' => $sessionId,
             );
         } catch (\Exception $e) {
             $returnarray = array(

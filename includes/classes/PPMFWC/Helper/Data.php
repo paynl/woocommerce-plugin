@@ -47,6 +47,17 @@ class PPMFWC_Helper_Data
     }
 
     /**
+     * @param string $message
+     * @param string|null $payTransactionId
+     * @param array $infoFields
+     * @return void
+     */
+    public static function ppmfwc_payDebug($message, $payTransactionId = null, $infoFields = array()): void
+    {
+        self::ppmfwc_payLogger($message, $payTransactionId, $infoFields, 'debug');
+    }
+
+    /**
      * Check for existing textfield and returns it sanitized
      *
      * @param string $fieldName

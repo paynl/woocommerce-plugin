@@ -902,20 +902,25 @@ class PPMFWC_Gateways
             if (!empty($orderId)) {
            
                 try {
-                    $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
-                    if (!$transactionLocalDB || empty($transactionLocalDB['order_id'])) {
-                        $config = PPMFWC_Helper_Config::getPayConfig();                   
-                        $request = new PayNL\Sdk\Model\Request\TransactionStatusRequest($transactionId);
-                        $payOrder = $request->setConfig($config)->start();
-                        $reference = $payOrder->getReference();
-                        if (!empty($reference) && $reference == $orderId) {
-                            $order = new WC_Order($reference);
-                        }
+                    $payPartsOrders = [];
+                    if (WC()->session) {
+                        $payPartsOrders = WC()->session->get('payparts_orders', []);
+                    }
+                    if (isset($payPartsOrders[$orderId])) {
+                        # PayParts flow return
+                        $order = wc_get_order($orderId);
                     } else {
+                        # Normal flow return
+                        $transactionLocalDB = PPMFWC_Helper_Transaction::getTransaction($orderId);
+                        if (!$transactionLocalDB || empty($transactionLocalDB['order_id'])) {
+                            throw new PPMFWC_Exception_Notice('Could not find local transaction for order ' . $orderId);
+                        }
                         $order = new WC_Order($transactionLocalDB['order_id']);
-                    }      
-              
-                    if(!$order){
+                        if ($order->get_meta('_created_by') === 'Pay. Parts') {
+                            throw new Exception('PayParts order does not belong to this session');
+                        }
+                    }
+                    if (!$order) {
                         throw new Exception('Order not found for orderId: ' . $orderId);
                     }
 
@@ -1103,7 +1108,7 @@ class PPMFWC_Gateways
 
             self::validateExchange($action, $payOrder, $exchange);
 
-            $order_id = $exchange->getReference();
+            $order_id = $payOrder->getReference();
             $methodId = $payOrder->getPaymentMethod();
 
             PPMFWC_Helper_Data::ppmfwc_payLogger('Exchange', $payOrderId, array('action' => $action, 'wc_order_id' => $order_id, 'methodid' => $methodId));
@@ -1125,7 +1130,7 @@ class PPMFWC_Gateways
                 throw new PPMFWC_Exception_Notice('Ignoring: ' . $action);
             }
 
-            $newStatus = PPMFWC_Helper_Transaction::processTransaction($payOrder, $status, $methodId, $order_id);
+            $newStatus = PPMFWC_Helper_Transaction::processTransaction($payOrder, $status, $methodId);
             $responseMessage = 'Status updated to ' . $newStatus;
 
         } catch (PPMFWC_Exception_Notice $e) {

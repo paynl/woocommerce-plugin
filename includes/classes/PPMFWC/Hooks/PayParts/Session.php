@@ -14,10 +14,12 @@ class PPMFWC_Hooks_PayParts_Session
 {
     /**
      * Handles the Pay. fast checkout requests
+     *
      * @phpcs:ignore Squiz.Commenting.FunctionComment.MissingReturn
      */
     public static function ppmfwc_onPayPartsSessionCreate()
     {
+        paydbg('ppmfwc_onPayPartsSessionCreate');
         try {
             if (!WC()->cart || !WC()->customer) {
                 throw new \Exception('Cart or customer not found');
@@ -26,6 +28,7 @@ class PPMFWC_Hooks_PayParts_Session
             $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(11);
 
             if ($gateway->enabled == 'no') {
+                paydbg('Selected payment method is not available.');
                 throw new \Exception("Selected payment method is not available.");
             }
 
@@ -120,22 +123,32 @@ class PPMFWC_Hooks_PayParts_Session
             curl_close($ch);
 
             $result = json_decode($response, true);
+            if (empty($result['sessionId']) || empty($result['sessionToken'])) {
+                throw new \Exception('Could not start PayParts session');
+            }
 
-            $returnarray = array(
+            PPMFWC_Helper_Data::ppmfwc_payDebug('Created  PayParts sessionid: ' . $result['sessionId']);
+
+            $csrfToken = bin2hex(random_bytes(32));
+            WC()->session->set('payparts_session', ['id' => $result['sessionId'], 'csrf_token' => $csrfToken]);
+
+            $responseData = array(
                 'success' => true,
                 'data' => $result,
+                'csrfToken' => $csrfToken,
                 'startData' => $data,
             );
-
         } catch (\Exception $e) {
-            $returnarray = array(
+            PPMFWC_Helper_Data::ppmfwc_payLogger('Exception onPayPartsSessionCreate failed: ' . $e->getMessage());
+
+            $responseData = array(
                 'success' => false,
                 'error' => $e->getMessage(),
             );
         }
 
         header('Content-Type: application/json;charset=UTF-8');
-        die(json_encode($returnarray));
+        die(json_encode($responseData));
     }
 
 

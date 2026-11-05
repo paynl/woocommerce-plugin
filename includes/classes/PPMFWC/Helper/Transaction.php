@@ -127,27 +127,7 @@ class PPMFWC_Helper_Transaction
         global $wpdb;
 
         $table_name_transactions = $wpdb->prefix . "pay_transactions";
-        $result = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE transaction_id = %s", $transactionId),
-            ARRAY_A
-        );
-
-        return $result[0] ?? false;
-    }
-
-    /**
-     * @param string $transactionId
-     * @return false|mixed
-     */
-    public static function getTransactionByOrderId(string $orderId): mixed
-    {
-        global $wpdb;
-
-        $table_name_transactions = $wpdb->prefix . "pay_transactions";
-        $result = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $table_name_transactions WHERE order_id = %s", $orderId),
-            ARRAY_A
-        );
+        $result = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table_name_transactions WHERE transaction_id = %s", $transactionId), ARRAY_A);
 
         return $result[0] ?? false;
     }
@@ -160,28 +140,27 @@ class PPMFWC_Helper_Transaction
      * @throws PPMFWC_Exception
      * @throws PPMFWC_Exception_Notice
      */
-    public static function processTransaction(\PayNL\Sdk\Model\Pay\PayOrder $payOrder, $status = null, $methodId = null, $orderId = null): mixed
+    public static function processTransaction(\PayNL\Sdk\Model\Pay\PayOrder $payOrder, $status = null, $methodId = null): mixed
     {
         $transactionId = $payOrder->getOrderId();
 
-        if (empty($orderId)) {
-            $orderId = PPMFWC_Helper_Data::getRequestArg('extra1') ?? null;
-        }
-
-        # Retrieve local payment state
+        # Retrieve local transaction
         $transactionLocalDB = self::getTransaction($transactionId);
-        if (empty($transactionLocalDB) && !empty($orderId)) {
-            $transactionLocalDB = self::getTransactionByOrderId($orderId);
+        if (empty($transactionLocalDB)) {
+            $reference = $payOrder->getReference();
+            if (!empty($reference)) {
+                $transactionLocalDB = self::getTransaction($reference);
+                PPMFWC_Helper_Data::ppmfwc_payDebug('Using reference to retrieve WooCom order: ' . $reference);
+            }
         }
 
         $orderId = $transactionLocalDB['order_id'] ?? null;
 
-        if (empty($transactionLocalDB) || empty($orderId)) {
+        if (empty($orderId)) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Notice: Cant find local transaction: ' . $transactionId);
             throw new PPMFWC_Exception_Notice('Pay. order not found');
         }
 
-        $transactionDbId = $transactionLocalDB['transaction_id'];
         $localTransactionStatus = $transactionLocalDB['status'] ?? '';
 
         try {
@@ -207,7 +186,7 @@ class PPMFWC_Helper_Transaction
             if ($localTransactionStatus === PPMFWC_Gateways::STATUS_SUCCESS && $payApiStatus === PPMFWC_Gateways::STATUS_CANCELED) {
                 PPMFWC_Helper_Data::ppmfwc_payLogger('Not changing order status to canceled, order is paid.');
             } else {
-                self::updateStatus($transactionDbId, $payApiStatus);
+                self::updateStatus($transactionLocalDB['transaction_id'], $payApiStatus);
             }
         }
         $wcOrderStatus = $order->get_status();

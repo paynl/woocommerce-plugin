@@ -21,6 +21,12 @@ require_once dirname(__FILE__) . '/vendor/autoload.php';
 # Load plugin functionality.
 require_once(ABSPATH . '/wp-admin/includes/plugin.php');
 
+$apilogFile = '/src/public/apilog_functions.php';
+if (file_exists($apilogFile)) {
+    include_once($apilogFile);
+}
+
+
 define('PPMFWC_WOOCOMMERCE_TEXTDOMAIN', 'woocommerce-paynl-payment-methods');
 define('PPMFWC_PLUGIN_URL', plugins_url('/', __FILE__));
 define('PPMFWC_PLUGIN_PATH', plugin_dir_path(__FILE__));
@@ -131,6 +137,9 @@ function ppmfwc_registerBlockScripts()
     $blocks_js_route = PPMFWC_PLUGIN_URL . 'assets/js/paynl-blocks.js';
     $gateways = WC()->payment_gateways()->payment_gateways();
     $payGateways = [];
+    paydbg('ppmfwc_registerBlockScripts');
+
+
 
     $texts['issuer'] = __('Issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
     $texts['selectissuer'] = __('Select an issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
