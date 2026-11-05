@@ -37,14 +37,12 @@ async function initPayment($, sessionToken, nonce)
 
     console.info('initPayment()');
 
-
     if (!window.PayPartsSDK || sessionToken == null) {
         cardSection.removeData('payparts-initialized');
         return;
     }
 
     try {
-
         var woocommerceOrderId = null;
         var woocommerceOrderIdAdded = false;
         console.info('initPayment() -> init pay parts');
@@ -78,7 +76,6 @@ async function initPayment($, sessionToken, nonce)
                 });
 
                 if (!woocommerceOrderIdAdded) {
-                    console.log('Wc_Pay_Gateway_PaypartsOrderCreate aanroep');
                     var ajaxurl = '/?wc-api=Wc_Pay_Gateway_PaypartsOrderCreate';
                     var data = { nonce: nonce };
                     $.ajax({
@@ -102,7 +99,6 @@ async function initPayment($, sessionToken, nonce)
                         }
                     });
                 } else {
-                    console.log('Wc_Pay_Gateway_PaypartsOrderCreate aanroep - oh nee toch niet.');
                     event.resolve();
                 }
             },
@@ -147,8 +143,6 @@ jQuery(function ($) {
     $(document).ready(function ()
     {
         console.log('doc ready - init session')
-
-
         $(document.body).on('updated_checkout payment_method_selected', function (event, data)
         {
             if ($('input[name="payment_method"]:checked').val() === 'pay_gateway_creditcardsgrouped') {
