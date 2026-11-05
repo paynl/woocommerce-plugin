@@ -104,7 +104,6 @@ async function initPayment($, sessionToken, nonce)
             },
             onSuccess: (event) => {
                 console.log('initPayment onSuccess');
-                console.log(event);
                 window.location.href = event.returnUrl + '&id=' + event.orderId + '&orderId=' + woocommerceOrderId + '&statusCode=' + event.paymentStatus.action + '&orderStatusId=' + event.paymentStatus.code;
                 event.resolve();
             },

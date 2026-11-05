@@ -158,97 +158,66 @@ class PPMFWC_Hooks_PayParts_Session
     public static function getProducts()
     {
         $products = [];
-        $orderDiscount = 0;
 
         foreach (WC()->cart->get_cart() as $itemNumber => $cart_item) {
             $product = $cart_item['data'];
             $product_id = $cart_item['product_id'];
-            $variation_id = $cart_item['variation_id'];
+            $qty = (int) $cart_item['quantity'];
+            if ($qty <= 0) {
+                continue;
+            }
 
-            $line_total = $cart_item['line_total']; // excl tax
-            $line_tax = $cart_item['line_tax'];   // tax amount
-            $qty = $cart_item['quantity'];
+            $lineAmount = (float) $cart_item['line_total'] + (float) $cart_item['line_tax'];
+            $taxes = $cart_item['line_tax_data']['total'] ?? [];
+            $vatPercentage = count($taxes) === 1
+                ? WC_Tax::get_rate_percent_value(array_key_first($taxes))
+                : paynl_calc_vat_percentage($lineAmount, (float) $cart_item['line_tax']);
 
-            $price_ex_tax = $line_total / $qty;
-            $tax_per_unit = $line_tax / $qty;
-            $price_inc_tax = $price_ex_tax + $tax_per_unit;
-
-            $tax_percentage = $price_ex_tax > 0
-                ? round(($tax_per_unit / $price_ex_tax) * 100, 2)
-                : 0;
-
-            $products[] = [
+            $lineCents = (int) round($lineAmount * 100);
+            $unitCents = intdiv($lineCents, $qty);
+            $remainder = $lineCents % $qty;
+            $row = [
                 'id' => empty($product_id) ? 'p' . (string) $itemNumber : (string) $product_id,
                 'description' => (string) $product->get_title(),
-                'quantity' => $cart_item['quantity'],
+                'quantity' => $qty - $remainder,
                 "price" => array(
-                    "value" => round($price_inc_tax * 100, 2),
+                    "value" => $unitCents,
                     "currency" => get_woocommerce_currency(),
                 ),
-                'vatPercentage' => $tax_percentage,
+                'vatPercentage' => $vatPercentage,
                 'type' => 'ARTICLE'
             ];
-        }
+            if ($unitCents > 0) {
+                $products[] = $row;
+            }
 
-        if (!empty(WC()->cart->applied_coupons)) {
-            foreach (WC()->cart->applied_coupons as $coupon_code) {
-                $coupon = new WC_Coupon($coupon_code);
-                $discount_total = $coupon->get_amount();
-
-                if ($coupon->get_discount_type() == 'percent') {
-                    $discount_total = 0;
-                    foreach ($products as $product) {
-                        $couponAmount = $coupon->get_amount();
-                        $productAmount = $product['price']['value'];
-                        $discount_total += round(($productAmount / 100 * $couponAmount * $product['quantity']), 2);
-                    }
-                }
-
-                $products[] = [
-                    'id' => (string) $coupon_code,
-                    'description' => (string) $coupon_code,
-                    'quantity' => 1,
-                    "price" => array(
-                        "value" => round($discount_total * 100, 2),
-                        "currency" => get_woocommerce_currency(),
-                    ),
-                    'vatPercentage' => 0,
-                    'type' => 'DISCOUNT',
-                    'discountType' => $coupon->get_discount_type()
-                ];
-
-                $orderDiscount += $discount_total;
+            if ($remainder > 0) {
+                $row['id'] .= '-rounding';
+                $row['quantity'] = $remainder;
+                $row['price']['value'] = $unitCents + 1;
+                $products[] = $row;
             }
         }
 
         if (WC()->cart->get_shipping_total() > 0) {
-
-            $chosen_methods = WC()->session->get('chosen_shipping_methods');
-
-            if (!empty($chosen_methods[0])) {
-                $chosen_method_id = $chosen_methods[0];
-                $packages = WC()->shipping()->get_packages();
-                if (isset($packages[0]['rates'][$chosen_method_id])) {
-                    $shippingMethod = $packages[0]['rates'][$chosen_method_id];
-                }
-            }
-
-            $shippingAmount = WC()->cart->get_shipping_total() + (float) array_shift($shippingMethod->get_taxes());
+            $shippingTax = (float) WC()->cart->get_shipping_tax();
+            $shippingAmount = (float) WC()->cart->get_shipping_total() + $shippingTax;
+            $taxes = WC()->cart->get_shipping_taxes();
 
             if ($shippingAmount > 0) {
-                $shipTotal = WC()->cart->get_shipping_total();
-                $shipTax = WC()->cart->get_shipping_tax();
-                $vatPerc = round((100 * $shipTax) / $shipTotal);
+                $vatPercentage = count($taxes) === 1
+                    ? WC_Tax::get_rate_percent_value(array_key_first($taxes))
+                    : paynl_calc_vat_percentage($shippingAmount, $shippingTax);
 
                 $products[] = [
                     'id' => 'shipping',
-                    'description' => $shippingMethod->label,
+                    'description' => __('Shipping', PPMFWC_WOOCOMMERCE_TEXTDOMAIN),
                     'quantity' => 1,
                     "price" => array(
-                        "value" => round($shippingAmount * 100, 2),
+                        "value" => (int) round($shippingAmount * 100),
                         "currency" => get_woocommerce_currency(),
                     ),
-                    'vatPercentage' => $vatPerc,
+                    'vatPercentage' => $vatPercentage,
                     'type' => 'SHIPPING'
                 ];
             }

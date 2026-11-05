@@ -47,13 +47,8 @@ class PPMFWC_Gateway_CreditCardsGrouped extends PPMFWC_Gateway_Abstract
     {
         parent::payment_fields();
 
-        ?>
-
-        <div id="card-payments"></div>
-        <div id="card-section"></div>
-
-        <?php
-
+        echo '<div id="card-payments"></div>';
+        echo '<div id="card-section"></div>';
     }
 
     /**
