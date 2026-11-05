@@ -91,6 +91,7 @@ async function initPayment($, sessionToken, nonce)
                             }
                             woocommerceOrderId = data.order_id;
                             woocommerceOrderIdAdded = true;
+
                             event.resolve({ reference: data.session_id });
                         },
                         error: function (data) {
