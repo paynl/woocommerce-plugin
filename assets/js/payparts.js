@@ -8,7 +8,7 @@ async function initSession($)
     }
     cardSection.data('payparts-initialized', true);
 
-    console.info('initSession().')
+    console.info('initSession()');
     var data = {};
     var ajaxurl = '/?wc-api=Wc_Pay_Gateway_PaypartsSession';
 
@@ -19,7 +19,7 @@ async function initSession($)
         dataType: 'json',
         success: function (data) {
             if (data.success) {
-                window.initPayment($, data.data.sessionToken, data.csrfToken);
+                window.initPayment($, data.data.sessionToken, data.nonce);
             } else {
                 cardSection.removeData('payparts-initialized');
                 console.error('Pay.: couldn\'t load pay parts: ' + data.error);
@@ -31,7 +31,7 @@ async function initSession($)
     })
 }
 
-async function initPayment($, sessionToken, csrfToken)
+async function initPayment($, sessionToken, nonce)
 {
     var cardSection = $('#card-section');
 
@@ -80,7 +80,7 @@ async function initPayment($, sessionToken, csrfToken)
                 if (!woocommerceOrderIdAdded) {
                     console.log('Wc_Pay_Gateway_PaypartsOrderCreate aanroep');
                     var ajaxurl = '/?wc-api=Wc_Pay_Gateway_PaypartsOrderCreate';
-                    var data = { csrfToken: csrfToken };
+                    var data = { nonce: nonce };
                     $.ajax({
                         url: ajaxurl,
                         type: 'POST',

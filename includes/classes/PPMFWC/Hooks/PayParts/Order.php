@@ -21,8 +21,8 @@ class PPMFWC_Hooks_PayParts_Order
 
         try {
             $payPartsSession = WC()->session->get('payparts_session', []);
-            $csrfToken = PPMFWC_Helper_Data::getPostTextField('csrfToken', true);
-            if (empty($payPartsSession['id']) || empty($payPartsSession['csrf_token']) || !is_string($csrfToken) || !hash_equals($payPartsSession['csrf_token'], $csrfToken)) {
+            $nonce = PPMFWC_Helper_Data::getPostTextField('nonce', true);
+            if (empty($payPartsSession['id']) || !wp_verify_nonce($nonce, 'woocommerce-payparts-order')) {
                 throw new \Exception('Invalid or expired PayParts session');
             }
             $sessionId = $payPartsSession['id'];

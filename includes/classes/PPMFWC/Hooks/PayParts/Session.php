@@ -129,13 +129,12 @@ class PPMFWC_Hooks_PayParts_Session
 
             PPMFWC_Helper_Data::ppmfwc_payDebug('Created  PayParts sessionid: ' . $result['sessionId']);
 
-            $csrfToken = bin2hex(random_bytes(32));
-            WC()->session->set('payparts_session', ['id' => $result['sessionId'], 'csrf_token' => $csrfToken]);
+            WC()->session->set('payparts_session', ['id' => $result['sessionId']]);
 
             $responseData = array(
                 'success' => true,
                 'data' => $result,
-                'csrfToken' => $csrfToken,
+                'nonce' => wp_create_nonce('woocommerce-payparts-order'),
                 'startData' => $data,
             );
         } catch (\Exception $e) {
