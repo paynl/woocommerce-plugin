@@ -182,7 +182,7 @@ class PPMFWC_Hooks_PayParts_Session
                     "value" => $unitCents,
                     "currency" => get_woocommerce_currency(),
                 ),
-                'vatPercentage' => $vatPercentage,
+                'vatPercentage' => (int) round($vatPercentage),
                 'type' => 'ARTICLE'
             ];
             if ($unitCents > 0) {
@@ -215,7 +215,7 @@ class PPMFWC_Hooks_PayParts_Session
                         "value" => (int) round($shippingAmount * 100),
                         "currency" => get_woocommerce_currency(),
                     ),
-                    'vatPercentage' => $vatPercentage,
+                    'vatPercentage' => (int) round($vatPercentage),
                     'type' => 'SHIPPING'
                 ];
             }
