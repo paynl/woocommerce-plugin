@@ -19,7 +19,6 @@ class PPMFWC_Hooks_PayParts_Session
      */
     public static function ppmfwc_onPayPartsSessionCreate()
     {
-        paydbg('ppmfwc_onPayPartsSessionCreate');
         try {
             if (!WC()->cart || !WC()->customer) {
                 throw new \Exception('Cart or customer not found');
@@ -28,7 +27,6 @@ class PPMFWC_Hooks_PayParts_Session
             $gateway = PPMFWC_Gateways::ppmfwc_getGateWayById(11);
 
             if ($gateway->enabled == 'no') {
-                paydbg('Selected payment method is not available.');
                 throw new \Exception("Selected payment method is not available.");
             }
 

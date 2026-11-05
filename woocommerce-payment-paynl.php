@@ -131,9 +131,6 @@ function ppmfwc_registerBlockScripts()
     $blocks_js_route = PPMFWC_PLUGIN_URL . 'assets/js/paynl-blocks.js';
     $gateways = WC()->payment_gateways()->payment_gateways();
     $payGateways = [];
-    paydbg('ppmfwc_registerBlockScripts');
-
-
 
     $texts['issuer'] = __('Issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
     $texts['selectissuer'] = __('Select an issuer', PPMFWC_WOOCOMMERCE_TEXTDOMAIN);
