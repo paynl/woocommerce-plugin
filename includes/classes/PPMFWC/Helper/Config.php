@@ -225,7 +225,11 @@ class PPMFWC_Helper_Config
                     $code = null;
                 }
 
-                $pricePerPiece = ($item['line_subtotal'] + $item['line_subtotal_tax']) / $item['qty'];                
+                $product = $item->get_product();
+                $imageUrl = wp_get_attachment_image_url((int) $product->get_image_id(), 'full') ?: null;
+                $productUrl = $product->get_permalink() ?: null;
+
+                $pricePerPiece = ($item['line_subtotal'] + $item['line_subtotal_tax']) / $item['qty'];
 
                 $collectionProducts->addProduct(
                     new PayNL\Sdk\Model\Product(
@@ -237,6 +241,8 @@ class PPMFWC_Helper_Config
                         $item['qty'],
                         $code,
                         $vatPercentage,
+                        $imageUrl,
+                        $productUrl
                     )
                 );
             }
