@@ -59,45 +59,45 @@ class PPMFWC_Hooks_PayParts_Session
             $street2 = preg_replace('/\s+[0-9]+.*$/', '', $address_2);
             $house_number2 = trim(str_replace($street2, '', $address_2));
 
-            $customer = new Customer();
-            $customer->setLocale(str_replace('_', '-', get_user_locale()));
-            $customer->setFirstName(WC()->customer->get_billing_first_name());
-            $customer->setLastName(WC()->customer->get_billing_last_name());
-            $customer->setEmail(WC()->customer->get_billing_email());
-            $customer->setPhone(WC()->customer->get_billing_phone());
+            $customer = (new Customer())
+                ->setLocale(str_replace('_', '-', get_user_locale()))
+                ->setFirstName(WC()->customer->get_billing_first_name())
+                ->setLastName(WC()->customer->get_billing_last_name())
+                ->setEmail(WC()->customer->get_billing_email())
+                ->setPhone(WC()->customer->get_billing_phone());
 
-            $deliveryAddress = new Address();
-            $deliveryAddress->setFirstName(WC()->customer->get_shipping_first_name());
-            $deliveryAddress->setLastName(WC()->customer->get_shipping_last_name());
-            $deliveryAddress->setRegionCode(WC()->customer->get_shipping_state());
-            $deliveryAddress->setStreetName($street2 ?: $address_2);
-            $deliveryAddress->setStreetNumber($house_number2);
-            $deliveryAddress->setZipCode(WC()->customer->get_shipping_postcode());
-            $deliveryAddress->setCity(WC()->customer->get_shipping_city());
-            $deliveryAddress->setCountryCode(WC()->customer->get_shipping_country());
+            $deliveryAddress = (new Address())
+                ->setFirstName(WC()->customer->get_shipping_first_name())
+                ->setLastName(WC()->customer->get_shipping_last_name())
+                ->setRegionCode(WC()->customer->get_shipping_state())
+                ->setStreetName($street2 ?: $address_2)
+                ->setStreetNumber($house_number2)
+                ->setZipCode(WC()->customer->get_shipping_postcode())
+                ->setCity(WC()->customer->get_shipping_city())
+                ->setCountryCode(WC()->customer->get_shipping_country());
 
-            $invoiceAddress = new Address();
-            $invoiceAddress->setFirstName(WC()->customer->get_billing_first_name());
-            $invoiceAddress->setLastName(WC()->customer->get_billing_last_name());
-            $invoiceAddress->setRegionCode(WC()->customer->get_billing_state());
-            $invoiceAddress->setStreetName($street ?: $address_1);
-            $invoiceAddress->setStreetNumber($house_number);
-            $invoiceAddress->setZipCode(WC()->customer->get_billing_postcode());
-            $invoiceAddress->setCity(WC()->customer->get_billing_city());
-            $invoiceAddress->setCountryCode(WC()->customer->get_billing_country());
+            $invoiceAddress = (new Address())
+                ->setFirstName(WC()->customer->get_billing_first_name())
+                ->setLastName(WC()->customer->get_billing_last_name())
+                ->setRegionCode(WC()->customer->get_billing_state())
+                ->setStreetName($street ?: $address_1)
+                ->setStreetNumber($house_number)
+                ->setZipCode(WC()->customer->get_billing_postcode())
+                ->setCity(WC()->customer->get_billing_city())
+                ->setCountryCode(WC()->customer->get_billing_country());
 
             $order = new Order();
             $order->setCountryCode(WC()->customer->get_billing_country());
             $order->setDeliveryAddress($deliveryAddress);
             $order->setInvoiceAddress($invoiceAddress);
             foreach (self::getProducts() as $row) {
-                $product = new Product();
-                $product->setId($row['id']);
-                $product->setDescription($row['description']);
-                $product->setType($row['type']);
-                $product->setQuantity($row['quantity']);
-                $product->setPrice(new Amount($row['price']['value'], $row['price']['currency']));
-                $product->setVatPercentage($row['vatPercentage']);
+                $product = (new Product())
+                    ->setId($row['id'])
+                    ->setDescription($row['description'])
+                    ->setType($row['type'])
+                    ->setQuantity($row['quantity'])
+                    ->setPrice(new Amount($row['price']['value'], $row['price']['currency']))
+                    ->setVatPercentage($row['vatPercentage']);
                 $order->addProduct($product);
             }
 
@@ -105,15 +105,15 @@ class PPMFWC_Hooks_PayParts_Session
             $config->setUsername(get_option('paynl_serviceid', ''));
             $config->setPassword($gateway->settings['credit_cards_grouped_pay_parts_secret']);
 
-            $request = new PayPartsSessionCreateRequest();
-            $request->setAmount(new Amount($total_amount_cents, get_woocommerce_currency()));
-            $request->setReturnUrl($returnUrl);
-            $request->setExchangeUrl($exchangeUrl);
-            $request->setDescription('Credit Card Order');
-            $request->setReference('0');
-            $request->setExpire(date('c', strtotime('+1 hour')));
-            $request->setCustomer($customer);
-            $request->setOrder($order);
+            $request = (new PayPartsSessionCreateRequest())
+                ->setAmount(new Amount($total_amount_cents, get_woocommerce_currency()))
+                ->setReturnUrl($returnUrl)
+                ->setExchangeUrl($exchangeUrl)
+                ->setDescription('Credit Card Order')
+                ->setReference('0')
+                ->setExpire(date('c', strtotime('+1 hour')))
+                ->setCustomer($customer)
+                ->setOrder($order);
             $response = $request->setConfig($config)->start();
             $result = [
                 'sessionId' => $response->getSessionId(),
