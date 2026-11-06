@@ -1,5 +1,13 @@
 <?php
 
+use PayNL\Sdk\Config\Config;
+use PayNL\Sdk\Model\Address;
+use PayNL\Sdk\Model\Amount;
+use PayNL\Sdk\Model\Customer;
+use PayNL\Sdk\Model\Order;
+use PayNL\Sdk\Model\Product;
+use PayNL\Sdk\Model\Request\PayPartsSessionCreateRequest;
+
 /**
  * PPMFWC_Hooks_PayParts_Session
  *
@@ -30,8 +38,6 @@ class PPMFWC_Hooks_PayParts_Session
                 throw new \Exception("Selected payment method is not available.");
             }
 
-            $api_url = 'https://parts.pay.nl/v1/session/start';
-
             $returnUrl = add_query_arg(array('wc-api' => 'Wc_Pay_Gateway_Return'), home_url('/'));
             $exchangeUrl = add_query_arg('wc-api', 'Wc_Pay_Gateway_Exchange', home_url('/'));
 
@@ -53,77 +59,66 @@ class PPMFWC_Hooks_PayParts_Session
             $street2 = preg_replace('/\s+[0-9]+.*$/', '', $address_2);
             $house_number2 = trim(str_replace($street2, '', $address_2));
 
-            $products = self::getProducts();
+            $customer = new Customer();
+            $customer->setLocale(str_replace('_', '-', get_user_locale()));
+            $customer->setFirstName(WC()->customer->get_billing_first_name());
+            $customer->setLastName(WC()->customer->get_billing_last_name());
+            $customer->setEmail(WC()->customer->get_billing_email());
+            $customer->setPhone(WC()->customer->get_billing_phone());
 
-            $data = [
-                "returnUrl" => $returnUrl,
-                "exchangeUrl" => $exchangeUrl,
-                "amount" => [
-                    "value" => $total_amount_cents,
-                    "currency" => get_woocommerce_currency(),
-                ],
-                "description" => 'Credit Card Order',
-                "reference" => '0',
-                "expire" => date('c', strtotime('+1 hour')),
-                "customer" => [
-                    "locale" => str_replace('_', '-', get_user_locale()),
-                    "firstName" => WC()->customer->get_billing_first_name(),
-                    "lastName" => WC()->customer->get_billing_last_name(),
-                    "email" => WC()->customer->get_billing_email(),
-                    "phone" => WC()->customer->get_billing_phone(),
-                ],
-                "order" => [
-                    "countryCode" => WC()->customer->get_billing_country(),
-                    "deliveryAddress" => [
-                        "firstName" => WC()->customer->get_shipping_first_name(),
-                        "lastName" => WC()->customer->get_shipping_last_name(),
-                        "region" => WC()->customer->get_shipping_state(),
-                        "street" => $street2 ?: $address_2,
-                        "streetNumber" => $house_number2,
-                        "zipCode" => WC()->customer->get_shipping_postcode(),
-                        "city" => WC()->customer->get_shipping_city(),
-                        "country" => WC()->customer->get_shipping_country(),
-                    ],
-                    "invoiceAddress" => [
-                        "firstName" => WC()->customer->get_billing_first_name(),
-                        "lastName" => WC()->customer->get_billing_last_name(),
-                        "region" => WC()->customer->get_billing_state(),
-                        "street" => $street ?: $address_1,
-                        "streetNumber" => $house_number,
-                        "zipCode" => WC()->customer->get_billing_postcode(),
-                        "city" => WC()->customer->get_billing_city(),
-                        "country" => WC()->customer->get_billing_country(),
-                    ],
-                    "products" => $products,
-                    "shippingCosts" => (int) round(WC()->cart->get_shipping_total() * 100),
-                    "totalVat" => (int) round(WC()->cart->get_taxes_total() * 100),
-                ],
+            $deliveryAddress = new Address();
+            $deliveryAddress->setFirstName(WC()->customer->get_shipping_first_name());
+            $deliveryAddress->setLastName(WC()->customer->get_shipping_last_name());
+            $deliveryAddress->setRegionCode(WC()->customer->get_shipping_state());
+            $deliveryAddress->setStreetName($street2 ?: $address_2);
+            $deliveryAddress->setStreetNumber($house_number2);
+            $deliveryAddress->setZipCode(WC()->customer->get_shipping_postcode());
+            $deliveryAddress->setCity(WC()->customer->get_shipping_city());
+            $deliveryAddress->setCountryCode(WC()->customer->get_shipping_country());
+
+            $invoiceAddress = new Address();
+            $invoiceAddress->setFirstName(WC()->customer->get_billing_first_name());
+            $invoiceAddress->setLastName(WC()->customer->get_billing_last_name());
+            $invoiceAddress->setRegionCode(WC()->customer->get_billing_state());
+            $invoiceAddress->setStreetName($street ?: $address_1);
+            $invoiceAddress->setStreetNumber($house_number);
+            $invoiceAddress->setZipCode(WC()->customer->get_billing_postcode());
+            $invoiceAddress->setCity(WC()->customer->get_billing_city());
+            $invoiceAddress->setCountryCode(WC()->customer->get_billing_country());
+
+            $order = new Order();
+            $order->setCountryCode(WC()->customer->get_billing_country());
+            $order->setDeliveryAddress($deliveryAddress);
+            $order->setInvoiceAddress($invoiceAddress);
+            foreach (self::getProducts() as $row) {
+                $product = new Product();
+                $product->setId($row['id']);
+                $product->setDescription($row['description']);
+                $product->setType($row['type']);
+                $product->setQuantity($row['quantity']);
+                $product->setPrice(new Amount($row['price']['value'], $row['price']['currency']));
+                $product->setVatPercentage($row['vatPercentage']);
+                $order->addProduct($product);
+            }
+
+            $config = new Config();
+            $config->setUsername(get_option('paynl_serviceid', ''));
+            $config->setPassword($gateway->settings['credit_cards_grouped_pay_parts_secret']);
+
+            $request = new PayPartsSessionCreateRequest();
+            $request->setAmount(new Amount($total_amount_cents, get_woocommerce_currency()));
+            $request->setReturnUrl($returnUrl);
+            $request->setExchangeUrl($exchangeUrl);
+            $request->setDescription('Credit Card Order');
+            $request->setReference('0');
+            $request->setExpire(date('c', strtotime('+1 hour')));
+            $request->setCustomer($customer);
+            $request->setOrder($order);
+            $response = $request->setConfig($config)->start();
+            $result = [
+                'sessionId' => $response->getSessionId(),
+                'sessionToken' => $response->getSessionToken(),
             ];
-
-            $ch = curl_init($api_url);
-
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Content-Type: application/json',
-                'Authorization: Basic ' . base64_encode(get_option('paynl_serviceid', '') . ':' . $gateway->settings['credit_cards_grouped_pay_parts_secret']),
-            ]);
-
-            $response = curl_exec($ch);
-
-            if (curl_errno($ch)) {
-                $error_msg = curl_error($ch);
-                curl_close($ch);
-                die('cURL Error: ' . $error_msg);
-            }
-
-            curl_close($ch);
-
-            $result = json_decode($response, true);
-            if (empty($result['sessionId']) || empty($result['sessionToken'])) {
-                throw new \Exception('Could not start PayParts session');
-            }
 
             PPMFWC_Helper_Data::ppmfwc_payDebug('Created  PayParts sessionid: ' . $result['sessionId']);
 
@@ -133,7 +128,7 @@ class PPMFWC_Hooks_PayParts_Session
                 'success' => true,
                 'data' => $result,
                 'nonce' => wp_create_nonce('woocommerce-payparts-order'),
-                'startData' => $data,
+                'startData' => $request->getBodyParameters(),
             );
         } catch (\Exception $e) {
             PPMFWC_Helper_Data::ppmfwc_payLogger('Exception onPayPartsSessionCreate failed: ' . $e->getMessage());
