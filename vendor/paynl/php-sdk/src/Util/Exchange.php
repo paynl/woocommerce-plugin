@@ -207,17 +207,23 @@ class Exchange
     }
 
     /**
+     * @param boolean $signed Read the raw body only.
      * @return PayLoad
      * @throws Exception
      */
-    public function getPayLoad()
+    public function getPayLoad(bool $signed = false)
     {
-        if (!empty($this->payload)) {
+        if (!$signed && !empty($this->payload)) {
             # Payload already initilized, then return payload.
             return $this->payload;
         }
 
-        if (!empty($this->custom_payload)) {
+        if ($signed) {
+            $request = json_decode(file_get_contents('php://input'), true, 512, JSON_BIGINT_AS_STRING);
+            if (!is_array($request) || empty($request)) {
+                throw new Exception('Empty or invalid signed payload', Exchange::ERROR_PAYLOAD_VALIDATION);
+            }
+        } elseif (!empty($this->custom_payload)) {
             # In case a payload has been provided, use that one.
             $request = $this->custom_payload;
         } else {
@@ -304,8 +310,6 @@ class Exchange
      */
     public function process(?Config $config = null): PayOrder
     {
-        $payload = $this->getPayload();
-
         if (empty($config)) {
             $config = Config::getConfig();
         }
@@ -319,6 +323,7 @@ class Exchange
 
             if ($signingResult === true) {
                 paydbg('signingResult true');
+                $payload = $this->getPayload(true);
                 $payOrder = new PayOrder($payload->getFullPayLoad());
                 $payOrder->setReference($payload->getReference());
                 $payOrder->setOrderId($payload->getPayOrderId());
@@ -332,6 +337,8 @@ class Exchange
             if ($payOrder->getStatusCode() != 0) {
                 return $payOrder;
             }
+        } else {
+            $payload = $this->getPayload();
         }
 
         # Continue to retrieve the order status with API call..
@@ -451,7 +458,24 @@ class Exchange
     private function getRequestHeaders(): bool|array|string
     {
         if (empty($this->headers)) {
-            $this->headers = array_change_key_case(getallheaders());
+            $headers = [];
+            foreach ($_SERVER as $name => $value) {
+                if (!is_string($name)) {
+                    continue;
+                }
+                if (str_starts_with($name, 'HTTP_')) {
+                    $headers[str_replace('_', '-', substr($name, 5))] = $value;
+                    continue;
+                }
+                if ($name === 'CONTENT_TYPE') {
+                    $headers['Content-Type'] = $value;
+                    continue;
+                }
+                if ($name === 'CONTENT_LENGTH') {
+                    $headers['Content-Length'] = $value;
+                }
+            }
+            $this->headers = array_change_key_case($headers);
         }
         return $this->headers;
     }

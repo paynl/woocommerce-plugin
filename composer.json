@@ -3,7 +3,7 @@
   "description": "Pay. woocommerce plugin",
   "license": "MIT",
     "require": {
-    "paynl/php-sdk": "^2.0.1"
+    "paynl/php-sdk": "^2.1.0"
   },
   "config": {
     "platform": {

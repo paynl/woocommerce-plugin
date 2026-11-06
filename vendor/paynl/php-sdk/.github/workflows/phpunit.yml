@@ -14,6 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         php-version: ['8.1', '8.2', '8.3', '8.4', '8.5']
+        guzzle: ['^7', '^8']
 
     steps:
       - name: Checkout code
@@ -25,8 +26,17 @@ jobs:
           php-version: ${{ matrix.php-version }}
           coverage: xdebug
 
+      - name: Prepare PHP 8.1 compatibility tests
+        if: matrix.php-version == '8.1'
+        run: composer remove --dev roave/security-advisories --no-update --no-interaction
+
       - name: Install dependencies
-        run: composer install --no-interaction --no-progress --prefer-dist
+        run: |
+          composer require "guzzlehttp/guzzle:${{ matrix.guzzle }}" --no-update --no-interaction
+          composer update --no-interaction --no-progress --prefer-dist
+
+      - name: Check dependency vulnerabilities
+        run: composer audit
 
       - name: Run PHPUnit with coverage
         run: vendor/bin/phpunit --coverage-clover coverage.xml
