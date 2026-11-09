@@ -166,13 +166,11 @@ class PPMFWC_Hooks_PayParts_Session
                 ? WC_Tax::get_rate_percent_value(array_key_first($taxes))
                 : paynl_calc_vat_percentage($lineAmount, (float) $cart_item['line_tax']);
 
-            $lineCents = (int) round($lineAmount * 100);
-            $unitCents = intdiv($lineCents, $qty);
-            $remainder = $lineCents % $qty;
+            $unitCents = (int) round($lineAmount * 100 / $qty);
             $row = [
                 'id' => empty($product_id) ? 'p' . (string) $itemNumber : (string) $product_id,
                 'description' => (string) $product->get_title(),
-                'quantity' => $qty - $remainder,
+                'quantity' => $qty,
                 "price" => array(
                     "value" => $unitCents,
                     "currency" => get_woocommerce_currency(),
@@ -181,13 +179,6 @@ class PPMFWC_Hooks_PayParts_Session
                 'type' => 'ARTICLE'
             ];
             if ($unitCents > 0) {
-                $products[] = $row;
-            }
-
-            if ($remainder > 0) {
-                $row['id'] .= '-rounding';
-                $row['quantity'] = $remainder;
-                $row['price']['value'] = $unitCents + 1;
                 $products[] = $row;
             }
         }
