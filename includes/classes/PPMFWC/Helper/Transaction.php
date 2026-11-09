@@ -170,6 +170,11 @@ class PPMFWC_Helper_Transaction
             throw new PPMFWC_Exception_Notice('Woocommerce could not find internal order ' . $orderId);
         }
 
+        if ($order->get_meta('_created_by') === 'Pay. Parts') {
+            $order->update_meta_data('transactionId', $transactionId);
+            $order->save();
+        }
+
         PPMFWC_Helper_Data::ppmfwc_payLogger('processTransaction', $transactionId, array($status, $localTransactionStatus, $orderId));
 
         if ($status == $localTransactionStatus) {
