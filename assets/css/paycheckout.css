@@ -13,18 +13,18 @@
     src: url("../../assets/fonts/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("../../assets/fonts/fa-solid-900.woff2") format("woff2"), url("../../assets/fonts/fa-solid-900.woff") format("woff"), url("../../assets/fonts/fa-solid-900.ttf") format("truetype"), url("../../assets/fonts/fa-solid-900.svg#fontawesome") format("svg")
 }
 
-#payment .payment_methods li[class*="payment_method_pay_gateway"] *,
+#payment .payment_methods li[class*="payment_method_pay_gateway"] *:not(#card-section *),
 div p[class*="payment_method_pay_gateway"] * {
     font-family: 'Lato', sans-serif;
 }
 
-#payment .payment_methods li[class*="payment_method_pay_gateway"] label,
+#payment .payment_methods li[class*="payment_method_pay_gateway"] label:not(#card-section *),
 div p[class*="payment_method_pay_gateway"] label {
     display: block;
     width: 100%;
 }
 
-#payment .payment_methods li[class*="payment_method_pay_gateway"] img,
+#payment .payment_methods li[class*="payment_method_pay_gateway"] img:not(#card-section *),
 div p[class*="payment_method_pay_gateway"] img {
     float: right;
     margin: 3px 0 3px 0 !important;
@@ -35,7 +35,7 @@ div p[class*="payment_method_pay_gateway"] img {
     width: 35px;
 }
 
-#payment .payment_methods li[class*="payment_method_pay_gateway"] div,
+#payment .payment_methods li[class*="payment_method_pay_gateway"] div:not(#card-section *),
 div p[class*="payment_method_pay_gateway"] div {
     display: block;
 }
@@ -45,14 +45,14 @@ div p[class*="payment_method_pay_gateway"] div:empty {
     display: none !important;
 }
 
-#payment .payment_methods li[class*="payment_method_pay_gateway"] label::after,
+#payment .payment_methods li[class*="payment_method_pay_gateway"] label:not(#card-section *)::after,
 div p[class*="payment_method_pay_gateway"] label::after {
     content: '';
     display: block;
     clear: both;
 }
 
-#payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box fieldset,
+#payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box fieldset:not(#card-section *),
 div p[class*="payment_method_pay_gateway"] .payment_box fieldset {
     border: 1px solid #c2c2c2;
     line-height: 1.42857143;
@@ -81,7 +81,7 @@ div p[class*="payment_method_pay_gateway"] .payment_box fieldset legend {
     width: auto;
 }
 
-#payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box input:not([type=checkbox]):not([type=radio]),
+#payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box input:not([type=checkbox]):not([type=radio]):not(#card-section *),
 #payment .payment_methods li[class*="payment_method_pay_gateway"] .payment_box select,
 div p[class*="payment_method_pay_gateway"] .payment_box input:not([type=checkbox]):not([type=radio]),
 div p[class*="payment_method_pay_gateway"] .payment_box select {
@@ -111,7 +111,7 @@ div p[class*="payment_method_pay_gateway"] .payment_box select {
     width: calc(100% - 10px);
 }
 
-#payment .payment_methods li[class*="payment_method_pay_gateway"]>.payment_box input:not([type=checkbox]):not([type=radio]):focus,
+#payment .payment_methods li[class*="payment_method_pay_gateway"]>.payment_box input:not([type=checkbox]):not([type=radio]):not(#card-section *):focus,
 #payment .payment_methods li[class*="payment_method_pay_gateway"]>.payment_box select:focus,
 div p[class*="payment_method_pay_gateway"]>.payment_box input:not([type=checkbox]):not([type=radio]):focus,
 div p[class*="payment_method_pay_gateway"]>.payment_box select:focus {
