@@ -5,8 +5,8 @@ Link: https://www.pay.nl
 Tags: paynl, paymentmethods, iDEAL, betaalmethoden, pay
 Requires at least: 6.1.0
 Stable tag: 4.2.0
-Tested up to: 7.1.3
-WC tested up to: 11.2.1
+Tested up to: 7.1.4
+WC tested up to: 11.2.2
 WC requires at least: 6.5
 Requires PHP: 8.1
 License: GPLv2
@@ -189,7 +189,13 @@ Paid accounts have better tariffs! see: [tariffs](https://pay.nl/tarieven)
 
 == Changelog ==
 = 4.2.0 =
-Added Pay Parts: support for embedded credit card payments directly in the checkout.
+Added embedded credit card support for classic checkout with Pay Parts
+Fixed failure type exchange and caching issues with blocks JS
+Included fee tax in fast checkout amounts and order items
+Added payment methods Billink Factoring, Cashback ZL and SAS Eurobonus
+Updated VAT calculations
+Included product images in product data when available
+Resolved various minor issues
 = 4.1.1 =
 Fixed compatibility with psr/container 1.0
 = 4.1.0 =
