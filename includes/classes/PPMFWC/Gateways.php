@@ -89,6 +89,7 @@ class PPMFWC_Gateways
         'PPMFWC_Gateway_Biercheque',
         'PPMFWC_Gateway_Biller',
         'PPMFWC_Gateway_Billink',
+        'PPMFWC_Gateway_Billinkfactoring',
         'PPMFWC_Gateway_Bioscoopbon',
         'PPMFWC_Gateway_Bizum',
         'PPMFWC_Gateway_Blik',
